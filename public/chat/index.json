@@ -1,0 +1,74 @@
+[
+  {
+    "id": "about-meena",
+    "title": "About Meena Kannan",
+    "text": "Meena Kannan is a Senior Full-Stack Software Engineer & Solutions Architect with 7+ years of experience in Enterprise Java, Spring Boot 3, React 19, Microservices, and Cloud-Native systems. She specializes in Clean Architecture, Domain-Driven Design (DDD), high-concurrency systems handling 10,000+ RPS, and multi-tenant SaaS platforms.",
+    "url": "#about"
+  },
+  {
+    "id": "skills-backend",
+    "title": "Backend Engineering Skills",
+    "text": "Meena has mastery in Java 21 LTS (96%), Spring Boot 3 (95%), Spring Security & OAuth2 (90%), Hibernate/JPA (92%), Spring Cloud (88%), and Node.js. She specializes in Clean Architecture, Domain-Driven Design, virtual threads, reactive WebFlux, high-throughput REST APIs, and microservices design patterns.",
+    "url": "#skills"
+  },
+  {
+    "id": "skills-frontend",
+    "title": "Frontend Engineering Skills",
+    "text": "Meena has extensive frontend mastery in React 19 (93%), TypeScript (92%), Tailwind CSS 4 (95%), Next.js, and Framer Motion. She builds highly responsive, accessible SPAs with optimistic updates, real-time WebSocket state management, and modern component design systems.",
+    "url": "#skills"
+  },
+  {
+    "id": "skills-cloud-devops",
+    "title": "Cloud and DevOps Skills",
+    "text": "Meena is proficient in AWS Cloud (EC2, S3, RDS, ECS, Lambda, CloudWatch, IAM), Docker containerization, Kubernetes orchestration, automated CI/CD with GitHub Actions, Terraform Infrastructure as Code, and Prometheus/Grafana monitoring.",
+    "url": "#skills"
+  },
+  {
+    "id": "skills-database",
+    "title": "Database and Streaming Technologies",
+    "text": "Meena excels in PostgreSQL (93%), Redis in-memory caching and distributed locks (92%), Apache Kafka event streaming (88%), Oracle DB (85%), and Flyway schema migrations. She has optimized database query latency by over 65%.",
+    "url": "#skills"
+  },
+  {
+    "id": "saas-project",
+    "title": "Meena Kannan Enterprise SaaS Platform",
+    "text": "Meena designed and developed an enterprise-grade multi-tenant SaaS portfolio and project management platform. Built with Java 21, Spring Boot 3, PostgreSQL, Redis, React 19, and Docker. Features multi-tenant isolation, JWT/OAuth2 security, Flyway database migrations, and 99.99% uptime with sub-80ms API response times.",
+    "url": "#projects"
+  },
+  {
+    "id": "ecommerce-project",
+    "title": "Distributed Cloud E-Commerce Engine",
+    "text": "Meena built a high-throughput microservices architecture processing 10,000+ RPS and 500,000+ daily orders. Engineered with Spring Boot 3, Apache Kafka event streaming, Redis distributed locks, and Kubernetes autoscaling, achieving 99.99% uptime and a 40% reduction in cloud infrastructure expenses.",
+    "url": "#projects"
+  },
+  {
+    "id": "realtime-project",
+    "title": "Real-Time Collaboration Platform",
+    "text": "Meena developed a sub-20ms WebSocket streaming platform supporting 50,000+ concurrent users with Redis Pub/Sub, React 19 optimistic updates, and Spring Cloud, boosting user collaboration engagement by 95%.",
+    "url": "#projects"
+  },
+  {
+    "id": "fintech-project",
+    "title": "FinTech Payment Gateway & Audit System",
+    "text": "Meena architected a PCI-DSS compliant transaction processing gateway handling $10M+ daily volume with zero double-spend anomalies using cryptographic idempotency tokens, AWS KMS tokenization, and automated reconciliation.",
+    "url": "#projects"
+  },
+  {
+    "id": "availability-engagement",
+    "title": "Availability and Engagement",
+    "text": "Meena Kannan is currently OPEN to new opportunities, including full-time Senior/Lead Software Engineering roles, cloud architecture contracts, and system modernization consulting. She can onboard within 2-3 weeks.",
+    "url": "#contact"
+  },
+  {
+    "id": "location-remote",
+    "title": "Location and Remote Work",
+    "text": "Meena is fully remote-ready and based in Singapore/India (GMT+8 / GMT+5:30). She provides flexible scheduling with 4+ hours of daily overlap with US and European timezones, utilizing asynchronous updates, pull request reviews, and scheduled video syncs.",
+    "url": "#contact"
+  },
+  {
+    "id": "contact-channels",
+    "title": "How to Contact Meena",
+    "text": "You can contact Meena directly via email at meenakannan.dev@gmail.com, on LinkedIn at https://www.linkedin.com/in/meena-kannan, or via GitHub at https://github.com/meenak95. She guarantees a response within 24 hours.",
+    "url": "#contact"
+  }
+]

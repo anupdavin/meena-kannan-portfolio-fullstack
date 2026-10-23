@@ -1,0 +1,102 @@
+@import "tailwindcss";
+
+@layer base {
+  * {
+    box-sizing: border-box;
+  }
+  
+  html, body, #root {
+    min-height: 100%;
+    margin: 0;
+    padding: 0;
+    font-family: 'JetBrains Mono', 'Fira Code', monospace;
+    background-color: #030704;
+    color: #4ade80;
+    overflow-x: hidden;
+  }
+}
+
+/* Cyberpunk & Matrix Neon Glow Effects */
+.glow-text {
+  text-shadow: 0 0 10px rgba(34, 197, 94, 0.7), 0 0 20px rgba(34, 197, 94, 0.4), 0 0 35px rgba(34, 197, 94, 0.2);
+}
+
+.glow-text-cyan {
+  text-shadow: 0 0 10px rgba(6, 182, 212, 0.7), 0 0 20px rgba(6, 182, 212, 0.4);
+}
+
+.glow-border {
+  box-shadow: 0 0 15px rgba(34, 197, 94, 0.35), inset 0 0 15px rgba(34, 197, 94, 0.1);
+}
+
+.glow-border-cyan {
+  box-shadow: 0 0 15px rgba(6, 182, 212, 0.35), inset 0 0 15px rgba(6, 182, 212, 0.1);
+}
+
+.glow-card {
+  box-shadow: 0 10px 30px -10px rgba(0, 0, 0, 0.9), 0 0 20px -5px rgba(34, 197, 94, 0.15);
+}
+
+.code-block {
+  background: rgba(4, 13, 8, 0.85);
+  border: 1px solid rgba(34, 197, 94, 0.25);
+  backdrop-filter: blur(16px);
+}
+
+/* Scanline and CRT effects */
+.scanlines {
+  background: linear-gradient(
+    rgba(18, 16, 16, 0) 50%, 
+    rgba(0, 0, 0, 0.25) 50%
+  ), linear-gradient(
+    90deg,
+    rgba(255, 0, 0, 0.03),
+    rgba(0, 255, 0, 0.01),
+    rgba(0, 0, 255, 0.03)
+  );
+  background-size: 100% 3px, 6px 100%;
+  pointer-events: none;
+}
+
+/* Custom Scrollbar */
+::-webkit-scrollbar {
+  width: 6px;
+  height: 6px;
+}
+
+::-webkit-scrollbar-track {
+  background: #030704;
+}
+
+::-webkit-scrollbar-thumb {
+  background: #15803d;
+  border-radius: 3px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: #22c55e;
+  box-shadow: 0 0 10px #22c55e;
+}
+
+/* Floating animations */
+@keyframes floatSlow {
+  0%, 100% {
+    transform: translateY(0px);
+  }
+  50% {
+    transform: translateY(-12px);
+  }
+}
+
+.animate-float {
+  animation: floatSlow 6s ease-in-out infinite;
+}
+
+@keyframes terminalBlink {
+  0%, 49% { opacity: 1; }
+  50%, 100% { opacity: 0; }
+}
+
+.cursor-blink {
+  animation: terminalBlink 1s infinite;
+}
