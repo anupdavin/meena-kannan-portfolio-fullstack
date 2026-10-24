@@ -2,12 +2,10 @@ import { useEffect, useRef, useState } from 'react'
 
 interface MatrixBackgroundProps {
   speed?: number
-  density?: number
 }
 
-export default function MatrixBackground({ speed = 33 }: MatrixBackgroundProps) {
+export default function MatrixBackground({ speed = 35 }: MatrixBackgroundProps) {
   const canvasRef = useRef<HTMLCanvasElement | null>(null)
-  const [isPaused, setIsPaused] = useState(false)
 
   useEffect(() => {
     const canvas = canvasRef.current
@@ -17,12 +15,16 @@ export default function MatrixBackground({ speed = 33 }: MatrixBackgroundProps) 
     if (!ctx) return
 
     let animationFrameId: number
-    let width = (canvas.width = window.innerWidth)
-    let height = (canvas.height = window.innerHeight)
+    const dpr = Math.min(window.devicePixelRatio || 1, 2)
+    
+    let width = (canvas.width = window.innerWidth * dpr)
+    let height = (canvas.height = window.innerHeight * dpr)
+    ctx.scale(dpr, dpr)
 
+    const isMobile = window.innerWidth < 768
     const characters = '0123456789ABCDEFJAVA<>{}/*$=+-_[]!@#%^&;MEENAKANNAN'
-    const fontSize = 14
-    let columns = Math.floor(width / fontSize)
+    const fontSize = isMobile ? 18 : 14
+    let columns = Math.floor(window.innerWidth / fontSize)
     let drops: number[] = []
 
     for (let i = 0; i < columns; i++) {
@@ -31,9 +33,12 @@ export default function MatrixBackground({ speed = 33 }: MatrixBackgroundProps) 
 
     const handleResize = () => {
       if (!canvas) return
-      width = canvas.width = window.innerWidth
-      height = canvas.height = window.innerHeight
-      columns = Math.floor(width / fontSize)
+      const mobileCheck = window.innerWidth < 768
+      const currentFontSize = mobileCheck ? 18 : 14
+      width = canvas.width = window.innerWidth * dpr
+      height = canvas.height = window.innerHeight * dpr
+      ctx.scale(dpr, dpr)
+      columns = Math.floor(window.innerWidth / currentFontSize)
       drops = []
       for (let i = 0; i < columns; i++) {
         drops[i] = Math.floor(Math.random() * -50)
@@ -43,36 +48,39 @@ export default function MatrixBackground({ speed = 33 }: MatrixBackgroundProps) 
     window.addEventListener('resize', handleResize)
 
     let lastDraw = Date.now()
+    const frameSpeed = isMobile ? Math.max(speed, 45) : speed
 
     const draw = () => {
       const now = Date.now()
-      if (now - lastDraw >= speed && !isPaused) {
+      if (now - lastDraw >= frameSpeed) {
         lastDraw = now
 
-        // Translucent background to show fade trails
+        // Translucent background fade trails
         ctx.fillStyle = 'rgba(3, 7, 4, 0.08)'
-        ctx.fillRect(0, 0, width, height)
+        ctx.fillRect(0, 0, window.innerWidth, window.innerHeight)
 
         ctx.font = `${fontSize}px 'JetBrains Mono', monospace`
 
         for (let i = 0; i < drops.length; i++) {
           const char = characters.charAt(Math.floor(Math.random() * characters.length))
-          
-          // Head of the drop is bright white/emerald, tail is darker green
           const y = drops[i] * fontSize
           
-          if (Math.random() > 0.85) {
-            ctx.fillStyle = '#bbf7d0' // Bright head
-            ctx.shadowBlur = 8
-            ctx.shadowColor = '#4ade80'
+          if (Math.random() > 0.88) {
+            ctx.fillStyle = '#86efac' // Bright head
+            if (!isMobile) {
+              ctx.shadowBlur = 6
+              ctx.shadowColor = '#4ade80'
+            }
           } else {
-            ctx.fillStyle = '#22c55e'
-            ctx.shadowBlur = 0
+            ctx.fillStyle = '#16a34a' // Tail stream
+            if (!isMobile) {
+              ctx.shadowBlur = 0
+            }
           }
 
           ctx.fillText(char, i * fontSize, y)
 
-          if (y > height && Math.random() > 0.975) {
+          if (y > window.innerHeight && Math.random() > 0.975) {
             drops[i] = 0
           }
           drops[i]++
@@ -88,23 +96,24 @@ export default function MatrixBackground({ speed = 33 }: MatrixBackgroundProps) 
       window.removeEventListener('resize', handleResize)
       cancelAnimationFrame(animationFrameId)
     }
-  }, [speed, isPaused])
+  }, [speed])
 
   return (
     <div className="fixed inset-0 pointer-events-none z-0 overflow-hidden">
       <canvas 
         ref={canvasRef} 
-        className="w-full h-full opacity-25 transition-opacity duration-1000"
+        style={{ width: '100vw', height: '100vh' }}
+        className="opacity-25 transition-opacity duration-1000"
       />
-      {/* Subtle grid pattern overlay */}
+      {/* Subtle futuristic tech grid pattern overlay */}
       <div 
-        className="absolute inset-0 opacity-[0.03]" 
+        className="absolute inset-0 opacity-[0.035]" 
         style={{
           backgroundImage: `linear-gradient(to right, #22c55e 1px, transparent 1px), linear-gradient(to bottom, #22c55e 1px, transparent 1px)`,
-          backgroundSize: '40px 40px'
+          backgroundSize: '48px 48px'
         }}
       />
-      {/* Vignette effect */}
+      {/* Ambient Vignette Gradient */}
       <div className="absolute inset-0 bg-radial-gradient from-transparent via-black/40 to-black/90 pointer-events-none" />
     </div>
   )

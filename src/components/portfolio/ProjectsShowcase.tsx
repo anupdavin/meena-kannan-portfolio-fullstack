@@ -1,4 +1,4 @@
-import { useState } from 'react'
+import { useState, useEffect } from 'react'
 import { motion, AnimatePresence } from 'framer-motion'
 import { 
   Github, 
@@ -239,6 +239,18 @@ export default function ProjectsShowcase() {
   const [activeModalProject, setActiveModalProject] = useState<Project | null>(null)
   const [copiedSnippet, setCopiedSnippet] = useState(false)
 
+  // Prevent background scroll when modal is active
+  useEffect(() => {
+    if (activeModalProject) {
+      document.body.style.overflow = 'hidden'
+    } else {
+      document.body.style.overflow = ''
+    }
+    return () => {
+      document.body.style.overflow = ''
+    }
+  }, [activeModalProject])
+
   const categories = ['All', 'Enterprise SaaS', 'Microservices', 'Real-Time', 'FinTech']
 
   const filteredProjects = selectedFilter === 'All'
@@ -259,27 +271,27 @@ export default function ProjectsShowcase() {
         whileInView={{ opacity: 1, y: 0 }} 
         viewport={{ once: true }} 
         transition={{ duration: 0.6 }} 
-        className="text-center mb-12"
+        className="text-center mb-8 sm:mb-12"
       >
         <div className="inline-flex items-center gap-2 text-xs font-mono text-purple-400 bg-purple-950/40 px-3 py-1 rounded-full border border-purple-800/50 mb-3">
           <Terminal className="w-3.5 h-3.5" />
           <span>$ ./showcase --production-systems --featured</span>
         </div>
-        <h2 className="text-3xl md:text-5xl font-extrabold text-white glow-text tracking-tight font-mono">
+        <h2 className="text-2xl sm:text-3xl md:text-5xl font-extrabold text-white glow-text tracking-tight font-mono">
           Featured Enterprise Architecture Projects
         </h2>
-        <p className="text-gray-400 max-w-2xl mx-auto mt-3 font-mono text-sm md:text-base">
+        <p className="text-gray-400 max-w-2xl mx-auto mt-2 sm:mt-3 font-mono text-xs sm:text-sm md:text-base">
           Real-world cloud-native applications, high-concurrency microservices, and enterprise full-stack SaaS solutions.
         </p>
       </motion.div>
 
-      {/* Filter Tabs */}
-      <div className="flex flex-wrap items-center justify-center gap-2 mb-12">
+      {/* Filter Tabs (Horizontal Scroll on Mobile) */}
+      <div className="flex items-center sm:justify-center gap-2 overflow-x-auto scrollbar-none pb-2 mb-8 sm:mb-12 w-full touch-scroll px-1">
         {categories.map(category => (
           <button
             key={category}
             onClick={() => setSelectedFilter(category)}
-            className={`px-4 py-2 rounded-lg text-xs md:text-sm font-mono transition-all cursor-pointer ${
+            className={`px-3.5 sm:px-4 py-2 rounded-lg text-xs md:text-sm font-mono transition-all cursor-pointer whitespace-nowrap shrink-0 active:scale-95 ${
               selectedFilter === category
                 ? 'bg-green-500 text-black font-bold shadow-md shadow-green-500/20 glow-border'
                 : 'bg-black/50 text-gray-400 border border-gray-800 hover:border-gray-700 hover:text-white'
@@ -291,7 +303,7 @@ export default function ProjectsShowcase() {
       </div>
 
       {/* Projects Grid */}
-      <div className="grid md:grid-cols-2 gap-8">
+      <div className="grid md:grid-cols-2 gap-6 sm:gap-8">
         {filteredProjects.map((project, idx) => (
           <motion.div
             key={project.id}
@@ -303,7 +315,7 @@ export default function ProjectsShowcase() {
           >
             <div>
               {/* Project Visual Banner */}
-              <div className="relative h-48 overflow-hidden bg-gray-900 border-b border-green-500/20">
+              <div className="relative h-40 sm:h-48 overflow-hidden bg-gray-900 border-b border-green-500/20">
                 <img 
                   src={project.image} 
                   alt={project.title} 
@@ -312,41 +324,41 @@ export default function ProjectsShowcase() {
                 <div className="absolute inset-0 bg-gradient-to-t from-[#040e07] via-transparent to-black/40" />
                 
                 {/* Top Badges */}
-                <div className="absolute top-4 left-4 flex items-center gap-2">
+                <div className="absolute top-3 sm:top-4 left-3 sm:left-4 flex items-center gap-2">
                   <Badge variant="cyan">{project.category}</Badge>
                 </div>
 
-                <div className="absolute bottom-3 left-4 right-4 flex items-center justify-between text-xs font-mono text-gray-300">
-                  <span className="text-green-400 font-semibold">{project.clientType}</span>
+                <div className="absolute bottom-2.5 sm:bottom-3 left-3 sm:left-4 right-3 sm:right-4 flex items-center justify-between text-[11px] sm:text-xs font-mono text-gray-300">
+                  <span className="text-green-400 font-semibold truncate">{project.clientType}</span>
                 </div>
               </div>
 
               {/* Project Body */}
-              <div className="p-6">
-                <h3 className="text-xl md:text-2xl font-bold font-mono text-white group-hover:text-green-300 transition-colors mb-2">
+              <div className="p-4 sm:p-6">
+                <h3 className="text-lg sm:text-xl md:text-2xl font-bold font-mono text-white group-hover:text-green-300 transition-colors mb-2">
                   {project.title}
                 </h3>
                 
-                <p className="text-xs text-gray-400 font-mono mb-4 leading-relaxed line-clamp-3">
+                <p className="text-[11px] sm:text-xs text-gray-400 font-mono mb-4 leading-relaxed line-clamp-3">
                   {project.description}
                 </p>
 
                 {/* Key Metrics Strip */}
-                <div className="grid grid-cols-2 sm:grid-cols-4 gap-2 py-3 border-y border-gray-800/80 mb-5">
+                <div className="grid grid-cols-2 sm:grid-cols-4 gap-2 py-2.5 sm:py-3 border-y border-gray-800/80 mb-4 sm:mb-5">
                   {Object.entries(project.metrics).map(([label, val]) => (
                     <div key={label} className="text-center p-1.5 bg-black/40 rounded border border-gray-800/60">
                       <div className="text-xs font-bold font-mono text-green-400">{val}</div>
-                      <div className="text-[10px] text-gray-500 font-mono truncate">{label}</div>
+                      <div className="text-[9px] sm:text-[10px] text-gray-500 font-mono truncate">{label}</div>
                     </div>
                   ))}
                 </div>
 
                 {/* Tech Badges */}
-                <div className="flex flex-wrap gap-1.5 mb-2">
+                <div className="flex flex-wrap gap-1 sm:gap-1.5 mb-2">
                   {project.tech.map(t => (
                     <span 
                       key={t}
-                      className="text-[11px] font-mono px-2 py-0.5 rounded bg-black/60 border border-green-500/20 text-gray-300"
+                      className="text-[10px] sm:text-[11px] font-mono px-2 py-0.5 rounded bg-black/60 border border-green-500/20 text-gray-300"
                     >
                       {t}
                     </span>
@@ -356,12 +368,12 @@ export default function ProjectsShowcase() {
             </div>
 
             {/* Project Footer Actions */}
-            <div className="p-6 pt-0 flex items-center justify-between gap-3">
+            <div className="p-4 sm:p-6 pt-0 flex items-center justify-between gap-2.5 sm:gap-3">
               <Button 
                 variant="outline" 
                 size="sm"
                 onClick={() => setActiveModalProject(project)}
-                className="w-full text-xs font-mono"
+                className="w-full text-xs font-mono min-h-[40px] flex items-center justify-center cursor-pointer active:scale-98"
               >
                 <span>View Architecture & Code</span>
                 <Code2 className="w-3.5 h-3.5 ml-1.5" />
@@ -371,7 +383,8 @@ export default function ProjectsShowcase() {
                 href={project.githubUrl} 
                 target="_blank" 
                 rel="noreferrer"
-                className="p-2 rounded-lg border border-gray-800 bg-black hover:border-green-400 text-gray-400 hover:text-green-400 transition-colors"
+                aria-label={`View Repository for ${project.title}`}
+                className="w-10 h-10 rounded-lg border border-gray-800 bg-black hover:border-green-400 text-gray-400 hover:text-green-400 transition-colors flex items-center justify-center shrink-0 active:scale-95 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-green-400"
                 title="View Source on GitHub"
               >
                 <Github className="w-4 h-4" />
@@ -384,98 +397,99 @@ export default function ProjectsShowcase() {
       {/* Interactive Project Detail Modal */}
       <AnimatePresence>
         {activeModalProject && (
-          <div className="fixed inset-0 z-50 flex items-center justify-center p-4 sm:p-6 overflow-y-auto">
+          <div className="fixed inset-0 z-50 flex items-end sm:items-center justify-center p-0 sm:p-4 md:p-6 overflow-hidden">
             {/* Modal Backdrop */}
             <motion.div
               initial={{ opacity: 0 }}
               animate={{ opacity: 1 }}
               exit={{ opacity: 0 }}
               onClick={() => setActiveModalProject(null)}
-              className="fixed inset-0 bg-black/80 backdrop-blur-md"
+              className="fixed inset-0 bg-black/85 backdrop-blur-md overscroll-contain"
             />
 
             {/* Modal Box */}
             <motion.div
-              initial={{ opacity: 0, scale: 0.95, y: 20 }}
-              animate={{ opacity: 1, scale: 1, y: 0 }}
-              exit={{ opacity: 0, scale: 0.95, y: 20 }}
-              className="relative w-full max-w-4xl max-h-[90vh] overflow-y-auto rounded-2xl bg-[#040e07] border border-green-500/40 shadow-2xl z-10 p-6 md:p-8"
+              initial={{ opacity: 0, y: 40 }}
+              animate={{ opacity: 1, y: 0 }}
+              exit={{ opacity: 0, y: 40 }}
+              transition={{ duration: 0.25 }}
+              className="relative w-full max-w-4xl max-h-[88dvh] sm:max-h-[90vh] overflow-y-auto overscroll-contain touch-scroll rounded-t-2xl sm:rounded-2xl bg-[#030905]/98 border border-green-500/40 shadow-2xl z-10 p-4 sm:p-6 md:p-8 pb-[calc(1.5rem+env(safe-area-inset-bottom,0px))]"
             >
               {/* Modal Header */}
-              <div className="flex items-start justify-between pb-4 border-b border-gray-800 mb-6">
+              <div className="flex items-start justify-between pb-3 sm:pb-4 border-b border-gray-800 mb-4 sm:mb-6 gap-2">
                 <div>
-                  <div className="flex items-center gap-2 mb-1">
+                  <div className="flex flex-wrap items-center gap-2 mb-1">
                     <Badge variant="cyan">{activeModalProject.category}</Badge>
-                    <span className="text-xs font-mono text-gray-500">{activeModalProject.clientType}</span>
+                    <span className="text-[11px] font-mono text-gray-500">{activeModalProject.clientType}</span>
                   </div>
-                  <h3 className="text-2xl font-bold font-mono text-white glow-text">
+                  <h3 className="text-xl sm:text-2xl font-bold font-mono text-white glow-text leading-tight">
                     {activeModalProject.title}
                   </h3>
-                  <p className="text-sm font-mono text-green-400 mt-1">
+                  <p className="text-xs sm:text-sm font-mono text-green-400 mt-1">
                     {activeModalProject.tagline}
                   </p>
                 </div>
 
                 <button
                   onClick={() => setActiveModalProject(null)}
-                  className="p-2 rounded-lg border border-gray-800 hover:border-red-400 hover:text-red-400 text-gray-400 transition-colors cursor-pointer"
+                  className="w-9 h-9 sm:w-10 sm:h-10 rounded-lg border border-gray-800 hover:border-red-400 hover:text-red-400 text-gray-400 transition-colors cursor-pointer flex items-center justify-center shrink-0 active:scale-95"
                 >
                   <X className="w-5 h-5" />
                 </button>
               </div>
 
               {/* Modal Body */}
-              <div className="space-y-6">
+              <div className="space-y-4 sm:space-y-6">
                 {/* Overview Metrics */}
-                <div className="grid grid-cols-2 sm:grid-cols-4 gap-3">
+                <div className="grid grid-cols-2 sm:grid-cols-4 gap-2.5 sm:gap-3">
                   {Object.entries(activeModalProject.metrics).map(([k, v]) => (
-                    <div key={k} className="p-3 rounded-lg bg-black/60 border border-green-500/20 text-center">
-                      <div className="text-base font-bold font-mono text-green-400">{v}</div>
-                      <div className="text-xs font-mono text-gray-500">{k}</div>
+                    <div key={k} className="p-2.5 sm:p-3 rounded-lg bg-black/60 border border-green-500/20 text-center">
+                      <div className="text-sm sm:text-base font-bold font-mono text-green-400">{v}</div>
+                      <div className="text-[10px] sm:text-xs font-mono text-gray-500">{k}</div>
                     </div>
                   ))}
                 </div>
 
                 {/* Challenge & Solution Architecture */}
-                <div className="grid md:grid-cols-2 gap-4">
-                  <div className="p-4 rounded-xl bg-black/40 border border-red-500/20">
-                    <h5 className="text-xs font-bold font-mono text-red-400 uppercase tracking-wider mb-2 flex items-center gap-1.5">
-                      <Shield className="w-4 h-4" /> Architectural Challenge
+                <div className="grid sm:grid-cols-2 gap-3 sm:gap-4">
+                  <div className="p-3.5 sm:p-4 rounded-xl bg-black/40 border border-red-500/20">
+                    <h5 className="text-[11px] sm:text-xs font-bold font-mono text-red-400 uppercase tracking-wider mb-1.5 sm:mb-2 flex items-center gap-1.5">
+                      <Shield className="w-4 h-4 shrink-0" /> Architectural Challenge
                     </h5>
-                    <p className="text-xs font-mono text-gray-300 leading-relaxed">
+                    <p className="text-[11px] sm:text-xs font-mono text-gray-300 leading-relaxed">
                       {activeModalProject.details.challenge}
                     </p>
                   </div>
 
-                  <div className="p-4 rounded-xl bg-black/40 border border-green-500/20">
-                    <h5 className="text-xs font-bold font-mono text-green-400 uppercase tracking-wider mb-2 flex items-center gap-1.5">
-                      <Zap className="w-4 h-4" /> Engineering Solution
+                  <div className="p-3.5 sm:p-4 rounded-xl bg-black/40 border border-green-500/20">
+                    <h5 className="text-[11px] sm:text-xs font-bold font-mono text-green-400 uppercase tracking-wider mb-1.5 sm:mb-2 flex items-center gap-1.5">
+                      <Zap className="w-4 h-4 shrink-0" /> Engineering Solution
                     </h5>
-                    <p className="text-xs font-mono text-gray-300 leading-relaxed">
+                    <p className="text-[11px] sm:text-xs font-mono text-gray-300 leading-relaxed">
                       {activeModalProject.details.solution}
                     </p>
                   </div>
                 </div>
 
                 {/* System Architecture Flow */}
-                <div className="p-4 rounded-xl bg-black/50 border border-cyan-500/30">
-                  <h5 className="text-xs font-bold font-mono text-cyan-400 uppercase tracking-wider mb-2 flex items-center gap-1.5">
-                    <Layers className="w-4 h-4" /> System Topology & Flow
+                <div className="p-3.5 sm:p-4 rounded-xl bg-black/50 border border-cyan-500/30">
+                  <h5 className="text-[11px] sm:text-xs font-bold font-mono text-cyan-400 uppercase tracking-wider mb-1.5 sm:mb-2 flex items-center gap-1.5">
+                    <Layers className="w-4 h-4 shrink-0" /> System Topology & Flow
                   </h5>
-                  <p className="text-xs font-mono text-gray-300 leading-relaxed">
+                  <p className="text-[11px] sm:text-xs font-mono text-gray-300 leading-relaxed">
                     {activeModalProject.details.architecture}
                   </p>
                 </div>
 
                 {/* Problems Solved Checklist */}
                 <div>
-                  <h5 className="text-sm font-bold font-mono text-white mb-3 flex items-center gap-2">
-                    <CheckCircle2 className="w-4 h-4 text-green-400" />
+                  <h5 className="text-xs sm:text-sm font-bold font-mono text-white mb-2 sm:mb-3 flex items-center gap-2">
+                    <CheckCircle2 className="w-4 h-4 text-green-400 shrink-0" />
                     Key Problems Solved
                   </h5>
                   <div className="grid sm:grid-cols-2 gap-2">
                     {activeModalProject.problemsSolved.map(prob => (
-                      <div key={prob} className="flex items-start gap-2 text-xs font-mono text-gray-300 p-2 bg-black/40 rounded border border-gray-800">
+                      <div key={prob} className="flex items-start gap-2 text-[11px] sm:text-xs font-mono text-gray-300 p-2 bg-black/40 rounded border border-gray-800">
                         <span className="text-green-400 mt-0.5">•</span>
                         <span>{prob}</span>
                       </div>
@@ -485,31 +499,31 @@ export default function ProjectsShowcase() {
 
                 {/* Code Snippet Viewer */}
                 <div className="rounded-xl overflow-hidden border border-green-500/30 bg-[#020904]">
-                  <div className="flex items-center justify-between px-4 py-2.5 bg-[#07190e] border-b border-green-500/20">
-                    <span className="text-xs font-mono text-green-400 flex items-center gap-2">
-                      <Terminal className="w-3.5 h-3.5" />
-                      Core Production Snippet ({activeModalProject.codeLanguage})
+                  <div className="flex items-center justify-between px-3.5 py-2 bg-[#07190e] border-b border-green-500/20">
+                    <span className="text-[11px] sm:text-xs font-mono text-green-400 flex items-center gap-1.5 sm:gap-2 truncate">
+                      <Terminal className="w-3.5 h-3.5 shrink-0" />
+                      Core Snippet ({activeModalProject.codeLanguage})
                     </span>
                     <button
                       onClick={() => copyCode(activeModalProject.codeSnippet)}
-                      className="flex items-center gap-1 text-xs font-mono text-gray-400 hover:text-white px-2 py-1 rounded hover:bg-green-500/10 transition-colors cursor-pointer"
+                      className="flex items-center gap-1 text-[10px] sm:text-xs font-mono text-gray-400 hover:text-white px-2 py-1 rounded hover:bg-green-500/10 transition-colors cursor-pointer shrink-0"
                     >
                       {copiedSnippet ? <Check className="w-3.5 h-3.5 text-green-400" /> : <Copy className="w-3.5 h-3.5" />}
                       <span>{copiedSnippet ? 'Copied' : 'Copy'}</span>
                     </button>
                   </div>
-                  <pre className="p-4 text-xs font-mono text-green-300 overflow-x-auto leading-relaxed">
+                  <pre className="p-3 sm:p-4 text-[11px] sm:text-xs font-mono text-green-300 overflow-x-auto leading-relaxed">
                     {activeModalProject.codeSnippet}
                   </pre>
                 </div>
 
                 {/* Modal Action Buttons */}
-                <div className="flex items-center justify-end gap-3 pt-4 border-t border-gray-800">
-                  <Button variant="outline" size="sm" onClick={() => setActiveModalProject(null)}>
+                <div className="flex flex-col-reverse sm:flex-row items-stretch sm:items-center justify-end gap-2.5 pt-4 border-t border-gray-800">
+                  <Button variant="outline" size="sm" onClick={() => setActiveModalProject(null)} className="w-full sm:w-auto min-h-[40px]">
                     Close
                   </Button>
-                  <a href={activeModalProject.githubUrl} target="_blank" rel="noreferrer">
-                    <Button size="sm">
+                  <a href={activeModalProject.githubUrl} target="_blank" rel="noreferrer" className="w-full sm:w-auto">
+                    <Button size="sm" className="w-full min-h-[40px]">
                       <Github className="w-4 h-4 mr-2" />
                       <span>View GitHub Repository</span>
                     </Button>

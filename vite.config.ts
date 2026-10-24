@@ -8,6 +8,16 @@ export default defineConfig({
   base: '/',
   build: {
     outDir: 'dist',
+    rollupOptions: {
+      output: {
+        manualChunks: {
+          vendor: ['react', 'react-dom', 'react-router-dom'],
+          motion: ['framer-motion'],
+          icons: ['lucide-react'],
+        },
+      },
+    },
+    chunkSizeWarningLimit: 600,
   },
   resolve: {
     alias: {
@@ -18,5 +28,6 @@ export default defineConfig({
     host: true,
     port: 5173,
     open: false,
+    allowedHosts: true,
   },
 })

@@ -94,107 +94,107 @@ export default function ExperienceTimeline() {
         whileInView={{ opacity: 1, y: 0 }} 
         viewport={{ once: true }} 
         transition={{ duration: 0.6 }} 
-        className="text-center mb-16"
+        className="text-center mb-10 sm:mb-16"
       >
         <div className="inline-flex items-center gap-2 text-xs font-mono text-cyan-400 bg-cyan-950/40 px-3 py-1 rounded-full border border-cyan-800/50 mb-3">
           <Terminal className="w-3.5 h-3.5" />
           <span>$ git log --experience --graph --oneline</span>
         </div>
-        <h2 className="text-3xl md:text-5xl font-extrabold text-white glow-text tracking-tight font-mono">
+        <h2 className="text-2xl sm:text-3xl md:text-5xl font-extrabold text-white glow-text tracking-tight font-mono">
           Career Journey & Engineering Impact
         </h2>
-        <p className="text-gray-400 max-w-2xl mx-auto mt-3 font-mono text-sm md:text-base">
+        <p className="text-gray-400 max-w-2xl mx-auto mt-2 sm:mt-3 font-mono text-xs sm:text-sm md:text-base">
           Proven history of architecting, building, and delivering enterprise software solutions.
         </p>
       </motion.div>
 
       {/* Timeline Container */}
-      <div className="relative border-l-2 border-green-500/30 ml-4 md:ml-32 space-y-12">
+      <div className="relative border-l-2 border-green-500/30 ml-2.5 sm:ml-6 md:ml-32 space-y-8 sm:space-y-12">
         {EXPERIENCES.map((exp, idx) => (
           <motion.div
             key={exp.title}
-            initial={{ opacity: 0, x: -30 }}
+            initial={{ opacity: 0, x: -20 }}
             whileInView={{ opacity: 1, x: 0 }}
             viewport={{ once: true }}
-            transition={{ delay: idx * 0.15, duration: 0.6 }}
-            className="relative pl-6 md:pl-10"
+            transition={{ delay: idx * 0.12, duration: 0.5 }}
+            className="relative pl-4 sm:pl-6 md:pl-10"
           >
             {/* Timeline Node Point */}
-            <div className={`absolute -left-[11px] top-1.5 w-5 h-5 rounded-full border-2 ${
+            <div className={`absolute -left-[9px] sm:-left-[11px] top-1.5 w-4 h-4 sm:w-5 sm:h-5 rounded-full border-2 ${
               exp.highlight 
                 ? 'bg-green-400 border-green-200 shadow-lg shadow-green-500/50' 
                 : 'bg-black border-green-500/50'
             }`}>
-              <div className="w-2 h-2 rounded-full bg-black m-auto mt-[4px]" />
+              <div className="w-1.5 h-1.5 sm:w-2 sm:h-2 rounded-full bg-black m-auto mt-[3px] sm:mt-[4px]" />
             </div>
 
-            {/* Date Pill (Left on desktop) */}
+            {/* Date Pill (Left on desktop, above on mobile) */}
             <div className="md:absolute md:-left-36 md:top-1 text-xs font-mono text-green-400 font-bold mb-2 md:mb-0">
-              <span className="px-2.5 py-1 rounded bg-green-500/10 border border-green-500/30 inline-block">
+              <span className="px-2 sm:px-2.5 py-0.5 sm:py-1 rounded bg-green-500/10 border border-green-500/30 inline-block text-[10px] sm:text-xs">
                 {exp.duration}
               </span>
             </div>
 
             {/* Main Experience Card */}
-            <div className={`p-6 md:p-8 rounded-2xl bg-[#040e07]/90 border ${
+            <div className={`p-4 sm:p-6 md:p-8 rounded-2xl bg-[#040e07]/90 border ${
               exp.highlight ? 'border-green-400/60 shadow-xl glow-card' : 'border-green-500/20'
             } backdrop-blur-md`}>
               {/* Header */}
               <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-2 mb-3">
                 <div>
-                  <h3 className="text-xl md:text-2xl font-bold font-mono text-white">
+                  <h3 className="text-lg sm:text-xl md:text-2xl font-bold font-mono text-white leading-snug">
                     {exp.title}
                   </h3>
-                  <div className="flex flex-wrap items-center gap-3 text-xs font-mono text-gray-400 mt-1">
+                  <div className="flex flex-wrap items-center gap-2 sm:gap-3 text-xs font-mono text-gray-400 mt-1">
                     <span className="text-green-400 font-semibold">{exp.company}</span>
-                    <span>•</span>
-                    <span className="flex items-center gap-1">
-                      <MapPin className="w-3.5 h-3.5 text-gray-500" />
+                    <span className="hidden sm:inline">•</span>
+                    <span className="flex items-center gap-1 text-[11px] sm:text-xs">
+                      <MapPin className="w-3.5 h-3.5 text-gray-500 shrink-0" />
                       {exp.location}
                     </span>
-                    <span>•</span>
-                    <span className="text-cyan-400">{exp.industry}</span>
+                    <span className="hidden sm:inline">•</span>
+                    <span className="text-cyan-400 text-[11px] sm:text-xs">{exp.industry}</span>
                   </div>
                 </div>
 
                 {exp.highlight && (
-                  <Badge variant="cyan" className="self-start sm:self-center">
+                  <Badge variant="cyan" className="self-start sm:self-center shrink-0">
                     Current Focus
                   </Badge>
                 )}
               </div>
 
               {/* Client Outcome Summary */}
-              <p className="text-xs md:text-sm text-gray-300 font-mono mb-5 italic border-l-2 border-green-500/50 pl-3 py-0.5">
+              <p className="text-[11px] sm:text-xs md:text-sm text-gray-300 font-mono mb-4 sm:mb-5 italic border-l-2 border-green-500/50 pl-3 py-0.5 leading-relaxed">
                 "{exp.clientOutcome}"
               </p>
 
               {/* Key Achievements Checklist */}
-              <div className="space-y-2.5 mb-6">
+              <div className="space-y-2 sm:space-y-2.5 mb-4 sm:mb-6">
                 {exp.achievements.map((ach, aIdx) => (
-                  <div key={aIdx} className="flex items-start gap-2.5 text-xs font-mono text-gray-300">
-                    <ach.icon className="w-4 h-4 text-green-400 shrink-0 mt-0.5" />
-                    <span>{ach.text}</span>
+                  <div key={aIdx} className="flex items-start gap-2 sm:gap-2.5 text-[11px] sm:text-xs font-mono text-gray-300">
+                    <ach.icon className="w-3.5 h-3.5 sm:w-4 sm:h-4 text-green-400 shrink-0 mt-0.5" />
+                    <span className="leading-relaxed">{ach.text}</span>
                   </div>
                 ))}
               </div>
 
               {/* Metrics Grid */}
-              <div className="grid grid-cols-2 sm:grid-cols-4 gap-2.5 py-4 border-y border-gray-800/80 mb-5">
+              <div className="grid grid-cols-2 sm:grid-cols-4 gap-2 sm:gap-2.5 py-3 sm:py-4 border-y border-gray-800/80 mb-4 sm:mb-5">
                 {Object.entries(exp.metrics).map(([k, v]) => (
                   <div key={k} className="p-2 rounded bg-black/50 border border-green-500/20 text-center">
-                    <div className="text-sm font-bold font-mono text-green-400">{v}</div>
-                    <div className="text-[10px] font-mono text-gray-500">{k}</div>
+                    <div className="text-xs sm:text-sm font-bold font-mono text-green-400">{v}</div>
+                    <div className="text-[9px] sm:text-[10px] font-mono text-gray-500 truncate">{k}</div>
                   </div>
                 ))}
               </div>
 
               {/* Tech Stack Tags */}
-              <div className="flex flex-wrap gap-1.5">
+              <div className="flex flex-wrap gap-1 sm:gap-1.5">
                 {exp.technologies.map(tech => (
                   <span
                     key={tech}
-                    className="text-[10px] font-mono px-2.5 py-1 rounded bg-black/60 border border-gray-800 text-gray-400 hover:text-green-300 hover:border-green-500/40 transition-colors"
+                    className="text-[9px] sm:text-[10px] font-mono px-2 py-0.5 rounded bg-black/60 border border-gray-800 text-gray-400 hover:text-green-300 hover:border-green-500/40 transition-colors"
                   >
                     {tech}
                   </span>

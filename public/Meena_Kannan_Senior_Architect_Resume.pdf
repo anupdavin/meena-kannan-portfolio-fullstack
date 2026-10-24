@@ -1,0 +1,133 @@
+%PDF-1.4
+1 0 obj
+<< /Type /Catalog /Pages 2 0 R >>
+endobj
+2 0 obj
+<< /Type /Pages /Kids [3 0 R] /Count 1 >>
+endobj
+3 0 obj
+<< /Type /Page /Parent 2 0 R /MediaBox [0 0 612 842] /Contents 4 0 R /Resources << /Font << /F1 5 0 R /F2 6 0 R >> >> >>
+endobj
+4 0 obj
+<< /Length 3787 >>
+stream
+BT
+/F2 18 Tf
+50 800 Td
+(MEENA KANNAN) Tj
+/F2 11 Tf
+50 780 Td
+(Senior Full-Stack & Cloud Solutions Architect) Tj
+/F1 9 Tf
+50 765 Td
+(meenakannan.dev@gmail.com | linkedin.com/in/meena-kannan | github.com/meenak95) Tj
+/F1 8 Tf
+50 751 Td
+(------------------------------------------------------------------------------------------------------------------------) Tj
+/F2 11 Tf
+50 735 Td
+(EXECUTIVE SUMMARY) Tj
+/F1 8.5 Tf
+50 720 Td
+(Senior Full-Stack Software Engineer & Solutions Architect with 7+ years of experience engineering high-concurrency) Tj
+/F1 8.5 Tf
+50 708 Td
+(distributed microservices, multi-tenant SaaS products, and resilient cloud architectures. Expert in Clean Architecture,) Tj
+/F1 8.5 Tf
+50 696 Td
+(Domain-Driven Design \(DDD\), Java 21 LTS, Spring Boot 3, React 19, TypeScript, PostgreSQL, Redis, and AWS Cloud Native.) Tj
+/F2 11 Tf
+50 678 Td
+(CORE TECHNICAL ARSENAL) Tj
+/F1 8.5 Tf
+50 663 Td
+(• Backend & JVM: Java 21, Spring Boot 3, Spring Security, Spring Cloud, Hibernate/JPA, Node.js) Tj
+/F1 8.5 Tf
+50 651 Td
+(• Cloud & DevOps: AWS \(EC2, S3, RDS, ECS, Lambda\), Docker, Kubernetes \(K8s\), GitHub Actions CI/CD, Terraform) Tj
+/F1 8.5 Tf
+50 639 Td
+(• Databases & Streams: PostgreSQL, Redis \(Caching & Distributed Locks\), Apache Kafka, Oracle DB, Flyway) Tj
+/F1 8.5 Tf
+50 627 Td
+(• Frontend & UI: React 19, TypeScript, Next.js, Tailwind CSS 4, Framer Motion, Real-Time WebSockets) Tj
+/F1 8.5 Tf
+50 615 Td
+(• Architectural Patterns: Clean Architecture, Domain-Driven Design \(DDD\), CQRS, Saga Pattern, Resilience4j) Tj
+/F2 11 Tf
+50 597 Td
+(PROFESSIONAL EXPERIENCE) Tj
+/F2 9.5 Tf
+50 582 Td
+(Lead Full-Stack & Cloud Solutions Architect | Enterprise Cloud & SaaS Consulting \(2022 - Present\)) Tj
+/F1 8.5 Tf
+50 569 Td
+(• Decomposed monolithic legacy architectures into 12 autonomous microservices with Kafka, achieving 99.99% SLA.) Tj
+/F1 8.5 Tf
+50 557 Td
+(• Established automated GitHub Actions CI/CD pipelines, slashing release turnaround from 2 days to under 15 minutes.) Tj
+/F1 8.5 Tf
+50 545 Td
+(• Optimized PostgreSQL queries and implemented multi-tier Redis caching, cutting monthly cloud spend by 40%.) Tj
+/F1 8.5 Tf
+50 533 Td
+(• Spearheaded Clean Architecture & DDD best practices, mentoring 10+ cross-functional software engineers.) Tj
+/F2 9.5 Tf
+50 515 Td
+(Senior Full-Stack Software Engineer | FinTech & Scale-up Technologies \(2020 - 2022\)) Tj
+/F1 8.5 Tf
+50 502 Td
+(• Engineered high-throughput REST APIs handling 50,000+ concurrent active sessions with sub-80ms response times.) Tj
+/F1 8.5 Tf
+50 490 Td
+(• Implemented secure JWT and OAuth2 authorization flows with Spring Security, passing 100% compliance audits.) Tj
+/F1 8.5 Tf
+50 478 Td
+(• Tuned HikariCP connection pools and database indexing, speeding up query retrieval by 60%.) Tj
+/F2 9.5 Tf
+50 460 Td
+(Software Engineer | Enterprise Web Solutions \(2018 - 2020\)) Tj
+/F1 8.5 Tf
+50 447 Td
+(• Developed mission-critical core inventory modules processing over 25M+ relational records with zero downtime.) Tj
+/F1 8.5 Tf
+50 435 Td
+(• Authored comprehensive unit and integration testing suites with JUnit & Mockito, cutting production defects by 75%.) Tj
+/F2 11 Tf
+50 417 Td
+(FEATURED ARCHITECTURAL PROJECTS) Tj
+/F1 8.5 Tf
+50 402 Td
+(• Enterprise SaaS Platform: Multi-tenant portfolio & management platform with Spring Boot 3, React 19, Redis, Docker.) Tj
+/F1 8.5 Tf
+50 390 Td
+(• Distributed E-Commerce Microservices: Event-driven engine handling 10,000+ RPS with Kafka & Kubernetes autoscaling.) Tj
+/F1 8.5 Tf
+50 378 Td
+(• Real-Time Collaboration Engine: Sub-20ms WebSocket broadcast sync supporting 50,000+ concurrent sessions.) Tj
+/F1 8.5 Tf
+50 366 Td
+(• FinTech Transaction & Compliance Gateway: PCI-DSS compliant payment gateway handling $10M+ daily volume.) Tj
+ET
+endstream
+endobj
+5 0 obj
+<< /Type /Font /Subtype /Type1 /BaseFont /Helvetica >>
+endobj
+6 0 obj
+<< /Type /Font /Subtype /Type1 /BaseFont /Helvetica-Bold >>
+endobj
+xref
+0 7
+0000000000 65535 f 
+0000000009 00000 n 
+0000000058 00000 n 
+0000000115 00000 n 
+0000000251 00000 n 
+0000004089 00000 n 
+0000004159 00000 n 
+trailer
+<< /Size 7 /Root 1 0 R >>
+startxref
+4234
+%%EOF

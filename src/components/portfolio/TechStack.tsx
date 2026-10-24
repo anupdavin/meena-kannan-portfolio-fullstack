@@ -272,6 +272,7 @@ const TECH_DATA: Record<string, CategoryData> = {
 export default function TechStack() {
   const [selectedCategory, setSelectedCategory] = useState<string>('Backend & JVM')
   const [hoveredTech, setHoveredTech] = useState<Technology | null>(null)
+  const [activeTech, setActiveTech] = useState<Technology | null>(null)
   const [searchQuery, setSearchQuery] = useState('')
 
   // Filter technologies based on search query or category
@@ -295,6 +296,8 @@ export default function TechStack() {
     return TECH_DATA[selectedCategory].technologies
   }, [searchQuery, selectedCategory])
 
+  const currentBenchmarkTech = hoveredTech || activeTech || filteredTechs[0]
+
   return (
     <div className="max-w-7xl mx-auto">
       {/* Section Header */}
@@ -303,24 +306,24 @@ export default function TechStack() {
         whileInView={{ opacity: 1, y: 0 }} 
         viewport={{ once: true }} 
         transition={{ duration: 0.6 }} 
-        className="text-center mb-12"
+        className="text-center mb-8 sm:mb-12"
       >
         <div className="inline-flex items-center gap-2 text-xs font-mono text-green-400 bg-green-950/40 px-3 py-1 rounded-full border border-green-800/50 mb-3">
           <Terminal className="w-3.5 h-3.5" />
           <span>$ ls -la /skills/ --verbose</span>
         </div>
-        <h2 className="text-3xl md:text-5xl font-extrabold text-white glow-text tracking-tight font-mono">
+        <h2 className="text-2xl sm:text-3xl md:text-5xl font-extrabold text-white glow-text tracking-tight font-mono">
           Technical Arsenal & Core Stack
         </h2>
-        <p className="text-gray-400 max-w-2xl mx-auto mt-3 font-mono text-sm md:text-base">
+        <p className="text-gray-400 max-w-2xl mx-auto mt-2 sm:mt-3 font-mono text-xs sm:text-sm md:text-base">
           Proven enterprise technologies mastered through building and scaling production software systems.
         </p>
       </motion.div>
 
-      {/* Controls: Category Selector & Search Bar */}
-      <div className="flex flex-col md:flex-row items-center justify-between gap-4 mb-10">
-        {/* Categories Bar */}
-        <div className="flex flex-wrap items-center gap-2 w-full md:w-auto">
+      {/* Controls: Horizontal Scroll Category Selector & Search Bar */}
+      <div className="flex flex-col md:flex-row items-stretch md:items-center justify-between gap-3 sm:gap-4 mb-6 sm:mb-10">
+        {/* Categories Bar (Mobile Swipeable Chips) */}
+        <div className="flex items-center gap-2 overflow-x-auto scrollbar-none pb-1.5 w-full md:w-auto shrink-0 touch-scroll px-1">
           {Object.entries(TECH_DATA).map(([category, data]) => {
             const Icon = data.icon
             const isSelected = selectedCategory === category && !searchQuery
@@ -330,14 +333,15 @@ export default function TechStack() {
                 onClick={() => {
                   setSelectedCategory(category)
                   setSearchQuery('')
+                  setActiveTech(null)
                 }}
-                className={`flex items-center gap-2 px-3.5 py-2 rounded-lg text-xs md:text-sm font-mono transition-all cursor-pointer ${
+                className={`flex items-center gap-1.5 sm:gap-2 px-3 sm:px-3.5 py-2 rounded-lg text-xs md:text-sm font-mono transition-all cursor-pointer whitespace-nowrap shrink-0 min-h-[40px] active:scale-95 ${
                   isSelected
-                    ? 'bg-green-500/20 text-green-300 border border-green-400 shadow-md shadow-green-500/10 glow-border'
+                    ? 'bg-green-500/20 text-green-300 border border-green-400 shadow-md shadow-green-500/10 glow-border font-bold'
                     : 'bg-black/40 text-gray-400 border border-gray-800 hover:border-gray-700 hover:text-gray-200'
                 }`}
               >
-                <Icon className={`w-4 h-4 ${isSelected ? 'text-green-400' : 'text-gray-500'}`} />
+                <Icon className={`w-3.5 h-3.5 sm:w-4 sm:h-4 ${isSelected ? 'text-green-400' : 'text-gray-500'}`} />
                 <span>{category}</span>
               </button>
             )
@@ -350,11 +354,19 @@ export default function TechStack() {
           <input
             type="text"
             value={searchQuery}
-            onChange={(e) => setSearchQuery(e.target.value)}
-            placeholder="Search skill (e.g. Kafka, Java, Docker)..."
-            className="w-full pl-9 pr-4 py-2 bg-[#040e07] border border-green-500/30 text-green-200 text-xs font-mono rounded-lg focus:outline-none focus:border-green-400 focus:ring-1 focus:ring-green-400 placeholder:text-gray-600"
+            onChange={(e) => {
+              setSearchQuery(e.target.value)
+              setActiveTech(null)
+            }}
+            placeholder="Search skill (e.g. Kafka, Java)..."
+            className="w-full pl-9 pr-4 py-2 bg-[#040e07] border border-green-500/30 text-green-200 text-base md:text-xs font-mono rounded-lg focus:outline-none focus:border-green-400 focus:ring-1 focus:ring-green-400 placeholder:text-gray-600"
           />
         </div>
+      </div>
+
+      {/* Mobile helper hint */}
+      <div className="sm:hidden text-center text-[10px] text-gray-500 font-mono mb-3">
+        <span>Tap any card to view production benchmark details</span>
       </div>
 
       {/* Grid of Skill Cards */}
@@ -363,69 +375,98 @@ export default function TechStack() {
         initial={{ opacity: 0, y: 15 }}
         animate={{ opacity: 1, y: 0 }}
         transition={{ duration: 0.4 }}
-        className="grid md:grid-cols-2 lg:grid-cols-3 gap-5"
+        className="grid sm:grid-cols-2 lg:grid-cols-3 gap-3.5 sm:gap-5"
       >
-        {filteredTechs.map((tech, index) => (
-          <motion.div
-            key={tech.name}
-            initial={{ opacity: 0, scale: 0.95 }}
-            animate={{ opacity: 1, scale: 1 }}
-            transition={{ delay: index * 0.05 }}
-            onHoverStart={() => setHoveredTech(tech)}
-            onHoverEnd={() => setHoveredTech(null)}
-            className="group p-5 rounded-xl bg-[#040d07]/90 border border-green-500/20 hover:border-green-400/60 transition-all duration-300 glow-card hover:bg-green-500/[0.03] cursor-pointer flex flex-col justify-between"
-          >
-            <div>
-              {/* Card Header */}
-              <div className="flex items-center justify-between mb-3">
-                <h4 className="text-base font-bold font-mono text-white group-hover:text-green-300 transition-colors">
-                  {tech.name}
-                </h4>
-                <div className="flex items-center gap-2">
-                  <span className="text-[11px] font-mono text-gray-500">{tech.years}</span>
-                  <span className="px-2 py-0.5 rounded bg-green-500/15 border border-green-500/30 text-green-400 text-xs font-mono font-bold">
-                    {tech.level}%
-                  </span>
+        {filteredTechs.map((tech, index) => {
+          const isSelected = activeTech?.name === tech.name
+          return (
+            <motion.div
+              key={tech.name}
+              initial={{ opacity: 0, scale: 0.95 }}
+              animate={{ opacity: 1, scale: 1 }}
+              transition={{ delay: index * 0.04 }}
+              onClick={() => setActiveTech(isSelected ? null : tech)}
+              onHoverStart={() => setHoveredTech(tech)}
+              onHoverEnd={() => setHoveredTech(null)}
+              className={`group p-4 sm:p-5 rounded-xl bg-[#040d07]/90 border transition-all duration-300 glow-card cursor-pointer flex flex-col justify-between ${
+                isSelected 
+                  ? 'border-green-400 bg-green-500/10 shadow-lg shadow-green-500/15' 
+                  : 'border-green-500/20 hover:border-green-400/60 hover:bg-green-500/[0.03]'
+              }`}
+            >
+              <div>
+                {/* Card Header */}
+                <div className="flex items-center justify-between mb-2.5 sm:mb-3">
+                  <h4 className={`text-sm sm:text-base font-bold font-mono transition-colors ${
+                    isSelected ? 'text-green-300' : 'text-white group-hover:text-green-300'
+                  }`}>
+                    {tech.name}
+                  </h4>
+                  <div className="flex items-center gap-1.5 sm:gap-2">
+                    <span className="text-[10px] sm:text-[11px] font-mono text-gray-500">{tech.years}</span>
+                    <span className="px-1.5 sm:px-2 py-0.5 rounded bg-green-500/15 border border-green-500/30 text-green-400 text-[11px] sm:text-xs font-mono font-bold">
+                      {tech.level}%
+                    </span>
+                  </div>
                 </div>
+
+                {/* Progress Bar */}
+                <Progress value={tech.level} className="mb-3 h-1.5" />
+
+                {/* Description */}
+                <p className="text-[11px] sm:text-xs text-gray-400 font-mono leading-relaxed mb-3 sm:mb-4">
+                  {tech.description}
+                </p>
+
+                {/* Mobile expanded production benchmark inside card */}
+                {isSelected && (
+                  <motion.div
+                    initial={{ opacity: 0, height: 0 }}
+                    animate={{ opacity: 1, height: 'auto' }}
+                    className="sm:hidden mb-3 p-3 rounded-lg bg-green-950/40 border border-green-500/40 text-[11px] font-mono text-gray-200"
+                  >
+                    <div className="flex items-center gap-1.5 text-green-400 font-bold mb-1 text-[10px]">
+                      <Sparkles className="w-3 h-3" />
+                      <span>PRODUCTION BENCHMARK:</span>
+                    </div>
+                    {tech.productionUse}
+                  </motion.div>
+                )}
               </div>
 
-              {/* Progress Bar */}
-              <Progress value={tech.level} className="mb-3.5 h-1.5" />
-
-              {/* Description */}
-              <p className="text-xs text-gray-400 font-mono leading-relaxed mb-4">
-                {tech.description}
-              </p>
-            </div>
-
-            {/* Tags and Production Snippet */}
-            <div className="pt-3 border-t border-gray-800/80">
-              <div className="flex flex-wrap gap-1.5">
-                {tech.tags.map(tag => (
-                  <span key={tag} className="text-[10px] font-mono px-2 py-0.5 rounded bg-black/60 border border-gray-800 text-gray-400">
-                    #{tag}
-                  </span>
-                ))}
+              {/* Tags and Production Snippet */}
+              <div className="pt-2.5 sm:pt-3 border-t border-gray-800/80 flex items-center justify-between">
+                <div className="flex flex-wrap gap-1 sm:gap-1.5">
+                  {tech.tags.map(tag => (
+                    <span key={tag} className="text-[9px] sm:text-[10px] font-mono px-1.5 sm:px-2 py-0.5 rounded bg-black/60 border border-gray-800 text-gray-400">
+                      #{tag}
+                    </span>
+                  ))}
+                </div>
+                <span className="sm:hidden text-[9px] text-green-400 font-mono">
+                  {isSelected ? '▲ close' : '▼ impact'}
+                </span>
               </div>
-            </div>
-          </motion.div>
-        ))}
+            </motion.div>
+          )
+        })}
       </motion.div>
 
-      {/* Interactive Detail Drawer on Hover */}
-      {hoveredTech && (
+      {/* Interactive Detail Drawer on Desktop/Tablet */}
+      {currentBenchmarkTech && (
         <motion.div 
+          key={currentBenchmarkTech.name}
           initial={{ opacity: 0, y: 15 }} 
           animate={{ opacity: 1, y: 0 }} 
-          className="mt-8 p-5 rounded-xl bg-gradient-to-r from-green-950/40 via-black to-cyan-950/40 border border-green-500/40 backdrop-blur-md shadow-2xl"
+          className="hidden sm:block mt-8 p-5 rounded-xl bg-gradient-to-r from-green-950/40 via-black to-cyan-950/40 border border-green-500/40 backdrop-blur-md shadow-2xl"
         >
           <div className="flex items-center gap-2 mb-1 text-green-400 font-mono text-xs">
             <Sparkles className="w-4 h-4" />
-            <span>PRODUCTION BENCHMARK & IMPACT</span>
+            <span>PRODUCTION BENCHMARK & ARCHITECTURAL IMPACT</span>
           </div>
-          <h4 className="text-xl font-bold font-mono text-white mb-2">{hoveredTech.name}</h4>
+          <h4 className="text-xl font-bold font-mono text-white mb-2">{currentBenchmarkTech.name}</h4>
           <p className="text-gray-300 font-mono text-sm leading-relaxed">
-            {hoveredTech.productionUse}
+            {currentBenchmarkTech.productionUse}
           </p>
         </motion.div>
       )}

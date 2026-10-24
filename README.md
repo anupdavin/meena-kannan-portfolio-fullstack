@@ -1,5 +1,7 @@
 # Meena Kannan — Full-Stack & Cloud Solutions Architect Portfolio
 
+[![CI Quality & Verification](https://github.com/meenak95/meena-kannan-portfolio-fullstack/actions/workflows/ci.yml/badge.svg)](https://github.com/meenak95/meena-kannan-portfolio-fullstack/actions)
+
 > Production-ready, enterprise-grade developer portfolio featuring Cyberpunk/Matrix aesthetics, interactive terminal CLI, Clean Architecture blueprints, filterable tech stack & enterprise projects, career timeline, and an in-browser AI Assistant.
 
 ---
@@ -44,14 +46,21 @@
 
 ---
 
-## 💻 Local Development
+## 💻 Development & Cross-Device Testing
+
+### 🌐 Access URLs
+- **Local Machine**: [http://localhost:5173](http://localhost:5173)
+- **Mobile / Local Network**: `http://<your-local-ip>:5173` (e.g. `http://192.168.1.152:5173` on same Wi-Fi)
 
 ```bash
 # Install dependencies (if not already present)
 npm install
 
-# Start Vite local development server
+# Start Vite server (host: true enabled for network access on phones/tablets)
 npm run dev
+
+# Run automated tests
+npm test
 
 # Build for production
 npm run build

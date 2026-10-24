@@ -105,31 +105,31 @@ public class MeenaKannanArchitect {
         whileInView={{ opacity: 1, y: 0 }} 
         viewport={{ once: true }} 
         transition={{ duration: 0.6 }} 
-        className="text-center mb-16"
+        className="text-center mb-10 sm:mb-16"
       >
         <div className="inline-flex items-center gap-2 text-xs font-mono text-cyan-400 bg-cyan-950/40 px-3 py-1 rounded-full border border-cyan-800/50 mb-3">
           <Terminal className="w-3.5 h-3.5" />
           <span>$ cat /system/specifications/about_me.txt</span>
         </div>
-        <h2 className="text-3xl md:text-5xl font-extrabold text-white glow-text tracking-tight font-mono">
+        <h2 className="text-2xl sm:text-3xl md:text-5xl font-extrabold text-white glow-text tracking-tight font-mono">
           System Specifications & Architecture
         </h2>
-        <p className="text-gray-400 max-w-2xl mx-auto mt-3 font-mono text-sm md:text-base">
+        <p className="text-gray-400 max-w-2xl mx-auto mt-2 sm:mt-3 font-mono text-xs sm:text-sm md:text-base">
           Engineering clean, maintainable, and highly resilient cloud-native software built for enterprise scale.
         </p>
       </motion.div>
 
       {/* Code Card & Overview */}
-      <div className="grid lg:grid-cols-12 gap-8 items-start mb-16">
+      <div className="grid lg:grid-cols-12 gap-6 lg:gap-8 items-start mb-10 sm:mb-16">
         {/* Left: Interactive Class Specification */}
         <motion.div 
           initial={{ opacity: 0, x: -30 }} 
           whileInView={{ opacity: 1, x: 0 }} 
           viewport={{ once: true }} 
           transition={{ duration: 0.6 }} 
-          className="lg:col-span-6 code-block rounded-xl border border-green-500/30 overflow-hidden shadow-2xl"
+          className="lg:col-span-6 code-block rounded-xl border border-green-500/30 overflow-hidden shadow-2xl min-w-0 w-full"
         >
-          <div className="flex items-center justify-between px-4 py-3 bg-[#06140b] border-b border-green-500/20">
+          <div className="flex items-center justify-between px-3.5 py-2.5 sm:px-4 sm:py-3 bg-[#06140b] border-b border-green-500/20">
             <span className="text-xs font-mono text-green-400 flex items-center gap-2">
               <Code className="w-4 h-4" />
               DeveloperProfile.java
@@ -143,7 +143,7 @@ public class MeenaKannanArchitect {
             </button>
           </div>
 
-          <pre className="p-5 text-xs sm:text-sm font-mono text-green-300 leading-relaxed overflow-x-auto">
+          <pre className="p-3.5 sm:p-5 text-[11px] sm:text-sm font-mono text-green-300 leading-relaxed overflow-x-auto touch-scroll max-w-full">
 {`/**
  * Senior Full-Stack Cloud & Software Architect
  * Specialized in Enterprise Clean Architecture & Cloud Solutions
@@ -176,27 +176,27 @@ public class MeenaKannanArchitect {
           whileInView={{ opacity: 1, x: 0 }} 
           viewport={{ once: true }} 
           transition={{ duration: 0.6 }} 
-          className="lg:col-span-6 space-y-4"
+          className="lg:col-span-6 space-y-4 min-w-0 w-full"
         >
-          <Card className="bg-[#040e07]/90 border border-green-500/30 p-6">
+          <Card className="bg-[#040e07]/90 border border-green-500/30 p-4 sm:p-6">
             <div className="flex items-center gap-2 text-green-400 text-sm font-mono font-semibold mb-2">
               <span className="text-cyan-400">&gt;&gt;</span> Executive Engineering Profile
             </div>
-            <p className="text-gray-300 font-mono text-sm leading-relaxed mb-4">
+            <p className="text-gray-300 font-mono text-xs sm:text-sm leading-relaxed mb-3 sm:mb-4">
               I am a <strong className="text-white">Senior Full-Stack Software Engineer & Solutions Architect</strong> with extensive experience designing and deploying scalable, high-availability web applications, enterprise microservices, and multi-tenant SaaS products.
             </p>
-            <p className="text-gray-400 font-mono text-sm leading-relaxed mb-6">
+            <p className="text-gray-400 font-mono text-xs sm:text-sm leading-relaxed mb-4 sm:mb-6">
               Throughout my 7+ years in enterprise software engineering, I have focused on closing the gap between complex business requirements and elegant, battle-tested software architectures. Whether decomposing monolithic systems into distributed microservices or crafting responsive React frontends, my focus is always on <span className="text-green-300">reliability</span>, <span className="text-cyan-300">performance</span>, and <span className="text-purple-300">maintainability</span>.
             </p>
 
-            <div className="grid grid-cols-2 gap-3 pt-2 border-t border-gray-800">
-              <div className="p-3 rounded bg-black/40 border border-green-500/20">
-                <span className="text-xs text-gray-400 font-mono block">Primary Methodology</span>
-                <span className="text-sm font-mono font-bold text-green-400">Clean Architecture / DDD</span>
+            <div className="grid grid-cols-1 sm:grid-cols-2 gap-2.5 sm:gap-3 pt-2 border-t border-gray-800">
+              <div className="p-2.5 sm:p-3 rounded bg-black/40 border border-green-500/20">
+                <span className="text-[10px] sm:text-xs text-gray-400 font-mono block">Primary Methodology</span>
+                <span className="text-xs sm:text-sm font-mono font-bold text-green-400">Clean Architecture / DDD</span>
               </div>
-              <div className="p-3 rounded bg-black/40 border border-cyan-500/20">
-                <span className="text-xs text-gray-400 font-mono block">Delivery Cycle</span>
-                <span className="text-sm font-mono font-bold text-cyan-400">CI/CD Continuous Delivery</span>
+              <div className="p-2.5 sm:p-3 rounded bg-black/40 border border-cyan-500/20">
+                <span className="text-[10px] sm:text-xs text-gray-400 font-mono block">Delivery Cycle</span>
+                <span className="text-xs sm:text-sm font-mono font-bold text-cyan-400">CI/CD Continuous Delivery</span>
               </div>
             </div>
           </Card>
@@ -209,10 +209,10 @@ public class MeenaKannanArchitect {
         whileInView={{ opacity: 1, y: 0 }} 
         viewport={{ once: true }} 
         transition={{ duration: 0.6 }} 
-        className="space-y-6 mb-16"
+        className="space-y-4 sm:space-y-6 mb-10 sm:mb-16"
       >
         <div className="flex items-center justify-between border-b border-gray-800 pb-3">
-          <h3 className="text-xl md:text-2xl font-bold font-mono text-white flex items-center gap-2">
+          <h3 className="text-lg sm:text-xl md:text-2xl font-bold font-mono text-white flex items-center gap-2">
             <Layers className="w-5 h-5 text-green-400" />
             <span>Clean Architecture Blueprint</span>
           </h3>
@@ -221,7 +221,7 @@ public class MeenaKannanArchitect {
           </span>
         </div>
 
-        <div className="grid md:grid-cols-2 lg:grid-cols-4 gap-4">
+        <div className="grid sm:grid-cols-2 lg:grid-cols-4 gap-3 sm:gap-4">
           {ARCHITECTURE_LAYERS.map((layer, idx) => (
             <motion.div
               key={layer.layer}
@@ -229,17 +229,17 @@ public class MeenaKannanArchitect {
               whileInView={{ opacity: 1, y: 0 }}
               viewport={{ once: true }}
               transition={{ delay: idx * 0.1 }}
-              className={`p-5 rounded-xl border ${layer.border} bg-[#040e07] hover:${layer.bg} transition-all duration-300 flex flex-col justify-between`}
+              className={`p-4 sm:p-5 rounded-xl border ${layer.border} bg-[#040e07] hover:${layer.bg} transition-all duration-300 flex flex-col justify-between`}
             >
               <div>
-                <div className="flex items-center justify-between mb-3">
-                  <layer.icon className={`w-5 h-5 ${layer.color}`} />
+                <div className="flex items-center justify-between mb-2 sm:mb-3">
+                  <layer.icon className={`w-4 h-4 sm:w-5 sm:h-5 ${layer.color}`} />
                   <span className="text-[10px] font-mono text-gray-500 uppercase">Layer {idx + 1}</span>
                 </div>
-                <h4 className={`text-base font-bold font-mono ${layer.color} mb-2`}>{layer.layer}</h4>
-                <p className="text-xs text-gray-400 font-mono leading-relaxed">{layer.desc}</p>
+                <h4 className={`text-sm sm:text-base font-bold font-mono ${layer.color} mb-1.5 sm:mb-2`}>{layer.layer}</h4>
+                <p className="text-[11px] sm:text-xs text-gray-400 font-mono leading-relaxed">{layer.desc}</p>
               </div>
-              <div className="mt-4 pt-3 border-t border-gray-800/80 flex items-center justify-between text-[11px] text-gray-500 font-mono">
+              <div className="mt-3 sm:mt-4 pt-2.5 sm:pt-3 border-t border-gray-800/80 flex items-center justify-between text-[10px] sm:text-[11px] text-gray-500 font-mono">
                 <span>Contract Compliant</span>
                 <Check className={`w-3.5 h-3.5 ${layer.color}`} />
               </div>
@@ -249,12 +249,12 @@ public class MeenaKannanArchitect {
       </motion.div>
 
       {/* Core Engineering Pillars */}
-      <div className="grid md:grid-cols-2 lg:grid-cols-4 gap-4">
-        {CORE_PILLARS.map((pillar, idx) => (
-          <div key={pillar.title} className="p-5 rounded-xl bg-black/50 border border-gray-800 hover:border-green-500/40 transition-all">
-            <pillar.icon className="w-5 h-5 text-green-400 mb-3" />
-            <h4 className="text-sm font-bold font-mono text-white mb-2">{pillar.title}</h4>
-            <p className="text-xs text-gray-400 font-mono leading-relaxed">{pillar.desc}</p>
+      <div className="grid sm:grid-cols-2 lg:grid-cols-4 gap-3 sm:gap-4">
+        {CORE_PILLARS.map((pillar) => (
+          <div key={pillar.title} className="p-4 sm:p-5 rounded-xl bg-black/50 border border-gray-800 hover:border-green-500/40 transition-all">
+            <pillar.icon className="w-4 h-4 sm:w-5 sm:h-5 text-green-400 mb-2 sm:mb-3" />
+            <h4 className="text-xs sm:text-sm font-bold font-mono text-white mb-1.5 sm:mb-2">{pillar.title}</h4>
+            <p className="text-[11px] sm:text-xs text-gray-400 font-mono leading-relaxed">{pillar.desc}</p>
           </div>
         ))}
       </div>
