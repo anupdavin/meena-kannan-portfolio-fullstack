@@ -1,6 +1,6 @@
 # Meena Kannan: Full-Stack & Cloud Solutions Architect Portfolio
 
-[![CI Quality & Verification](https://github.com/meenak95/meena-kannan-portfolio-fullstack/actions/workflows/ci.yml/badge.svg)](https://github.com/meenak95/meena-kannan-portfolio-fullstack/actions)
+[![CI Quality & Verification](https://github.com/anupdavin/meena-kannan-portfolio-fullstack/actions/workflows/ci.yml/badge.svg)](https://github.com/anupdavin/meena-kannan-portfolio-fullstack/actions)
 
 > Production-ready, enterprise-grade developer portfolio featuring Cyberpunk/Matrix aesthetics, interactive terminal CLI, Clean Architecture blueprints, filterable tech stack & enterprise projects, career timeline, and an in-browser AI Assistant.
 
