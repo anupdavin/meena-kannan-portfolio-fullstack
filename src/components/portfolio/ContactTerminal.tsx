@@ -1,5 +1,5 @@
-import React, { useEffect, useState } from 'react'
-import { motion } from 'framer-motion'
+import React, { useEffect, useState, useMemo } from 'react'
+import { motion, AnimatePresence } from 'framer-motion'
 import { 
   Mail, 
   Linkedin, 
@@ -9,106 +9,151 @@ import {
   CheckCircle, 
   Globe, 
   Send, 
-  Sparkles,
-  Calendar,
-  Check,
-  Copy
+  Check, 
+  Copy,
+  Briefcase,
+  Building,
+  ShieldCheck,
+  ExternalLink,
+  FileText
 } from 'lucide-react'
 import { Button } from '@/components/ui/button'
 import { Input } from '@/components/ui/input'
 import { Textarea } from '@/components/ui/textarea'
 
-const terminalScript = [
-  'meena@portfolio:~$ contact --info --verbose',
-  '> Email: meenakannan.dev@gmail.com',
-  '> LinkedIn: linkedin.com/in/meena-kannan',
-  '> GitHub: github.com/meenak95',
-  '> Location: Remote / Global (Singapore / India timezone with US/EU overlap)',
-  '',
-  'meena@portfolio:~$ availability --status',
-  '> Current Status: OPEN to new opportunities & consulting engagements',
-  '> Capacity: Full-time Senior/Lead Architect OR high-impact advisory contracts',
-  '> Onboarding Window: Available within 2-3 weeks',
-  '',
-  'meena@portfolio:~$ engagement --models',
-  '> 1. Full-Stack SaaS Architecture & End-to-End Build',
-  '> 2. Monolith to Distributed Microservices Migration',
-  '> 3. High-Concurrency Backend Tuning (Java 21 / Spring Boot 3 / Kafka)',
-  '> 4. Cloud Infrastructure & CI/CD Modernization (AWS / Kubernetes)',
-  '',
-  'meena@portfolio:~$ sla --response-time',
-  '> Guarantee: All business inquiries receive a tailored reply within 24 hours',
-  'meena@portfolio:~$ _'
-]
+// Dynamic email assembly to protect against Cloudflare mailto: scraper rewrites
+const EMAIL_USER = 'meenakannan.dev'
+const EMAIL_DOMAIN = 'gmail.com'
+const getDynamicEmail = () => `${EMAIL_USER}@${EMAIL_DOMAIN}`
+
+const ENGAGEMENT_TYPES = [
+  'Full-Stack Architecture',
+  'Cloud Migration',
+  'Technical Advisory',
+  'Full-Time / Contract'
+] as const
+
+type EngagementType = typeof ENGAGEMENT_TYPES[number]
 
 export default function ContactTerminal() {
   const [displayedLines, setDisplayedLines] = useState<string[]>([])
   const [currentLine, setCurrentLine] = useState(0)
-  const [mobileTab, setMobileTab] = useState<'form' | 'terminal'>('form')
-  const [formData, setFormData] = useState({
-    name: '',
-    email: '',
-    company: '',
-    projectType: 'Full-Stack Enterprise SaaS',
-    message: ''
-  })
+  const [mobileTab, setMobileTab] = useState<'inquiry' | 'terminal'>('inquiry')
+  
+  // B2B Inquiry Form State
+  const [nameAndCompany, setNameAndCompany] = useState('')
+  const [contactEmail, setContactEmail] = useState('')
+  const [engagementType, setEngagementType] = useState<EngagementType>('Full-Stack Architecture')
+  const [projectBrief, setProjectBrief] = useState('')
+  
   const [isSubmitting, setIsSubmitting] = useState(false)
   const [isSubmitted, setIsSubmitted] = useState(false)
-  const [copiedEmail, setCopiedEmail] = useState(false)
+  
+  // Toast state
+  const [showCopyToast, setShowCopyToast] = useState(false)
+
+  const resolvedEmail = useMemo(() => getDynamicEmail(), [])
+
+  const terminalScript = useMemo(() => [
+    'meena@portfolio:~$ contact --info --verbose',
+    `> Direct Channel: ${resolvedEmail}`,
+    '> LinkedIn: linkedin.com/in/meena-kannan',
+    '> GitHub: github.com/meenak95',
+    '> Location: Remote Worldwide (Singapore / India with US/EU timezone overlap)',
+    '',
+    'meena@portfolio:~$ availability --status',
+    '> Current Status: OPEN to Enterprise Architecture & Advisory Roles',
+    '> Capacity: Senior/Lead Architect OR high-impact B2B consulting engagements',
+    '> Onboarding SLA: Available within 2-3 weeks',
+    '',
+    'meena@portfolio:~$ architecture --core-pillars',
+    '> 1. Monolith to Distributed Microservices Decomposition (Kafka + Saga)',
+    '> 2. Full-Stack Enterprise SaaS Architecture (Spring Boot 3 + React 19)',
+    '> 3. High-Concurrency Backend Tuning & Virtual Threads (Java 21)',
+    '> 4. Cloud Infrastructure Modernization (AWS EKS / Terraform)',
+    '',
+    'meena@portfolio:~$ sla --response-guarantee',
+    '> Response Window: All business & architecture inquiries answered within 24 hours',
+    'meena@portfolio:~$ _'
+  ], [resolvedEmail])
 
   useEffect(() => {
     if (currentLine < terminalScript.length) {
       const timer = setTimeout(() => {
         setDisplayedLines(prev => [...prev, terminalScript[currentLine]])
         setCurrentLine(prev => prev + 1)
-      }, currentLine === 0 ? 500 : 150)
+      }, currentLine === 0 ? 400 : 120)
       return () => clearTimeout(timer)
     }
-  }, [currentLine])
+  }, [currentLine, terminalScript])
+
+  const copyEmailToClipboard = () => {
+    navigator.clipboard.writeText(resolvedEmail)
+    setShowCopyToast(true)
+    setTimeout(() => {
+      setShowCopyToast(false)
+    }, 3000)
+  }
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault()
     setIsSubmitting(true)
 
-    // Build mailto URL with pre-filled subject and body from form data
+    // Build client mailto URL dynamically without exposing raw static markup
     const subject = encodeURIComponent(
-      `[Portfolio Inquiry] ${formData.projectType} — from ${formData.name}`
+      `[B2B Architecture Inquiry] ${engagementType}: ${nameAndCompany}`
     )
     const body = encodeURIComponent(
       `Hi Meena,\n\n` +
-      `Name: ${formData.name}\n` +
-      `Email: ${formData.email}\n` +
-      `Company: ${formData.company || 'N/A'}\n` +
-      `Project / Role Domain: ${formData.projectType}\n\n` +
-      `--- Message ---\n${formData.message}\n\n` +
-      `---\nSent via portfolio contact form`
+      `Name / Company: ${nameAndCompany}\n` +
+      `Contact Email: ${contactEmail}\n` +
+      `Engagement Type: ${engagementType}\n\n` +
+      `--- Project Brief & Scope ---\n${projectBrief}\n\n` +
+      `---\nDispatched via meenakannan.dev B2B Inquiry Portal`
     )
-    const mailtoUrl = `mailto:meenakannan.dev@gmail.com?subject=${subject}&body=${body}`
+    const dynamicMailto = `mailto:${resolvedEmail}?subject=${subject}&body=${body}`
 
-    // Open the user's default email client
-    window.open(mailtoUrl, '_self')
+    // Trigger user mail client
+    window.location.href = dynamicMailto
 
     setTimeout(() => {
       setIsSubmitting(false)
       setIsSubmitted(true)
-      setFormData({
-        name: '',
-        email: '',
-        company: '',
-        projectType: 'Full-Stack Enterprise SaaS',
-        message: ''
-      })
-    }, 800)
-  }
-
-  const copyEmail = () => {
-    navigator.clipboard.writeText('meenakannan.dev@gmail.com')
-    setCopiedEmail(true)
-    setTimeout(() => setCopiedEmail(false), 2000)
+      setNameAndCompany('')
+      setContactEmail('')
+      setEngagementType('Full-Stack Architecture')
+      setProjectBrief('')
+    }, 600)
   }
 
   return (
-    <div className="max-w-7xl mx-auto">
+    <div className="max-w-7xl mx-auto relative">
+      {/* Toast Notification for One-Click Email Copy */}
+      <AnimatePresence>
+        {showCopyToast && (
+          <motion.div
+            initial={{ opacity: 0, y: -20, scale: 0.95 }}
+            animate={{ opacity: 1, y: 0, scale: 1 }}
+            exit={{ opacity: 0, y: -20, scale: 0.95 }}
+            className="fixed top-20 right-4 sm:right-8 z-50 p-3 sm:p-4 rounded-xl bg-slate-900 border border-emerald-500/80 shadow-2xl backdrop-blur-xl flex items-center gap-3 text-slate-100"
+            role="status"
+            aria-live="polite"
+          >
+            <div className="w-8 h-8 rounded-lg bg-emerald-500/20 text-emerald-400 flex items-center justify-center shrink-0">
+              <Check className="w-4 h-4" />
+            </div>
+            <div>
+              <p className="text-xs sm:text-sm font-mono font-bold text-emerald-300">
+                Copied to clipboard!
+              </p>
+              <p className="text-[11px] font-mono text-slate-400">
+                {resolvedEmail}
+              </p>
+            </div>
+          </motion.div>
+        )}
+      </AnimatePresence>
+
       {/* Section Header */}
       <motion.div 
         initial={{ opacity: 0, y: 30 }} 
@@ -117,20 +162,20 @@ export default function ContactTerminal() {
         transition={{ duration: 0.6 }} 
         className="text-center mb-8 sm:mb-12"
       >
-        <div className="inline-flex items-center gap-2 text-xs font-mono text-green-400 bg-green-950/40 px-3 py-1 rounded-full border border-green-800/50 mb-3">
+        <div className="inline-flex items-center gap-2 text-xs font-mono text-emerald-400 bg-emerald-950/40 px-3 py-1 rounded-full border border-emerald-800/50 mb-3 shadow-sm">
           <Terminal className="w-3.5 h-3.5" />
-          <span>$ ./contact_me.sh --secure-dispatch</span>
+          <span>$ ./contact_gateway.sh --b2b-consulting</span>
         </div>
-        <h2 className="text-2xl sm:text-3xl md:text-5xl font-extrabold text-white glow-text tracking-tight font-mono">
-          Initialize Contact & Collaborate
+        <h2 className="text-2xl sm:text-4xl md:text-5xl font-extrabold text-white tracking-tight font-editorial">
+          Consultation & Strategic Engagements
         </h2>
-        <p className="text-gray-400 max-w-2xl mx-auto mt-2 sm:mt-3 font-mono text-xs sm:text-sm md:text-base">
-          Ready to scale your enterprise architecture, build a modern full-stack SaaS, or optimize cloud infrastructure?
+        <p className="text-slate-400 max-w-2xl mx-auto mt-2 sm:mt-3 font-sans text-xs sm:text-sm md:text-base leading-relaxed">
+          Available for senior architecture leadership, cloud migrations, monolith-to-microservices decomposition, and full-stack enterprise systems advisory.
         </p>
 
         {/* Value badges strip */}
         <div className="flex flex-wrap items-center justify-center gap-3 sm:gap-6 mt-4 sm:mt-6">
-          <div className="flex items-center gap-1.5 sm:gap-2 text-[11px] sm:text-xs font-mono text-green-400">
+          <div className="flex items-center gap-1.5 sm:gap-2 text-[11px] sm:text-xs font-mono text-emerald-400">
             <Clock className="w-3.5 h-3.5 sm:w-4 sm:h-4" />
             <span>&lt;24h Response SLA</span>
           </div>
@@ -139,124 +184,171 @@ export default function ContactTerminal() {
             <span>Remote Worldwide</span>
           </div>
           <div className="flex items-center gap-1.5 sm:gap-2 text-[11px] sm:text-xs font-mono text-purple-400">
-            <CheckCircle className="w-3.5 h-3.5 sm:w-4 sm:h-4" />
-            <span>Available for Hire</span>
+            <ShieldCheck className="w-3.5 h-3.5 sm:w-4 sm:h-4" />
+            <span>Open for Hire & Advisory</span>
           </div>
         </div>
       </motion.div>
 
       {/* Mobile Tab Switcher */}
-      <div className="lg:hidden flex items-center justify-center p-1 bg-black/60 border border-green-500/30 rounded-xl mb-6 max-w-sm mx-auto">
+      <div className="lg:hidden flex items-center justify-center p-1 bg-slate-950 border border-slate-800 rounded-xl mb-6 max-w-sm mx-auto">
         <button
-          onClick={() => setMobileTab('form')}
+          onClick={() => setMobileTab('inquiry')}
           className={`flex-1 py-2.5 px-3 text-xs font-mono font-bold rounded-lg transition-all min-h-[42px] cursor-pointer active:scale-95 ${
-            mobileTab === 'form'
-              ? 'bg-green-500 text-black shadow-md glow-border'
-              : 'text-gray-400 hover:text-white'
+            mobileTab === 'inquiry'
+              ? 'bg-emerald-500 text-slate-950 shadow-md'
+              : 'text-slate-400 hover:text-white'
           }`}
+          aria-label="Show B2B Architecture Inquiry Form"
         >
-          Send Message
+          B2B Inquiry Card
         </button>
         <button
           onClick={() => setMobileTab('terminal')}
           className={`flex-1 py-2.5 px-3 text-xs font-mono font-bold rounded-lg transition-all min-h-[42px] cursor-pointer active:scale-95 ${
             mobileTab === 'terminal'
-              ? 'bg-green-500 text-black shadow-md glow-border'
-              : 'text-gray-400 hover:text-white'
+              ? 'bg-emerald-500 text-slate-950 shadow-md'
+              : 'text-slate-400 hover:text-white'
           }`}
+          aria-label="Show Terminal Specifications"
         >
           Terminal Info
         </button>
       </div>
 
-      {/* Main Grid: Terminal Info (Left) + Contact Form (Right) */}
+      {/* Main Grid: Left Daemon Terminal + Right B2B Inquiry Card */}
       <div className="grid lg:grid-cols-12 gap-6 sm:gap-8 items-start">
-        {/* Left Column: Live Terminal Printout */}
+        
+        {/* Left Column: Live Terminal Printout & Direct Copy Action */}
         <motion.div 
           initial={{ opacity: 0, x: -30 }} 
           whileInView={{ opacity: 1, x: 0 }} 
           viewport={{ once: true }} 
           transition={{ duration: 0.6 }} 
-          className={`lg:col-span-6 rounded-2xl overflow-hidden border border-green-500/30 bg-[#030a05]/95 shadow-xl backdrop-blur-md min-w-0 w-full ${
-            mobileTab === 'form' ? 'hidden lg:block' : 'block'
+          className={`lg:col-span-5 rounded-2xl overflow-hidden border border-slate-800/90 bg-[#040912]/95 shadow-xl backdrop-blur-md min-w-0 w-full ${
+            mobileTab === 'inquiry' ? 'hidden lg:block' : 'block'
           }`}
         >
-          <div className="flex items-center justify-between px-3.5 sm:px-4 py-2.5 sm:py-3 bg-[#06160b] border-b border-green-500/20">
+          {/* Header */}
+          <div className="flex items-center justify-between px-3.5 sm:px-4 py-2.5 sm:py-3 bg-[#081120] border-b border-slate-800">
             <div className="flex items-center gap-1.5 sm:gap-2">
               <div className="w-2.5 h-2.5 sm:w-3 sm:h-3 rounded-full bg-red-500/80" />
               <div className="w-2.5 h-2.5 sm:w-3 sm:h-3 rounded-full bg-yellow-500/80" />
               <div className="w-2.5 h-2.5 sm:w-3 sm:h-3 rounded-full bg-green-500/80" />
-              <span className="ml-1 sm:ml-2 text-[10px] sm:text-xs font-mono text-gray-400">
-                daemon://dispatch-service
+              <span className="ml-1 sm:ml-2 text-[10px] sm:text-xs font-mono text-slate-400">
+                daemon://advisory-spec
               </span>
             </div>
+
+            {/* Direct Copy Button */}
             <button 
-              onClick={copyEmail}
-              className="text-[10px] sm:text-xs font-mono text-green-400 hover:text-white flex items-center gap-1.5 cursor-pointer py-1 px-2 rounded hover:bg-green-500/10"
+              onClick={copyEmailToClipboard}
+              aria-label="Copy Email Address to Clipboard"
+              className="text-[10px] sm:text-xs font-mono text-emerald-400 hover:text-white flex items-center gap-1.5 cursor-pointer py-1 px-2.5 rounded-lg bg-emerald-500/10 hover:bg-emerald-500/20 border border-emerald-500/30 transition-all focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-emerald-400"
             >
-              {copiedEmail ? <Check className="w-3.5 h-3.5" /> : <Copy className="w-3.5 h-3.5" />}
-              <span>{copiedEmail ? 'Copied' : 'Copy Email'}</span>
+              <Copy className="w-3.5 h-3.5" />
+              <span>Copy Email</span>
             </button>
           </div>
 
-          <div className="p-3.5 sm:p-5 font-mono text-[11px] sm:text-xs md:text-sm text-green-300 min-h-[260px] sm:min-h-[360px] max-h-[460px] overflow-y-auto leading-relaxed space-y-1 touch-scroll overscroll-contain">
-            {displayedLines.map((line, idx) => (
-              <div key={idx} className={line.startsWith('meena@') ? 'text-cyan-400 font-semibold' : 'text-gray-300'}>
-                {line}
-              </div>
-            ))}
+          {/* Terminal Screen Output */}
+          <div className="p-3.5 sm:p-5 font-mono text-[11px] sm:text-xs text-slate-300 min-h-[260px] sm:min-h-[380px] max-h-[480px] overflow-y-auto leading-relaxed space-y-1.5 touch-scroll overscroll-contain">
+            {displayedLines.map((rawLine, idx) => {
+              const line = typeof rawLine === 'string' ? rawLine : ''
+              return (
+                <div key={idx} className={line.startsWith('meena@') ? 'text-cyan-400 font-semibold' : 'text-slate-300'}>
+                  {line}
+                </div>
+              )
+            })}
           </div>
 
-          {/* Social Links Footer */}
-          <div className="p-3 sm:p-4 bg-[#05140b] border-t border-green-500/20 flex flex-wrap items-center justify-between gap-2.5">
-            <span className="text-xs font-mono text-gray-400">Direct Channels:</span>
-            <div className="flex items-center gap-1.5 sm:gap-2">
-              <a 
-                href="mailto:meenakannan.dev@gmail.com" 
-                className="px-2.5 sm:px-3 py-1.5 rounded-lg bg-green-500/10 border border-green-500/30 text-green-400 hover:bg-green-500/20 text-xs font-mono flex items-center gap-1.5 transition-all"
+          {/* Social Links & One-Click Contact Footer */}
+          <div className="p-3.5 sm:p-4 bg-[#060c18] border-t border-slate-800 space-y-3">
+            <div className="flex items-center justify-between text-xs font-mono text-slate-400">
+              <span>Direct Professional Channels:</span>
+              <button
+                onClick={copyEmailToClipboard}
+                className="text-emerald-400 hover:text-emerald-300 text-[11px] font-mono cursor-pointer underline flex items-center gap-1"
               >
-                <Mail className="w-3.5 h-3.5" />
-                <span>Email</span>
-              </a>
+                <span>{resolvedEmail}</span>
+              </button>
+            </div>
+
+            <div className="grid grid-cols-2 gap-2">
               <a 
                 href="https://www.linkedin.com/in/meena-kannan" 
                 target="_blank" 
                 rel="noreferrer" 
-                className="px-2.5 sm:px-3 py-1.5 rounded-lg bg-cyan-500/10 border border-cyan-500/30 text-cyan-400 hover:bg-cyan-500/20 text-xs font-mono flex items-center gap-1.5 transition-all"
+                aria-label="Visit Meena Kannan on LinkedIn"
+                className="px-3 py-2 rounded-xl bg-cyan-500/10 border border-cyan-500/30 text-cyan-300 hover:bg-cyan-500/20 hover:text-white text-xs font-mono flex items-center justify-center gap-2 transition-all focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-cyan-400"
               >
-                <Linkedin className="w-3.5 h-3.5" />
+                <Linkedin className="w-4 h-4 text-cyan-400" />
                 <span>LinkedIn</span>
+                <ExternalLink className="w-3 h-3 text-cyan-400/70 ml-auto" />
               </a>
+
               <a 
                 href="https://github.com/meenak95" 
                 target="_blank" 
                 rel="noreferrer" 
-                className="px-2.5 sm:px-3 py-1.5 rounded-lg bg-purple-500/10 border border-purple-500/30 text-purple-400 hover:bg-purple-500/20 text-xs font-mono flex items-center gap-1.5 transition-all"
+                aria-label="Visit Meena Kannan on GitHub"
+                className="px-3 py-2 rounded-xl bg-purple-500/10 border border-purple-500/30 text-purple-300 hover:bg-purple-500/20 hover:text-white text-xs font-mono flex items-center justify-center gap-2 transition-all focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-purple-400"
               >
-                <Github className="w-3.5 h-3.5" />
+                <Github className="w-4 h-4 text-purple-400" />
                 <span>GitHub</span>
+                <ExternalLink className="w-3 h-3 text-purple-400/70 ml-auto" />
+              </a>
+            </div>
+
+            <div className="grid grid-cols-2 gap-2">
+              <a 
+                href={`mailto:${resolvedEmail}`}
+                aria-label="Send direct email to Meena Kannan"
+                className="px-3 py-2 rounded-xl bg-emerald-500/10 border border-emerald-500/30 text-emerald-300 hover:bg-emerald-500/20 hover:text-white text-xs font-mono flex items-center justify-center gap-2 transition-all focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-emerald-400"
+              >
+                <Mail className="w-4 h-4 text-emerald-400" />
+                <span>Direct Mail</span>
+                <ExternalLink className="w-3 h-3 text-emerald-400/70 ml-auto" />
+              </a>
+
+              <a 
+                href="/Meena_Kannan_Senior_Architect_Resume.pdf"
+                download="Meena_Kannan_Senior_Architect_Resume.pdf"
+                target="_blank" 
+                rel="noreferrer"
+                aria-label="Download Executive CV PDF"
+                className="px-3 py-2 rounded-xl bg-slate-800/50 border border-slate-700/80 text-slate-300 hover:bg-slate-800 hover:text-white text-xs font-mono flex items-center justify-center gap-2 transition-all focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-slate-400"
+              >
+                <FileText className="w-4 h-4 text-slate-400" />
+                <span>Resume (PDF)</span>
+                <ExternalLink className="w-3 h-3 text-slate-400/70 ml-auto" />
               </a>
             </div>
           </div>
         </motion.div>
 
-        {/* Right Column: Interactive Dispatch Form */}
+        {/* Right Column: B2B Consulting & Architecture Inquiry Card */}
         <motion.div 
           initial={{ opacity: 0, x: 30 }} 
           whileInView={{ opacity: 1, x: 0 }} 
           viewport={{ once: true }} 
           transition={{ duration: 0.6 }} 
-          className={`lg:col-span-6 rounded-2xl bg-[#040e07]/90 border border-green-500/30 p-4 sm:p-6 md:p-8 shadow-xl backdrop-blur-md min-w-0 w-full ${
+          className={`lg:col-span-7 rounded-2xl bg-[#090e18]/95 border border-slate-800 p-5 sm:p-7 md:p-8 shadow-2xl backdrop-blur-md min-w-0 w-full specular-card ${
             mobileTab === 'terminal' ? 'hidden lg:block' : 'block'
           }`}
         >
-          <div className="mb-4 sm:mb-6">
-            <h3 className="text-lg sm:text-xl font-bold font-mono text-white flex items-center gap-2">
-              <Mail className="w-4 h-4 sm:w-5 sm:h-5 text-green-400" />
-              <span>Direct Project / Role Inquiry</span>
+          {/* Inquiry Header */}
+          <div className="pb-4 sm:pb-5 border-b border-slate-800 mb-5 sm:mb-6">
+            <div className="flex items-center gap-2 text-xs font-mono text-emerald-400 font-bold uppercase tracking-wider mb-1">
+              <Briefcase className="w-4 h-4 text-emerald-400" />
+              <span>B2B Consulting & Architecture Inquiry</span>
+            </div>
+            <h3 className="text-xl sm:text-2xl font-bold font-editorial text-white">
+              Request an Architecture Assessment or Retainer
             </h3>
-            <p className="text-xs text-gray-400 font-mono mt-1">
-              Send a direct message detailing your project scope, requirements, or role details.
+            <p className="text-xs sm:text-sm text-slate-400 font-sans mt-1 leading-relaxed">
+              Submit your system specifications, cloud migration roadmap, or squad leadership goals. All submissions receive an architectural reply within 24 hours.
             </p>
           </div>
 
@@ -264,109 +356,188 @@ export default function ContactTerminal() {
             <motion.div 
               initial={{ opacity: 0, scale: 0.95 }} 
               animate={{ opacity: 1, scale: 1 }} 
-              className="p-5 sm:p-6 rounded-xl bg-green-500/10 border border-green-400/40 text-center space-y-3"
+              className="p-6 rounded-xl bg-emerald-500/10 border border-emerald-500/40 text-center space-y-3"
             >
-              <div className="w-10 h-10 sm:w-12 sm:h-12 rounded-full bg-green-500/20 border border-green-400 flex items-center justify-center mx-auto text-green-400">
-                <CheckCircle className="w-5 h-5 sm:w-6 sm:h-6" />
+              <div className="w-12 h-12 rounded-full bg-emerald-500/20 border border-emerald-400 flex items-center justify-center mx-auto text-emerald-400">
+                <CheckCircle className="w-6 h-6" />
               </div>
-              <h4 className="text-base sm:text-lg font-bold font-mono text-white">Transmission Successful</h4>
-              <p className="text-xs text-gray-300 font-mono max-w-sm mx-auto leading-relaxed">
-                Thank you for reaching out! Your message has been received. Meena will review your inquiry and follow up within 24 hours.
+              <h4 className="text-lg font-bold font-editorial text-white">Inquiry Payload Dispatched</h4>
+              <p className="text-xs sm:text-sm text-slate-300 font-sans max-w-md mx-auto leading-relaxed">
+                Thank you for your interest! Your email client has been prepared with your architecture brief. Meena will analyze your requirements and follow up within 24 hours.
               </p>
               <Button 
                 variant="outline" 
                 size="sm" 
                 onClick={() => setIsSubmitted(false)}
-                className="mt-3 text-xs font-mono"
+                className="mt-3 text-xs font-mono border-slate-700 text-slate-300"
               >
-                Send Another Message
+                Send Another Inquiry
               </Button>
             </motion.div>
           ) : (
-            <form onSubmit={handleSubmit} className="space-y-3.5 sm:space-y-4">
-              <div className="grid sm:grid-cols-2 gap-3 sm:gap-4">
+            <form onSubmit={handleSubmit} className="space-y-4">
+              {/* Row 1: Name / Company and Email */}
+              <div className="grid sm:grid-cols-2 gap-3.5 sm:gap-4">
                 <div className="space-y-1.5">
-                  <label htmlFor="contact-name" className="text-xs font-mono text-gray-300">Your Name *</label>
+                  <label htmlFor="inquiry-name" className="text-xs font-mono font-semibold text-slate-300 flex items-center gap-1.5">
+                    <Building className="w-3.5 h-3.5 text-emerald-400" />
+                    <span>Name / Company *</span>
+                  </label>
                   <Input 
-                    id="contact-name"
+                    id="inquiry-name"
                     required 
-                    placeholder="e.g. Sarah Jenkins"
-                    value={formData.name}
-                    onChange={(e) => setFormData({ ...formData, name: e.target.value })}
+                    placeholder="e.g. David Lin / FinTech Scale Corp"
+                    value={nameAndCompany}
+                    onChange={(e) => setNameAndCompany(e.target.value)}
+                    className="bg-[#050811] border-slate-700 text-white placeholder:text-slate-600 focus:border-emerald-400"
                   />
                 </div>
+
                 <div className="space-y-1.5">
-                  <label htmlFor="contact-email" className="text-xs font-mono text-gray-300">Email Address *</label>
+                  <label htmlFor="inquiry-email" className="text-xs font-mono font-semibold text-slate-300 flex items-center gap-1.5">
+                    <Mail className="w-3.5 h-3.5 text-cyan-400" />
+                    <span>Your Direct Email *</span>
+                  </label>
                   <Input 
-                    id="contact-email"
+                    id="inquiry-email"
                     type="email" 
                     required 
-                    placeholder="sarah@enterprise.com"
-                    value={formData.email}
-                    onChange={(e) => setFormData({ ...formData, email: e.target.value })}
+                    placeholder="david.lin@fintech.io"
+                    value={contactEmail}
+                    onChange={(e) => setContactEmail(e.target.value)}
+                    className="bg-[#050811] border-slate-700 text-white placeholder:text-slate-600 focus:border-cyan-400"
                   />
                 </div>
               </div>
 
-              <div className="grid sm:grid-cols-2 gap-3 sm:gap-4">
-                <div className="space-y-1.5">
-                  <label htmlFor="contact-company" className="text-xs font-mono text-gray-300">Company / Organization</label>
-                  <Input 
-                    id="contact-company"
-                    placeholder="e.g. Acme Cloud Corp"
-                    value={formData.company}
-                    onChange={(e) => setFormData({ ...formData, company: e.target.value })}
-                  />
-                </div>
-                <div className="space-y-1.5">
-                  <label htmlFor="contact-domain" className="text-xs font-mono text-gray-300">Project / Role Domain</label>
-                  <select 
-                    id="contact-domain"
-                    value={formData.projectType}
-                    onChange={(e) => setFormData({ ...formData, projectType: e.target.value })}
-                    className="w-full bg-[#040c06] border border-green-500/30 text-green-100 px-4 py-2.5 rounded-lg focus:border-green-400 focus:outline-none font-mono text-base md:text-sm"
-                  >
-                    <option value="Full-Stack Enterprise SaaS">Full-Stack Enterprise SaaS</option>
-                    <option value="Microservices Decomposition">Microservices Decomposition</option>
-                    <option value="Java 21 / Spring Boot Modernization">Java 21 / Spring Boot Modernization</option>
-                    <option value="Senior / Lead Full-Stack Role">Senior / Lead Full-Stack Role</option>
-                    <option value="Architecture Consulting">Architecture Consulting</option>
-                  </select>
+              {/* Engagement Type Selector */}
+              <div className="space-y-1.5" role="radiogroup" aria-labelledby="engagement-type-label">
+                <span id="engagement-type-label" className="text-xs font-mono font-semibold text-slate-300 flex items-center gap-1.5">
+                  <Briefcase className="w-3.5 h-3.5 text-purple-400" />
+                  <span>Engagement Type *</span>
+                </span>
+                <div className="grid grid-cols-2 sm:grid-cols-4 gap-2">
+                  {ENGAGEMENT_TYPES.map((type) => (
+                    <button
+                      key={type}
+                      type="button"
+                      role="radio"
+                      onClick={() => setEngagementType(type)}
+                      className={`p-2 rounded-xl text-left text-[11px] font-mono transition-all cursor-pointer border focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-emerald-400 focus-visible:ring-offset-1 focus-visible:ring-offset-[#090e18] ${
+                        engagementType === type
+                          ? 'bg-emerald-500/20 border-emerald-400 text-white font-bold shadow-sm'
+                          : 'bg-[#050811] border-slate-800 text-slate-400 hover:border-slate-700 hover:text-slate-200'
+                      }`}
+                      aria-checked={engagementType === type}
+                    >
+                      <div className="truncate">{type}</div>
+                    </button>
+                  ))}
                 </div>
               </div>
 
+              {/* Project Brief */}
               <div className="space-y-1.5">
-                <label htmlFor="contact-message" className="text-xs font-mono text-gray-300">Project Scope & Details *</label>
+                <div className="flex items-center justify-between">
+                  <label htmlFor="inquiry-brief" className="text-xs font-mono font-semibold text-slate-300 flex items-center gap-1.5">
+                    <Terminal className="w-3.5 h-3.5 text-amber-400" />
+                    <span>Project Brief & Architectural Requirements *</span>
+                  </label>
+                  <span className="text-[10px] font-mono text-slate-500">Confidentiality Assured</span>
+                </div>
                 <Textarea 
-                  id="contact-message"
+                  id="inquiry-brief"
                   required 
                   rows={4}
-                  placeholder="Describe your current system challenges, architectural targets, or role requirements..."
-                  value={formData.message}
-                  onChange={(e) => setFormData({ ...formData, message: e.target.value })}
+                  placeholder="Detail your system bottlenecks, tech stack (e.g. Java 21, Spring Boot, React, Kafka, AWS), target scale/RPS, timeline, or leadership scope..."
+                  value={projectBrief}
+                  onChange={(e) => setProjectBrief(e.target.value)}
+                  className="bg-[#050811] border-slate-700 text-white placeholder:text-slate-600 focus:border-emerald-400 text-xs sm:text-sm font-sans"
                 />
               </div>
 
-              <Button 
-                type="submit" 
-                size="lg" 
-                disabled={isSubmitting}
-                className="w-full min-h-[44px]"
-              >
-                {isSubmitting ? (
-                  <span className="flex items-center gap-2">
-                    <span className="w-3.5 h-3.5 border-2 border-black border-t-transparent rounded-full animate-spin" />
-                    Transmitting Payload...
-                  </span>
-                ) : (
-                  <span className="flex items-center gap-2">
-                    <Send className="w-4 h-4" />
-                    <span>Send Secure Message</span>
-                  </span>
-                )}
-              </Button>
+              {/* Action Buttons */}
+              <div className="pt-2 flex flex-col sm:flex-row items-stretch sm:items-center justify-between gap-3">
+                <button
+                  type="button"
+                  onClick={copyEmailToClipboard}
+                  className="text-xs font-mono text-slate-400 hover:text-emerald-400 transition-colors flex items-center justify-center gap-1.5 py-2 px-3 rounded-lg border border-slate-800 bg-slate-900/60 cursor-pointer"
+                  aria-label="Copy Meena Kannan's email address"
+                >
+                  <Copy className="w-3.5 h-3.5" />
+                  <span>Copy Direct Email</span>
+                </button>
+
+                <Button 
+                  type="submit" 
+                  size="lg" 
+                  disabled={isSubmitting}
+                  className="min-h-[46px] bg-emerald-500 text-slate-950 font-bold hover:bg-emerald-400 shadow-lg shadow-emerald-500/25 transition-all cursor-pointer text-xs sm:text-sm font-mono"
+                  aria-label="Dispatch Architecture Inquiry"
+                >
+                  {isSubmitting ? (
+                    <span className="flex items-center gap-2">
+                      <span className="w-3.5 h-3.5 border-2 border-slate-950 border-t-transparent rounded-full animate-spin" />
+                      <span>Preparing Dispatch...</span>
+                    </span>
+                  ) : (
+                    <span className="flex items-center gap-2">
+                      <Send className="w-4 h-4" />
+                      <span>Dispatch Architecture Inquiry</span>
+                    </span>
+                  )}
+                </Button>
+              </div>
             </form>
           )}
+
+          {/* Direct channels bottom strip */}
+          <div className="mt-5 pt-4 border-t border-slate-800/80 flex flex-wrap items-center justify-between gap-3 text-xs font-mono text-slate-400">
+            <div className="flex flex-wrap items-center gap-2.5 text-[11px] text-slate-400">
+              <a
+                href={`mailto:${resolvedEmail}`}
+                className="hover:text-emerald-400 transition-colors flex items-center gap-1"
+                aria-label="Direct Email"
+              >
+                <Mail className="w-3.5 h-3.5 text-emerald-400" />
+                <span>{resolvedEmail}</span>
+              </a>
+              <span className="text-slate-600 hidden sm:inline">&bull;</span>
+              <a
+                href="/Meena_Kannan_Senior_Architect_Resume.pdf"
+                download="Meena_Kannan_Senior_Architect_Resume.pdf"
+                target="_blank"
+                rel="noreferrer"
+                className="hover:text-white transition-colors flex items-center gap-1"
+                aria-label="Download Executive CV PDF"
+              >
+                <FileText className="w-3.5 h-3.5 text-slate-300" />
+                <span>Resume (PDF)</span>
+              </a>
+            </div>
+            <div className="flex items-center gap-3">
+              <a 
+                href="https://www.linkedin.com/in/meena-kannan" 
+                target="_blank" 
+                rel="noreferrer"
+                className="hover:text-cyan-400 transition-colors flex items-center gap-1"
+                aria-label="LinkedIn Profile"
+              >
+                <Linkedin className="w-3.5 h-3.5 text-cyan-400" />
+                <span>linkedin.com/in/meena-kannan</span>
+              </a>
+              <a 
+                href="https://github.com/meenak95" 
+                target="_blank" 
+                rel="noreferrer"
+                className="hover:text-purple-400 transition-colors flex items-center gap-1"
+                aria-label="GitHub Profile"
+              >
+                <Github className="w-3.5 h-3.5 text-purple-400" />
+                <span>github.com/meenak95</span>
+              </a>
+            </div>
+          </div>
         </motion.div>
       </div>
     </div>

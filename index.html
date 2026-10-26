@@ -3,33 +3,324 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" />
-    <meta name="theme-color" content="#030704" />
+    <meta name="theme-color" content="#06090e" />
     <meta name="mobile-web-app-capable" content="yes" />
     <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
+    
+    <!-- Primary Metadata -->
     <title>Meena Kannan | Senior Full-Stack & Cloud Solutions Architect</title>
-    <meta name="description" content="Portfolio of Meena Kannan — Senior Full-Stack Software Engineer & Solutions Architect. Specializing in Java 21, Spring Boot 3, Microservices, React 19, AWS & Cloud-Native Systems." />
+    <meta name="description" content="Portfolio of Meena Kannan: Senior Full-Stack Software Engineer & Solutions Architect with 8+ years experience. Specializing in Java 21, Spring Boot 3, Microservices, React 19, AWS & Cloud-Native Systems." />
+    <meta name="author" content="Meena Kannan" />
+    <meta name="keywords" content="Meena Kannan, Solutions Architect, Senior Full-Stack Engineer, Java 21, Spring Boot 3, Microservices, React 19, Cloud Architecture, System Design, Kafka, PostgreSQL, Redis, AWS, Choreographed Saga, Transactional Outbox" />
+    
+    <!-- OpenGraph Social Cards -->
     <meta property="og:title" content="Meena Kannan | Senior Full-Stack & Cloud Solutions Architect" />
-    <meta property="og:description" content="Enterprise Full-Stack Developer & Cloud Architect. Scalable Microservices, High-Throughput Systems, Clean Architecture." />
+    <meta property="og:description" content="Enterprise Full-Stack Developer & Cloud Architect. Scalable Microservices, High-Throughput Distributed Systems, Clean Architecture, and Interactive Architecture Workbenches." />
     <meta property="og:type" content="website" />
+    <meta property="og:url" content="https://meenakannan.dev" />
     <meta property="og:image" content="/og-image.svg" />
+    <meta property="og:image:alt" content="Meena Kannan - Senior Full-Stack & Cloud Solutions Architect Architecture Blueprint" />
+    <meta property="og:site_name" content="Meena Kannan Portfolio" />
+    <meta property="og:locale" content="en_US" />
+    
+    <!-- Twitter Social Cards -->
     <meta name="twitter:card" content="summary_large_image" />
     <meta name="twitter:title" content="Meena Kannan | Senior Full-Stack & Cloud Solutions Architect" />
-    <meta name="twitter:description" content="Scalable Microservices, Clean Architecture & Cloud Native Solutions." />
+    <meta name="twitter:description" content="Scalable Microservices, Clean Architecture, Interactive System Design Workbenches & Cloud Native Solutions." />
     <meta name="twitter:image" content="/og-image.svg" />
+    <meta name="twitter:creator" content="@meenak95" />
+    
     <link rel="canonical" href="https://meenakannan.dev" />
-    <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><rect width='100' height='100' rx='20' fill='%23050d08'/><text x='50%' y='55%' dominant-baseline='middle' text-anchor='middle' font-family='monospace' font-size='50' font-weight='bold' fill='%2322c55e'>&lt;M/&gt;</text></svg>" />
+    <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+    <link rel="apple-touch-icon" href="/favicon.svg" />
+    
+    <!-- Structured JSON-LD Schema (Person & WebSite) -->
+    <script type="application/ld+json">
+    {
+      "@context": "https://schema.org",
+      "@graph": [
+        {
+          "@type": "Person",
+          "@id": "https://meenakannan.dev/#person",
+          "name": "Meena Kannan",
+          "givenName": "Meena",
+          "familyName": "Kannan",
+          "jobTitle": "Senior Full-Stack & Cloud Solutions Architect",
+          "url": "https://meenakannan.dev",
+          "image": "https://meenakannan.dev/og-image.svg",
+          "sameAs": [
+            "https://github.com/meenak95",
+            "https://www.linkedin.com/in/meena-kannan"
+          ],
+          "knowsAbout": [
+            "Cloud Solutions Architecture",
+            "Distributed Microservices",
+            "Java 21 LTS (Virtual Threads)",
+            "Spring Boot 3",
+            "React 19",
+            "TypeScript",
+            "Apache Kafka",
+            "PostgreSQL",
+            "Redis Clustered Caching",
+            "Amazon Web Services (AWS)",
+            "Kubernetes & Docker",
+            "Clean Architecture",
+            "Domain-Driven Design (DDD)",
+            "Choreographed Saga Pattern",
+            "Transactional Outbox Pattern (Debezium CDC)"
+          ],
+          "description": "Senior Full-Stack Software Engineer & Solutions Architect with 8+ years of enterprise experience designing scalable, high-throughput microservices and cloud architectures."
+        },
+        {
+          "@type": "WebSite",
+          "@id": "https://meenakannan.dev/#website",
+          "url": "https://meenakannan.dev",
+          "name": "Meena Kannan Portfolio",
+          "description": "Enterprise Systems & Interactive Architecture Workbenches by Meena Kannan, Senior Full-Stack & Cloud Solutions Architect.",
+          "author": {
+            "@id": "https://meenakannan.dev/#person"
+          },
+          "inLanguage": "en-US"
+        }
+      ]
+    }
+    </script>
+
+    <!-- Fonts Preconnect -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Fira+Code:wght@400;500;600;700&family=JetBrains+Mono:ital,wght@0,300;0,400;0,500;0,600;0,700;0,800;1,400&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Fira+Code:wght@400;500;600;700&family=Inter:wght@300;400;500;600;700;800&family=JetBrains+Mono:ital,wght@0,300;0,400;0,500;0,600;0,700;0,800;1,400&family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+    
     <style>
       html {
         scroll-behavior: smooth;
-        background-color: #030704;
+        background-color: #06090e;
+      }
+      /* Fallback styling for pre-rendered semantic landmarks */
+      .prerender-shell {
+        font-family: 'JetBrains Mono', 'Inter', monospace, sans-serif;
+        color: #94a3b8;
+        background-color: #06090e;
+        min-height: 100vh;
+        line-height: 1.6;
+      }
+      .prerender-nav {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        padding: 1rem 1.5rem;
+        background: rgba(6, 10, 18, 0.95);
+        border-bottom: 1px solid #1e293b;
+      }
+      .prerender-hero {
+        padding: 4rem 1.5rem 3rem;
+        max-width: 1200px;
+        margin: 0 auto;
+      }
+      .prerender-heading {
+        color: #f8fafc;
+        font-size: 2.25rem;
+        font-weight: 800;
+        margin-bottom: 0.5rem;
+      }
+      .prerender-badge {
+        display: inline-block;
+        padding: 0.25rem 0.75rem;
+        border-radius: 9999px;
+        background: rgba(16, 185, 129, 0.1);
+        border: 1px solid rgba(16, 185, 129, 0.3);
+        color: #10b981;
+        font-size: 0.75rem;
+        font-weight: 600;
+        margin-bottom: 1rem;
       }
     </style>
   </head>
   <body class="bg-[#030704] text-green-400 antialiased selection:bg-green-500 selection:text-black">
-    <div id="root"></div>
+    <div id="root">
+      <!-- Semantic HTML Landmarks & Pre-rendered Content Shell for Crawlers & Link Previews -->
+      <div class="prerender-shell">
+        <header class="prerender-nav">
+          <div>
+            <strong style="color: #ffffff; font-size: 1.1rem;">Meena Kannan</strong>
+            <span style="display: block; font-size: 0.75rem; color: #64748b;">Principal Systems &amp; Cloud Architect</span>
+          </div>
+          <nav aria-label="Primary Navigation">
+            <a href="#hero" style="color: #94a3b8; text-decoration: none; margin-right: 1rem;">Home</a>
+            <a href="#about" style="color: #94a3b8; text-decoration: none; margin-right: 1rem;">About</a>
+            <a href="#skills" style="color: #94a3b8; text-decoration: none; margin-right: 1rem;">Skills</a>
+            <a href="#projects" style="color: #94a3b8; text-decoration: none; margin-right: 1rem;">Projects</a>
+            <a href="#experience" style="color: #94a3b8; text-decoration: none; margin-right: 1rem;">Experience</a>
+            <a href="#contact" style="color: #10b981; text-decoration: none; font-weight: bold;">Contact</a>
+          </nav>
+        </header>
+
+        <main id="main-content">
+          <!-- Hero Section Landmark -->
+          <section id="hero" class="prerender-hero">
+            <div class="prerender-badge">Enterprise Distributed Systems</div>
+            <h1 class="prerender-heading">Meena Kannan</h1>
+            <h2 style="font-size: 1.25rem; color: #38bdf8; margin-bottom: 1rem;">Senior Full-Stack Software Engineer & Solutions Architect</h2>
+            <p style="max-width: 800px; color: #cbd5e1; font-size: 1rem; margin-bottom: 1.5rem;">
+              Architecting high-throughput, fault-tolerant enterprise systems with Java 21 (Virtual Threads), Spring Boot 3, React 19, Kafka, and Cloud-Native AWS infrastructure. Specializing in Clean Architecture, sub-100ms P99 latency, and resilient distributed microservices.
+            </p>
+            <div style="display: flex; gap: 1rem; margin-top: 1.5rem;">
+              <a href="#projects" style="padding: 0.6rem 1.2rem; background: #10b981; color: #022c22; text-decoration: none; font-weight: bold; border-radius: 8px;">Explore Systems Architecture</a>
+              <a href="/Meena_Kannan_Senior_Architect_Resume.pdf" target="_blank" style="padding: 0.6rem 1.2rem; background: #1e293b; color: #f8fafc; text-decoration: none; border: 1px solid #334155; border-radius: 8px;">Download Resume (PDF)</a>
+            </div>
+          </section>
+
+          <!-- About Section Landmark -->
+          <section id="about" style="padding: 3rem 1.5rem; max-width: 1200px; margin: 0 auto; border-top: 1px solid #1e293b;">
+            <h2 style="color: #f8fafc; font-size: 1.75rem;">About & Engineering Philosophy</h2>
+            <p style="color: #94a3b8; max-width: 800px;">
+              Over 8+ years designing and implementing mission-critical software systems across fintech, enterprise SaaS, and real-time streaming domains. Strict proponent of Domain-Driven Design (DDD), Clean Architecture with explicit Dependency Inversion, deterministic automated test harnesses, and infrastructure as code.
+            </p>
+          </section>
+
+          <!-- Skills Section Landmark -->
+          <section id="skills" style="padding: 3rem 1.5rem; max-width: 1200px; margin: 0 auto; border-top: 1px solid #1e293b;">
+            <h2 style="color: #f8fafc; font-size: 1.75rem;">Technical Stack & Competencies</h2>
+            <ul style="color: #94a3b8; line-height: 2;">
+              <li><strong style="color: #38bdf8;">Backend & Microservices:</strong> Java 21 (Virtual Threads), Spring Boot 3, Spring Cloud, Node.js, Python, gRPC, REST, GraphQL</li>
+              <li><strong style="color: #10b981;">Frontend & Web Systems:</strong> React 19, TypeScript, Next.js, Vite, Tailwind CSS, Framer Motion, WebSockets, SSE</li>
+              <li><strong style="color: #f59e0b;">Distributed Systems & Messaging:</strong> Apache Kafka, RabbitMQ, Redis Pub/Sub, Event-Driven Architecture, Outbox Pattern</li>
+              <li><strong style="color: #a855f7;">Data Persistence & Caching:</strong> PostgreSQL (ACID / WAL Replication), Redis (Cache-Aside), Elasticsearch, DynamoDB</li>
+              <li><strong style="color: #38bdf8;">Cloud & DevOps:</strong> AWS (ECS, EKS, Lambda, S3, RDS, CloudFront), Docker, Kubernetes, Terraform, GitHub Actions CI/CD</li>
+            </ul>
+          </section>
+
+          <!-- Projects & Interactive Architecture Section Landmark -->
+          <section id="projects" style="padding: 3rem 1.5rem; max-width: 1200px; margin: 0 auto; border-top: 1px solid #1e293b;">
+            <h2 style="color: #f8fafc; font-size: 1.75rem;">Enterprise Systems & Interactive Architecture Workbenches</h2>
+            <div style="margin-top: 1rem; color: #94a3b8;">
+              <article style="margin-bottom: 2rem;">
+                <h3 style="color: #38bdf8; font-size: 1.25rem;">1. Multi-Tenant B2B IAM & Subscription Core</h3>
+                <p>Multi-Tenant Portfolio & Project Management SaaS with Clean Architecture, JWT/OAuth2, and sub-80ms API latency.</p>
+              </article>
+              <article style="margin-bottom: 2rem;">
+                <h3 style="color: #10b981; font-size: 1.25rem;">2. Distributed E-Commerce Checkout Engine</h3>
+                <p>High-throughput event-driven microservices architecture processing 15,000+ orders/sec with Choreographed Saga orchestration, Transactional Outbox pattern (Debezium CDC), and idempotent Kafka consumers.</p>
+              </article>
+              <article style="margin-bottom: 2rem;">
+                <h3 style="color: #f59e0b; font-size: 1.25rem;">3. Real-Time Telemetry & Financial Streaming Platform</h3>
+                <p>Low-latency WebSocket streaming engine broadcasting real-time market data ticks with sub-10ms delivery.</p>
+              </article>
+              <article style="margin-bottom: 2rem;">
+                <h3 style="color: #a855f7; font-size: 1.25rem;">4. High-Security FinTech Payment & Ledger Gateway</h3>
+                <p>PCI-DSS compliant payment processing engine with immutable double-entry ledger bookkeeping and tokenized vault storage.</p>
+              </article>
+            </div>
+          </section>
+
+          <!-- Experience & Architecture Leadership Section Landmark -->
+          <section id="experience" style="padding: 3rem 1.5rem; max-width: 1200px; margin: 0 auto; border-top: 1px solid #1e293b;">
+            <h2 style="color: #f8fafc; font-size: 1.75rem;">Experience & Architecture Leadership</h2>
+            <p style="color: #94a3b8; margin-bottom: 2rem;">Data-driven architectural leadership track record spanning 8+ years across enterprise SaaS, distributed cloud modernizations, and financial infrastructure.</p>
+            
+            <div style="display: flex; flex-direction: column; gap: 2rem; color: #cbd5e1;">
+              <!-- Milestone 1 -->
+              <article style="background: rgba(9, 14, 24, 0.7); border: 1px solid #10b981; border-radius: 12px; padding: 1.5rem;">
+                <div style="display: flex; justify-content: space-between; align-items: baseline; flex-wrap: wrap; gap: 0.5rem;">
+                  <h3 style="color: #ffffff; font-size: 1.2rem; margin: 0;">Lead Full-Stack & Cloud Solutions Architect</h3>
+                  <span style="color: #10b981; font-family: monospace; font-size: 0.85rem; font-weight: bold;">2022 - Present</span>
+                </div>
+                <div style="color: #38bdf8; font-size: 0.85rem; margin-top: 0.25rem; font-family: monospace;">Domain: Enterprise SaaS & Cloud Migration | Remote / Singapore & Global</div>
+                <p style="color: #94a3b8; font-style: italic; margin: 0.75rem 0;">"Leading enterprise cloud transformation, monolith-to-microservices decomposition, and distributed systems architecture."</p>
+                <ul style="color: #cbd5e1; line-height: 1.8; padding-left: 1.25rem; margin-bottom: 1rem;">
+                  <li><strong>Zero-Downtime Microservices Migration:</strong> Decomposed legacy core into autonomous event-driven microservices via Apache Kafka and Spring Boot 3, achieving 99.99% availability SLA.</li>
+                  <li><strong>Kubernetes/EKS & AWS Cost Optimization:</strong> Slashed cloud infrastructure spend by 40% using HPA autoscaling, Graviton EC2 instances, and Redis L2 caching.</li>
+                  <li><strong>Cross-Functional Squad Leadership:</strong> Directed 12+ engineers across 3 squads, instituted Clean Architecture/DDD boundaries, and reduced release cycles from 2 days to under 15 minutes.</li>
+                </ul>
+                <div style="display: flex; flex-wrap: wrap; gap: 0.5rem; font-size: 0.75rem; font-family: monospace;">
+                  <span style="background: #1e293b; color: #38bdf8; padding: 0.2rem 0.5rem; border-radius: 4px;">Java 21 (Virtual Threads)</span>
+                  <span style="background: #1e293b; color: #38bdf8; padding: 0.2rem 0.5rem; border-radius: 4px;">Spring Boot 3</span>
+                  <span style="background: #1e293b; color: #38bdf8; padding: 0.2rem 0.5rem; border-radius: 4px;">React 19</span>
+                  <span style="background: #1e293b; color: #10b981; padding: 0.2rem 0.5rem; border-radius: 4px;">Apache Kafka</span>
+                  <span style="background: #1e293b; color: #10b981; padding: 0.2rem 0.5rem; border-radius: 4px;">AWS EKS</span>
+                  <span style="background: #1e293b; color: #f59e0b; padding: 0.2rem 0.5rem; border-radius: 4px;">Clean Architecture</span>
+                  <span style="background: #1e293b; color: #f59e0b; padding: 0.2rem 0.5rem; border-radius: 4px;">Choreographed Saga</span>
+                </div>
+              </article>
+
+              <!-- Milestone 2 -->
+              <article style="background: rgba(9, 14, 24, 0.7); border: 1px solid #1e293b; border-radius: 12px; padding: 1.5rem;">
+                <div style="display: flex; justify-content: space-between; align-items: baseline; flex-wrap: wrap; gap: 0.5rem;">
+                  <h3 style="color: #ffffff; font-size: 1.2rem; margin: 0;">Senior Full-Stack & Distributed Systems Engineer</h3>
+                  <span style="color: #10b981; font-family: monospace; font-size: 0.85rem; font-weight: bold;">2020 - 2022</span>
+                </div>
+                <div style="color: #38bdf8; font-size: 0.85rem; margin-top: 0.25rem; font-family: monospace;">Domain: FinTech & High-Throughput E-Commerce | Singapore / India</div>
+                <p style="color: #94a3b8; font-style: italic; margin: 0.75rem 0;">"Designed and deployed high-concurrency payment APIs and real-time state streaming pipelines."</p>
+                <ul style="color: #cbd5e1; line-height: 1.8; padding-left: 1.25rem; margin-bottom: 1rem;">
+                  <li><strong>High-Throughput Payment APIs:</strong> Built non-blocking asynchronous REST/gRPC endpoints serving 50,000+ concurrent active sessions without degradation.</li>
+                  <li><strong>Real-Time Latency Reduction:</strong> Cut live collaborative sync delay from 5s polling down to sub-20ms with clustered WebSocket mesh and Redis Pub/Sub.</li>
+                  <li><strong>PCI-DSS Compliance Hardening:</strong> Engineered cryptographic tokenization vault with AWS KMS and Spring Security, passing banking audits with 0 findings.</li>
+                </ul>
+                <div style="display: flex; flex-wrap: wrap; gap: 0.5rem; font-size: 0.75rem; font-family: monospace;">
+                  <span style="background: #1e293b; color: #38bdf8; padding: 0.2rem 0.5rem; border-radius: 4px;">Java 17</span>
+                  <span style="background: #1e293b; color: #38bdf8; padding: 0.2rem 0.5rem; border-radius: 4px;">Spring Cloud</span>
+                  <span style="background: #1e293b; color: #10b981; padding: 0.2rem 0.5rem; border-radius: 4px;">WebSockets</span>
+                  <span style="background: #1e293b; color: #10b981; padding: 0.2rem 0.5rem; border-radius: 4px;">Redis Pub/Sub</span>
+                  <span style="background: #1e293b; color: #f59e0b; padding: 0.2rem 0.5rem; border-radius: 4px;">AWS KMS</span>
+                </div>
+              </article>
+
+              <!-- Milestone 3 -->
+              <article style="background: rgba(9, 14, 24, 0.7); border: 1px solid #1e293b; border-radius: 12px; padding: 1.5rem;">
+                <div style="display: flex; justify-content: space-between; align-items: baseline; flex-wrap: wrap; gap: 0.5rem;">
+                  <h3 style="color: #ffffff; font-size: 1.2rem; margin: 0;">Full-Stack Software Engineer</h3>
+                  <span style="color: #10b981; font-family: monospace; font-size: 0.85rem; font-weight: bold;">2018 - 2020</span>
+                </div>
+                <div style="color: #38bdf8; font-size: 0.85rem; margin-top: 0.25rem; font-family: monospace;">Domain: Enterprise SaaS & Workflow Automation | Chennai, India / Remote</div>
+                <p style="color: #94a3b8; font-style: italic; margin: 0.75rem 0;">"Spearheaded core multi-tenant billing engines and automated testing harnesses."</p>
+                <ul style="color: #cbd5e1; line-height: 1.8; padding-left: 1.25rem; margin-bottom: 1rem;">
+                  <li><strong>Database Latency Reduction:</strong> Optimized SQL queries and indexing over 25M+ rows in PostgreSQL, reducing query execution latency by 65%.</li>
+                  <li><strong>Resilient Webhook Delivery:</strong> Engineered asynchronous webhook queue processing over $2M in monthly transaction alerts with zero packet loss.</li>
+                  <li><strong>Automated Test Harness:</strong> Instituted comprehensive test harnesses with JUnit and Mockito, driving down production defects by 75%.</li>
+                </ul>
+                <div style="display: flex; flex-wrap: wrap; gap: 0.5rem; font-size: 0.75rem; font-family: monospace;">
+                  <span style="background: #1e293b; color: #38bdf8; padding: 0.2rem 0.5rem; border-radius: 4px;">Java 11 / 8</span>
+                  <span style="background: #1e293b; color: #38bdf8; padding: 0.2rem 0.5rem; border-radius: 4px;">Spring Boot</span>
+                  <span style="background: #1e293b; color: #10b981; padding: 0.2rem 0.5rem; border-radius: 4px;">PostgreSQL</span>
+                  <span style="background: #1e293b; color: #f59e0b; padding: 0.2rem 0.5rem; border-radius: 4px;">Testcontainers</span>
+                </div>
+              </article>
+
+              <!-- Milestone 4 -->
+              <article style="background: rgba(9, 14, 24, 0.7); border: 1px solid #1e293b; border-radius: 12px; padding: 1.5rem;">
+                <div style="display: flex; justify-content: space-between; align-items: baseline; flex-wrap: wrap; gap: 0.5rem;">
+                  <h3 style="color: #ffffff; font-size: 1.2rem; margin: 0;">Software Engineer & Solutions Developer</h3>
+                  <span style="color: #10b981; font-family: monospace; font-size: 0.85rem; font-weight: bold;">2016 - 2018</span>
+                </div>
+                <div style="color: #38bdf8; font-size: 0.85rem; margin-top: 0.25rem; font-family: monospace;">Enterprise Web Systems & Database Optimization | Chennai, India</div>
+                <p style="color: #94a3b8; font-style: italic; margin: 0.75rem 0;">"Developed mission-critical inventory management systems and telemetry monitoring dashboards."</p>
+                <ul style="color: #cbd5e1; line-height: 1.8; padding-left: 1.25rem; margin-bottom: 1rem;">
+                  <li><strong>Database Throughput Optimization:</strong> Normalized schemas and tuned connection pooling, yielding a 4x throughput increase on heavy reporting queries.</li>
+                  <li><strong>Modular Frontend Components:</strong> Built reusable responsive UI components, accelerating feature shipment velocity by 35%.</li>
+                  <li><strong>Telemetry & Monitoring:</strong> Configured Prometheus and Grafana metrics, enabling 24/7 proactive incident alerting.</li>
+                </ul>
+                <div style="display: flex; flex-wrap: wrap; gap: 0.5rem; font-size: 0.75rem; font-family: monospace;">
+                  <span style="background: #1e293b; color: #38bdf8; padding: 0.2rem 0.5rem; border-radius: 4px;">Java</span>
+                  <span style="background: #1e293b; color: #38bdf8; padding: 0.2rem 0.5rem; border-radius: 4px;">Spring MVC</span>
+                  <span style="background: #1e293b; color: #10b981; padding: 0.2rem 0.5rem; border-radius: 4px;">PostgreSQL</span>
+                  <span style="background: #1e293b; color: #f59e0b; padding: 0.2rem 0.5rem; border-radius: 4px;">Prometheus / Grafana</span>
+                </div>
+              </article>
+            </div>
+          </section>
+
+          <!-- Contact Section Landmark -->
+          <section id="contact" style="padding: 3rem 1.5rem; max-width: 1200px; margin: 0 auto; border-top: 1px solid #1e293b;">
+            <h2 style="color: #f8fafc; font-size: 1.75rem;">Contact & Consultation</h2>
+            <p style="color: #94a3b8;">Direct Email: <a href="mailto:meenakannan.dev@gmail.com" style="color: #10b981; font-family: monospace;">meenakannan.dev@gmail.com</a> | Available for Remote Worldwide Consulting & Architecture Leadership</p>
+          </section>
+        </main>
+
+        <footer style="padding: 2rem 1.5rem; border-top: 1px solid #1e293b; text-align: center; font-size: 0.85rem; color: #64748b;">
+          <p>© 2026 Meena Kannan. Senior Full-Stack & Solutions Architect. Engineered for High Availability & Scale.</p>
+        </footer>
+      </div>
+    </div>
     <script type="module" src="/src/main.tsx"></script>
   </body>
 </html>

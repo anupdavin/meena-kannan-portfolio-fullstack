@@ -1,0 +1,41 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64" width="64" height="64">
+  <defs>
+    <linearGradient id="fav-bg" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#0a121e" />
+      <stop offset="100%" stop-color="#03070d" />
+    </linearGradient>
+    <linearGradient id="fav-glow" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#10b981" />
+      <stop offset="100%" stop-color="#38bdf8" />
+    </linearGradient>
+    <filter id="neon-glow" x="-20%" y="-20%" width="140%" height="140%">
+      <feGaussianBlur stdDeviation="2.5" result="blur" />
+      <feMerge>
+        <feMergeNode in="blur" />
+        <feMergeNode in="SourceGraphic" />
+      </feMerge>
+    </filter>
+  </defs>
+  
+  <!-- Outer Rounded Shield -->
+  <rect x="2" y="2" width="60" height="60" rx="14" fill="url(#fav-bg)" stroke="#1e293b" stroke-width="2" />
+  
+  <!-- Circuit Grid Accents -->
+  <line x1="12" y1="2" x2="12" y2="16" stroke="#10b981" stroke-width="1.5" stroke-opacity="0.4" />
+  <circle cx="12" cy="16" r="2" fill="#10b981" />
+  
+  <line x1="52" y1="48" x2="52" y2="62" stroke="#38bdf8" stroke-width="1.5" stroke-opacity="0.4" />
+  <circle cx="52" cy="48" r="2" fill="#38bdf8" />
+  
+  <!-- Monogram Logo: <M/> with glowing emerald/cyan gradient -->
+  <g filter="url(#neon-glow)">
+    <!-- Left Bracket < -->
+    <path d="M 18 24 L 10 32 L 18 40" fill="none" stroke="#10b981" stroke-width="3" stroke-linecap="round" stroke-linejoin="round" />
+    
+    <!-- Central Monogram M -->
+    <path d="M 23 40 L 23 24 L 32 34 L 41 24 L 41 40" fill="none" stroke="url(#fav-glow)" stroke-width="3.2" stroke-linecap="round" stroke-linejoin="round" />
+    
+    <!-- Right Bracket > -->
+    <path d="M 46 24 L 54 32 L 46 40" fill="none" stroke="#38bdf8" stroke-width="3" stroke-linecap="round" stroke-linejoin="round" />
+  </g>
+</svg>

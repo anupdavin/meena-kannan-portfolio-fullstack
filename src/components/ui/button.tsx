@@ -11,7 +11,7 @@ export function Button({
   size = 'md',
   ...props 
 }: ButtonProps){
-  const base = 'inline-flex items-center justify-center font-mono font-medium rounded-lg transition-all duration-200 disabled:opacity-50 disabled:cursor-not-allowed cursor-pointer'
+  const base = 'inline-flex items-center justify-center font-mono font-medium rounded-lg transition-all duration-200 disabled:opacity-50 disabled:cursor-not-allowed cursor-pointer focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-emerald-400 focus-visible:ring-offset-2 focus-visible:ring-offset-[#06090e]'
   
   const sizeStyles = {
     sm: 'text-xs px-3 py-1.5 gap-1.5',
@@ -19,14 +19,14 @@ export function Button({
     lg: 'text-base px-6 py-3 gap-2.5 font-semibold',
   }[size]
 
-  let variantStyles = 'bg-green-500 hover:bg-green-400 text-black font-semibold shadow-lg shadow-green-500/20 glow-border'
+  let variantStyles = 'bg-emerald-500 hover:bg-emerald-400 text-slate-950 font-semibold shadow-lg shadow-emerald-500/20 glow-border'
   
   if (variant === 'outline') {
-    variantStyles = 'border border-green-500/60 text-green-400 hover:bg-green-500/15 hover:border-green-400 glow-border'
+    variantStyles = 'border border-emerald-500/50 text-emerald-400 hover:bg-emerald-500/15 hover:border-emerald-400 glow-border'
   } else if (variant === 'cyan') {
-    variantStyles = 'bg-cyan-500 hover:bg-cyan-400 text-black font-semibold shadow-lg shadow-cyan-500/20 glow-border-cyan'
+    variantStyles = 'bg-cyan-500 hover:bg-cyan-400 text-slate-950 font-semibold shadow-lg shadow-cyan-500/20 glow-border-cyan'
   } else if (variant === 'ghost') {
-    variantStyles = 'text-gray-300 hover:text-green-400 hover:bg-green-500/10'
+    variantStyles = 'text-slate-300 hover:text-emerald-400 hover:bg-emerald-500/10'
   }
 
   return <button className={`${base} ${sizeStyles} ${variantStyles} ${className}`} {...props} />

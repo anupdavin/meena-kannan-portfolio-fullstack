@@ -4,11 +4,13 @@ import { createBrowserRouter, RouterProvider } from 'react-router-dom'
 import './index.css'
 import Portfolio from './pages/Portfolio'
 import Layout from './pages/Layout'
+import RouteErrorBoundary from './components/portfolio/RouteErrorBoundary'
 
 const router = createBrowserRouter([
   {
     path: '/',
     element: <Layout />,
+    errorElement: <RouteErrorBoundary />,
     children: [
       { index: true, element: <Portfolio /> },
     ],

@@ -1,4 +1,4 @@
-import { useEffect, useRef, useState } from 'react'
+import { useEffect, useRef } from 'react'
 
 interface MatrixBackgroundProps {
   speed?: number
@@ -17,8 +17,8 @@ export default function MatrixBackground({ speed = 35 }: MatrixBackgroundProps) 
     let animationFrameId: number
     const dpr = Math.min(window.devicePixelRatio || 1, 2)
     
-    let width = (canvas.width = window.innerWidth * dpr)
-    let height = (canvas.height = window.innerHeight * dpr)
+    canvas.width = window.innerWidth * dpr
+    canvas.height = window.innerHeight * dpr
     ctx.scale(dpr, dpr)
 
     const isMobile = window.innerWidth < 768
@@ -35,8 +35,8 @@ export default function MatrixBackground({ speed = 35 }: MatrixBackgroundProps) 
       if (!canvas) return
       const mobileCheck = window.innerWidth < 768
       const currentFontSize = mobileCheck ? 18 : 14
-      width = canvas.width = window.innerWidth * dpr
-      height = canvas.height = window.innerHeight * dpr
+      canvas.width = window.innerWidth * dpr
+      canvas.height = window.innerHeight * dpr
       ctx.scale(dpr, dpr)
       columns = Math.floor(window.innerWidth / currentFontSize)
       drops = []
@@ -47,6 +47,16 @@ export default function MatrixBackground({ speed = 35 }: MatrixBackgroundProps) 
 
     window.addEventListener('resize', handleResize)
 
+    const prefersReducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches
+    if (prefersReducedMotion) {
+      // Paint single subtle static backdrop frame and bypass continuous animation loop
+      ctx.fillStyle = 'rgba(6, 9, 14, 0.95)'
+      ctx.fillRect(0, 0, window.innerWidth, window.innerHeight)
+      return () => {
+        window.removeEventListener('resize', handleResize)
+      }
+    }
+
     let lastDraw = Date.now()
     const frameSpeed = isMobile ? Math.max(speed, 45) : speed
 
@@ -56,7 +66,7 @@ export default function MatrixBackground({ speed = 35 }: MatrixBackgroundProps) 
         lastDraw = now
 
         // Translucent background fade trails
-        ctx.fillStyle = 'rgba(3, 7, 4, 0.08)'
+        ctx.fillStyle = 'rgba(6, 9, 14, 0.1)'
         ctx.fillRect(0, 0, window.innerWidth, window.innerHeight)
 
         ctx.font = `${fontSize}px 'JetBrains Mono', monospace`
@@ -65,14 +75,14 @@ export default function MatrixBackground({ speed = 35 }: MatrixBackgroundProps) 
           const char = characters.charAt(Math.floor(Math.random() * characters.length))
           const y = drops[i] * fontSize
           
-          if (Math.random() > 0.88) {
-            ctx.fillStyle = '#86efac' // Bright head
+          if (Math.random() > 0.92) {
+            ctx.fillStyle = '#34d399' // Bright teal/emerald head
             if (!isMobile) {
-              ctx.shadowBlur = 6
-              ctx.shadowColor = '#4ade80'
+              ctx.shadowBlur = 4
+              ctx.shadowColor = '#10b981'
             }
           } else {
-            ctx.fillStyle = '#16a34a' // Tail stream
+            ctx.fillStyle = 'rgba(16, 185, 129, 0.25)' // Subtle dim stream
             if (!isMobile) {
               ctx.shadowBlur = 0
             }
@@ -80,7 +90,7 @@ export default function MatrixBackground({ speed = 35 }: MatrixBackgroundProps) 
 
           ctx.fillText(char, i * fontSize, y)
 
-          if (y > window.innerHeight && Math.random() > 0.975) {
+          if (y > window.innerHeight && Math.random() > 0.985) {
             drops[i] = 0
           }
           drops[i]++
@@ -99,22 +109,19 @@ export default function MatrixBackground({ speed = 35 }: MatrixBackgroundProps) 
   }, [speed])
 
   return (
-    <div className="fixed inset-0 pointer-events-none z-0 overflow-hidden">
+    <div className="fixed inset-0 pointer-events-none z-0 overflow-hidden bg-[#06090e]">
       <canvas 
         ref={canvasRef} 
         style={{ width: '100vw', height: '100vh' }}
-        className="opacity-25 transition-opacity duration-1000"
+        className="opacity-15 transition-opacity duration-1000"
       />
-      {/* Subtle futuristic tech grid pattern overlay */}
-      <div 
-        className="absolute inset-0 opacity-[0.035]" 
-        style={{
-          backgroundImage: `linear-gradient(to right, #22c55e 1px, transparent 1px), linear-gradient(to bottom, #22c55e 1px, transparent 1px)`,
-          backgroundSize: '48px 48px'
-        }}
-      />
-      {/* Ambient Vignette Gradient */}
-      <div className="absolute inset-0 bg-radial-gradient from-transparent via-black/40 to-black/90 pointer-events-none" />
+      {/* Subtle modern engineering dot grid pattern */}
+      <div className="absolute inset-0 bg-grid-pattern opacity-40 pointer-events-none" />
+      
+      {/* Ambient Radial Mesh Diffusions */}
+      <div className="absolute -top-40 -left-40 w-[600px] h-[600px] bg-emerald-500/10 rounded-full blur-[160px] pointer-events-none" />
+      <div className="absolute top-1/3 -right-40 w-[600px] h-[600px] bg-sky-500/10 rounded-full blur-[170px] pointer-events-none" />
+      <div className="absolute -bottom-40 left-1/3 w-[600px] h-[600px] bg-indigo-500/10 rounded-full blur-[180px] pointer-events-none" />
     </div>
   )
 }

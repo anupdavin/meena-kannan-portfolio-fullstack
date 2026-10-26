@@ -1,6 +1,6 @@
 import { useState, useRef, useEffect, useCallback } from 'react'
 import { motion } from 'framer-motion'
-import { Terminal as TerminalIcon, Sparkles, CornerDownLeft, Maximize2, Trash2 } from 'lucide-react'
+import { Terminal as TerminalIcon, CornerDownLeft, Trash2 } from 'lucide-react'
 
 interface HistoryEntry {
   command: string
@@ -26,18 +26,29 @@ const AVAILABLE_COMMANDS = [
   'easteregg'
 ]
 
+const QUICK_CHIPS = [
+  { label: '[ $ whoami ]', cmd: 'whoami' },
+  { label: '[ $ architecture ]', cmd: 'architecture' },
+  { label: '[ $ skills ]', cmd: 'skills' },
+  { label: '[ $ contact ]', cmd: 'contact' },
+  { label: '[ $ projects ]', cmd: 'projects' },
+  { label: '[ $ hire ]', cmd: 'hire' },
+  { label: '[ $ stats ]', cmd: 'stats' },
+  { label: '[ $ help ]', cmd: 'help' }
+]
+
 const COMMAND_HELP = [
   'Available Commands:',
   '  help            - Show this command reference list',
-  '  whoami          - Display Meena Kannan\'s professional background',
+  '  whoami          - Display Meena Kannan\'s professional background & role',
   '  skills          - Print summary of core technology stack & competencies',
-  '  projects        - List featured enterprise projects & metrics',
-  '  experience      - Output career journey summary & achievements',
-  '  stats           - View production performance & impact metrics',
-  '  architecture    - Display Clean Architecture & DDD design principles',
+  '  projects        - List featured enterprise systems, SAGAs & metrics',
+  '  experience      - Output career journey summary & 8+ years leadership milestones',
+  '  stats           - View production performance & impact metrics (99.99% SLA)',
+  '  architecture    - Display Clean Architecture, DDD & Saga design principles',
   '  hire            - Check current availability & consulting engagement models',
-  '  contact         - Display direct contact channels & quick links',
-  '  resume          - Quick link to view / download technical CV',
+  '  contact         - Display direct contact channels & copy-email action',
+  '  resume          - Open / download senior solutions architect technical CV (PDF)',
   '  date            - Show current system timestamp (UTC)',
   '  echo [text]     - Print arbitrary text to screen',
   '  clear           - Clear terminal history',
@@ -51,7 +62,8 @@ export default function InteractiveCli() {
       command: 'welcome',
       output: [
         'MeenaOS Terminal v3.2.0 [x86_64-cloud-native-linux]',
-        'Type "help" to view available commands, or click any quick-run pill below.',
+        'Architecture Cluster: ONLINE • High-Performance Shell Ready.',
+        'Type "help" to view commands, or click any quick-action chip directly above the prompt.',
         '--------------------------------------------------------------------------------'
       ]
     }
@@ -81,8 +93,8 @@ export default function InteractiveCli() {
     }
   }, [])
 
-  const handleCommand = (cmdToRun?: string) => {
-    const rawCmd = (cmdToRun !== undefined ? cmdToRun : input).trim()
+  const executeCommand = (cmdToRun: string) => {
+    const rawCmd = cmdToRun.trim()
     if (!rawCmd) return
 
     setExecutedCommands(prev => [...prev, rawCmd])
@@ -101,81 +113,82 @@ export default function InteractiveCli() {
         output = [
           'Name       : Meena Kannan',
           'Role       : Senior Full-Stack Software Engineer & Cloud Solutions Architect',
-          'Experience : 7+ Years building enterprise Java, Spring Boot, React & AWS systems',
-          'Focus Area : Clean Architecture, Distributed Microservices, High Concurrency',
-          'Status     : OPEN to Senior / Staff / Architect roles & Consulting contracts',
-          'Location   : Remote / Global (Singapore / India with US/EU overlap)'
+          'Experience : 8+ Years building enterprise Java, Spring Boot 3, React 19 & AWS systems',
+          'Focus Area : Clean Architecture, Choreographed Sagas, Distributed Microservices, Cloud Native',
+          'Status     : OPEN to Senior / Staff / Architect roles & Strategic B2B Consulting',
+          'Location   : Remote / Global (Singapore / India with US/EU timezone overlap)'
         ]
         break
       case 'skills':
         output = [
-          '[Backend]       Java 21 LTS, Spring Boot 3, Spring Security, Spring Cloud, Hibernate, Node.js',
-          '[Cloud/DevOps]  AWS (EC2, S3, RDS, ECS, Lambda), Docker, Kubernetes, GitHub Actions CI/CD',
-          '[Databases]     PostgreSQL, Redis multi-tier caching, Apache Kafka, Flyway migrations',
+          '[Backend]       Java 21 LTS (Virtual Threads), Spring Boot 3, Spring Security, Spring Cloud, Node.js',
+          '[Cloud/DevOps]  AWS (EKS, EC2, S3, RDS, Lambda), Docker, Kubernetes, Terraform, GitHub Actions CI/CD',
+          '[Databases]     PostgreSQL (ACID/RLS), Redis cluster L2 caching, Apache Kafka (CDC Outbox), Flyway',
           '[Frontend]      React 19, TypeScript, Next.js, Tailwind CSS 4, Framer Motion, WebSockets',
-          '[Architecture]  Clean Architecture, Domain-Driven Design (DDD), CQRS, Resilience4j'
+          '[Architecture]  Clean Architecture, DDD, Choreographed Saga, Transactional Outbox, CQRS'
         ]
         break
       case 'projects':
         output = [
-          '1. Meena Kannan Enterprise SaaS Platform  - Spring Boot 3, React 19, Redis, Docker (99.99% SLA)',
-          '2. Distributed E-Commerce Microservices   - 10K+ RPS, Apache Kafka, Redis Cluster (-40% Cloud Spend)',
-          '3. High-Throughput Real-Time Task Engine  - 50K+ Concurrent WebSockets (<20ms Broadcast Sync)',
-          '4. FinTech Payment & Compliance Gateway   - $10M+ Daily Volume, PCI-DSS Compliant (0% Fraud)'
+          '1. Meena Kannan Enterprise SaaS Platform  - Spring Boot 3, React 19, Redis, Docker (99.99% SLA, <80ms)',
+          '2. Distributed E-Commerce Checkout Engine - 15k+ TPS, Choreographed Saga, Debezium CDC Outbox, Kafka',
+          '3. High-Throughput Real-Time Task Engine  - 50K+ Concurrent WebSockets (<20ms Sync via Redis Pub/Sub)',
+          '4. FinTech Payment & Compliance Gateway   - $10M+ Daily Volume, Double-Entry Immutable Ledger, PCI-DSS'
         ]
         break
       case 'stats':
         output = [
           'Production Impact Metrics:',
-          '  * System SLA Uptime     : 99.99%',
-          '  * Peak Throughput       : 10,000+ Requests/Second',
-          '  * Database Query Speed  : -65% Latency Reduction via Redis & Indexing',
-          '  * Cloud Infrastructure  : 40% Monthly Cost Reduction',
+          '  * System SLA Uptime     : 99.99% Production Reliability',
+          '  * Peak Throughput       : 15,000+ Transactions/Second (TPS)',
+          '  * Database Query Speed  : -65% Latency Reduction via Redis L2 & Index Tuning',
+          '  * Cloud Infrastructure  : 40% Monthly Spend Cut via EKS Autoscaling & Graviton',
           '  * CI/CD Deployment Time : 2 Days -> Under 15 Minutes'
         ]
         break
       case 'experience':
         output = [
-          '2022 - Present : Lead Full-Stack & Cloud Solutions Architect (Enterprise SaaS & Cloud)',
-          '2020 - 2022    : Senior Full-Stack Software Engineer (FinTech & Scale-up Technologies)',
-          '2018 - 2020    : Software Engineer (Enterprise Web Platforms & Database Optimization)'
+          '2022 - Present : Lead Full-Stack & Cloud Solutions Architect (Enterprise SaaS & Cloud Migration)',
+          '2020 - 2022    : Senior Full-Stack Software Engineer (FinTech & High-Frequency Scale-ups)',
+          '2018 - 2020    : Full-Stack Software Engineer (Enterprise SaaS & Workflow Automation)',
+          '2016 - 2018    : Software Engineer & Solutions Developer (Distributed Database & Web Systems)'
         ]
         break
       case 'contact':
         output = [
           'Direct Contact Channels:',
-          '  Email    : meenakannan.dev@gmail.com',
+          '  Email    : meenakannan.dev@gmail.com (or click "Copy Email" in contact section)',
           '  LinkedIn : https://www.linkedin.com/in/meena-kannan',
           '  GitHub   : https://github.com/meenak95',
-          '  SLA      : All professional inquiries answered within 24 hours'
+          '  Response : All enterprise B2B inquiries answered within 24 hours'
         ]
         break
       case 'hire':
         output = [
           'Availability: OPEN to new opportunities and strategic architecture contracts',
           'Primary Engagement Models:',
-          '  1. Full-Time Senior / Lead / Staff Software Engineer or Architect',
+          '  1. Full-Time Senior / Lead / Staff Software Engineer or Cloud Solutions Architect',
           '  2. Enterprise Microservices Architecture & Modernization Consulting',
-          '  3. Monolith to Distributed Microservices Decomposition',
+          '  3. Monolith to Distributed Microservices Decomposition (Saga + Kafka Outbox)',
           '  4. Full-Stack SaaS MVP to Resilient Production Architecture'
         ]
         break
       case 'architecture':
         output = [
-          'Clean Architecture & DDD Pillars:',
-          '  1. Independent of Frameworks: Core business rules do not depend on libraries',
-          '  2. Testable in Isolation: Use-case unit tests execute in milliseconds without DB or UI',
-          '  3. Independent of UI: Decoupled controllers enable web, CLI, or mobile interfaces',
-          '  4. Independent of Database: Swap Postgres, MongoDB, or Oracle with zero domain impact'
+          'Clean Architecture & Distributed Systems Principles:',
+          '  1. Independent of Frameworks: Core business domains decouple from libraries and vendor SDKs',
+          '  2. Dependency Inversion: High-level business policies do not depend on low-level infrastructure',
+          '  3. Choreographed Sagas: Asynchronous eventual consistency replaces blocking 2PC coordinators',
+          '  4. Transactional Outbox: Guaranteed atomic dual-writes to Postgres and Kafka via Debezium CDC'
         ]
         break
       case 'resume':
         window.open('/Meena_Kannan_Senior_Architect_Resume.pdf', '_blank')
         output = [
           'Resume Document: Meena_Kannan_Senior_Architect_Resume.pdf',
-          'Status: Initiated PDF download / opened in new tab.',
+          'Status: Initiated PDF view / opened in new tab.',
           'Direct Link: /Meena_Kannan_Senior_Architect_Resume.pdf',
-          'Summary: 7+ Years Enterprise Dev, Java 21, Spring Boot 3, React 19, AWS Cloud Native'
+          'Summary: 8+ Years Enterprise Architecture, Java 21, Spring Boot 3, React 19, AWS Cloud Native'
         ]
         break
       case 'date':
@@ -200,16 +213,29 @@ export default function InteractiveCli() {
           '          | |  | | |___| |___| |\\  | / /\\ \\  ',
           '          |_|  |_|_____|_____|_| \\_|/_/  \\_\\ ',
           '                                             ',
-          '"Clean code always looks like it was written by someone who cares." — Robert C. Martin'
+          '"Clean code always looks like it was written by someone who cares." (Robert C. Martin)'
         ]
         break
       default:
-        output = `command not found: "${rawCmd}". Type "help" to see available commands.`
+        output = `command not found: "${rawCmd}". Type "help" or click one of the quick chips above.`
         isError = true
     }
 
     setHistory(prev => [...prev, { command: rawCmd, output, isError }])
     setInput('')
+  }
+
+  const handleCommand = (e?: React.FormEvent) => {
+    if (e) e.preventDefault()
+    executeCommand(input)
+  }
+
+  const handleQuickChipClick = (cmd: string) => {
+    setInput(cmd)
+    // Small timeout to allow input to visually reflect the command before execution
+    setTimeout(() => {
+      executeCommand(cmd)
+    }, 40)
   }
 
   const handleKeyDown = (e: React.KeyboardEvent<HTMLInputElement>) => {
@@ -259,29 +285,29 @@ export default function InteractiveCli() {
           Interactive Terminal CLI
         </h2>
         <p className="text-gray-400 max-w-xl mx-auto mt-2 font-mono text-xs sm:text-sm">
-          Type commands directly or tap quick pills below to query specifications, stack, and availability.
+          Execute terminal commands or click the quick-action chips directly above the prompt to inspect architecture and stack.
         </p>
       </motion.div>
 
       {/* Terminal Shell Window */}
       <div 
         onClick={focusInputSafely} 
-        className="rounded-2xl overflow-hidden border border-green-500/35 bg-[#030a05]/95 shadow-2xl backdrop-blur-xl cursor-text"
+        className="rounded-2xl overflow-hidden border border-slate-800 bg-[#090e18]/95 shadow-2xl backdrop-blur-xl cursor-text"
       >
         {/* Terminal Header */}
-        <div className="flex items-center justify-between px-3.5 sm:px-4 py-2.5 sm:py-3 bg-[#06160b] border-b border-green-500/25">
+        <div className="flex items-center justify-between px-3.5 sm:px-4 py-2.5 sm:py-3 bg-[#0d1424] border-b border-slate-800">
           <div className="flex items-center gap-1.5 sm:gap-2">
             <div className="w-2.5 h-2.5 sm:w-3 sm:h-3 rounded-full bg-red-500/70" />
             <div className="w-2.5 h-2.5 sm:w-3 sm:h-3 rounded-full bg-yellow-500/70" />
-            <div className="w-2.5 h-2.5 sm:w-3 sm:h-3 rounded-full bg-green-500/70" />
-            <span className="ml-1.5 sm:ml-2 text-[10px] sm:text-xs font-mono text-gray-400 flex items-center gap-1 sm:gap-1.5">
-              <TerminalIcon className="w-3 sm:w-3.5 h-3 sm:h-3.5 text-green-400" />
+            <div className="w-2.5 h-2.5 sm:w-3 sm:h-3 rounded-full bg-emerald-500/70" />
+            <span className="ml-1.5 sm:ml-2 text-[10px] sm:text-xs font-mono text-slate-400 flex items-center gap-1 sm:gap-1.5">
+              <TerminalIcon className="w-3 sm:w-3.5 h-3 sm:h-3.5 text-emerald-400" />
               <span>meena@cloud:~</span>
             </span>
           </div>
           <div className="flex items-center gap-2 sm:gap-3">
-            <span className="text-[10px] sm:text-[11px] font-mono text-gray-500 hidden sm:inline">
-              Press [Enter] to submit • Type "help"
+            <span className="text-[10px] sm:text-[11px] font-mono text-slate-500 hidden sm:inline">
+              [Enter] to submit • [Tab] autocomplete • [↑/↓] history
             </span>
             <button
               onClick={(e) => {
@@ -290,7 +316,7 @@ export default function InteractiveCli() {
               }}
               title="Clear terminal"
               aria-label="Clear terminal history"
-              className="text-gray-500 hover:text-red-400 transition-colors p-1 focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-red-400 rounded"
+              className="text-slate-500 hover:text-red-400 transition-colors p-1 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-red-400 rounded cursor-pointer"
             >
               <Trash2 className="w-3.5 h-3.5" />
             </button>
@@ -300,18 +326,20 @@ export default function InteractiveCli() {
         {/* Terminal History - Scrollable container */}
         <div 
           ref={terminalBodyRef}
-          className="p-3 sm:p-5 font-mono text-[11px] sm:text-xs md:text-sm min-h-[260px] sm:min-h-[340px] max-h-[360px] sm:max-h-[460px] overflow-y-auto space-y-2.5 sm:space-y-3 leading-relaxed touch-scroll overscroll-contain"
+          aria-live="polite"
+          aria-atomic="false"
+          className="p-3 sm:p-5 font-mono text-[11px] sm:text-xs md:text-sm min-h-[260px] sm:min-h-[340px] max-h-[380px] sm:max-h-[480px] overflow-y-auto space-y-2.5 sm:space-y-3 leading-relaxed touch-scroll overscroll-contain"
         >
           {history.map((item, idx) => (
             <div key={idx} className="space-y-1">
-              <div className="flex items-center gap-1.5 sm:gap-2 text-green-400 text-xs sm:text-sm">
+              <div className="flex items-center gap-1.5 sm:gap-2 text-emerald-400 text-xs sm:text-sm">
                 <span className="text-cyan-400">
                   <span className="hidden sm:inline">meena@cloud:~$</span>
                   <span className="sm:hidden">~$</span>
                 </span>
                 <span className="text-white">{item.command}</span>
               </div>
-              <div className={`${item.isError ? 'text-red-400' : 'text-gray-300'} pl-2 sm:pl-4 text-[11px] sm:text-xs md:text-sm overflow-x-auto touch-scroll`}>
+              <div className={`${item.isError ? 'text-red-400' : 'text-slate-300'} pl-2 sm:pl-4 text-[11px] sm:text-xs md:text-sm overflow-x-auto touch-scroll`}>
                 {Array.isArray(item.output) ? (
                   item.output.map((line, lIdx) => (
                     <div key={lIdx} className="leading-relaxed whitespace-pre font-mono text-[10px] sm:text-xs md:text-sm">{line}</div>
@@ -323,13 +351,31 @@ export default function InteractiveCli() {
             </div>
           ))}
 
+          {/* Clickable Quick-Action Chips directly above terminal prompt */}
+          <div className="pt-2 pb-1 border-t border-slate-800/80 flex items-center gap-1.5 sm:gap-2 overflow-x-auto scrollbar-none touch-scroll">
+            <span className="text-[10px] sm:text-[11px] font-mono text-slate-400 shrink-0 select-none">
+              Quick Run:
+            </span>
+            {QUICK_CHIPS.map(chip => (
+              <button
+                key={chip.cmd}
+                type="button"
+                onClick={(e) => {
+                  e.stopPropagation()
+                  handleQuickChipClick(chip.cmd)
+                }}
+                className="px-2.5 py-1 rounded-lg bg-[#0d1527] border border-slate-800 hover:border-emerald-500/50 hover:bg-emerald-500/15 text-emerald-300 hover:text-white font-mono text-[11px] transition-all cursor-pointer active:scale-95 shrink-0 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-emerald-400 shadow-sm"
+                aria-label={`Execute command ${chip.cmd}`}
+              >
+                {chip.label}
+              </button>
+            ))}
+          </div>
+
           {/* Active Prompt Line */}
           <form 
-            onSubmit={(e) => {
-              e.preventDefault()
-              handleCommand()
-            }} 
-            className="flex items-center gap-1.5 sm:gap-2 pt-1 text-green-400"
+            onSubmit={handleCommand} 
+            className="flex items-center gap-1.5 sm:gap-2 pt-1 text-emerald-400"
           >
             <span className="text-cyan-400 select-none text-xs sm:text-sm font-semibold shrink-0">
               <span className="hidden sm:inline">meena@cloud:~$</span>
@@ -342,36 +388,19 @@ export default function InteractiveCli() {
               value={input}
               onChange={(e) => setInput(e.target.value)}
               onKeyDown={handleKeyDown}
-              placeholder="type command..."
-              className="flex-1 bg-transparent border-none outline-none text-green-200 font-mono text-base md:text-sm p-0 m-0 placeholder:text-gray-600 focus:ring-0"
+              placeholder="type command (e.g. whoami, architecture, skills)..."
+              className="flex-1 bg-transparent border-none outline-none text-emerald-100 font-mono text-base md:text-sm p-0 m-0 placeholder:text-slate-600 focus:ring-0"
               spellCheck={false}
               autoComplete="off"
             />
             <button 
               type="submit" 
               aria-label="Execute Command"
-              className="text-gray-500 hover:text-green-400 transition-colors p-1.5 shrink-0 min-h-[36px] min-w-[36px] flex items-center justify-center focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-green-400 rounded"
+              className="text-slate-500 hover:text-emerald-400 transition-colors p-1.5 shrink-0 min-h-[36px] min-w-[36px] flex items-center justify-center focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-emerald-400 rounded cursor-pointer"
             >
               <CornerDownLeft className="w-4 h-4" />
             </button>
           </form>
-        </div>
-
-        {/* Quick Command Suggestion Buttons (Swipeable on Mobile) */}
-        <div className="px-3 sm:px-4 py-2 sm:py-2.5 bg-[#05140b] border-t border-green-500/20 flex items-center gap-1.5 sm:gap-2 overflow-x-auto scrollbar-none text-xs font-mono touch-scroll">
-          <span className="text-gray-500 text-[10px] sm:text-[11px] mr-1 shrink-0">Quick Run:</span>
-          {['help', 'whoami', 'skills', 'projects', 'stats', 'hire', 'clear'].map(cmd => (
-            <button
-              key={cmd}
-              onClick={(e) => {
-                e.stopPropagation()
-                handleCommand(cmd)
-              }}
-              className="px-2.5 py-1.5 rounded bg-black/60 border border-green-500/20 text-gray-300 hover:text-green-300 hover:border-green-500/50 text-[11px] transition-colors cursor-pointer shrink-0 min-h-[34px] active:scale-95 flex items-center"
-            >
-              ${cmd}
-            </button>
-          ))}
         </div>
       </div>
     </div>

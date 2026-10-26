@@ -3,75 +3,40 @@ import { motion } from 'framer-motion'
 import { 
   Terminal, 
   Layers, 
-  Cpu, 
   ShieldCheck, 
   Zap, 
-  GitBranch, 
   Server, 
-  Database, 
   Check, 
-  Copy,
-  ExternalLink,
-  Code
+  Copy, 
+  Code, 
+  Sparkles
 } from 'lucide-react'
-import { Card, CardContent } from '@/components/ui/card'
-import { Badge } from '@/components/ui/badge'
-
-const ARCHITECTURE_LAYERS = [
-  {
-    layer: 'Presentation Layer',
-    icon: Layers,
-    color: 'text-cyan-400',
-    border: 'border-cyan-500/40',
-    bg: 'bg-cyan-500/10',
-    desc: 'React 19 SPA, TypeScript, Tailwind CSS 4, WebSocket realtime streaming, responsive dashboards, interactive UI widgets.'
-  },
-  {
-    layer: 'Application Layer',
-    icon: Cpu,
-    color: 'text-green-400',
-    border: 'border-green-500/40',
-    bg: 'bg-green-500/10',
-    desc: 'Use-case services, CQRS command handlers, DTO mappings, input validation, transaction boundaries & Resilience4j fault tolerance.'
-  },
-  {
-    layer: 'Domain Layer (Core)',
-    icon: GitBranch,
-    color: 'text-purple-400',
-    border: 'border-purple-500/40',
-    bg: 'bg-purple-500/10',
-    desc: 'Pure business logic, Domain Entities, Value Objects, Domain Events, Aggregate Roots, invariant validation & DDD specifications.'
-  },
-  {
-    layer: 'Infrastructure Layer',
-    icon: Database,
-    color: 'text-amber-400',
-    border: 'border-amber-500/40',
-    bg: 'bg-amber-500/10',
-    desc: 'Spring Boot 3, Spring Data JPA, PostgreSQL, Redis caching, Apache Kafka event streams, Flyway migrations & AWS cloud hosting.'
-  }
-]
+import AgenticWorkflowDiagram from '@/components/architecture/AgenticWorkflowDiagram'
 
 const CORE_PILLARS = [
   {
-    title: 'Clean Architecture & DDD',
-    desc: 'Decoupled domain logic from infrastructure, ensuring maintainability, high testability, and zero framework lock-in.',
-    icon: Layers
+    title: 'Clean Architecture & Domain Core',
+    desc: 'Decoupled domain rules from infrastructure via Ports and Adapters, ensuring deterministic unit tests and zero framework lock-in.',
+    icon: Layers,
+    color: 'text-purple-400'
   },
   {
-    title: 'Distributed Resilience',
-    desc: 'Zero single point of failure with circuit breakers, graceful degradation, retry queues, and rate-limiting policies.',
-    icon: ShieldCheck
+    title: 'Distributed Sagas & Resilience',
+    desc: 'Eliminates distributed locking coordinators via Choreographed Sagas, Transactional Outbox (Debezium CDC), and Resilience4j circuit breakers.',
+    icon: ShieldCheck,
+    color: 'text-emerald-400'
   },
   {
-    title: 'Sub-Second High Throughput',
-    desc: 'Optimized database indexing, Redis multi-tier caching, parallel streams, and non-blocking asynchronous event processing.',
-    icon: Zap
+    title: 'ACID Isolation & Multi-Tier Caching',
+    desc: 'Guarantees transactional consistency via PostgreSQL Row-Level Security, composite indexing, and sub-5ms Redis L2 cache-aside.',
+    icon: Zap,
+    color: 'text-cyan-400'
   },
   {
-    title: 'Security & Compliance First',
-    desc: 'Hardened with JWT, OAuth2 (Google/GitHub), RBAC, strict CORS, encrypted payload tokens, and automated audit logging.',
-    icon: Server
+    title: 'Zero-Trust Security & Auditing',
+    desc: 'Hardened identity with stateless JWT/OAuth2 RBAC, AWS KMS envelope tokenization, and immutable append-only ledgers for SOC-2 and PCI-DSS.',
+    icon: Server,
+    color: 'text-amber-400'
   }
 ]
 
@@ -81,16 +46,31 @@ export default function AboutTerminal() {
   const copyCode = () => {
     const codeSnippet = `/**
  * Senior Full-Stack Cloud & Software Architect
- * Specialized in Enterprise Clean Architecture & Cloud Solutions
+ * Specialized in Clean Architecture, Event-Driven Systems & Cloud Platforms
  */
+@Component
 public class MeenaKannanArchitect {
     private final String name = "Meena Kannan";
-    private final String location = "Remote / Singapore / India";
-    private final List<String> specialties = List.of(
-        "Domain-Driven Design (DDD)", "Clean Architecture",
-        "Spring Boot 3 & Java 21", "React 19 & TypeScript",
-        "Microservices & Kafka", "Kubernetes & AWS"
+    private final String focus = "Distributed Systems & Cloud Architecture";
+    private final String location = "Singapore / Remote";
+    
+    private final List<String> architecturalProficiencies = List.of(
+        "Clean Architecture (Ports & Adapters) & Domain-Driven Design",
+        "Java 21 (Virtual Threads) & Spring Boot 3 Microservices",
+        "Event-Driven Sagas, Transactional Outbox & Debezium CDC",
+        "High-Throughput Apache Kafka Partitioning & Ingestion",
+        "PostgreSQL (Row-Level Security) & Redis Clustered Caching",
+        "React 19, TypeScript & Real-Time WebSocket Streaming",
+        "Kubernetes (EKS), Terraform & Automated CI/CD Governance"
     );
+
+    public SystemHealth verifyProductionReadiness() {
+        return SystemHealth.builder()
+            .experienceYears(8)
+            .zeroDowntimeDeployments(true)
+            .compliancePassingRate(1.0)
+            .build();
+    }
 }`
     navigator.clipboard.writeText(codeSnippet)
     setCopied(true)
@@ -107,14 +87,14 @@ public class MeenaKannanArchitect {
         transition={{ duration: 0.6 }} 
         className="text-center mb-10 sm:mb-16"
       >
-        <div className="inline-flex items-center gap-2 text-xs font-mono text-cyan-400 bg-cyan-950/40 px-3 py-1 rounded-full border border-cyan-800/50 mb-3">
+        <div className="inline-flex items-center gap-2 text-xs font-mono text-cyan-400 bg-cyan-950/40 px-3 py-1 rounded-full border border-cyan-800/50 mb-3 shadow-sm">
           <Terminal className="w-3.5 h-3.5" />
-          <span>$ cat /system/specifications/about_me.txt</span>
+          <span>SPECIFICATIONS & ARCHITECTURAL FOUNDATION</span>
         </div>
-        <h2 className="text-2xl sm:text-3xl md:text-5xl font-extrabold text-white glow-text tracking-tight font-mono">
+        <h2 className="text-2xl sm:text-4xl md:text-5xl font-extrabold text-white tracking-tight font-editorial">
           System Specifications & Architecture
         </h2>
-        <p className="text-gray-400 max-w-2xl mx-auto mt-2 sm:mt-3 font-mono text-xs sm:text-sm md:text-base">
+        <p className="text-slate-400 max-w-2xl mx-auto mt-2 sm:mt-3 font-sans text-xs sm:text-sm md:text-base leading-relaxed">
           Engineering clean, maintainable, and highly resilient cloud-native software built for enterprise scale.
         </p>
       </motion.div>
@@ -127,44 +107,50 @@ public class MeenaKannanArchitect {
           whileInView={{ opacity: 1, x: 0 }} 
           viewport={{ once: true }} 
           transition={{ duration: 0.6 }} 
-          className="lg:col-span-6 code-block rounded-xl border border-green-500/30 overflow-hidden shadow-2xl min-w-0 w-full"
+          className="lg:col-span-6 rounded-2xl border border-slate-800 bg-[#070b14] overflow-hidden shadow-2xl min-w-0 w-full"
         >
-          <div className="flex items-center justify-between px-3.5 py-2.5 sm:px-4 sm:py-3 bg-[#06140b] border-b border-green-500/20">
-            <span className="text-xs font-mono text-green-400 flex items-center gap-2">
+          <div className="flex items-center justify-between px-3.5 py-2.5 sm:px-4 sm:py-3 bg-[#0d1424] border-b border-slate-800">
+            <span className="text-xs font-mono text-emerald-400 flex items-center gap-2">
               <Code className="w-4 h-4" />
               DeveloperProfile.java
             </span>
             <button 
               onClick={copyCode}
-              className="text-xs font-mono text-gray-400 hover:text-white flex items-center gap-1.5 px-2 py-1 rounded hover:bg-green-500/10 transition-colors cursor-pointer"
+              aria-label="Copy code snippet"
+              className="text-xs font-mono text-slate-400 hover:text-white flex items-center gap-1.5 px-2 py-1 rounded hover:bg-slate-800 transition-colors cursor-pointer"
             >
-              {copied ? <Check className="w-3.5 h-3.5 text-green-400" /> : <Copy className="w-3.5 h-3.5" />}
+              {copied ? <Check className="w-3.5 h-3.5 text-emerald-400" /> : <Copy className="w-3.5 h-3.5" />}
               <span>{copied ? 'Copied' : 'Copy'}</span>
             </button>
           </div>
 
-          <pre className="p-3.5 sm:p-5 text-[11px] sm:text-sm font-mono text-green-300 leading-relaxed overflow-x-auto touch-scroll max-w-full">
+          <pre className="p-3.5 sm:p-5 text-[11px] sm:text-xs font-mono text-emerald-300/90 leading-relaxed overflow-x-auto touch-scroll max-w-full">
 {`/**
  * Senior Full-Stack Cloud & Software Architect
- * Specialized in Enterprise Clean Architecture & Cloud Solutions
+ * Specialized in Clean Architecture, Event-Driven Systems & Cloud Platforms
  */
 @Component
 public class MeenaKannanArchitect {
     private final String name = "Meena Kannan";
-    private final String status = "Available for Enterprise Roles & Consulting";
-    private final String location = "Remote / Global";
+    private final String focus = "Distributed Systems & Cloud Architecture";
+    private final String location = "Singapore / Remote";
     
-    private final List<String> coreCompetencies = List.of(
-        "Clean Architecture & Domain-Driven Design (DDD)",
-        "Enterprise Java 21 & Spring Boot 3 Ecosystem",
-        "React 19, TypeScript & Modern Frontend Architecture",
-        "Event-Driven Microservices & Apache Kafka",
-        "PostgreSQL, Redis & Distributed Caching",
-        "Cloud Native (AWS, Docker, Kubernetes, CI/CD)"
+    private final List<String> architecturalProficiencies = List.of(
+        "Clean Architecture (Ports & Adapters) & Domain-Driven Design",
+        "Java 21 (Virtual Threads) & Spring Boot 3 Microservices",
+        "Event-Driven Sagas, Transactional Outbox & Debezium CDC",
+        "High-Throughput Apache Kafka Partitioning & Ingestion",
+        "PostgreSQL (Row-Level Security) & Redis Clustered Caching",
+        "React 19, TypeScript & Real-Time WebSocket Streaming",
+        "Kubernetes (EKS), Terraform & Automated CI/CD Governance"
     );
 
-    public boolean isReadyToDeliver() {
-        return true; // 7+ years of proven production results
+    public SystemHealth verifyProductionReadiness() {
+        return SystemHealth.builder()
+            .experienceYears(8)
+            .zeroDowntimeDeployments(true)
+            .compliancePassingRate(1.0)
+            .build();
     }
 }`}
           </pre>
@@ -178,83 +164,50 @@ public class MeenaKannanArchitect {
           transition={{ duration: 0.6 }} 
           className="lg:col-span-6 space-y-4 min-w-0 w-full"
         >
-          <Card className="bg-[#040e07]/90 border border-green-500/30 p-4 sm:p-6">
-            <div className="flex items-center gap-2 text-green-400 text-sm font-mono font-semibold mb-2">
-              <span className="text-cyan-400">&gt;&gt;</span> Executive Engineering Profile
+          <div className="rounded-2xl bg-[#090e18]/90 border border-slate-800 p-5 sm:p-7 specular-card">
+            <div className="flex items-center gap-2 text-emerald-400 text-xs font-mono font-semibold mb-2">
+              <Sparkles className="w-3.5 h-3.5" />
+              <span>EXECUTIVE ENGINEERING PROFILE</span>
             </div>
-            <p className="text-gray-300 font-mono text-xs sm:text-sm leading-relaxed mb-3 sm:mb-4">
-              I am a <strong className="text-white">Senior Full-Stack Software Engineer & Solutions Architect</strong> with extensive experience designing and deploying scalable, high-availability web applications, enterprise microservices, and multi-tenant SaaS products.
+            <p className="text-slate-200 font-sans text-sm sm:text-base leading-relaxed mb-3 sm:mb-4">
+              I am a <strong className="text-white font-bold">Senior Full-Stack Software Engineer & Solutions Architect</strong> specializing in decomposing monolithic enterprise systems into resilient, event-driven microservices.
             </p>
-            <p className="text-gray-400 font-mono text-xs sm:text-sm leading-relaxed mb-4 sm:mb-6">
-              Throughout my 7+ years in enterprise software engineering, I have focused on closing the gap between complex business requirements and elegant, battle-tested software architectures. Whether decomposing monolithic systems into distributed microservices or crafting responsive React frontends, my focus is always on <span className="text-green-300">reliability</span>, <span className="text-cyan-300">performance</span>, and <span className="text-purple-300">maintainability</span>.
+            <p className="text-slate-400 font-sans text-xs sm:text-sm leading-relaxed mb-4 sm:mb-6">
+              Across 8+ years of production delivery for enterprise platforms in Singapore and global markets, I have architected high-throughput financial ingest pipelines, multi-tenant B2B SaaS platforms, and low-latency WebSocket meshes. My engineering practice centers on Clean Architecture, Domain-Driven Design, Choreographed Sagas, and strict ACID transaction boundaries.
             </p>
 
-            <div className="grid grid-cols-1 sm:grid-cols-2 gap-2.5 sm:gap-3 pt-2 border-t border-gray-800">
-              <div className="p-2.5 sm:p-3 rounded bg-black/40 border border-green-500/20">
-                <span className="text-[10px] sm:text-xs text-gray-400 font-mono block">Primary Methodology</span>
-                <span className="text-xs sm:text-sm font-mono font-bold text-green-400">Clean Architecture / DDD</span>
+            <div className="grid grid-cols-1 sm:grid-cols-2 gap-2.5 sm:gap-3 pt-3 border-t border-slate-800">
+              <div className="p-3 rounded-xl bg-slate-950/60 border border-slate-800/80">
+                <span className="text-[10px] sm:text-xs text-slate-400 font-mono block">Primary Methodology</span>
+                <span className="text-xs sm:text-sm font-mono font-bold text-emerald-400">Clean Architecture / DDD</span>
               </div>
-              <div className="p-2.5 sm:p-3 rounded bg-black/40 border border-cyan-500/20">
-                <span className="text-[10px] sm:text-xs text-gray-400 font-mono block">Delivery Cycle</span>
+              <div className="p-3 rounded-xl bg-slate-950/60 border border-slate-800/80">
+                <span className="text-[10px] sm:text-xs text-slate-400 font-mono block">Delivery Cycle</span>
                 <span className="text-xs sm:text-sm font-mono font-bold text-cyan-400">CI/CD Continuous Delivery</span>
               </div>
             </div>
-          </Card>
+          </div>
         </motion.div>
       </div>
 
-      {/* Clean Architecture Blueprint Stack */}
+      {/* Agentic AI Architecture Blueprint: ByteByteGo Style Orchestrator-Worker Engine */}
       <motion.div 
         initial={{ opacity: 0, y: 30 }} 
         whileInView={{ opacity: 1, y: 0 }} 
         viewport={{ once: true }} 
         transition={{ duration: 0.6 }} 
-        className="space-y-4 sm:space-y-6 mb-10 sm:mb-16"
+        className="mb-10 sm:mb-16"
       >
-        <div className="flex items-center justify-between border-b border-gray-800 pb-3">
-          <h3 className="text-lg sm:text-xl md:text-2xl font-bold font-mono text-white flex items-center gap-2">
-            <Layers className="w-5 h-5 text-green-400" />
-            <span>Clean Architecture Blueprint</span>
-          </h3>
-          <span className="text-xs font-mono text-gray-500 hidden sm:inline">
-            // Domain-Driven & Dependency Inversion
-          </span>
-        </div>
-
-        <div className="grid sm:grid-cols-2 lg:grid-cols-4 gap-3 sm:gap-4">
-          {ARCHITECTURE_LAYERS.map((layer, idx) => (
-            <motion.div
-              key={layer.layer}
-              initial={{ opacity: 0, y: 20 }}
-              whileInView={{ opacity: 1, y: 0 }}
-              viewport={{ once: true }}
-              transition={{ delay: idx * 0.1 }}
-              className={`p-4 sm:p-5 rounded-xl border ${layer.border} bg-[#040e07] hover:${layer.bg} transition-all duration-300 flex flex-col justify-between`}
-            >
-              <div>
-                <div className="flex items-center justify-between mb-2 sm:mb-3">
-                  <layer.icon className={`w-4 h-4 sm:w-5 sm:h-5 ${layer.color}`} />
-                  <span className="text-[10px] font-mono text-gray-500 uppercase">Layer {idx + 1}</span>
-                </div>
-                <h4 className={`text-sm sm:text-base font-bold font-mono ${layer.color} mb-1.5 sm:mb-2`}>{layer.layer}</h4>
-                <p className="text-[11px] sm:text-xs text-gray-400 font-mono leading-relaxed">{layer.desc}</p>
-              </div>
-              <div className="mt-3 sm:mt-4 pt-2.5 sm:pt-3 border-t border-gray-800/80 flex items-center justify-between text-[10px] sm:text-[11px] text-gray-500 font-mono">
-                <span>Contract Compliant</span>
-                <Check className={`w-3.5 h-3.5 ${layer.color}`} />
-              </div>
-            </motion.div>
-          ))}
-        </div>
+        <AgenticWorkflowDiagram />
       </motion.div>
 
       {/* Core Engineering Pillars */}
       <div className="grid sm:grid-cols-2 lg:grid-cols-4 gap-3 sm:gap-4">
         {CORE_PILLARS.map((pillar) => (
-          <div key={pillar.title} className="p-4 sm:p-5 rounded-xl bg-black/50 border border-gray-800 hover:border-green-500/40 transition-all">
-            <pillar.icon className="w-4 h-4 sm:w-5 sm:h-5 text-green-400 mb-2 sm:mb-3" />
-            <h4 className="text-xs sm:text-sm font-bold font-mono text-white mb-1.5 sm:mb-2">{pillar.title}</h4>
-            <p className="text-[11px] sm:text-xs text-gray-400 font-mono leading-relaxed">{pillar.desc}</p>
+          <div key={pillar.title} className="p-4 sm:p-5 rounded-2xl bg-slate-950/70 border border-slate-800 hover:border-slate-700 transition-all specular-card">
+            <pillar.icon className={`w-4 h-4 sm:w-5 sm:h-5 ${pillar.color} mb-2 sm:mb-3`} />
+            <h4 className="text-xs sm:text-sm font-bold font-editorial text-white mb-1.5 sm:mb-2">{pillar.title}</h4>
+            <p className="text-[11px] sm:text-xs text-slate-400 font-sans leading-relaxed">{pillar.desc}</p>
           </div>
         ))}
       </div>

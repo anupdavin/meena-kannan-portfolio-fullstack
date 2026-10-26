@@ -1,0 +1,2015 @@
+import type { SubsystemBox, ConnectionDef, StepDefinition, ChaosScenarioDef } from '@/components/architecture/SystemDesignCanvas'
+import type { ArchNodeData } from '@/components/architecture/ArchNode'
+
+export interface ByteByteGoSystemConfig {
+  systemId: string
+  title: string
+  tagline: string
+  subsystems: SubsystemBox[]
+  nodes: ArchNodeData[]
+  connections: ConnectionDef[]
+  steps: StepDefinition[]
+  chaosScenarios: ChaosScenarioDef[]
+}
+
+const COMMON_SUBSYSTEMS: SubsystemBox[] = [
+  {
+    id: 'subsystem-edge',
+    label: 'EDGE & INGRESS ZONE',
+    x: 25,
+    y: 110,
+    width: 230,
+    height: 490,
+    accentColor: '#38BDF8'
+  },
+  {
+    id: 'subsystem-vpc',
+    label: 'VPC / PRIVATE SUBNET (DMZ)',
+    x: 285,
+    y: 110,
+    width: 230,
+    height: 490,
+    accentColor: '#10B981'
+  },
+  {
+    id: 'subsystem-compute',
+    label: 'MICROSERVICE & WORKER CLUSTER',
+    x: 545,
+    y: 50,
+    width: 260,
+    height: 550,
+    accentColor: '#F59E0B'
+  },
+  {
+    id: 'subsystem-persistence',
+    label: 'DATA PERSISTENCE LAYER',
+    x: 835,
+    y: 50,
+    width: 335,
+    height: 550,
+    accentColor: '#A855F7'
+  }
+]
+
+export const BYTEBYTEGO_SYSTEMS: Record<string, ByteByteGoSystemConfig> = {
+  'saas-platform': {
+    systemId: 'saas-platform',
+    title: 'Enterprise Multi-Tenant SaaS Architecture',
+    tagline: 'Clean Architecture with Strict Tenant Isolation, JWT/OAuth2, and Sub-80ms Latency',
+    subsystems: COMMON_SUBSYSTEMS,
+    nodes: [
+      {
+        id: 'client',
+        label: 'Client / Mobile',
+        sublabel: 'Enterprise SPA / iOS App',
+        role: 'Client & Presentation Layer',
+        category: 'client',
+        x: 50,
+        y: 170,
+        width: 180,
+        height: 95,
+        color: 'cyan',
+        iconType: 'client',
+        protocol: 'HTTPS / TLS 1.3',
+        latencyBadge: '< 15ms',
+        techBadge: 'React 19 + iOS',
+        metricValue: 'P99 < 65ms',
+        specs: {
+          technology: 'React 19 SPA, TypeScript, Vite, TanStack Query, Swift iOS Client',
+          concurrencyModel: 'Concurrent Mode, Optimistic Mutations, Virtualized Render Lists',
+          resiliencePattern: 'Token refresh retry loop with jittered exponential backoff',
+          targetSla: '99.99% Availability',
+          deepDive: 'Sends signed JWT bearer requests with distributed tenant context headers.'
+        }
+      },
+      {
+        id: 'cloudflare',
+        label: 'Cloudflare CDN',
+        sublabel: 'Edge Cache & Anycast',
+        role: 'Global Edge Ingress & DDoS Defense',
+        category: 'edge',
+        x: 50,
+        y: 390,
+        width: 180,
+        height: 95,
+        color: 'cyan',
+        iconType: 'cloudflare',
+        protocol: 'HTTP/3 / Anycast',
+        latencyBadge: '~12ms',
+        techBadge: 'Cloudflare Enterprise',
+        metricValue: '300+ PoPs Globally',
+        specs: {
+          technology: 'Anycast DNS, Edge Workers, Cloudflare Argo Smart Routing',
+          concurrencyModel: 'Event-driven distributed edge compute engine',
+          resiliencePattern: 'Automatic BGP rerouting around transit provider outages',
+          targetSla: '100% Edge Uptime',
+          deepDive: 'Shields origin from volumetric DDoS attacks and serves cached tenant static assets.'
+        }
+      },
+      {
+        id: 'gateway',
+        label: 'API Gateway',
+        sublabel: 'Spring Cloud Gateway / Envoy',
+        role: 'Unified Ingress, Auth & Rate Limiting',
+        category: 'gateway',
+        x: 310,
+        y: 170,
+        width: 180,
+        height: 95,
+        color: 'emerald',
+        iconType: 'gateway',
+        protocol: 'HTTP/2 / OAuth2',
+        latencyBadge: '~2ms',
+        techBadge: 'Envoy / Spring Cloud',
+        metricValue: '100K Req/sec',
+        specs: {
+          technology: 'Spring Cloud Gateway, Netty Non-Blocking IO, Envoy Proxy',
+          concurrencyModel: 'Reactor Pattern, Epoll Event Loop, zero-copy packet proxying',
+          resiliencePattern: 'Redis-backed distributed token bucket rate limiter (429 Too Many Requests)',
+          targetSla: '99.999% Availability',
+          deepDive: 'Validates cryptographic RS256 JWT claims, strips untrusted headers, and injects tenant ID.'
+        }
+      },
+      {
+        id: 'nginx',
+        label: 'Load Balancer (Nginx)',
+        sublabel: 'L7 Reverse Proxy & SSL Term',
+        role: 'Traffic Distribution & Health Checks',
+        category: 'lb',
+        x: 310,
+        y: 390,
+        width: 180,
+        height: 95,
+        color: 'emerald',
+        iconType: 'nginx',
+        protocol: 'gRPC / TCP',
+        latencyBadge: '< 1ms',
+        techBadge: 'Nginx Enterprise / HAProxy',
+        metricValue: 'Sub-millisecond LB',
+        specs: {
+          technology: 'Nginx L7 Reverse Proxy, Consistent Hash Ring',
+          concurrencyModel: 'Asynchronous event-driven master-worker architecture',
+          resiliencePattern: 'Active keepalive HTTP health checks with automated circuit tripping',
+          targetSla: '99.999% SLA',
+          deepDive: 'Distributes traffic across downstream Spring Boot microservice instances with zero drop.'
+        }
+      },
+      {
+        id: 'services',
+        label: 'Microservices (Java 21)',
+        sublabel: 'Spring Boot 3 Core Services',
+        role: 'Domain Business Logic & Clean Architecture',
+        category: 'compute',
+        x: 575,
+        y: 90,
+        width: 200,
+        height: 105,
+        color: 'emerald',
+        iconType: 'microservices',
+        protocol: 'gRPC / Virtual Threads',
+        latencyBadge: '~4ms',
+        techBadge: 'Java 21 + Spring Boot 3',
+        metricValue: 'Virtual Thread Pool',
+        specs: {
+          technology: 'Java 21 LTS, Spring Boot 3.3, Project Loom Virtual Threads',
+          concurrencyModel: 'Lightweight Virtual Threads (Millions of concurrent tasks without memory overhead)',
+          resiliencePattern: 'Resilience4j CircuitBreaker, RateLimiter, Bulkhead, and Retry',
+          targetSla: '99.99% Availability',
+          deepDive: 'Executes pure domain entities isolated from persistence via dependency inversion ports.'
+        }
+      },
+      {
+        id: 'kafka',
+        label: 'Message Broker (Kafka)',
+        sublabel: 'Distributed Log & Event Stream',
+        role: 'Asynchronous Pub/Sub & Event-Driven Backbone',
+        category: 'event',
+        x: 575,
+        y: 270,
+        width: 200,
+        height: 105,
+        color: 'amber',
+        iconType: 'kafka',
+        protocol: 'Kafka Binary / TCP',
+        latencyBadge: '~3ms',
+        techBadge: 'Apache Kafka 3.7 + KRaft',
+        metricValue: '1M+ Msgs/sec',
+        specs: {
+          technology: 'Apache Kafka with KRaft consensus, partitioned replicated commit log',
+          concurrencyModel: 'Zero-copy sendfile kernel disk-to-network transfer',
+          resiliencePattern: 'At-least-once delivery, min.insync.replicas=2, transactional producer idempotence',
+          targetSla: '99.999% Event Durability',
+          deepDive: 'Decouples core transactional workflows from downstream consumers with outbox pattern.'
+        }
+      },
+      {
+        id: 'worker',
+        label: 'Async Worker / Consumer',
+        sublabel: 'Event Processing & Search Sync',
+        role: 'Background Task Execution & CQRS Projection',
+        category: 'compute',
+        x: 575,
+        y: 450,
+        width: 200,
+        height: 105,
+        color: 'amber',
+        iconType: 'cpu',
+        protocol: 'Async / Batch Poll',
+        latencyBadge: '~5ms',
+        techBadge: 'Spring Cloud Stream Workers',
+        metricValue: 'DLQ Protected',
+        specs: {
+          technology: 'Spring Cloud Stream, Kafka Consumer Groups, Elasticsearch Indexer',
+          concurrencyModel: 'Multi-threaded partitioned consumer groups with backpressure throttling',
+          resiliencePattern: 'Exponential backoff retry with automatic Dead Letter Queue (DLQ) routing',
+          targetSla: 'Near real-time sync',
+          deepDive: 'Consumes committed Kafka events and updates read projections and search indexes.'
+        }
+      },
+      {
+        id: 'cache',
+        label: 'Cache (Redis Cluster)',
+        sublabel: 'In-Memory Key-Value & Sessions',
+        role: 'Sub-Millisecond Read Accelerator & Locks',
+        category: 'cache',
+        x: 870,
+        y: 90,
+        width: 265,
+        height: 105,
+        color: 'emerald',
+        iconType: 'redis',
+        protocol: 'RESP / TCP',
+        latencyBadge: '< 1ms',
+        techBadge: 'Redis 7.2 Cluster (6 Nodes)',
+        metricValue: 'P99.9 < 1.2ms',
+        specs: {
+          technology: 'Redis 7.2 Cluster with 16,384 hash slots across primary/replica shards',
+          concurrencyModel: 'Single-threaded event loop per shard with multiplexed non-blocking IO',
+          resiliencePattern: 'Cache-aside pattern with probabilistic early expiration to avoid thundering herds',
+          targetSla: '99.999% Low Latency',
+          deepDive: 'Provides ultra-fast session validation, query memoization, and Redlock distributed locks.'
+        }
+      },
+      {
+        id: 'db-primary',
+        label: 'PostgreSQL Primary (Write Master)',
+        sublabel: 'ACID Transactions & Master Ledger',
+        role: 'Authoritative Relational Master Store',
+        category: 'database',
+        x: 870,
+        y: 270,
+        width: 265,
+        height: 105,
+        color: 'purple',
+        iconType: 'postgres',
+        protocol: 'JDBC / TLS',
+        latencyBadge: '~8ms',
+        techBadge: 'PostgreSQL 16 + Flyway',
+        metricValue: 'ACID Master / HikariCP',
+        specs: {
+          technology: 'PostgreSQL 16, Multi-AZ High Availability RDS / Patroni Cluster',
+          concurrencyModel: 'Multiversion Concurrency Control (MVCC) with Read Committed isolation',
+          resiliencePattern: 'Automated 30-second failover with synchronous WAL standby promotion',
+          targetSla: '99.999% Durability',
+          deepDive: 'Guarantees strict ACID consistency for user orders, payments, and multi-tenant billing.'
+        }
+      },
+      {
+        id: 'db-replicas',
+        label: 'PostgreSQL Read Replicas',
+        sublabel: 'Horizontal Read Scale & Analytics',
+        role: 'Read Traffic Offloading & Streaming WAL',
+        category: 'database',
+        x: 870,
+        y: 450,
+        width: 265,
+        height: 105,
+        color: 'purple',
+        iconType: 'database',
+        protocol: 'Streaming WAL / Async',
+        latencyBadge: '< 3ms Lag',
+        techBadge: '3x Read Replicas (HA)',
+        metricValue: 'Auto-Scaling Read Pool',
+        specs: {
+          technology: 'PostgreSQL Streaming Replication, PgBouncer Connection Pooling',
+          concurrencyModel: 'Read-only concurrent query scaling with replica load balancing',
+          resiliencePattern: 'Lag-aware routing: routes to primary if replica lag exceeds 100ms threshold',
+          targetSla: 'Horizontal Read Scale',
+          deepDive: 'Offloads complex analytical queries, reporting, and customer catalog lookups.'
+        }
+      }
+    ],
+    connections: [
+      {
+        id: 'conn-client-cdn',
+        fromNodeId: 'client',
+        toNodeId: 'cloudflare',
+        pathD: 'M 140 265 L 140 390',
+        packetType: 'cyan',
+        activeInSteps: [1],
+        calloutBadge: '①',
+        calloutPos: { x: 140, y: 327 },
+        label: 'HTTPS'
+      },
+      {
+        id: 'conn-cdn-gateway',
+        fromNodeId: 'cloudflare',
+        toNodeId: 'gateway',
+        pathD: 'M 230 437 L 262 437 Q 270 437 270 429 L 270 225 Q 270 217 278 217 L 310 217',
+        packetType: 'cyan',
+        activeInSteps: [1],
+        calloutBadge: '①',
+        calloutPos: { x: 270, y: 327 },
+        label: 'Origin Ingress'
+      },
+      {
+        id: 'conn-client-gateway',
+        fromNodeId: 'client',
+        toNodeId: 'gateway',
+        pathD: 'M 230 217 L 310 217',
+        packetType: 'cyan',
+        activeInSteps: [1, 6],
+        calloutBadge: '①',
+        calloutPos: { x: 270, y: 217 },
+        label: 'API Direct'
+      },
+      {
+        id: 'conn-gateway-cache',
+        fromNodeId: 'gateway',
+        toNodeId: 'cache',
+        pathD: 'M 400 170 L 400 73 Q 400 65 408 65 L 994 65 Q 1002 65 1002 73 L 1002 90',
+        packetType: 'emerald',
+        activeInSteps: [2],
+        calloutBadge: '②',
+        calloutPos: { x: 700, y: 65 },
+        label: 'Cache Check'
+      },
+      {
+        id: 'conn-gateway-lb',
+        fromNodeId: 'gateway',
+        toNodeId: 'nginx',
+        pathD: 'M 400 265 L 400 390',
+        packetType: 'cyan',
+        activeInSteps: [2],
+        calloutBadge: '②',
+        calloutPos: { x: 400, y: 327 },
+        label: 'Forward'
+      },
+      {
+        id: 'conn-lb-services',
+        fromNodeId: 'nginx',
+        toNodeId: 'services',
+        pathD: 'M 490 437 L 527 437 Q 535 437 535 429 L 535 150 Q 535 142 543 142 L 575 142',
+        packetType: 'cyan',
+        activeInSteps: [3],
+        calloutBadge: '③',
+        calloutPos: { x: 535, y: 290 },
+        label: 'gRPC Dispatch'
+      },
+      {
+        id: 'conn-services-cache',
+        fromNodeId: 'services',
+        toNodeId: 'cache',
+        pathD: 'M 775 142 L 870 142',
+        packetType: 'emerald',
+        activeInSteps: [2, 5],
+        calloutBadge: '②',
+        calloutPos: { x: 822, y: 142 },
+        label: 'Cache Aside'
+      },
+      {
+        id: 'conn-services-db',
+        fromNodeId: 'services',
+        toNodeId: 'db-primary',
+        pathD: 'M 775 165 L 817 165 Q 825 165 825 173 L 825 314 Q 825 322 833 322 L 870 322',
+        packetType: 'purple',
+        activeInSteps: [3],
+        calloutBadge: '③',
+        calloutPos: { x: 825, y: 243 },
+        label: 'ACID Write'
+      },
+      {
+        id: 'conn-services-kafka',
+        fromNodeId: 'services',
+        toNodeId: 'kafka',
+        pathD: 'M 675 195 L 675 270',
+        packetType: 'amber',
+        activeInSteps: [4],
+        calloutBadge: '④',
+        calloutPos: { x: 675, y: 232 },
+        label: 'Pub Event'
+      },
+      {
+        id: 'conn-kafka-worker',
+        fromNodeId: 'kafka',
+        toNodeId: 'worker',
+        pathD: 'M 675 375 L 675 450',
+        packetType: 'amber',
+        activeInSteps: [5],
+        calloutBadge: '⑤',
+        calloutPos: { x: 675, y: 412 },
+        label: 'Consume'
+      },
+      {
+        id: 'conn-db-replicas',
+        fromNodeId: 'db-primary',
+        toNodeId: 'db-replicas',
+        pathD: 'M 1002 375 L 1002 450',
+        packetType: 'purple',
+        activeInSteps: [5],
+        calloutBadge: '⑤',
+        calloutPos: { x: 1002, y: 412 },
+        label: 'WAL Sync'
+      },
+      {
+        id: 'conn-worker-replicas',
+        fromNodeId: 'worker',
+        toNodeId: 'db-replicas',
+        pathD: 'M 775 502 L 870 502',
+        packetType: 'purple',
+        activeInSteps: [5],
+        calloutBadge: '⑤',
+        calloutPos: { x: 822, y: 502 },
+        label: 'Index Update'
+      },
+      {
+        id: 'conn-response-flow',
+        fromNodeId: 'services',
+        toNodeId: 'client',
+        pathD: 'M 575 120 L 498 120 Q 490 120 490 128 L 490 209 Q 490 217 482 217 L 310 217',
+        packetType: 'emerald',
+        activeInSteps: [6],
+        calloutBadge: '⑥',
+        calloutPos: { x: 490, y: 168 },
+        label: '200 OK Fast'
+      }
+    ],
+    steps: [
+      {
+        stepNumber: 1,
+        title: 'Step 1: Client Request & Edge Ingress',
+        activeNodeIds: ['client', 'cloudflare', 'gateway'],
+        activeConnectionIds: ['conn-client-cdn', 'conn-cdn-gateway', 'conn-client-gateway'],
+        packetType: 'cyan',
+        calloutBadge: '①',
+        payloadTag: 'GET /api/v1/workspaces [Bearer JWT + TenantId]',
+        latencyEst: '~12ms TTFB',
+        detailedExplanation: 'Client sends an authenticated request over TLS 1.3. Cloudflare verifies edge DDoS signatures, mitigates bot attacks, and forwards dynamic traffic directly to API Gateway.',
+        impactMetric: 'Zero Cold-Start / Edge TLS Termination'
+      },
+      {
+        stepNumber: 2,
+        title: 'Step 2: Gateway Auth & Redis Cache Evaluation',
+        activeNodeIds: ['gateway', 'cache', 'nginx'],
+        activeConnectionIds: ['conn-gateway-cache', 'conn-gateway-lb'],
+        packetType: 'emerald',
+        calloutBadge: '②',
+        payloadTag: 'CACHE_LOOKUP: key=tenant:482:ws_list [TTL=300s]',
+        latencyEst: '~1ms Sub-ms',
+        detailedExplanation: 'API Gateway authenticates the JWT cryptographic signature, evaluates token-bucket rate limits, and queries Redis Cluster. On cache miss, traffic is routed to Nginx load balancer.',
+        impactMetric: 'P99.9 < 1.2ms Session Check'
+      },
+      {
+        stepNumber: 3,
+        title: 'Step 3: Core Service Execution & Master DB Write',
+        activeNodeIds: ['nginx', 'services', 'db-primary'],
+        activeConnectionIds: ['conn-lb-services', 'conn-services-db'],
+        packetType: 'purple',
+        calloutBadge: '③',
+        payloadTag: 'TX_BEGIN: INSERT INTO workspace_events (...) COMMIT;',
+        latencyEst: '~8ms ACID Commit',
+        detailedExplanation: 'Nginx round-robins traffic to Spring Boot 3 microservices running on Java 21 Virtual Threads. The service commits an ACID transaction to PostgreSQL Primary and registers an Outbox record.',
+        impactMetric: 'Strict ACID Multi-Tenant Isolation'
+      },
+      {
+        stepNumber: 4,
+        title: 'Step 4: Asynchronous Kafka Event Publishing',
+        activeNodeIds: ['services', 'kafka'],
+        activeConnectionIds: ['conn-services-kafka'],
+        packetType: 'amber',
+        calloutBadge: '④',
+        payloadTag: 'TOPIC: tenant.events.v1 [Partition=3, acks=all]',
+        latencyEst: '~3ms Async Log',
+        detailedExplanation: 'The microservice dispatches an immutable domain event to the Apache Kafka cluster using transactional idempotent producer guarantees (acks=all, min.insync.replicas=2).',
+        impactMetric: 'Zero Synchronous Downstream Block'
+      },
+      {
+        stepNumber: 5,
+        title: 'Step 5: Worker Consumption & Replica WAL Sync',
+        activeNodeIds: ['kafka', 'worker', 'db-replicas', 'db-primary'],
+        activeConnectionIds: ['conn-kafka-worker', 'conn-worker-replicas', 'conn-db-replicas'],
+        packetType: 'purple',
+        calloutBadge: '⑤',
+        payloadTag: 'STREAM_CONSUME: offset=948291 -> Update Read View',
+        latencyEst: '~4ms Replica Sync',
+        detailedExplanation: 'Async worker groups consume partition messages from Kafka, update CQRS read projections in Read Replicas, and synchronize search indexes while PostgreSQL streams write-ahead logs (WAL).',
+        impactMetric: 'Eventual Consistency in < 50ms'
+      },
+      {
+        stepNumber: 6,
+        title: 'Step 6: Replica Sync & 200 OK Fast Response',
+        activeNodeIds: ['services', 'gateway', 'client'],
+        activeConnectionIds: ['conn-response-flow', 'conn-client-gateway'],
+        packetType: 'emerald',
+        calloutBadge: '⑥',
+        payloadTag: 'HTTP/2 200 OK [Content-Type: application/json, 1.4KB]',
+        latencyEst: 'Total P99 < 65ms',
+        detailedExplanation: 'With the transaction committed and event published, the microservice streams the response back through API Gateway to the Client, concluding the low-latency roundtrip.',
+        impactMetric: 'Roundtrip Complete in 62ms'
+      }
+    ],
+    chaosScenarios: [
+      {
+        id: 'chaos-cache-drop',
+        name: 'Redis Shard Outage',
+        affectedNodeId: 'cache',
+        triggerStep: 2,
+        scenarioDescription: 'Simulates primary Redis cache partition drop during peak 15,000 req/s load.',
+        resilientOutcome: 'Probabilistic cache fallback routes safely to DB replicas without thundering herd crash.',
+        recoveryBadge: 'Circuit Breaker Open -> Graceful Fallback'
+      },
+      {
+        id: 'chaos-db-failover',
+        name: 'Postgres Primary Failover',
+        affectedNodeId: 'db-primary',
+        triggerStep: 3,
+        scenarioDescription: 'Simulates hardware crash on PostgreSQL Primary write master node.',
+        resilientOutcome: 'Patroni initiates 30-sec promotion of synchronous standby replica with zero data loss.',
+        recoveryBadge: 'Zero Data Loss WAL Promotion'
+      },
+      {
+        id: 'chaos-kafka-backpressure',
+        name: 'Kafka Consumer Lag Spike',
+        affectedNodeId: 'kafka',
+        triggerStep: 4,
+        scenarioDescription: 'Simulates worker pool pause causing consumer offset lag to surge past 50,000 messages.',
+        resilientOutcome: 'Kafka partitioned buffer absorbs traffic; workers spin up reactive threads with backpressure.',
+        recoveryBadge: 'Backpressure Absorbed by Partition Buffer'
+      }
+    ]
+  },
+
+  'ecommerce-engine': {
+    systemId: 'ecommerce-engine',
+    title: 'High-Throughput Distributed E-Commerce Checkout Engine',
+    tagline: 'Event-Driven Microservices Processing 15,000+ Orders/sec with Kafka and Distributed Locks',
+    subsystems: COMMON_SUBSYSTEMS,
+    nodes: [
+      {
+        id: 'client',
+        label: 'Flash-Sale Ingress',
+        sublabel: '15,000+ RPS Traffic Spike',
+        role: 'Client Demand Generator',
+        category: 'client',
+        x: 50,
+        y: 170,
+        width: 180,
+        height: 95,
+        color: 'cyan',
+        iconType: 'client',
+        protocol: 'HTTPS / HTTP/2',
+        latencyBadge: '< 20ms',
+        techBadge: 'Flash Ingress',
+        metricValue: '15,400 RPS',
+        specs: {
+          technology: 'Distributed global buyers hitting flash-sale checkout endpoints simultaneously',
+          concurrencyModel: 'High-concurrency bursts handled with client-side queuing & optimistic UI state',
+          resiliencePattern: 'Virtual waiting room admission control with token passes',
+          targetSla: 'Zero Order Drop',
+          deepDive: 'Dispatches signed order placement payloads with idempotency request keys.'
+        }
+      },
+      {
+        id: 'cloudflare',
+        label: 'Cloudflare Bot Shield',
+        sublabel: 'WAF & Bot Management',
+        role: 'Anti-Scalper & Edge Throttling',
+        category: 'edge',
+        x: 50,
+        y: 390,
+        width: 180,
+        height: 95,
+        color: 'cyan',
+        iconType: 'cloudflare',
+        protocol: 'HTTP/3 / mTLS',
+        latencyBadge: '~10ms',
+        techBadge: 'Cloudflare WAF',
+        metricValue: '99.4% Bot Drop',
+        specs: {
+          technology: 'Machine-learning bot detection, fingerprint challenge, rate-limiting tokens',
+          concurrencyModel: 'Edge distributed filtering blocking 45,000 malicious requests/sec',
+          resiliencePattern: 'Automated IP challenge before reaching internal origin servers',
+          targetSla: '100% Protection',
+          deepDive: 'Stops automated scalp scripts from exhausting inventory buffers.'
+        }
+      },
+      {
+        id: 'gateway',
+        label: 'Kong / Spring Gateway',
+        sublabel: 'Idempotency & Ingress Filter',
+        role: 'Traffic Ingress & Route Partitioning',
+        category: 'gateway',
+        x: 310,
+        y: 170,
+        width: 180,
+        height: 95,
+        color: 'emerald',
+        iconType: 'gateway',
+        protocol: 'HTTP/2 / REST',
+        latencyBadge: '~1.5ms',
+        techBadge: 'Gateway Ingress',
+        metricValue: '25,000 RPS',
+        specs: {
+          technology: 'Spring Cloud Gateway with Redis reactive idempotency plugin',
+          concurrencyModel: 'Reactor pattern over epoll non-blocking sockets',
+          resiliencePattern: 'Token bucket rate-limiting with tenant quotas',
+          targetSla: '99.999% Availability',
+          deepDive: 'Checks idempotency keys to ensure zero double-charges on network retries.'
+        }
+      },
+      {
+        id: 'nginx',
+        label: 'Load Balancer (Nginx)',
+        sublabel: 'L7 Reverse Proxy & Session Ring',
+        role: 'Layer 7 Microservice Router',
+        category: 'lb',
+        x: 310,
+        y: 390,
+        width: 180,
+        height: 95,
+        color: 'emerald',
+        iconType: 'nginx',
+        protocol: 'gRPC / TCP',
+        latencyBadge: '< 1ms',
+        techBadge: 'Nginx Enterprise',
+        metricValue: 'Least-Conn LB',
+        specs: {
+          technology: 'Nginx with least-connection balancing and persistent upstream pools',
+          concurrencyModel: 'Master-worker async event loop model',
+          resiliencePattern: 'Passive error detection: removes failing pods within 500ms',
+          targetSla: '99.999%',
+          deepDive: 'Balances checkout requests across order service pods.'
+        }
+      },
+      {
+        id: 'services',
+        label: 'Order & Inventory Service',
+        sublabel: 'Spring Boot 3 Core Engine',
+        role: 'Domain Order Orchestration',
+        category: 'compute',
+        x: 575,
+        y: 90,
+        width: 200,
+        height: 105,
+        color: 'emerald',
+        iconType: 'microservices',
+        protocol: 'gRPC / Virtual Threads',
+        latencyBadge: '~5ms',
+        techBadge: 'Java 21 + Spring 3',
+        metricValue: 'Zero-Lock Contention',
+        specs: {
+          technology: 'Java 21 Virtual Threads, Spring Boot 3, Redisson Distributed Lock API',
+          concurrencyModel: 'Distributed atomic spinlocks with lease times avoiding deadlocks',
+          resiliencePattern: 'Resilience4j Bulkhead preventing inventory thread exhaustion',
+          targetSla: '99.99%',
+          deepDive: 'Acquires distributed lock on SKU, decrements stock atomically, and creates order.'
+        }
+      },
+      {
+        id: 'kafka',
+        label: 'Kafka Order Topic',
+        sublabel: 'Partitioned Event Log',
+        role: 'Event Sourcing & Order Streaming',
+        category: 'event',
+        x: 575,
+        y: 270,
+        width: 200,
+        height: 105,
+        color: 'amber',
+        iconType: 'kafka',
+        protocol: 'Kafka Wire Protocol',
+        latencyBadge: '~2ms',
+        techBadge: 'Kafka 3.7 Cluster',
+        metricValue: '64 Partitions',
+        specs: {
+          technology: 'Apache Kafka with 64 partitions keyed by customerId',
+          concurrencyModel: 'Sequential partition writes yielding ultra-high throughput',
+          resiliencePattern: 'Replication factor 3, min.insync.replicas=2 for zero data loss',
+          targetSla: '99.999% Durability',
+          deepDive: 'Streams OrderPlaced events to payment, shipping, and notification microservices.'
+        }
+      },
+      {
+        id: 'worker',
+        label: 'Fulfillment & Audit Worker',
+        sublabel: 'Downstream Event Consumer',
+        role: 'Async Post-Order Processing',
+        category: 'compute',
+        x: 575,
+        y: 450,
+        width: 200,
+        height: 105,
+        color: 'amber',
+        iconType: 'cpu',
+        protocol: 'Async / Event Stream',
+        latencyBadge: '~6ms',
+        techBadge: 'Worker Fleet (30 Pods)',
+        metricValue: 'Parallel Consumers',
+        specs: {
+          technology: 'Spring Cloud Stream with Kafka consumer group concurrency',
+          concurrencyModel: 'Partition-balanced consumer threads with auto-scaling',
+          resiliencePattern: 'Dead-letter-topic fallback with human intervention queue',
+          targetSla: '99.95%',
+          deepDive: 'Triggers warehouse fulfillment and payment settlement asynchronously.'
+        }
+      },
+      {
+        id: 'cache',
+        label: 'Redis Inventory Locks',
+        sublabel: 'Distributed Atomic Redlock',
+        role: 'Flash Inventory Counter & Leases',
+        category: 'cache',
+        x: 870,
+        y: 90,
+        width: 265,
+        height: 105,
+        color: 'emerald',
+        iconType: 'redis',
+        protocol: 'RESP / Redlock',
+        latencyBadge: '< 1ms',
+        techBadge: 'Redis 7.2 Cluster',
+        metricValue: 'Zero Oversell',
+        specs: {
+          technology: 'Redis Cluster with Lua scripts for atomic decrement-if-greater-than-zero',
+          concurrencyModel: 'Single-threaded microsecond operations guaranteeing no overselling',
+          resiliencePattern: 'Master-replica auto-failover with sentinel monitoring',
+          targetSla: '100% Accuracy',
+          deepDive: 'Guarantees that 1,000 flash items sell out to exactly 1,000 users with zero negative stock.'
+        }
+      },
+      {
+        id: 'db-primary',
+        label: 'PostgreSQL Primary (Orders)',
+        sublabel: 'Authoritative Orders Master',
+        role: 'ACID Order & Transaction Ledger',
+        category: 'database',
+        x: 870,
+        y: 270,
+        width: 265,
+        height: 105,
+        color: 'purple',
+        iconType: 'postgres',
+        protocol: 'JDBC / TLS',
+        latencyBadge: '~7ms',
+        techBadge: 'PostgreSQL 16 High-IOPS',
+        metricValue: 'ACID Orders Master',
+        specs: {
+          technology: 'PostgreSQL 16 on NVMe SSDs with synchronous commit',
+          concurrencyModel: 'MVCC with row-level locks on user order tables',
+          resiliencePattern: 'Multi-AZ synchronous replication with automatic health failover',
+          targetSla: '99.999% Consistency',
+          deepDive: 'Persists immutable customer order receipts and payment verification records.'
+        }
+      },
+      {
+        id: 'db-replicas',
+        label: 'Catalog & Search Replicas',
+        sublabel: 'Read Replicas & Elasticsearch',
+        role: 'Product Catalog Browsing & Search',
+        category: 'database',
+        x: 870,
+        y: 450,
+        width: 265,
+        height: 105,
+        color: 'purple',
+        iconType: 'database',
+        protocol: 'Streaming WAL & CDC',
+        latencyBadge: '< 2ms Lag',
+        techBadge: 'Read Replicas + ES',
+        metricValue: '50K QPS Search',
+        specs: {
+          technology: 'PostgreSQL Read Replicas + Debezium CDC into Elasticsearch 8',
+          concurrencyModel: 'Read-only elastic query scaling across cluster',
+          resiliencePattern: 'Automatic replica shedding under extreme lag',
+          targetSla: 'Horizontal Read Scale',
+          deepDive: 'Serves catalog browsing traffic so write master is never impacted by shoppers.'
+        }
+      }
+    ],
+    connections: [
+      {
+        id: 'conn-client-cdn',
+        fromNodeId: 'client',
+        toNodeId: 'cloudflare',
+        pathD: 'M 140 265 L 140 390',
+        packetType: 'cyan',
+        activeInSteps: [1],
+        calloutBadge: '①',
+        calloutPos: { x: 140, y: 327 },
+        label: 'Flash Ingress'
+      },
+      {
+        id: 'conn-cdn-gateway',
+        fromNodeId: 'cloudflare',
+        toNodeId: 'gateway',
+        pathD: 'M 230 437 L 262 437 Q 270 437 270 429 L 270 225 Q 270 217 278 217 L 310 217',
+        packetType: 'cyan',
+        activeInSteps: [1],
+        calloutBadge: '①',
+        calloutPos: { x: 270, y: 327 },
+        label: 'WAF Filtered'
+      },
+      {
+        id: 'conn-client-gateway',
+        fromNodeId: 'client',
+        toNodeId: 'gateway',
+        pathD: 'M 230 217 L 310 217',
+        packetType: 'cyan',
+        activeInSteps: [1, 6],
+        calloutBadge: '①',
+        calloutPos: { x: 270, y: 217 },
+        label: 'Direct API'
+      },
+      {
+        id: 'conn-gateway-cache',
+        fromNodeId: 'gateway',
+        toNodeId: 'cache',
+        pathD: 'M 400 170 L 400 73 Q 400 65 408 65 L 994 65 Q 1002 65 1002 73 L 1002 90',
+        packetType: 'emerald',
+        activeInSteps: [2],
+        calloutBadge: '②',
+        calloutPos: { x: 700, y: 65 },
+        label: 'Idempotency'
+      },
+      {
+        id: 'conn-gateway-lb',
+        fromNodeId: 'gateway',
+        toNodeId: 'nginx',
+        pathD: 'M 400 265 L 400 390',
+        packetType: 'cyan',
+        activeInSteps: [2],
+        calloutBadge: '②',
+        calloutPos: { x: 400, y: 327 },
+        label: 'Forward'
+      },
+      {
+        id: 'conn-lb-services',
+        fromNodeId: 'nginx',
+        toNodeId: 'services',
+        pathD: 'M 490 437 L 527 437 Q 535 437 535 429 L 535 150 Q 535 142 543 142 L 575 142',
+        packetType: 'cyan',
+        activeInSteps: [3],
+        calloutBadge: '③',
+        calloutPos: { x: 535, y: 290 },
+        label: 'Dispatch'
+      },
+      {
+        id: 'conn-services-cache',
+        fromNodeId: 'services',
+        toNodeId: 'cache',
+        pathD: 'M 775 142 L 870 142',
+        packetType: 'emerald',
+        activeInSteps: [2, 3],
+        calloutBadge: '②',
+        calloutPos: { x: 822, y: 142 },
+        label: 'Stock Decr'
+      },
+      {
+        id: 'conn-services-db',
+        fromNodeId: 'services',
+        toNodeId: 'db-primary',
+        pathD: 'M 775 165 L 817 165 Q 825 165 825 173 L 825 314 Q 825 322 833 322 L 870 322',
+        packetType: 'purple',
+        activeInSteps: [3],
+        calloutBadge: '③',
+        calloutPos: { x: 825, y: 243 },
+        label: 'Write Order'
+      },
+      {
+        id: 'conn-services-kafka',
+        fromNodeId: 'services',
+        toNodeId: 'kafka',
+        pathD: 'M 675 195 L 675 270',
+        packetType: 'amber',
+        activeInSteps: [4],
+        calloutBadge: '④',
+        calloutPos: { x: 675, y: 232 },
+        label: 'Emit Order'
+      },
+      {
+        id: 'conn-kafka-worker',
+        fromNodeId: 'kafka',
+        toNodeId: 'worker',
+        pathD: 'M 675 375 L 675 450',
+        packetType: 'amber',
+        activeInSteps: [5],
+        calloutBadge: '⑤',
+        calloutPos: { x: 675, y: 412 },
+        label: 'Fulfill Stream'
+      },
+      {
+        id: 'conn-db-replicas',
+        fromNodeId: 'db-primary',
+        toNodeId: 'db-replicas',
+        pathD: 'M 1002 375 L 1002 450',
+        packetType: 'purple',
+        activeInSteps: [5],
+        calloutBadge: '⑤',
+        calloutPos: { x: 1002, y: 412 },
+        label: 'WAL Sync'
+      },
+      {
+        id: 'conn-worker-replicas',
+        fromNodeId: 'worker',
+        toNodeId: 'db-replicas',
+        pathD: 'M 775 502 L 870 502',
+        packetType: 'purple',
+        activeInSteps: [5],
+        calloutBadge: '⑤',
+        calloutPos: { x: 822, y: 502 },
+        label: 'Search Sync'
+      },
+      {
+        id: 'conn-response-flow',
+        fromNodeId: 'services',
+        toNodeId: 'client',
+        pathD: 'M 575 120 L 498 120 Q 490 120 490 128 L 490 209 Q 490 217 482 217 L 310 217',
+        packetType: 'emerald',
+        activeInSteps: [6],
+        calloutBadge: '⑥',
+        calloutPos: { x: 490, y: 168 },
+        label: 'Order Confirmed'
+      }
+    ],
+    steps: [
+      {
+        stepNumber: 1,
+        title: 'Step 1: Flash Ingress & Anti-Scalp WAF Filtering',
+        activeNodeIds: ['client', 'cloudflare', 'gateway'],
+        activeConnectionIds: ['conn-client-cdn', 'conn-cdn-gateway', 'conn-client-gateway'],
+        packetType: 'cyan',
+        calloutBadge: '①',
+        payloadTag: 'POST /api/v1/orders/checkout [IdempotencyKey: ord_8291f]',
+        latencyEst: '~10ms WAF Pass',
+        detailedExplanation: '15,000 flash buyers hit checkout concurrently. Cloudflare Bot Shield drops automated scalpers, admitting verified shoppers into the API Gateway.',
+        impactMetric: 'Over 99.4% Bot Traffic Dropped'
+      },
+      {
+        stepNumber: 2,
+        title: 'Step 2: Idempotency Verification & Lock Acquisition',
+        activeNodeIds: ['gateway', 'cache', 'nginx'],
+        activeConnectionIds: ['conn-gateway-cache', 'conn-gateway-lb'],
+        packetType: 'emerald',
+        calloutBadge: '②',
+        payloadTag: 'REDLOCK_ACQUIRE: lock:sku:ps5_pro [TTL=5000ms]',
+        latencyEst: '< 1ms Lock Granted',
+        detailedExplanation: 'Gateway checks Redis idempotency lease to prevent double-submit. Service acquires distributed atomic lock on the target SKU inventory counter.',
+        impactMetric: 'Guaranteed Single Execution'
+      },
+      {
+        stepNumber: 3,
+        title: 'Step 3: Atomic Stock Decrement & ACID Order Commit',
+        activeNodeIds: ['services', 'cache', 'db-primary'],
+        activeConnectionIds: ['conn-services-cache', 'conn-services-db'],
+        packetType: 'purple',
+        calloutBadge: '③',
+        payloadTag: 'REDIS_DECR: stock=492 -> 491; PG_INSERT: order_id=ord_8291f',
+        latencyEst: '~6ms Atomic Write',
+        detailedExplanation: 'Redis decrements stock via Lua script with zero race condition. Service commits order record to PostgreSQL Primary master in strict serializable transaction.',
+        impactMetric: 'Zero Oversell Under Peak Traffic'
+      },
+      {
+        stepNumber: 4,
+        title: 'Step 4: Kafka Event Stream Broadcast',
+        activeNodeIds: ['services', 'kafka'],
+        activeConnectionIds: ['conn-services-kafka'],
+        packetType: 'amber',
+        calloutBadge: '④',
+        payloadTag: 'TOPIC: ecommerce.order.placed [Partition=14, Offset=109283]',
+        latencyEst: '~2ms Stream Append',
+        detailedExplanation: 'Service publishes OrderPlacedEvent into Kafka topic partitioned by customerId, decoupling transactional checkout from downstream fulfillment.',
+        impactMetric: '15,000+ Msgs/sec High-Watermark'
+      },
+      {
+        stepNumber: 5,
+        title: 'Step 5: Fulfillment Worker Processing & Search Sync',
+        activeNodeIds: ['kafka', 'worker', 'db-replicas', 'db-primary'],
+        activeConnectionIds: ['conn-kafka-worker', 'conn-worker-replicas', 'conn-db-replicas'],
+        packetType: 'purple',
+        calloutBadge: '⑤',
+        payloadTag: 'CONSUME_EVENT: trigger payment charge & packing slip',
+        latencyEst: '~5ms Async Pipeline',
+        detailedExplanation: 'Worker pool consumes order events, coordinates with payment gateway, updates catalog search replicas, and dispatches customer confirmation email.',
+        impactMetric: 'Elasticsearch Index Synced in 18ms'
+      },
+      {
+        stepNumber: 6,
+        title: 'Step 6: Order Confirmation Response to Client',
+        activeNodeIds: ['services', 'gateway', 'client'],
+        activeConnectionIds: ['conn-response-flow', 'conn-client-gateway'],
+        packetType: 'emerald',
+        calloutBadge: '⑥',
+        payloadTag: '201 CREATED { orderId: "ord_8291f", status: "CONFIRMED" }',
+        latencyEst: 'Total P99 < 75ms',
+        detailedExplanation: 'Client receives instant 201 Created confirmation with order tracking number while the background worker pipeline finishes fulfillment asynchronously.',
+        impactMetric: 'Checkout Completed in 58ms'
+      }
+    ],
+    chaosScenarios: [
+      {
+        id: 'chaos-ecom-lock',
+        name: 'Redis Lock Partition Split',
+        affectedNodeId: 'cache',
+        triggerStep: 2,
+        scenarioDescription: 'Simulates network partition isolating Redis lock master node during 10K RPS flash-sale.',
+        resilientOutcome: 'Redlock consensus algorithm falls back to quorum majority across remaining 4 nodes with zero oversell.',
+        recoveryBadge: 'Redlock Quorum Maintained'
+      },
+      {
+        id: 'chaos-ecom-worker',
+        name: 'Fulfillment Pod Crash',
+        affectedNodeId: 'worker',
+        triggerStep: 5,
+        scenarioDescription: 'Simulates 50% worker pod crash under high memory load while processing payment events.',
+        resilientOutcome: 'Kafka partitions rebalance to healthy pods; uncommitted offsets resume processing with zero lost orders.',
+        recoveryBadge: 'Kafka Rebalance Zero Order Drop'
+      }
+    ]
+  },
+
+  'realtime-platform': {
+    systemId: 'realtime-platform',
+    title: 'Real-Time Financial Telemetry & WebSocket Engine',
+    tagline: '50K+ Concurrent WebSockets, Sub-20ms Redis Pub/Sub Mesh, React 19 State Sync',
+    subsystems: COMMON_SUBSYSTEMS,
+    nodes: [
+      {
+        id: 'client',
+        label: '50K+ Active Users',
+        sublabel: 'Global Financial Terminals',
+        role: 'Market Ticker Consumers',
+        category: 'client',
+        x: 50,
+        y: 170,
+        width: 180,
+        height: 95,
+        color: 'cyan',
+        iconType: 'client',
+        protocol: 'WSS / RFC 6455',
+        latencyBadge: '< 10ms',
+        techBadge: 'React 19 + WSS',
+        metricValue: '52,400 Conns',
+        specs: {
+          technology: 'React 19, TypeScript, RFC 6455 WebSockets with custom exponential backoff reconnect',
+          concurrencyModel: 'High-frequency binary message unpacking with WebAssembly decoder',
+          resiliencePattern: 'Vector clock delta sync on reconnect without full state reload',
+          targetSla: 'Sub-20ms Delivery',
+          deepDive: 'Maintains long-lived bidirectional WebSockets for real-time market ticks.'
+        }
+      },
+      {
+        id: 'cloudflare',
+        label: 'Edge Anycast Network',
+        sublabel: 'Global TCP Termination',
+        role: 'Edge Route Acceleration',
+        category: 'edge',
+        x: 50,
+        y: 390,
+        width: 180,
+        height: 95,
+        color: 'cyan',
+        iconType: 'cloudflare',
+        protocol: 'TCP / Anycast',
+        latencyBadge: '~8ms',
+        techBadge: 'Anycast TCP',
+        metricValue: 'Sub-10ms Jitter',
+        specs: {
+          technology: 'Cloudflare Spectrum TCP reverse proxy with BGP Anycast routing',
+          concurrencyModel: 'Edge TLS session resumption with zero handshake penalty',
+          resiliencePattern: 'Multi-datacenter TCP failover within 2 seconds',
+          targetSla: '100% Uptime',
+          deepDive: 'Terminates client TCP connections at closest geographic point of presence.'
+        }
+      },
+      {
+        id: 'gateway',
+        label: 'WebSocket API Gateway',
+        sublabel: 'Spring Reactive & Netty',
+        role: 'Socket Handshake & Auth',
+        category: 'gateway',
+        x: 310,
+        y: 170,
+        width: 180,
+        height: 95,
+        color: 'emerald',
+        iconType: 'gateway',
+        protocol: 'WSS / HTTP Upgrade',
+        latencyBadge: '~1ms',
+        techBadge: 'Netty Epoll Gateway',
+        metricValue: '100K Sockets/Pod',
+        specs: {
+          technology: 'Netty non-blocking IO with Epoll event loop and native SSL support',
+          concurrencyModel: 'Event loop thread model supporting 100K idle sockets per 4GB RAM',
+          resiliencePattern: 'Adaptive backpressure dropping non-essential channel telemetry',
+          targetSla: '99.999% SLA',
+          deepDive: 'Handles WebSocket upgrade handshakes and registers client subscription topic filters.'
+        }
+      },
+      {
+        id: 'nginx',
+        label: 'Load Balancer (Nginx L4/L7)',
+        sublabel: 'Consistent Hash Balancer',
+        role: 'Sticky Socket Distribution',
+        category: 'lb',
+        x: 310,
+        y: 390,
+        width: 180,
+        height: 95,
+        color: 'emerald',
+        iconType: 'nginx',
+        protocol: 'TCP / Proxy Protocol',
+        latencyBadge: '< 1ms',
+        techBadge: 'Nginx Stream Mode',
+        metricValue: 'Zero Reconnect Drops',
+        specs: {
+          technology: 'Nginx Stream module with ip_hash and sticky connection affinity',
+          concurrencyModel: 'Worker process socket reuse with SO_REUSEPORT kernel flag',
+          resiliencePattern: 'Graceful worker drain ensuring no aborted WebSocket connections',
+          targetSla: '99.999%',
+          deepDive: 'Ensures reliable long-lived socket routing across downstream node instances.'
+        }
+      },
+      {
+        id: 'services',
+        label: 'Market Telemetry Engine',
+        sublabel: 'Java 21 Stream Services',
+        role: 'Ticker Matching & Delta Engine',
+        category: 'compute',
+        x: 575,
+        y: 90,
+        width: 200,
+        height: 105,
+        color: 'emerald',
+        iconType: 'microservices',
+        protocol: 'gRPC / Binary Protobuf',
+        latencyBadge: '~2ms',
+        techBadge: 'Java 21 Disruptor',
+        metricValue: 'Ring Buffer P99 < 3ms',
+        specs: {
+          technology: 'Java 21, LMAX Disruptor lock-free circular ring buffer, Aeron messaging',
+          concurrencyModel: 'Lock-free single-writer principle maximizing CPU cache line locality',
+          resiliencePattern: 'Crash-only software recovery with deterministic replay log',
+          targetSla: 'Sub-5ms Processing',
+          deepDive: 'Matches market trades, calculates candlestick deltas, and dispatches updates.'
+        }
+      },
+      {
+        id: 'kafka',
+        label: 'Kafka Telemetry Log',
+        sublabel: 'Tick History & Replay',
+        role: 'Historical Stream Commit Log',
+        category: 'event',
+        x: 575,
+        y: 270,
+        width: 200,
+        height: 105,
+        color: 'amber',
+        iconType: 'kafka',
+        protocol: 'Kafka Binary Stream',
+        latencyBadge: '~3ms',
+        techBadge: 'Kafka 3.7 Log',
+        metricValue: '10M Ticks/Hour',
+        specs: {
+          technology: 'Apache Kafka with compact log policies for symbol order books',
+          concurrencyModel: 'Zero-copy kernel sendfile for fast replay queries',
+          resiliencePattern: 'Partition redundancy across 3 AZs with 7-day retention',
+          targetSla: 'Zero Tick Loss',
+          deepDive: 'Stores every trade execution for regulatory audit and market replay.'
+        }
+      },
+      {
+        id: 'worker',
+        label: 'Analytics & Alert Worker',
+        sublabel: 'Anomaly Detection Stream',
+        role: 'Real-Time Price Alerts & ML',
+        category: 'compute',
+        x: 575,
+        y: 450,
+        width: 200,
+        height: 105,
+        color: 'amber',
+        iconType: 'cpu',
+        protocol: 'Stream Windowing',
+        latencyBadge: '~4ms',
+        techBadge: 'Flink / Spring Stream',
+        metricValue: 'Sliding Windows',
+        specs: {
+          technology: 'Apache Flink / Spring Cloud Stream sliding window stateful analysis',
+          concurrencyModel: 'Keyed stream partitions with rocksdb local state storage',
+          resiliencePattern: 'Asynchronous checkpointing to S3 for fault recovery',
+          targetSla: 'Real-Time Alerts',
+          deepDive: 'Triggers instant push notifications for stop-loss and limit price triggers.'
+        }
+      },
+      {
+        id: 'cache',
+        label: 'Redis Pub/Sub Mesh',
+        sublabel: 'Sub-Millisecond Message Bus',
+        role: 'High-Fanout Cross-Node Dispatcher',
+        category: 'cache',
+        x: 870,
+        y: 90,
+        width: 265,
+        height: 105,
+        color: 'emerald',
+        iconType: 'redis',
+        protocol: 'RESP Pub/Sub',
+        latencyBadge: '< 1ms',
+        techBadge: 'Redis 7.2 Sharded Bus',
+        metricValue: '500K Msgs/sec',
+        specs: {
+          technology: 'Redis 7.2 Sharded Pub/Sub (SPUBLISH / SSUBSCRIBE)',
+          concurrencyModel: 'Node-local subscription matching with zero cross-shard chatter',
+          resiliencePattern: 'Automatic client reconnect with missed message vector sequence replay',
+          targetSla: 'Sub-millisecond Broadcast',
+          deepDive: 'Distributes ticker events across 20+ WebSocket gateway instances in < 1ms.'
+        }
+      },
+      {
+        id: 'db-primary',
+        label: 'TimescaleDB / Postgres Master',
+        sublabel: 'Hypertables & Financial Trades',
+        role: 'Time-Series Persistent Store',
+        category: 'database',
+        x: 870,
+        y: 270,
+        width: 265,
+        height: 105,
+        color: 'purple',
+        iconType: 'postgres',
+        protocol: 'Timescale Hypertables',
+        latencyBadge: '~5ms',
+        techBadge: 'TimescaleDB 2.14',
+        metricValue: 'Compressed Chunks',
+        specs: {
+          technology: 'TimescaleDB partitioned hypertables on top of PostgreSQL 16',
+          concurrencyModel: 'Chunk-based parallel inserts with columnar compression (95% ratio)',
+          resiliencePattern: 'Continuous continuous aggregates with real-time materialized views',
+          targetSla: '99.999% Durability',
+          deepDive: 'Stores billions of market tick records with sub-second aggregate query speeds.'
+        }
+      },
+      {
+        id: 'db-replicas',
+        label: 'Analytics & Cold Replicas',
+        sublabel: 'Historical Backtesting Pool',
+        role: 'Quantitative Query Offloading',
+        category: 'database',
+        x: 870,
+        y: 450,
+        width: 265,
+        height: 105,
+        color: 'purple',
+        iconType: 'database',
+        protocol: 'Streaming WAL Replicas',
+        latencyBadge: '< 3ms Lag',
+        techBadge: 'Timescale Replicas',
+        metricValue: 'Backtest Scale',
+        specs: {
+          technology: 'PostgreSQL Read Replicas dedicated to quantitative analyst queries',
+          concurrencyModel: 'Parallel query workers across large temporal partitions',
+          resiliencePattern: 'Read query isolation preventing any disruption to live trade storage',
+          targetSla: 'Horizontal Read Scale',
+          deepDive: 'Allows algorithmic backtesting without impacting active trading operations.'
+        }
+      }
+    ],
+    connections: [
+      {
+        id: 'conn-client-cdn',
+        fromNodeId: 'client',
+        toNodeId: 'cloudflare',
+        pathD: 'M 140 265 L 140 390',
+        packetType: 'cyan',
+        activeInSteps: [1],
+        calloutBadge: '①',
+        calloutPos: { x: 140, y: 327 },
+        label: 'TCP Anycast'
+      },
+      {
+        id: 'conn-cdn-gateway',
+        fromNodeId: 'cloudflare',
+        toNodeId: 'gateway',
+        pathD: 'M 230 437 L 262 437 Q 270 437 270 429 L 270 225 Q 270 217 278 217 L 310 217',
+        packetType: 'cyan',
+        activeInSteps: [1],
+        calloutBadge: '①',
+        calloutPos: { x: 270, y: 327 },
+        label: 'WSS Upgrade'
+      },
+      {
+        id: 'conn-client-gateway',
+        fromNodeId: 'client',
+        toNodeId: 'gateway',
+        pathD: 'M 230 217 L 310 217',
+        packetType: 'cyan',
+        activeInSteps: [1, 6],
+        calloutBadge: '①',
+        calloutPos: { x: 270, y: 217 },
+        label: 'Socket Pipe'
+      },
+      {
+        id: 'conn-gateway-cache',
+        fromNodeId: 'gateway',
+        toNodeId: 'cache',
+        pathD: 'M 400 170 L 400 73 Q 400 65 408 65 L 994 65 Q 1002 65 1002 73 L 1002 90',
+        packetType: 'emerald',
+        activeInSteps: [2],
+        calloutBadge: '②',
+        calloutPos: { x: 700, y: 65 },
+        label: 'Subscribe'
+      },
+      {
+        id: 'conn-gateway-lb',
+        fromNodeId: 'gateway',
+        toNodeId: 'nginx',
+        pathD: 'M 400 265 L 400 390',
+        packetType: 'cyan',
+        activeInSteps: [2],
+        calloutBadge: '②',
+        calloutPos: { x: 400, y: 327 },
+        label: 'TCP Stream'
+      },
+      {
+        id: 'conn-lb-services',
+        fromNodeId: 'nginx',
+        toNodeId: 'services',
+        pathD: 'M 490 437 L 527 437 Q 535 437 535 429 L 535 150 Q 535 142 543 142 L 575 142',
+        packetType: 'cyan',
+        activeInSteps: [3],
+        calloutBadge: '③',
+        calloutPos: { x: 535, y: 290 },
+        label: 'Disruptor Ring'
+      },
+      {
+        id: 'conn-services-cache',
+        fromNodeId: 'services',
+        toNodeId: 'cache',
+        pathD: 'M 775 142 L 870 142',
+        packetType: 'emerald',
+        activeInSteps: [3, 5],
+        calloutBadge: '③',
+        calloutPos: { x: 822, y: 142 },
+        label: 'SPUBLISH'
+      },
+      {
+        id: 'conn-services-db',
+        fromNodeId: 'services',
+        toNodeId: 'db-primary',
+        pathD: 'M 775 165 L 817 165 Q 825 165 825 173 L 825 314 Q 825 322 833 322 L 870 322',
+        packetType: 'purple',
+        activeInSteps: [3],
+        calloutBadge: '③',
+        calloutPos: { x: 825, y: 243 },
+        label: 'Batch Insert'
+      },
+      {
+        id: 'conn-services-kafka',
+        fromNodeId: 'services',
+        toNodeId: 'kafka',
+        pathD: 'M 675 195 L 675 270',
+        packetType: 'amber',
+        activeInSteps: [4],
+        calloutBadge: '④',
+        calloutPos: { x: 675, y: 232 },
+        label: 'Tick Stream'
+      },
+      {
+        id: 'conn-kafka-worker',
+        fromNodeId: 'kafka',
+        toNodeId: 'worker',
+        pathD: 'M 675 375 L 675 450',
+        packetType: 'amber',
+        activeInSteps: [5],
+        calloutBadge: '⑤',
+        calloutPos: { x: 675, y: 412 },
+        label: 'Alert Window'
+      },
+      {
+        id: 'conn-db-replicas',
+        fromNodeId: 'db-primary',
+        toNodeId: 'db-replicas',
+        pathD: 'M 1002 375 L 1002 450',
+        packetType: 'purple',
+        activeInSteps: [5],
+        calloutBadge: '⑤',
+        calloutPos: { x: 1002, y: 412 },
+        label: 'WAL Sync'
+      },
+      {
+        id: 'conn-worker-replicas',
+        fromNodeId: 'worker',
+        toNodeId: 'db-replicas',
+        pathD: 'M 775 502 L 870 502',
+        packetType: 'purple',
+        activeInSteps: [5],
+        calloutBadge: '⑤',
+        calloutPos: { x: 822, y: 502 },
+        label: 'Backtest Sync'
+      },
+      {
+        id: 'conn-response-flow',
+        fromNodeId: 'services',
+        toNodeId: 'client',
+        pathD: 'M 575 120 L 498 120 Q 490 120 490 128 L 490 209 Q 490 217 482 217 L 310 217',
+        packetType: 'emerald',
+        activeInSteps: [6],
+        calloutBadge: '⑥',
+        calloutPos: { x: 490, y: 168 },
+        label: 'Tick Broadcast'
+      }
+    ],
+    steps: [
+      {
+        stepNumber: 1,
+        title: 'Step 1: WebSocket Connection Handshake & Edge Acceleration',
+        activeNodeIds: ['client', 'cloudflare', 'gateway'],
+        activeConnectionIds: ['conn-client-cdn', 'conn-cdn-gateway', 'conn-client-gateway'],
+        packetType: 'cyan',
+        calloutBadge: '①',
+        payloadTag: 'GET /ws/v1/market-feed [Upgrade: websocket, Sec-WebSocket-Key]',
+        latencyEst: '~8ms Edge Connect',
+        detailedExplanation: 'Client requests WebSocket upgrade over TLS 1.3. Anycast Edge terminates TCP and proxies raw WebSocket frame stream into Spring Reactive Gateway.',
+        impactMetric: 'Sub-10ms Handshake Latency'
+      },
+      {
+        stepNumber: 2,
+        title: 'Step 2: Channel Subscription & Pub/Sub Topic Registration',
+        activeNodeIds: ['gateway', 'cache', 'nginx'],
+        activeConnectionIds: ['conn-gateway-cache', 'conn-gateway-lb'],
+        packetType: 'emerald',
+        calloutBadge: '②',
+        payloadTag: 'SSUBSCRIBE channel:ticks:BTC_USDT [SocketId=s_92104]',
+        latencyEst: '< 1ms Subscribed',
+        detailedExplanation: 'Gateway registers client topic filter in Redis Sharded Pub/Sub mesh. Connection is registered in local epoll table for instant zero-copy frame dispatch.',
+        impactMetric: '52,400 Concurrent Sockets Active'
+      },
+      {
+        stepNumber: 3,
+        title: 'Step 3: Lock-Free Matching & Redis Fanout Broadcast',
+        activeNodeIds: ['services', 'cache', 'db-primary'],
+        activeConnectionIds: ['conn-services-cache', 'conn-services-db'],
+        packetType: 'emerald',
+        calloutBadge: '③',
+        payloadTag: 'SPUBLISH channel:ticks:BTC_USDT { price: 68420.5, vol: 2.18 }',
+        latencyEst: '~1.8ms Disruptor Match',
+        detailedExplanation: 'Telemetry engine matches incoming trade in LMAX ring buffer, appends tick to TimescaleDB hypertable, and publishes delta to Redis Pub/Sub mesh in < 1ms.',
+        impactMetric: 'Sub-2ms Internal Latency'
+      },
+      {
+        stepNumber: 4,
+        title: 'Step 4: Kafka Immutable Audit Log Append',
+        activeNodeIds: ['services', 'kafka'],
+        activeConnectionIds: ['conn-services-kafka'],
+        packetType: 'amber',
+        calloutBadge: '④',
+        payloadTag: 'KAFKA_PRODUCE: topic=market.ticks.v1 [Partition=7, LZ4 Comp]',
+        latencyEst: '~3ms Append Time',
+        detailedExplanation: 'Trade tick is committed to partitioned Kafka cluster with LZ4 compression for regulatory trade reporting and full market historical playback.',
+        impactMetric: '10M+ Ticks/Hour Throughput'
+      },
+      {
+        stepNumber: 5,
+        title: 'Step 5: Sliding Window Analysis & Anomaly Detection',
+        activeNodeIds: ['kafka', 'worker', 'db-replicas', 'db-primary'],
+        activeConnectionIds: ['conn-kafka-worker', 'conn-worker-replicas', 'conn-db-replicas'],
+        packetType: 'purple',
+        calloutBadge: '⑤',
+        payloadTag: 'FLINK_WINDOW: 5-sec rolling VWAP & liquidation monitor',
+        latencyEst: '~4ms Window Compute',
+        detailedExplanation: 'Stream worker fleet analyzes 5-second sliding windows, detecting stop-loss triggers and price anomalies while PostgreSQL streams replication data.',
+        impactMetric: 'Real-Time Price Alerts Triggered'
+      },
+      {
+        stepNumber: 6,
+        title: 'Step 6: Binary Frame Broadcast to 50K+ Terminals',
+        activeNodeIds: ['services', 'gateway', 'client'],
+        activeConnectionIds: ['conn-response-flow', 'conn-client-gateway'],
+        packetType: 'emerald',
+        calloutBadge: '⑥',
+        payloadTag: 'WSS BINARY FRAME [Length: 64 bytes, Protobuf Ticker]',
+        latencyEst: 'End-to-End < 18ms',
+        detailedExplanation: 'Gateway pushes raw Protobuf frame to all subscribed client WebSockets. React 19 UI renders flash green ticker update without main thread lag.',
+        impactMetric: 'Total Broadcast Latency 16ms'
+      }
+    ],
+    chaosScenarios: [
+      {
+        id: 'chaos-rt-disconnect',
+        name: 'Gateway Pod Severance',
+        affectedNodeId: 'gateway',
+        triggerStep: 2,
+        scenarioDescription: 'Simulates sudden termination of WebSocket Gateway pod hosting 12,000 active sockets.',
+        resilientOutcome: 'React 19 client detects severance, reconnects to adjacent healthy pod within 1.2s, and receives delta sync.',
+        recoveryBadge: 'Auto-Reconnect & Delta Sync'
+      },
+      {
+        id: 'chaos-rt-flood',
+        name: 'Tick Volume Volatility Surge',
+        affectedNodeId: 'cache',
+        triggerStep: 3,
+        scenarioDescription: 'Simulates 500% sudden market volatility surge during major interest rate announcement.',
+        resilientOutcome: 'LMAX Disruptor ring buffer absorbs surge without lock contention; adaptive batching kicks in.',
+        recoveryBadge: 'Ring Buffer Surge Absorbed'
+      }
+    ]
+  },
+
+  'fintech-gateway': {
+    systemId: 'fintech-gateway',
+    title: 'High-Security FinTech Ledger & Payment Gateway',
+    tagline: 'PCI-DSS Compliant, Cryptographic Idempotency Leases, AWS KMS Envelope Vault',
+    subsystems: COMMON_SUBSYSTEMS,
+    nodes: [
+      {
+        id: 'client',
+        label: 'Merchant Checkout',
+        sublabel: '$10M+ Daily Transaction Volume',
+        role: 'Financial Originator',
+        category: 'client',
+        x: 50,
+        y: 170,
+        width: 180,
+        height: 95,
+        color: 'cyan',
+        iconType: 'client',
+        protocol: 'mTLS 1.3 / HTTPS',
+        latencyBadge: '< 25ms',
+        techBadge: 'PCI-DSS Ingress',
+        metricValue: 'Zero Double-Spend',
+        specs: {
+          technology: 'Mutual TLS (mTLS) with client x509 certificates and HMAC-SHA256 payload signatures',
+          concurrencyModel: 'Cryptographically signed idempotent payment transaction requests',
+          resiliencePattern: 'Deterministic request signatures prevent replay attacks',
+          targetSla: '100% Financial Accuracy',
+          deepDive: 'Originates high-value payment transactions with strict client validation.'
+        }
+      },
+      {
+        id: 'cloudflare',
+        label: 'Cloudflare Anti-Fraud',
+        sublabel: 'DDoS Shield & TLS 1.3',
+        role: 'Hardware Security Module Edge',
+        category: 'edge',
+        x: 50,
+        y: 390,
+        width: 180,
+        height: 95,
+        color: 'cyan',
+        iconType: 'cloudflare',
+        protocol: 'PCI Certified Edge',
+        latencyBadge: '~12ms',
+        techBadge: 'PCI-DSS Level 1',
+        metricValue: 'FIPS 140-2 Level 3',
+        specs: {
+          technology: 'Hardware Security Module (HSM) edge termination with strict cipher suite enforcement',
+          concurrencyModel: 'Zero cipher downgrade attacks; enforces TLS 1.3 only',
+          resiliencePattern: 'Automated IP anomaly scoring and rate enforcement',
+          targetSla: '100% Security SLA',
+          deepDive: 'Protects banking ingress from credential stuffing and fraud networks.'
+        }
+      },
+      {
+        id: 'gateway',
+        label: 'Mutual-TLS API Gateway',
+        sublabel: 'Spring Cloud Gateway Security',
+        role: 'Certificate Verification & Auth',
+        category: 'gateway',
+        x: 310,
+        y: 170,
+        width: 180,
+        height: 95,
+        color: 'emerald',
+        iconType: 'gateway',
+        protocol: 'mTLS / OAuth2 MTLS',
+        latencyBadge: '~2ms',
+        techBadge: 'mTLS Hardened',
+        metricValue: 'Zero Untrusted Ingress',
+        specs: {
+          technology: 'Spring Cloud Gateway with PKI certificate chain validation',
+          concurrencyModel: 'Non-blocking reactive SSL handshake evaluation',
+          resiliencePattern: 'Instant certificate revocation check via OCSP stapling',
+          targetSla: '99.999% Availability',
+          deepDive: 'Authenticates merchant public key certificates before request payload reaches VPC.'
+        }
+      },
+      {
+        id: 'nginx',
+        label: 'Hardened Load Balancer',
+        sublabel: 'Nginx Zero-Trust Proxy',
+        role: 'Internal Encrypted Routing',
+        category: 'lb',
+        x: 310,
+        y: 390,
+        width: 180,
+        height: 95,
+        color: 'emerald',
+        iconType: 'nginx',
+        protocol: 'Encrypted gRPC',
+        latencyBadge: '< 1ms',
+        techBadge: 'Zero-Trust Envoy',
+        metricValue: 'WireGuard Mesh',
+        specs: {
+          technology: 'Nginx Enterprise with mutual-TLS backplane upstream encryption',
+          concurrencyModel: 'Async worker routing with dedicated memory sandboxes',
+          resiliencePattern: 'Zero unencrypted plaintext ever touches internal network interfaces',
+          targetSla: '99.999%',
+          deepDive: 'Routes payment requests to isolated Ledger Service pods.'
+        }
+      },
+      {
+        id: 'services',
+        label: 'Payment & Ledger Service',
+        sublabel: 'Double-Entry Bookkeeping',
+        role: 'Immutable Financial Transactions',
+        category: 'compute',
+        x: 575,
+        y: 90,
+        width: 200,
+        height: 105,
+        color: 'emerald',
+        iconType: 'microservices',
+        protocol: 'Java 21 / AWS KMS',
+        latencyBadge: '~8ms',
+        techBadge: 'Double-Entry Engine',
+        metricValue: 'Sum(Debits) == Sum(Credits)',
+        specs: {
+          technology: 'Java 21, Spring Boot 3, AWS KMS envelope encryption, immutable audit ledger',
+          concurrencyModel: 'Pessimistic account row locks (SELECT ... FOR UPDATE) avoiding race conditions',
+          resiliencePattern: 'Two-phase commit coordinator with automatic compensating transactions',
+          targetSla: '100% Zero Drift',
+          deepDive: 'Enforces fundamental invariant: Sum(Debits) must equal Sum(Credits) on every transaction.'
+        }
+      },
+      {
+        id: 'kafka',
+        label: 'Kafka Immutable Audit Log',
+        sublabel: 'Write-Once Audit Trail',
+        role: 'Append-Only Regulatory Ledger',
+        category: 'event',
+        x: 575,
+        y: 270,
+        width: 200,
+        height: 105,
+        color: 'amber',
+        iconType: 'kafka',
+        protocol: 'WORM Compliant',
+        latencyBadge: '~3ms',
+        techBadge: 'Kafka WORM Storage',
+        metricValue: 'Cryptographic Chain',
+        specs: {
+          technology: 'Kafka cluster with Write-Once-Read-Many (WORM) storage policy and HMAC block chaining',
+          concurrencyModel: 'Sequential immutable append log signed by private ledger key',
+          resiliencePattern: 'Multi-region synchronous mirror maker replication',
+          targetSla: '100% Audit Compliance',
+          deepDive: 'Provides mathematically verifiable tamper-evident record for SOC2 / PCI auditors.'
+        }
+      },
+      {
+        id: 'worker',
+        label: 'Settlement & Fraud Worker',
+        sublabel: 'ACH / Swift Settlement',
+        role: 'Card Network & Bank Clearance',
+        category: 'compute',
+        x: 575,
+        y: 450,
+        width: 200,
+        height: 105,
+        color: 'amber',
+        iconType: 'cpu',
+        protocol: 'ISO 8583 / Swift',
+        latencyBadge: '~12ms',
+        techBadge: 'Settlement Fleet',
+        metricValue: 'Batch Reconciliation',
+        specs: {
+          technology: 'Spring Batch, ISO 8583 financial protocol parser, automated reconciliation',
+          concurrencyModel: 'Chunk-oriented batch processing with restartable job state',
+          resiliencePattern: 'Automated discrepancy detection with alert escalation',
+          targetSla: 'Daily Settlement',
+          deepDive: 'Clears transactions with Visa/Mastercard networks and banking ACH rails.'
+        }
+      },
+      {
+        id: 'cache',
+        label: 'Redis Idempotency Vault',
+        sublabel: 'Cryptographic Leases & Tokens',
+        role: 'Deduplication & Distributed Leases',
+        category: 'cache',
+        x: 870,
+        y: 90,
+        width: 265,
+        height: 105,
+        color: 'emerald',
+        iconType: 'redis',
+        protocol: 'RESP TLS / AES-256',
+        latencyBadge: '< 1ms',
+        techBadge: 'Redis Encrypted Cluster',
+        metricValue: '0.00% Double-Charge',
+        specs: {
+          technology: 'Redis 7.2 with in-transit and at-rest TLS encryption, 24-hour lease retention',
+          concurrencyModel: 'SET key val NX EX 86400 atomic reservation',
+          resiliencePattern: 'Atomic check-and-set guarantees no merchant request runs twice',
+          targetSla: '100% Precision',
+          deepDive: 'Stores cryptographically computed request digests to reject duplicated payment clicks.'
+        }
+      },
+      {
+        id: 'db-primary',
+        label: 'PostgreSQL Ledger Master',
+        sublabel: 'Immutable Double-Entry Ledger',
+        role: 'Authoritative Financial Ledger',
+        category: 'database',
+        x: 870,
+        y: 270,
+        width: 265,
+        height: 105,
+        color: 'purple',
+        iconType: 'postgres',
+        protocol: 'JDBC / TLS 1.3',
+        latencyBadge: '~10ms',
+        techBadge: 'PG 16 Encrypted Ledger',
+        metricValue: 'Zero Balance Drift',
+        specs: {
+          technology: 'PostgreSQL 16 with AWS KMS TDE disk encryption, multi-AZ synchronous standby',
+          concurrencyModel: 'Serializable isolation level for critical ledger posting entries',
+          resiliencePattern: 'Zero-downtime Patroni HA cluster with automated replication promotion',
+          targetSla: '100% ACID',
+          deepDive: 'Contains immutable double-entry journal lines; rows are never updated or deleted, only reversed.'
+        }
+      },
+      {
+        id: 'db-replicas',
+        label: 'Audit & Regulatory Replicas',
+        sublabel: 'Read-Only Compliance Vault',
+        role: 'SOC2 & PCI-DSS Audit Node',
+        category: 'database',
+        x: 870,
+        y: 450,
+        width: 265,
+        height: 105,
+        color: 'purple',
+        iconType: 'database',
+        protocol: 'Encrypted Streaming WAL',
+        latencyBadge: '< 2ms Lag',
+        techBadge: 'WORM Audit Replica',
+        metricValue: 'Tamper Evident',
+        specs: {
+          technology: 'Dedicated read replica with immutable hardware WORM storage volume',
+          concurrencyModel: 'Audit query execution with cryptographic hash integrity verification',
+          resiliencePattern: 'Completely air-gapped query credentials for external auditors',
+          targetSla: 'Permanent Audit Trail',
+          deepDive: 'Provides regulatory compliance reporting with proof of non-repudiation.'
+        }
+      }
+    ],
+    connections: [
+      {
+        id: 'conn-client-cdn',
+        fromNodeId: 'client',
+        toNodeId: 'cloudflare',
+        pathD: 'M 140 265 L 140 390',
+        packetType: 'cyan',
+        activeInSteps: [1],
+        calloutBadge: '①',
+        calloutPos: { x: 140, y: 327 },
+        label: 'mTLS Handshake'
+      },
+      {
+        id: 'conn-cdn-gateway',
+        fromNodeId: 'cloudflare',
+        toNodeId: 'gateway',
+        pathD: 'M 230 437 L 262 437 Q 270 437 270 429 L 270 225 Q 270 217 278 217 L 310 217',
+        packetType: 'cyan',
+        activeInSteps: [1],
+        calloutBadge: '①',
+        calloutPos: { x: 270, y: 327 },
+        label: 'HSM Ingress'
+      },
+      {
+        id: 'conn-client-gateway',
+        fromNodeId: 'client',
+        toNodeId: 'gateway',
+        pathD: 'M 230 217 L 310 217',
+        packetType: 'cyan',
+        activeInSteps: [1, 6],
+        calloutBadge: '①',
+        calloutPos: { x: 270, y: 217 },
+        label: 'Direct API'
+      },
+      {
+        id: 'conn-gateway-cache',
+        fromNodeId: 'gateway',
+        toNodeId: 'cache',
+        pathD: 'M 400 170 L 400 73 Q 400 65 408 65 L 994 65 Q 1002 65 1002 73 L 1002 90',
+        packetType: 'emerald',
+        activeInSteps: [2],
+        calloutBadge: '②',
+        calloutPos: { x: 700, y: 65 },
+        label: 'Lease Check'
+      },
+      {
+        id: 'conn-gateway-lb',
+        fromNodeId: 'gateway',
+        toNodeId: 'nginx',
+        pathD: 'M 400 265 L 400 390',
+        packetType: 'cyan',
+        activeInSteps: [2],
+        calloutBadge: '②',
+        calloutPos: { x: 400, y: 327 },
+        label: 'Zero-Trust'
+      },
+      {
+        id: 'conn-lb-services',
+        fromNodeId: 'nginx',
+        toNodeId: 'services',
+        pathD: 'M 490 437 L 527 437 Q 535 437 535 429 L 535 150 Q 535 142 543 142 L 575 142',
+        packetType: 'cyan',
+        activeInSteps: [3],
+        calloutBadge: '③',
+        calloutPos: { x: 535, y: 290 },
+        label: 'Ledger Post'
+      },
+      {
+        id: 'conn-services-cache',
+        fromNodeId: 'services',
+        toNodeId: 'cache',
+        pathD: 'M 775 142 L 870 142',
+        packetType: 'emerald',
+        activeInSteps: [2, 3],
+        calloutBadge: '②',
+        calloutPos: { x: 822, y: 142 },
+        label: 'Commit Lease'
+      },
+      {
+        id: 'conn-services-db',
+        fromNodeId: 'services',
+        toNodeId: 'db-primary',
+        pathD: 'M 775 165 L 817 165 Q 825 165 825 173 L 825 314 Q 825 322 833 322 L 870 322',
+        packetType: 'purple',
+        activeInSteps: [3],
+        calloutBadge: '③',
+        calloutPos: { x: 825, y: 243 },
+        label: '2-Phase ACID'
+      },
+      {
+        id: 'conn-services-kafka',
+        fromNodeId: 'services',
+        toNodeId: 'kafka',
+        pathD: 'M 675 195 L 675 270',
+        packetType: 'amber',
+        activeInSteps: [4],
+        calloutBadge: '④',
+        calloutPos: { x: 675, y: 232 },
+        label: 'WORM Trail'
+      },
+      {
+        id: 'conn-kafka-worker',
+        fromNodeId: 'kafka',
+        toNodeId: 'worker',
+        pathD: 'M 675 375 L 675 450',
+        packetType: 'amber',
+        activeInSteps: [5],
+        calloutBadge: '⑤',
+        calloutPos: { x: 675, y: 412 },
+        label: 'ACH Clear'
+      },
+      {
+        id: 'conn-db-replicas',
+        fromNodeId: 'db-primary',
+        toNodeId: 'db-replicas',
+        pathD: 'M 1002 375 L 1002 450',
+        packetType: 'purple',
+        activeInSteps: [5],
+        calloutBadge: '⑤',
+        calloutPos: { x: 1002, y: 412 },
+        label: 'Audit Replicate'
+      },
+      {
+        id: 'conn-worker-replicas',
+        fromNodeId: 'worker',
+        toNodeId: 'db-replicas',
+        pathD: 'M 775 502 L 870 502',
+        packetType: 'purple',
+        activeInSteps: [5],
+        calloutBadge: '⑤',
+        calloutPos: { x: 822, y: 502 },
+        label: 'Reconcile'
+      },
+      {
+        id: 'conn-response-flow',
+        fromNodeId: 'services',
+        toNodeId: 'client',
+        pathD: 'M 575 120 L 498 120 Q 490 120 490 128 L 490 209 Q 490 217 482 217 L 310 217',
+        packetType: 'emerald',
+        activeInSteps: [6],
+        calloutBadge: '⑥',
+        calloutPos: { x: 490, y: 168 },
+        label: 'Signed Receipt'
+      }
+    ],
+    steps: [
+      {
+        stepNumber: 1,
+        title: 'Step 1: Mutual TLS 1.3 Handshake & Merchant Auth',
+        activeNodeIds: ['client', 'cloudflare', 'gateway'],
+        activeConnectionIds: ['conn-client-cdn', 'conn-cdn-gateway', 'conn-client-gateway'],
+        packetType: 'cyan',
+        calloutBadge: '①',
+        payloadTag: 'POST /v1/charges [mTLS Client Cert + HMAC-SHA256 Sig]',
+        latencyEst: '~12ms mTLS Check',
+        detailedExplanation: 'Merchant checkout sends payment payload encrypted with mTLS 1.3. Cloudflare and Gateway verify client certificate thumbprint and reject untrusted traffic.',
+        impactMetric: 'Strict Cryptographic Client Authentication'
+      },
+      {
+        stepNumber: 2,
+        title: 'Step 2: Distributed Idempotency Lease Reservation',
+        activeNodeIds: ['gateway', 'cache', 'nginx'],
+        activeConnectionIds: ['conn-gateway-cache', 'conn-gateway-lb'],
+        packetType: 'emerald',
+        calloutBadge: '②',
+        payloadTag: 'SETNX lease:chg_98240f [TTL=86400s] -> GRANTED',
+        latencyEst: '< 1ms Lease Granted',
+        detailedExplanation: 'Gateway reserves a distributed idempotency lock in Redis. If merchant network drops and retries, duplicate requests receive the original cached result without re-billing.',
+        impactMetric: '0.00% Double-Charge Rate Guaranteed'
+      },
+      {
+        stepNumber: 3,
+        title: 'Step 3: Double-Entry ACID Commit & Envelope Encryption',
+        activeNodeIds: ['services', 'cache', 'db-primary'],
+        activeConnectionIds: ['conn-services-cache', 'conn-services-db'],
+        packetType: 'purple',
+        calloutBadge: '③',
+        payloadTag: 'TX: DEBIT merchant_payable $1000.00; CREDIT fees $29.00',
+        latencyEst: '~9ms ACID Commit',
+        detailedExplanation: 'Ledger service executes two-phase commit: writes cryptographic journal line with envelope KMS key, ensuring debit balance equals credit balance exactly.',
+        impactMetric: 'Strict Mathematical Balance Consistency'
+      },
+      {
+        stepNumber: 4,
+        title: 'Step 4: WORM Append-Only Audit Stream Broadcast',
+        activeNodeIds: ['services', 'kafka'],
+        activeConnectionIds: ['conn-services-kafka'],
+        packetType: 'amber',
+        calloutBadge: '④',
+        payloadTag: 'KAFKA_WORM: ledger.audit.v1 [HashChain=sha256(prev+tx)]',
+        latencyEst: '~3ms WORM Write',
+        detailedExplanation: 'Transaction event is signed and emitted to Kafka append-only topic with cryptographic hash chaining, creating an immutable audit trail for regulatory scrutiny.',
+        impactMetric: 'SOC2 & PCI-DSS Audit Proof'
+      },
+      {
+        stepNumber: 5,
+        title: 'Step 5: Settlement Batching & Regulatory Mirror Sync',
+        activeNodeIds: ['kafka', 'worker', 'db-replicas', 'db-primary'],
+        activeConnectionIds: ['conn-kafka-worker', 'conn-worker-replicas', 'conn-db-replicas'],
+        packetType: 'purple',
+        calloutBadge: '⑤',
+        payloadTag: 'ISO_8583: Batch clearance message to Visa/Mastercard',
+        latencyEst: '~10ms Batch Exec',
+        detailedExplanation: 'Worker pool processes clearing records for banking rails, while PostgreSQL master streams encrypted WAL logs to the compliance audit replica vault.',
+        impactMetric: 'Bank Clearance Reconciled'
+      },
+      {
+        stepNumber: 6,
+        title: 'Step 6: Cryptographically Signed Receipt Response',
+        activeNodeIds: ['services', 'gateway', 'client'],
+        activeConnectionIds: ['conn-response-flow', 'conn-client-gateway'],
+        packetType: 'emerald',
+        calloutBadge: '⑥',
+        payloadTag: '200 OK { chargeId: "chg_98240f", status: "SUCCEEDED" }',
+        latencyEst: 'Total P99 < 85ms',
+        detailedExplanation: 'Merchant receives signed receipt payload with proof of payment authorization, concluding the high-security financial transaction.',
+        impactMetric: 'Transaction Completed in 64ms'
+      }
+    ],
+    chaosScenarios: [
+      {
+        id: 'chaos-fin-double',
+        name: 'Simulated Network Retry Storm',
+        affectedNodeId: 'cache',
+        triggerStep: 2,
+        scenarioDescription: 'Simulates client submitting 5 identical payment charges within 100ms due to connection timeout.',
+        resilientOutcome: 'Redis idempotency lease halts duplicate executions; returns identical original receipt with zero duplicate charges.',
+        recoveryBadge: 'Idempotency Blocked 4 Duplicates'
+      },
+      {
+        id: 'chaos-fin-failover',
+        name: 'Primary Ledger DB Crash',
+        affectedNodeId: 'db-primary',
+        triggerStep: 3,
+        scenarioDescription: 'Simulates hardware crash on PostgreSQL Primary write master during active ledger posting.',
+        resilientOutcome: 'Synchronous Standby promoted via Patroni with zero ledger drift; in-flight transaction safely rolled back.',
+        recoveryBadge: 'Zero Ledger Drift Standby Promotion'
+      }
+    ]
+  }
+}

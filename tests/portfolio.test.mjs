@@ -38,6 +38,20 @@ describe('Portfolio Verification & Asset Integrity', () => {
     assert.ok(fs.existsSync(path.join(rootDir, 'public', 'og-image.svg')), 'OG image must exist');
     assert.ok(fs.existsSync(path.join(rootDir, 'public', 'robots.txt')), 'robots.txt must exist');
     assert.ok(fs.existsSync(path.join(rootDir, 'public', 'sitemap.xml')), 'sitemap.xml must exist');
+    assert.ok(fs.existsSync(path.join(rootDir, 'public', 'favicon.svg')), 'favicon.svg must exist');
+  });
+
+  test('index.html contains valid favicon.svg link, OpenGraph tags, and pre-rendered semantic landmarks', () => {
+    const html = fs.readFileSync(path.join(rootDir, 'index.html'), 'utf8');
+    assert.ok(html.includes('href="/favicon.svg"'), 'Must link to /favicon.svg in public directory');
+    assert.ok(html.includes('property="og:title"'), 'Must define og:title');
+    assert.ok(html.includes('property="og:description"'), 'Must define og:description');
+    assert.ok(html.includes('property="og:image"'), 'Must define og:image');
+    assert.ok(html.includes('<header'), 'Must include semantic <header> landmark');
+    assert.ok(html.includes('<main'), 'Must include semantic <main> landmark');
+    assert.ok(html.includes('<section'), 'Must include semantic <section> landmark');
+    assert.ok(html.includes('<footer'), 'Must include semantic <footer> landmark');
+    assert.ok(!html.includes('<div id="root"></div>'), 'Root must not be an empty shell; must have pre-rendered structure');
   });
 });
 
@@ -103,3 +117,260 @@ describe('Mobile & Cross-Device Responsiveness Verification', () => {
     assert.ok(chatTsx.includes('safe-area-inset-bottom'), 'Chat sheet must account for safe area insets');
   });
 });
+
+describe('ByteByteGo Architecture & Stock Image Elimination Verification', () => {
+  test('ProjectsShowcase.tsx has 0 low-quality Unsplash stock photos and embeds ByteByteGoDiagram', () => {
+    const showcaseCode = fs.readFileSync(path.join(rootDir, 'src', 'components', 'portfolio', 'ProjectsShowcase.tsx'), 'utf8');
+    assert.ok(!showcaseCode.includes('images.unsplash.com'), 'All generic Unsplash stock photos must be eliminated');
+    assert.ok(showcaseCode.includes('ByteByteGoDiagram'), 'Must embed ByteByteGoDiagram component');
+    assert.ok(showcaseCode.includes('variant="preview"'), 'Must provide interactive preview in project card');
+    assert.ok(showcaseCode.includes('variant="workbench"'), 'Must provide full workbench simulator in modal');
+  });
+
+  test('src/data/architectureSystems.ts defines complete specifications for all 4 enterprise systems', () => {
+    const archFilePath = path.join(rootDir, 'src', 'data', 'architectureSystems.ts');
+    assert.ok(fs.existsSync(archFilePath), 'architectureSystems.ts must exist');
+    const archCode = fs.readFileSync(archFilePath, 'utf8');
+    
+    assert.ok(archCode.includes("'saas-platform'"), 'Must define saas-platform system');
+    assert.ok(archCode.includes("'ecommerce-engine'"), 'Must define ecommerce-engine system');
+    assert.ok(archCode.includes("'realtime-platform'"), 'Must define realtime-platform system');
+    assert.ok(archCode.includes("'fintech-gateway'"), 'Must define fintech-gateway system');
+    assert.ok(archCode.includes('chaosScenarios'), 'Must define chaos failure mode simulations');
+  });
+
+  test('AboutTerminal.tsx embeds Agentic AI Orchestrator-Worker Workflow Diagram in ByteByteGo style', () => {
+    const aboutCode = fs.readFileSync(path.join(rootDir, 'src', 'components', 'portfolio', 'AboutTerminal.tsx'), 'utf8');
+    assert.ok(aboutCode.includes('AgenticWorkflowDiagram') || aboutCode.includes('CleanArchitectureRadar'), 'AboutTerminal must embed AgenticWorkflowDiagram');
+    
+    const diagramCode = fs.readFileSync(path.join(rootDir, 'src', 'components', 'architecture', 'AgenticWorkflowDiagram.tsx'), 'utf8');
+    assert.ok(diagramCode.includes('AGENTIC AI ARCHITECTURE BLUEPRINT'), 'Must define Agentic AI Architecture Blueprint');
+    assert.ok(diagramCode.includes('Supervisor Orchestrator'), 'Must define Supervisor Orchestrator');
+    assert.ok(diagramCode.includes('SPECIALIZED WORKER POOL'), 'Must define Specialized Worker Pool');
+  });
+
+  test('SystemDesignCanvas, ArchNode, and AnimatedConnection satisfy ByteByteGo specs', () => {
+    const canvasCode = fs.readFileSync(path.join(rootDir, 'src', 'components', 'architecture', 'SystemDesignCanvas.tsx'), 'utf8');
+    assert.ok(canvasCode.includes('viewBox="0 0 1200 650"'), 'Canvas must use viewBox 0 0 1200 650 for responsive scaling');
+    assert.ok(canvasCode.includes('#0B0F19'), 'Canvas must have dark slate blueprint background #0B0F19');
+    assert.ok(canvasCode.includes('pattern'), 'Canvas must use SVG grid/dot pattern');
+    assert.ok(canvasCode.includes('opacity: 0.25') || canvasCode.includes('0.25'), 'Canvas must dim inactive nodes and paths to 0.25 opacity');
+    assert.ok(canvasCode.includes('playbackSpeed'), 'Canvas must provide speed controls');
+    assert.ok(canvasCode.includes('activeStep'), 'Canvas must provide synchronized active step playback');
+
+    const nodeCode = fs.readFileSync(path.join(rootDir, 'src', 'components', 'architecture', 'ArchNode.tsx'), 'utf8');
+    assert.ok(nodeCode.includes('JetBrains Mono'), 'ArchNode must use JetBrains Mono bold typography');
+    assert.ok(nodeCode.includes('#1E293B'), 'ArchNode must have 1.5px crisp slate border');
+    assert.ok(nodeCode.includes('renderTechIcon'), 'ArchNode must render authentic SVG infrastructure icons');
+
+    const connCode = fs.readFileSync(path.join(rootDir, 'src', 'components', 'architecture', 'AnimatedConnection.tsx'), 'utf8');
+    assert.ok(connCode.includes('stroke="#334155"') || connCode.includes('#334155'), 'AnimatedConnection must have muted structural base wire #334155');
+    assert.ok(connCode.includes('strokeDasharray="6 6"'), 'AnimatedConnection must use strokeDasharray 6 6 flowing stream');
+    assert.ok(connCode.includes('animateMotion'), 'AnimatedConnection must animate packets using SVG animateMotion');
+    assert.ok(connCode.includes('#38BDF8'), 'AnimatedConnection must support Cyan packet type');
+    assert.ok(connCode.includes('#10B981'), 'AnimatedConnection must support Emerald packet type');
+    assert.ok(connCode.includes('#F59E0B'), 'AnimatedConnection must support Amber packet type');
+    assert.ok(connCode.includes('#A855F7'), 'AnimatedConnection must support Purple packet type');
+  });
+
+  test('byteByteGoConfigs.ts configures all 4 enterprise systems with orthogonal routing and 6-step flows', () => {
+    const configCode = fs.readFileSync(path.join(rootDir, 'src', 'data', 'byteByteGoConfigs.ts'), 'utf8');
+    assert.ok(configCode.includes("'saas-platform'"), 'Must configure saas-platform');
+    assert.ok(configCode.includes("'ecommerce-engine'"), 'Must configure ecommerce-engine');
+    assert.ok(configCode.includes("'realtime-platform'"), 'Must configure realtime-platform');
+    assert.ok(configCode.includes("'fintech-gateway'"), 'Must configure fintech-gateway');
+    assert.ok(configCode.includes('EDGE & INGRESS ZONE'), 'Must define Edge Subsystem');
+    assert.ok(configCode.includes('VPC / PRIVATE SUBNET'), 'Must define VPC Subsystem');
+    assert.ok(configCode.includes('MICROSERVICE & WORKER CLUSTER'), 'Must define Worker Cluster Subsystem');
+    assert.ok(configCode.includes('DATA PERSISTENCE LAYER'), 'Must define Persistence Subsystem');
+    assert.ok(configCode.includes('Step 1:'), 'Must define Step 1');
+    assert.ok(configCode.includes('Step 6:'), 'Must define Step 6');
+  });
+
+  test('ArchitectureLab.tsx and SystemDesignCanvas feature live system switcher and SVG export', () => {
+    const labPath = path.join(rootDir, 'src', 'components', 'portfolio', 'ArchitectureLab.tsx');
+    assert.ok(fs.existsSync(labPath), 'ArchitectureLab.tsx must exist');
+    const labCode = fs.readFileSync(labPath, 'utf8');
+    assert.ok(labCode.includes('ByteByteGoDiagram'), 'ArchitectureLab must embed ByteByteGoDiagram');
+    assert.ok(labCode.includes('allowSystemSwitch'), 'ArchitectureLab must enable system switching');
+
+    const canvasCode = fs.readFileSync(path.join(rootDir, 'src', 'components', 'architecture', 'SystemDesignCanvas.tsx'), 'utf8');
+    assert.ok(canvasCode.includes('handleExportSvg'), 'SystemDesignCanvas must implement SVG blueprint export');
+    assert.ok(canvasCode.includes('handleCopySpec'), 'SystemDesignCanvas must implement JSON spec copy');
+    assert.ok(canvasCode.includes('onSelectSystem'), 'SystemDesignCanvas must support onSelectSystem');
+
+    const layoutCode = fs.readFileSync(path.join(rootDir, 'src', 'pages', 'Layout.tsx'), 'utf8');
+    assert.ok(layoutCode.includes('#architecture'), 'Layout must link to #architecture section');
+
+    const portfolioCode = fs.readFileSync(path.join(rootDir, 'src', 'pages', 'Portfolio.tsx'), 'utf8');
+    assert.ok(portfolioCode.includes('id="architecture"'), 'Portfolio must mount architecture section');
+    assert.ok(portfolioCode.includes('ArchitectureLab'), 'Portfolio must render ArchitectureLab');
+  });
+});
+
+describe('Terminal Hero & Route Fault-Tolerance Verification', () => {
+  test('TerminalHero derives displayedCode safely and guards against undefined line checks', () => {
+    const heroCode = fs.readFileSync(path.join(rootDir, 'src', 'components', 'portfolio', 'TerminalHero.tsx'), 'utf8');
+    assert.ok(heroCode.includes('displayedCode = useMemo'), 'displayedCode must be derived via useMemo to avoid sparse state race conditions');
+    assert.ok(heroCode.includes("const line = typeof rawLine === 'string' ? rawLine : ''"), 'Must sanitize rawLine to prevent undefined.startsWith crash');
+    assert.ok(heroCode.includes('handleTabChange'), 'Must cleanly reset typewriter state synchronously on tab change');
+  });
+
+  test('ContactTerminal guards against undefined line strings', () => {
+    const contactCode = fs.readFileSync(path.join(rootDir, 'src', 'components', 'portfolio', 'ContactTerminal.tsx'), 'utf8');
+    assert.ok(contactCode.includes("const line = typeof rawLine === 'string' ? rawLine : ''"), 'ContactTerminal must sanitize rawLine');
+  });
+
+  test('RouteErrorBoundary is implemented and configured on root route', () => {
+    const boundaryPath = path.join(rootDir, 'src', 'components', 'portfolio', 'RouteErrorBoundary.tsx');
+    assert.ok(fs.existsSync(boundaryPath), 'RouteErrorBoundary.tsx must exist');
+
+    const mainCode = fs.readFileSync(path.join(rootDir, 'src', 'main.tsx'), 'utf8');
+    assert.ok(mainCode.includes('errorElement: <RouteErrorBoundary />'), 'Root route must configure RouteErrorBoundary as errorElement');
+  });
+});
+
+describe('Enterprise Architectural Upgrades & B2B Production Readiness', () => {
+  test('Projects section header eliminates third-party branding', () => {
+    const indexHtml = fs.readFileSync(path.join(rootDir, 'index.html'), 'utf8');
+    assert.ok(indexHtml.includes('Enterprise Systems & Interactive Architecture Workbenches'), 'index.html must use Enterprise Systems & Interactive Architecture Workbenches');
+    assert.ok(!indexHtml.includes('Enterprise Projects & ByteByteGo Architecture Workbenches'), 'Old third-party branding header must be removed');
+
+    const showcaseCode = fs.readFileSync(path.join(rootDir, 'src', 'components', 'portfolio', 'ProjectsShowcase.tsx'), 'utf8');
+    assert.ok(showcaseCode.includes('Enterprise Systems & Interactive Architecture Workbenches'), 'ProjectsShowcase must use updated section title');
+  });
+
+  test('Project #2 terminology enforces Saga, Outbox, and Idempotent consumers', () => {
+    const indexHtml = fs.readFileSync(path.join(rootDir, 'index.html'), 'utf8');
+    assert.ok(!indexHtml.includes('two-phase commit resilience'), 'two-phase commit resilience must be eliminated from project 2 description');
+    assert.ok(indexHtml.includes('Choreographed Saga orchestration, Transactional Outbox pattern (Debezium CDC), and idempotent Kafka consumers'), 'Must use choreographed saga and outbox pattern terminology');
+
+    const showcaseCode = fs.readFileSync(path.join(rootDir, 'src', 'components', 'portfolio', 'ProjectsShowcase.tsx'), 'utf8');
+    assert.ok(showcaseCode.includes('Choreographed Saga orchestration, Transactional Outbox pattern (Debezium CDC), and idempotent Kafka consumers'), 'ProjectsShowcase must define exact distributed systems terminology');
+  });
+
+  test('Project cards define problemStatement, architectureHighlights, diagramNodes, ADR, and action buttons', () => {
+    const showcaseCode = fs.readFileSync(path.join(rootDir, 'src', 'components', 'portfolio', 'ProjectsShowcase.tsx'), 'utf8');
+    assert.ok(showcaseCode.includes('problemStatement'), 'Project objects must define problemStatement');
+    assert.ok(showcaseCode.includes('architectureHighlights'), 'Project objects must define architectureHighlights');
+    assert.ok(showcaseCode.includes('diagramNodes'), 'Project objects must define diagramNodes request flow');
+    assert.ok(showcaseCode.includes('adr: ArchitecturalDecisionRecord') || showcaseCode.includes('adr: {') || showcaseCode.includes('adr:'), 'Project objects must define ADR structure');
+    assert.ok(showcaseCode.includes('View Architecture Blueprint'), 'Card must have View Architecture Blueprint button');
+    assert.ok(showcaseCode.includes('Read ADR'), 'Card must have Read ADR button');
+  });
+
+  test('Experience section defines structured 8+ years leadership timeline', () => {
+    const timelineCode = fs.readFileSync(path.join(rootDir, 'src', 'components', 'portfolio', 'ExperienceTimeline.tsx'), 'utf8');
+    assert.ok(timelineCode.includes('8+ YEARS ARCHITECTURAL LEADERSHIP') || timelineCode.includes('8+ years'), 'Must highlight 8+ years leadership');
+    assert.ok(timelineCode.includes('Zero-Downtime Monolith-to-Microservices Migration'), 'Must quantify zero-downtime microservices migration');
+    assert.ok(timelineCode.includes('Kubernetes/EKS & AWS Cost Optimization'), 'Must quantify EKS cost optimization');
+    assert.ok(timelineCode.includes('Cross-Functional Squad Leadership'), 'Must detail cross-functional squad leadership');
+    assert.ok(timelineCode.includes('techAndPatterns'), 'Must provide tech & patterns pill badges');
+
+    const indexHtml = fs.readFileSync(path.join(rootDir, 'index.html'), 'utf8');
+    assert.ok(indexHtml.includes('Lead Full-Stack & Cloud Solutions Architect'), 'index.html pre-rendered experience must define structured milestone entries');
+    assert.ok(indexHtml.includes('Senior Full-Stack & Distributed Systems Engineer'), 'index.html pre-rendered experience must define senior engineer milestone');
+    assert.ok(!indexHtml.includes('<p style="color: #94a3b8;">Track record of architecting enterprise solutions, leading engineering squads, and driving zero-downtime migrations.</p>'), 'Single paragraph placeholder must be replaced');
+  });
+
+  test('Interactive terminal provides clickable quick-action chips directly above prompt', () => {
+    const cliCode = fs.readFileSync(path.join(rootDir, 'src', 'components', 'portfolio', 'InteractiveCli.tsx'), 'utf8');
+    assert.ok(cliCode.includes('[ $ whoami ]'), 'Must define [ $ whoami ] quick chip');
+    assert.ok(cliCode.includes('[ $ architecture ]'), 'Must define [ $ architecture ] quick chip');
+    assert.ok(cliCode.includes('[ $ skills ]'), 'Must define [ $ skills ] quick chip');
+    assert.ok(cliCode.includes('[ $ contact ]'), 'Must define [ $ contact ] quick chip');
+    assert.ok(cliCode.includes('handleQuickChipClick'), 'Must execute quick chip on click');
+    assert.ok(cliCode.includes("e.key === 'ArrowUp'") && cliCode.includes("e.key === 'ArrowDown'"), 'Must maintain keyboard history navigation');
+    assert.ok(cliCode.includes("e.key === 'Tab'"), 'Must maintain Tab autocomplete');
+  });
+
+  test('Contact section fixes Cloudflare obfuscation and features B2B Inquiry card', () => {
+    const contactCode = fs.readFileSync(path.join(rootDir, 'src', 'components', 'portfolio', 'ContactTerminal.tsx'), 'utf8');
+    assert.ok(contactCode.includes('getDynamicEmail'), 'Must construct email dynamically to evade scraping');
+    assert.ok(contactCode.includes('Copied to clipboard!'), 'Must provide toast state for email copy');
+    assert.ok(contactCode.includes('B2B Consulting & Architecture Inquiry'), 'Must embed B2B Consulting Inquiry card');
+    assert.ok(contactCode.includes('Name / Company'), 'Must include Name / Company field');
+    assert.ok(contactCode.includes('Engagement Type'), 'Must include Engagement Type field');
+    assert.ok(contactCode.includes('Project Brief'), 'Must include Project Brief field');
+    assert.ok(contactCode.includes('https://www.linkedin.com/in/meena-kannan'), 'Must link to LinkedIn');
+    assert.ok(contactCode.includes('https://github.com/meenak95'), 'Must link to GitHub');
+  });
+
+  test('index.html contains valid JSON-LD Person and WebSite schema and meta tags', () => {
+    const indexHtml = fs.readFileSync(path.join(rootDir, 'index.html'), 'utf8');
+    assert.ok(indexHtml.includes('application/ld+json'), 'Must contain JSON-LD script tag');
+    assert.ok(indexHtml.includes('"@type": "Person"'), 'JSON-LD must define Person');
+    assert.ok(indexHtml.includes('"@type": "WebSite"'), 'JSON-LD must define WebSite');
+    assert.ok(indexHtml.includes('https://meenakannan.dev'), 'JSON-LD must define canonical URL');
+    assert.ok(indexHtml.includes('twitter:card'), 'Must define twitter:card');
+    assert.ok(indexHtml.includes('og:title'), 'Must define og:title');
+  });
+});
+
+describe('Quality, Antislop, Accessibility & Performance Hygiene Verification', () => {
+  test('src/index.css enforces tabular-nums and defines WCAG prefers-reduced-motion block', () => {
+    const css = fs.readFileSync(path.join(rootDir, 'src', 'index.css'), 'utf8');
+    assert.ok(css.includes('font-variant-numeric: tabular-nums'), 'index.css must enforce tabular-nums for numeric stability');
+    assert.ok(css.includes('@media (prefers-reduced-motion: reduce)'), 'index.css must include prefers-reduced-motion accessibility media query');
+  });
+
+  test('src/components/MatrixBackground.tsx respects prefers-reduced-motion', () => {
+    const code = fs.readFileSync(path.join(rootDir, 'src', 'components', 'MatrixBackground.tsx'), 'utf8');
+    assert.ok(code.includes('prefers-reduced-motion: reduce'), 'MatrixBackground must detect prefers-reduced-motion preference');
+  });
+
+  test('All architecture and portfolio files are free of generic Hallmark Score slop comments', () => {
+    const archDir = path.join(rootDir, 'src', 'components', 'architecture');
+    const files = fs.readdirSync(archDir);
+    for (const file of files) {
+      if (file.endsWith('.tsx') || file.endsWith('.ts')) {
+        const content = fs.readFileSync(path.join(archDir, file), 'utf8');
+        assert.ok(!content.includes('Hallmark Score'), `${file} must not contain generic Hallmark Score comment`);
+      }
+    }
+  });
+
+  test('ChatWidget.tsx implements Escape key listener and accessible dialog semantics', () => {
+    const chatCode = fs.readFileSync(path.join(rootDir, 'src', 'components', 'ChatWidget.tsx'), 'utf8');
+    assert.ok(chatCode.includes("e.key === 'Escape'"), 'ChatWidget must dismiss on Escape key press');
+    assert.ok(chatCode.includes('role="dialog"'), 'ChatWidget modal must specify role="dialog"');
+    assert.ok(chatCode.includes('aria-modal="true"'), 'ChatWidget modal must specify aria-modal="true"');
+  });
+
+  test('vite.config.ts configures architecture-data chunk splitting', () => {
+    const viteCode = fs.readFileSync(path.join(rootDir, 'vite.config.ts'), 'utf8');
+    assert.ok(viteCode.includes('architecture-data'), 'vite.config.ts must define architecture-data chunk');
+  });
+
+  test('ContactTerminal.tsx implements accessible radiogroup semantics for engagement type selection', () => {
+    const contactCode = fs.readFileSync(path.join(rootDir, 'src', 'components', 'portfolio', 'ContactTerminal.tsx'), 'utf8');
+    assert.ok(contactCode.includes('role="radiogroup"'), 'ContactTerminal must define role="radiogroup" for engagement options');
+    assert.ok(contactCode.includes('role="radio"'), 'Engagement buttons must define role="radio"');
+    assert.ok(contactCode.includes('aria-checked='), 'Engagement buttons must define aria-checked');
+  });
+
+  test('InteractiveCli.tsx implements aria-live dynamic region for screen readers', () => {
+    const cliCode = fs.readFileSync(path.join(rootDir, 'src', 'components', 'portfolio', 'InteractiveCli.tsx'), 'utf8');
+    assert.ok(cliCode.includes('aria-live="polite"'), 'Interactive CLI terminal must define aria-live="polite"');
+  });
+
+  test('ArchNode.tsx and ByteByteGoWorkbench.tsx support keyboard interaction with tabIndex and role="button"', () => {
+    const archNodeCode = fs.readFileSync(path.join(rootDir, 'src', 'components', 'architecture', 'ArchNode.tsx'), 'utf8');
+    assert.ok(archNodeCode.includes('tabIndex={0}'), 'ArchNode must provide tabIndex={0} for keyboard accessibility');
+    assert.ok(archNodeCode.includes('role="button"'), 'ArchNode must provide role="button"');
+
+    const workbenchCode = fs.readFileSync(path.join(rootDir, 'src', 'components', 'architecture', 'ByteByteGoWorkbench.tsx'), 'utf8');
+    assert.ok(workbenchCode.includes('tabIndex={0}'), 'ByteByteGoWorkbench nodes must provide tabIndex={0}');
+  });
+
+  test('src/components/ui primitives adhere to Swiss Editorial tokens and focus-visible rings without legacy green tokens', () => {
+    const inputCode = fs.readFileSync(path.join(rootDir, 'src', 'components', 'ui', 'input.tsx'), 'utf8');
+    assert.ok(!inputCode.includes('border-green-500'), 'Input must not use legacy border-green-500');
+    assert.ok(inputCode.includes('focus-visible:ring'), 'Input must specify focus-visible:ring');
+
+    const textareaCode = fs.readFileSync(path.join(rootDir, 'src', 'components', 'ui', 'textarea.tsx'), 'utf8');
+    assert.ok(!textareaCode.includes('border-green-500'), 'Textarea must not use legacy border-green-500');
+    assert.ok(textareaCode.includes('focus-visible:ring'), 'Textarea must specify focus-visible:ring');
+  });
+});
+

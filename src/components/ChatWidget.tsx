@@ -1,15 +1,9 @@
 import { useState, useRef, useEffect } from 'react'
 import { motion, AnimatePresence } from 'framer-motion'
 import { 
-  MessageSquare, 
   X, 
   Send, 
   Bot, 
-  User, 
-  Sparkles, 
-  Clock, 
-  Terminal, 
-  ExternalLink,
   ChevronRight
 } from 'lucide-react'
 
@@ -38,7 +32,7 @@ const QUICK_QUESTIONS = [
 
 const FAQ_MAP: Record<string, { answer: string; url?: string }> = {
   'who is she': {
-    answer: "Meena Kannan is a Senior Full-Stack Software Engineer & Solutions Architect with 7+ years of experience specializing in Java 21, Spring Boot 3, React 19, Microservices, and Cloud-Native systems.",
+    answer: "Meena Kannan is a Senior Full-Stack Software Engineer & Solutions Architect with 8+ years of experience specializing in Java 21, Spring Boot 3, React 19, Microservices, and Cloud-Native systems.",
     url: "#about"
   },
   'skills': {
@@ -66,7 +60,7 @@ const FAQ_MAP: Record<string, { answer: string; url?: string }> = {
     url: "#projects"
   },
   'experience': {
-    answer: "Meena has 7+ years of enterprise engineering experience, delivering 40+ production systems, cutting cloud costs by 40%, and designing architectures with 99.99% uptime.",
+    answer: "Meena has 8+ years of enterprise engineering leadership experience, delivering 40+ production systems, cutting cloud costs by 40%, and designing architectures with 99.99% uptime.",
     url: "#experience"
   }
 }
@@ -105,6 +99,17 @@ export default function ChatWidget() {
     return () => {
       document.body.style.overflow = ''
     }
+  }, [isOpen])
+
+  // Close chat on Escape key press (Accessibility / Keyboard Navigation)
+  useEffect(() => {
+    const handleKeyDown = (e: KeyboardEvent) => {
+      if (e.key === 'Escape' && isOpen) {
+        setIsOpen(false)
+      }
+    }
+    window.addEventListener('keydown', handleKeyDown)
+    return () => window.removeEventListener('keydown', handleKeyDown)
   }, [isOpen])
 
   useEffect(() => {
@@ -154,7 +159,7 @@ export default function ChatWidget() {
 
     // 3. Fallback
     return {
-      text: "Meena Kannan is a Senior Full-Stack Cloud & Software Architect with 7+ years of experience in Java 21, Spring Boot 3, React 19, and Microservices. Feel free to explore the sections above or email her at meenakannan.dev@gmail.com!",
+      text: "Meena Kannan is a Senior Full-Stack Cloud & Software Architect with 8+ years of experience in Java 21, Spring Boot 3, React 19, and Microservices. Feel free to explore the sections above or inquire in the contact section!",
       url: "#contact"
     }
   }
@@ -196,16 +201,16 @@ export default function ChatWidget() {
           whileHover={{ scale: 1.05 }}
           whileTap={{ scale: 0.95 }}
           onClick={() => setIsOpen(!isOpen)}
-          aria-label={isOpen ? 'Close AI chat' : 'Open AI chat assistant'}
-          className="relative flex items-center gap-2 px-3.5 py-3 sm:px-4 sm:py-3 rounded-full bg-green-500 hover:bg-green-400 text-black font-mono font-bold shadow-2xl shadow-green-500/30 glow-border cursor-pointer transition-all active:scale-95 min-h-[46px]"
+          aria-label={isOpen ? 'Close AI chat assistant' : 'Open AI chat assistant'}
+          className="relative flex items-center gap-2 px-3.5 py-3 sm:px-4 sm:py-3 rounded-full bg-emerald-500 hover:bg-emerald-400 text-slate-950 font-mono font-bold shadow-2xl shadow-emerald-500/25 glow-border cursor-pointer transition-all active:scale-95 min-h-[46px]"
         >
           {isOpen ? (
-            <X className="w-5 h-5 text-black" />
+            <X className="w-5 h-5 text-slate-950" />
           ) : (
             <>
               <div className="relative flex h-2.5 w-2.5">
-                <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-black opacity-75" />
-                <span className="relative inline-flex rounded-full h-2.5 w-2.5 bg-black" />
+                <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-slate-950 opacity-75" />
+                <span className="relative inline-flex rounded-full h-2.5 w-2.5 bg-slate-950" />
               </div>
               <Bot className="w-5 h-5" />
               <span className="text-xs tracking-wider hidden sm:inline">MeenaBot AI</span>
@@ -228,34 +233,37 @@ export default function ChatWidget() {
             />
 
             <motion.div
+              role="dialog"
+              aria-modal="true"
+              aria-label="Portfolio AI Assistant"
               initial={{ opacity: 0, y: 30 }}
               animate={{ opacity: 1, y: 0 }}
               exit={{ opacity: 0, y: 30 }}
               transition={{ duration: 0.25 }}
-              className="fixed inset-x-0 bottom-0 sm:bottom-22 sm:right-6 sm:inset-x-auto w-full sm:w-[420px] h-[85dvh] sm:h-[550px] sm:max-h-[80vh] rounded-t-2xl sm:rounded-2xl bg-[#030a05]/98 border border-green-500/40 shadow-2xl backdrop-blur-xl z-50 flex flex-col overflow-hidden font-mono text-xs pb-[calc(0.5rem+env(safe-area-inset-bottom,0px))] overscroll-contain"
+              className="fixed inset-x-0 bottom-0 sm:bottom-22 sm:right-6 sm:inset-x-auto w-full sm:w-[420px] h-[85dvh] sm:h-[550px] sm:max-h-[80vh] rounded-t-2xl sm:rounded-2xl bg-[#090e18]/98 border border-emerald-500/30 shadow-2xl backdrop-blur-xl z-50 flex flex-col overflow-hidden font-mono text-xs pb-[calc(0.5rem+env(safe-area-inset-bottom,0px))] overscroll-contain"
             >
               {/* Mobile Sheet Drag Handle Indicator */}
-              <div className="sm:hidden w-12 h-1 rounded-full bg-gray-700/80 mx-auto mt-2 mb-0.5 shrink-0" />
+              <div className="sm:hidden w-12 h-1 rounded-full bg-slate-700/80 mx-auto mt-2 mb-0.5 shrink-0" />
 
               {/* Header */}
-              <div className="px-4 py-3 bg-[#06160b] border-b border-green-500/20 flex items-center justify-between shrink-0">
+              <div className="px-4 py-3 bg-[#0d1424] border-b border-slate-800 flex items-center justify-between shrink-0">
                 <div className="flex items-center gap-2.5">
-                  <div className="w-8 h-8 rounded-full bg-green-500/20 border border-green-500 flex items-center justify-center text-green-400">
+                  <div className="w-8 h-8 rounded-full bg-emerald-500/15 border border-emerald-500/40 flex items-center justify-center text-emerald-400">
                     <Bot className="w-4 h-4" />
                   </div>
                   <div>
                     <div className="font-bold text-white text-sm flex items-center gap-1.5">
                       <span>MeenaBot AI</span>
-                      <span className="w-1.5 h-1.5 rounded-full bg-green-400 animate-pulse" />
+                      <span className="w-1.5 h-1.5 rounded-full bg-emerald-400 animate-pulse" />
                     </div>
-                    <span className="text-[10px] text-gray-400">Portfolio & Architecture Assistant</span>
+                    <span className="text-[10px] text-slate-400">Portfolio & Architecture Assistant</span>
                   </div>
                 </div>
 
                 <button
                   onClick={() => setIsOpen(false)}
                   aria-label="Close chat window"
-                  className="w-8 h-8 rounded-lg text-gray-400 hover:text-white flex items-center justify-center hover:bg-green-500/10 transition-colors cursor-pointer active:scale-95"
+                  className="w-8 h-8 rounded-lg text-slate-400 hover:text-white flex items-center justify-center hover:bg-slate-800 transition-colors cursor-pointer active:scale-95"
                 >
                   <X className="w-4 h-4" />
                 </button>
@@ -269,7 +277,7 @@ export default function ChatWidget() {
                     className={`flex gap-2.5 ${msg.role === 'user' ? 'justify-end' : 'justify-start'}`}
                   >
                     {msg.role === 'assistant' && (
-                      <div className="w-6 h-6 rounded-full bg-green-500/20 border border-green-500/50 flex items-center justify-center text-green-400 shrink-0 mt-0.5">
+                      <div className="w-6 h-6 rounded-full bg-emerald-500/15 border border-emerald-500/40 flex items-center justify-center text-emerald-400 shrink-0 mt-0.5">
                         <Bot className="w-3.5 h-3.5" />
                       </div>
                     )}
@@ -277,8 +285,8 @@ export default function ChatWidget() {
                     <div
                       className={`p-3 rounded-xl max-w-[85%] sm:max-w-[82%] leading-relaxed ${
                         msg.role === 'user'
-                          ? 'bg-green-500 text-black font-semibold'
-                          : 'bg-[#06150b] border border-green-500/25 text-gray-200'
+                          ? 'bg-emerald-500 text-slate-950 font-semibold'
+                          : 'bg-[#0d1527] border border-slate-800 text-slate-200'
                       }`}
                     >
                       <div>{msg.content}</div>
@@ -287,7 +295,7 @@ export default function ChatWidget() {
                         <a
                           href={msg.url}
                           onClick={() => setIsOpen(false)}
-                          className="inline-flex items-center gap-1 mt-2 text-[11px] text-green-400 hover:text-green-300 underline font-semibold"
+                          className="inline-flex items-center gap-1 mt-2 text-[11px] text-emerald-400 hover:text-emerald-300 underline font-semibold"
                         >
                           <span>Jump to Section</span>
                           <ChevronRight className="w-3 h-3" />
@@ -298,11 +306,11 @@ export default function ChatWidget() {
                 ))}
 
                 {isTyping && (
-                  <div className="flex gap-2 items-center text-gray-400 text-[11px] p-2 bg-[#06150b] rounded-lg w-fit border border-green-500/20">
-                    <span className="w-1.5 h-1.5 rounded-full bg-green-400 animate-bounce" />
-                    <span className="w-1.5 h-1.5 rounded-full bg-green-400 animate-bounce [animation-delay:0.2s]" />
-                    <span className="w-1.5 h-1.5 rounded-full bg-green-400 animate-bounce [animation-delay:0.4s]" />
-                    <span className="ml-1 text-green-400">Synthesizing reply...</span>
+                  <div className="flex gap-2 items-center text-slate-400 text-[11px] p-2 bg-[#0d1527] rounded-lg w-fit border border-slate-800">
+                    <span className="w-1.5 h-1.5 rounded-full bg-emerald-400 animate-bounce" />
+                    <span className="w-1.5 h-1.5 rounded-full bg-emerald-400 animate-bounce [animation-delay:0.2s]" />
+                    <span className="w-1.5 h-1.5 rounded-full bg-emerald-400 animate-bounce [animation-delay:0.4s]" />
+                    <span className="ml-1 text-emerald-400">Synthesizing reply...</span>
                   </div>
                 )}
 
@@ -310,12 +318,12 @@ export default function ChatWidget() {
               </div>
 
               {/* Quick Questions Chips */}
-              <div className="px-3 py-2 bg-[#040e07] border-t border-green-500/15 overflow-x-auto whitespace-nowrap scrollbar-none flex gap-1.5 shrink-0">
+              <div className="px-3 py-2 bg-[#070b14] border-t border-slate-800 overflow-x-auto whitespace-nowrap scrollbar-none flex gap-1.5 shrink-0">
                 {QUICK_QUESTIONS.map(q => (
                   <button
                     key={q}
                     onClick={() => handleSend(q)}
-                    className="px-2.5 sm:px-3 py-1.5 rounded-full bg-black/60 border border-green-500/25 hover:border-green-400 text-gray-300 hover:text-green-300 text-[10px] sm:text-[11px] transition-colors shrink-0 cursor-pointer active:scale-95"
+                    className="px-2.5 sm:px-3 py-1.5 rounded-full bg-slate-900/80 border border-slate-700/80 hover:border-emerald-500/50 text-slate-300 hover:text-emerald-300 text-[10px] sm:text-[11px] transition-colors shrink-0 cursor-pointer active:scale-95"
                   >
                     {q}
                   </button>
@@ -328,20 +336,22 @@ export default function ChatWidget() {
                   e.preventDefault()
                   handleSend()
                 }}
-                className="p-3 bg-[#06160b] border-t border-green-500/20 flex items-center gap-2 shrink-0"
+                className="p-3 bg-[#0d1424] border-t border-slate-800 flex items-center gap-2 shrink-0"
               >
                 <input
                   ref={inputRef}
                   type="text"
+                  aria-label="Ask Meena's AI Assistant"
                   value={input}
                   onChange={(e) => setInput(e.target.value)}
                   placeholder="Ask about Meena's experience, stack, or projects..."
-                  className="flex-1 bg-[#030905] border border-green-500/30 text-green-100 placeholder:text-gray-600 px-3 py-2.5 rounded-lg text-base sm:text-xs outline-none focus:border-green-400"
+                  className="flex-1 bg-[#060a12] border border-slate-700/80 text-emerald-100 placeholder:text-slate-500 px-3 py-2.5 rounded-lg text-base sm:text-xs outline-none focus:border-emerald-500"
                 />
                 <button
                   type="submit"
                   disabled={!input.trim()}
-                  className="p-2 sm:p-2.5 rounded-lg bg-green-500 hover:bg-green-400 text-black disabled:opacity-40 disabled:cursor-not-allowed transition-all cursor-pointer min-w-[38px] min-h-[38px] flex items-center justify-center shrink-0 active:scale-95"
+                  aria-label="Send message"
+                  className="p-2 sm:p-2.5 rounded-lg bg-emerald-500 hover:bg-emerald-400 text-slate-950 disabled:opacity-40 disabled:cursor-not-allowed transition-all cursor-pointer min-w-[38px] min-h-[38px] flex items-center justify-center shrink-0 active:scale-95"
                 >
                   <Send className="w-4 h-4" />
                 </button>

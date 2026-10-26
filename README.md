@@ -1,4 +1,4 @@
-# Meena Kannan — Full-Stack & Cloud Solutions Architect Portfolio
+# Meena Kannan: Full-Stack & Cloud Solutions Architect Portfolio
 
 [![CI Quality & Verification](https://github.com/meenak95/meena-kannan-portfolio-fullstack/actions/workflows/ci.yml/badge.svg)](https://github.com/meenak95/meena-kannan-portfolio-fullstack/actions)
 

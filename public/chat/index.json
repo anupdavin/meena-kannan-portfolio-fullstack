@@ -2,7 +2,7 @@
   {
     "id": "about-meena",
     "title": "About Meena Kannan",
-    "text": "Meena Kannan is a Senior Full-Stack Software Engineer & Solutions Architect with 7+ years of experience in Enterprise Java, Spring Boot 3, React 19, Microservices, and Cloud-Native systems. She specializes in Clean Architecture, Domain-Driven Design (DDD), high-concurrency systems handling 10,000+ RPS, and multi-tenant SaaS platforms.",
+    "text": "Meena Kannan is a Senior Full-Stack Software Engineer & Solutions Architect with 8+ years of experience in Enterprise Java, Spring Boot 3, React 19, Microservices, and Cloud-Native systems. She specializes in Clean Architecture, Domain-Driven Design (DDD), high-concurrency systems handling 15,000+ TPS, and multi-tenant SaaS platforms.",
     "url": "#about"
   },
   {
@@ -38,7 +38,7 @@
   {
     "id": "ecommerce-project",
     "title": "Distributed Cloud E-Commerce Engine",
-    "text": "Meena built a high-throughput microservices architecture processing 10,000+ RPS and 500,000+ daily orders. Engineered with Spring Boot 3, Apache Kafka event streaming, Redis distributed locks, and Kubernetes autoscaling, achieving 99.99% uptime and a 40% reduction in cloud infrastructure expenses.",
+    "text": "Meena built a high-throughput microservices architecture processing 15,000+ orders/sec with Choreographed Saga orchestration, Transactional Outbox pattern (Debezium CDC), and idempotent Kafka consumers backed by Kubernetes autoscaling, achieving 99.99% uptime and a 40% reduction in cloud infrastructure expenses.",
     "url": "#projects"
   },
   {
