@@ -142,5 +142,11 @@
     "title": "Enterprise Kafka Event Streams & Partition Lag Monitor",
     "text": "Meena designs enterprise Apache Kafka event streaming topologies with zero head-of-line blocking across 5 systems: (1) orders.v1.events: Choreographed Saga checkout events via Debezium CDC from transactional PostgreSQL outbox (8 partitions, 15,000 TPS, zstd compression), (2) tenants.v1.audit: Tenant isolation and RLS authorization audit logs for SOC2 compliance (6 partitions, 5,000 TPS, lz4 compression), (3) collab.v1.workspace-deltas: High-frequency operational transformations and cursor vectors partitioned by workspace UUID (12 partitions, 50,000 frames/sec), (4) payments.v1.settlement: Immutable append-only double-entry ledger stream with SHA-256 hash chains (6 partitions, 3,000 TPS, zstd), and (5) agent.v1.mcp-telemetry: Streaming JSON-RPC 2.0 tool execution logs and token expenditure telemetry from gVisor sandbox containers (8 partitions, 10,000 TPS).",
     "url": "#architecture-event-streams"
+  },
+  {
+    "id": "distributed-rate-limiting",
+    "title": "Distributed Rate Limiting & Traffic Shaping Algorithms",
+    "text": "Meena architectures production distributed rate limiters and traffic shapers with Redis Lua script evaluation across 5 systems: (1) Token Bucket: Multi-Tenant SaaS edge ingress with 5,000 token capacity and 1,000 tokens/sec refill to absorb tenant bursts, (2) Leaky Bucket: E-Commerce Saga checkout smoother with 15,000 FIFO queue capacity draining at constant 2,500 req/sec to prevent downstream Kafka consumer storms, (3) Fixed Window Counter: Real-Time WebSocket handshake metering (50,000 req/min) evaluated via single Redis INCR, (4) Sliding Window Log: FinTech PCI-DSS payment authorization meter using Redis Sorted Sets (ZSET) guaranteeing zero boundary burst overflow, and (5) Sliding Window Counter: Weighted interpolation algorithm controlling AI agent MCP tool call budgets (10,000 calls/min).",
+    "url": "#architecture-rate-limiter"
   }
 ]

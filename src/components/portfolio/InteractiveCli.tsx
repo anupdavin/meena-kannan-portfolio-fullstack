@@ -9,6 +9,7 @@ import { CHAOS_DRILLS } from '@/data/chaosDrills'
 import { GATEWAY_ROUTES } from '@/data/gatewayRoutes'
 import { DISTRIBUTED_TRACES } from '@/data/distributedTraces'
 import { KAFKA_TOPIC_STREAMS } from '@/data/kafkaStreams'
+import { RATE_LIMITING_ALGORITHMS } from '@/data/rateLimitingAlgorithms'
 import { EXECUTIVE_BRIEFING } from '@/data/executiveBriefing'
 
 interface HistoryEntry {
@@ -55,6 +56,10 @@ const AVAILABLE_COMMANDS = [
   'streams',
   'topics',
   'lag',
+  'ratelimit',
+  'throttling',
+  'tokenbucket',
+  'leakybucket',
   'adr',
   'decisions',
   'tradeoffs',
@@ -96,6 +101,7 @@ const QUICK_CHIPS = [
   { label: '[ $ gateway ]', cmd: 'gateway' },
   { label: '[ $ trace ]', cmd: 'trace' },
   { label: '[ $ kafka ]', cmd: 'kafka' },
+  { label: '[ $ ratelimit ]', cmd: 'ratelimit' },
   { label: '[ $ find kafka ]', cmd: 'find kafka' },
   { label: '[ $ tradeoffs ]', cmd: 'tradeoffs' },
   { label: '[ $ adr ]', cmd: 'adr' },
@@ -125,6 +131,7 @@ const COMMAND_HELP = [
   '  gateway         - Inspect Envoy API gateway routes, mTLS & filters (or "gateway <id>")',
   '  trace           - Inspect OpenTelemetry distributed traces & span flamegraphs (or "trace <id>")',
   '  kafka           - Inspect Kafka event topics, partition lag & ISR quorums (or "kafka <id>")',
+  '  ratelimit       - Evaluate distributed rate limiters & traffic shaping algorithms (or "ratelimit <id>")',
   '  find <query>    - Search cross-cutting architecture systems, ADRs, AI codex & trade-offs',
   '  tradeoffs       - Evaluate system design decision trade-offs (or "compare <topic>")',
   '  stats           - View production performance & impact metrics (99.99% SLA)',
@@ -890,6 +897,19 @@ export default function InteractiveCli() {
           ]
           break
         }
+        if (sub === 'ratelimit' || sub === 'throttling' || sub === 'tokenbucket' || sub === 'leakybucket' || args.some(a => a.toLowerCase().includes('rate') || a.toLowerCase().includes('throttle') || a.toLowerCase().includes('bucket'))) {
+          output = [
+            'Routing to Distributed Rate Limiting & Traffic Shaping (#architecture-rate-limiter):',
+            '  1. Token Bucket Rate Limiter     : Multi-Tenant SaaS Edge Ingress (5k tokens, ADR-004)',
+            '  2. Leaky Bucket Traffic Smoother : E-Commerce Saga Constant Egress (15k queue, ADR-001)',
+            '  3. Fixed Window Counter          : Real-Time WebSocket Handshakes (50k/min, ADR-003)',
+            '  4. Sliding Window Log            : FinTech PCI-DSS Strict Assurance (3k/min, ADR-005)',
+            '  5. Sliding Window Counter        : Agentic MCP Tool Execution Quotas (10k/min, ADR-006)',
+            '--------------------------------------------------------------------------------',
+            'Interactive Sandbox: Live in #architecture-rate-limiter with burst slider & Redis Lua scripts.'
+          ]
+          break
+        }
         output = [
           'ByteByteGo Interactive Architecture Lab Navigator:',
           '--------------------------------------------------------------------------------',
@@ -903,6 +923,7 @@ export default function InteractiveCli() {
           '  [ 7 ] "architecture gateway"   : Ingress Routing & Envoy Filters (#architecture-api-gateway)',
           '  [ 8 ] "architecture trace"     : OpenTelemetry Distributed Tracing (#architecture-distributed-tracing)',
           '  [ 9 ] "architecture kafka"     : Kafka Event Streams & Partition Lag (#architecture-event-streams)',
+          '  [ 10 ] "architecture ratelimit": Distributed Rate Limiting Algorithms (#architecture-rate-limiter)',
           '--------------------------------------------------------------------------------',
           'Clean Architecture Principles Enforced:',
           '  + Domain Isolation     : Core business domains decouple from libraries and vendor SDKs',
@@ -1339,6 +1360,69 @@ export default function InteractiveCli() {
         ]
         break
       }
+      case 'ratelimit':
+      case 'throttling':
+      case 'tokenbucket':
+      case 'leakybucket': {
+        const target = args[0]?.toLowerCase().trim()
+        if (target) {
+          const matched = RATE_LIMITING_ALGORITHMS.find(a => 
+            a.id === target ||
+            a.id.includes(target) ||
+            a.systemId === target ||
+            a.algorithmName.toLowerCase().includes(target) ||
+            a.systemName.toLowerCase().includes(target) ||
+            (target === '1' && a.id === 'token-bucket') ||
+            (target === '2' && a.id === 'leaky-bucket') ||
+            (target === '3' && a.id === 'fixed-window') ||
+            (target === '4' && (a.id === 'sliding-log' || a.id === 'sliding-window-log')) ||
+            (target === '5' && (a.id === 'sliding-counter' || a.id === 'sliding-window-counter'))
+          )
+          if (matched) {
+            output = [
+              `Rate Limiting Algorithm: ${matched.algorithmName}`,
+              `Algorithm ID : ${matched.id}`,
+              `Target System: ${matched.systemName}`,
+              `Category     : ${matched.category}`,
+              `Governing ADR: ${matched.governingAdr}`,
+              '--------------------------------------------------------------------------------',
+              `Capacity     : ${matched.capacityLimit}`,
+              `Refill Rate  : ${matched.refillRate}`,
+              `Burst Profile: ${matched.burstTolerance}`,
+              `Complexity   : Time ${matched.timeComplexity} | Memory ${matched.memoryComplexity}`,
+              '--------------------------------------------------------------------------------',
+              'ARCHITECTURAL TRADE-OFFS & GUARANTEES:',
+              ...matched.pros.map(p => `  + [PRO] ${p}`),
+              ...matched.cons.map(c => `  - [CON] ${c}`),
+              '',
+              'ATOMIC REDIS LUA SCRIPT:',
+              ...matched.redisScriptSnippet.split('\n').slice(0, 10).map(line => `  ${line}`),
+              '  ... [Run "copy lua" in #architecture-rate-limiter to inspect complete script]',
+              '--------------------------------------------------------------------------------',
+              'Full interactive rate limiter simulator available in #architecture-rate-limiter.'
+            ]
+            break
+          }
+        }
+
+        output = [
+          'Distributed Rate Limiting & Traffic Shaping Algorithms:',
+          '--------------------------------------------------------------------------------',
+          'Evaluate 5 production rate limiting algorithms & Redis Lua atomic scripts across systems:',
+          '',
+          ...RATE_LIMITING_ALGORITHMS.flatMap((a, idx) => [
+            `${idx + 1}. [ ${a.id} ] : ${a.algorithmName}`,
+            `   System        : ${a.systemName} (${a.category})`,
+            `   Capacity & Refill: ${a.capacityLimit} | ${a.refillRate}`,
+            `   Complexity    : ${a.timeComplexity} / ${a.memoryComplexity}`,
+            `   Deep Dive     : "ratelimit ${idx + 1}" or "ratelimit ${a.id.split('-')[0]}" (e.g. "ratelimit token", "ratelimit leaky", "ratelimit fixed", "ratelimit sliding")`,
+            ''
+          ]),
+          '--------------------------------------------------------------------------------',
+          'Tip: Run "ratelimit <id>" (e.g. "ratelimit 1" or "ratelimit token") to inspect Redis Lua evaluator.'
+        ]
+        break
+      }
       case 'find':
       case 'search': {
         const query = args.join(' ').toLowerCase().trim()
@@ -1348,7 +1432,7 @@ export default function InteractiveCli() {
             '--------------------------------------------------------------------------------',
             'Search cross-cutting distributed systems, ADRs, AI paradigms, and trade-offs.',
             'Usage: find <query> (e.g. "find kafka", "find redis", "find mcp", "find saga")',
-            'Available Domains: Systems, ADR Governance, AI Codex, Trade-Off Matrix, Evolution Diffs, Chaos Drills, API Gateway, Distributed Traces, Kafka Event Streams'
+            'Available Domains: Systems, ADR Governance, AI Codex, Trade-Off Matrix, Evolution Diffs, Chaos Drills, API Gateway, Distributed Traces, Kafka Event Streams, Distributed Rate Limiting'
           ]
           break
         }
@@ -1525,6 +1609,27 @@ export default function InteractiveCli() {
               `[Kafka Event Stream] ${k.title}`,
               `  Topic      : ${k.topicId} (${k.partitionsCount} parts, ${k.targetThroughputTps})`,
               `  Anchor     : #architecture-event-streams`,
+              ''
+            )
+          }
+        })
+
+        // 10. Search Distributed Rate Limiting
+        RATE_LIMITING_ALGORITHMS.forEach(a => {
+          if (
+            a.algorithmName.toLowerCase().includes(query) ||
+            a.id.toLowerCase().includes(query) ||
+            a.systemName.toLowerCase().includes(query) ||
+            a.category.toLowerCase().includes(query) ||
+            a.summary.toLowerCase().includes(query) ||
+            a.governingAdr.toLowerCase().includes(query) ||
+            a.pros.some(p => p.toLowerCase().includes(query)) ||
+            a.cons.some(c => c.toLowerCase().includes(query))
+          ) {
+            results.push(
+              `[Rate Limiter] ${a.algorithmName}`,
+              `  Algorithm  : ${a.id} (${a.capacityLimit}, ${a.refillRate})`,
+              `  Anchor     : #architecture-rate-limiter`,
               ''
             )
           }

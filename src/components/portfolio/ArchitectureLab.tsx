@@ -17,6 +17,7 @@ import {
   Globe,
   GitCommit,
   Radio,
+  ShieldAlert,
   X
 } from 'lucide-react'
 import ByteByteGoDiagram from '@/components/architecture/ByteByteGoDiagram'
@@ -28,6 +29,7 @@ import ChaosResilienceMatrix from '@/components/architecture/ChaosResilienceMatr
 import ApiGatewayPlayground from '@/components/architecture/ApiGatewayPlayground'
 import DistributedTraceInspector from '@/components/architecture/DistributedTraceInspector'
 import KafkaStreamMonitor from '@/components/architecture/KafkaStreamMonitor'
+import RateLimiterSandbox from '@/components/architecture/RateLimiterSandbox'
 import { ARCHITECTURE_SYSTEMS } from '@/data/architectureSystems'
 import { ARCHITECTURAL_DECISIONS } from '@/data/architecturalDecisions'
 import { ARCHITECTURAL_TRADEOFFS } from '@/data/architecturalTradeoffs'
@@ -36,6 +38,7 @@ import { CHAOS_DRILLS } from '@/data/chaosDrills'
 import { GATEWAY_ROUTES } from '@/data/gatewayRoutes'
 import { DISTRIBUTED_TRACES } from '@/data/distributedTraces'
 import { KAFKA_TOPIC_STREAMS } from '@/data/kafkaStreams'
+import { RATE_LIMITING_ALGORITHMS } from '@/data/rateLimitingAlgorithms'
 
 const AI_TERMS_SUMMARY = [
   { id: 'agentic-ai', title: 'Agentic AI', text: 'Perception-action loop, DAG memory, tool execution, LangGraph' },
@@ -62,6 +65,7 @@ export default function ArchitectureLab() {
         gateway: 5,
         traces: 5,
         kafka: 5,
+        ratelimit: 5,
         isActive: false
       }
     }
@@ -144,8 +148,18 @@ export default function ArchitectureLab() {
       k.governingAdr.toLowerCase().includes(q)
     ).length
 
+    const ratelimitCount = RATE_LIMITING_ALGORITHMS.filter(r => 
+      r.name.toLowerCase().includes(q) ||
+      r.id.toLowerCase().includes(q) ||
+      r.subtitle.toLowerCase().includes(q) ||
+      r.paradigm.toLowerCase().includes(q) ||
+      r.description.toLowerCase().includes(q) ||
+      r.governingAdr.toLowerCase().includes(q) ||
+      r.productionUseCase.system.toLowerCase().includes(q)
+    ).length
+
     return {
-      total: workbenchCount + aiCount + adrCount + tradeoffCount + evolutionCount + chaosCount + gatewayCount + traceCount + kafkaCount,
+      total: workbenchCount + aiCount + adrCount + tradeoffCount + evolutionCount + chaosCount + gatewayCount + traceCount + kafkaCount + ratelimitCount,
       workbench: workbenchCount,
       aiCodex: aiCount,
       adr: adrCount,
@@ -155,6 +169,7 @@ export default function ArchitectureLab() {
       gateway: gatewayCount,
       traces: traceCount,
       kafka: kafkaCount,
+      ratelimit: ratelimitCount,
       isActive: true
     }
   }, [searchQuery])
@@ -366,6 +381,17 @@ export default function ArchitectureLab() {
             <Radio className="w-3.5 h-3.5 text-cyan-400" />
             <span>Event Streams ({matchStats.kafka})</span>
           </a>
+          <a 
+            href="#architecture-rate-limiter"
+            className={`px-3 py-1.5 rounded-lg border transition-all flex items-center gap-1.5 cursor-pointer ${
+              matchStats.isActive && matchStats.ratelimit > 0
+                ? 'bg-emerald-500/10 border-emerald-500/50 text-emerald-400 shadow-[0_0_10px_rgba(16,185,129,0.15)] font-bold'
+                : 'bg-slate-900 border-slate-800 hover:border-emerald-500/50 hover:text-emerald-400 text-slate-300'
+            }`}
+          >
+            <ShieldAlert className="w-3.5 h-3.5 text-emerald-400" />
+            <span>Rate Limiter ({matchStats.ratelimit})</span>
+          </a>
         </div>
       </div>
 
@@ -479,6 +505,18 @@ export default function ArchitectureLab() {
         className="scroll-mt-24"
       >
         <KafkaStreamMonitor />
+      </motion.div>
+
+      {/* 2.13. Distributed Rate Limiting & Traffic Shaping Sandbox */}
+      <motion.div
+        id="architecture-rate-limiter"
+        initial={{ opacity: 0, y: 25 }}
+        whileInView={{ opacity: 1, y: 0 }}
+        viewport={{ once: true }}
+        transition={{ duration: 0.6, delay: 0.5 }}
+        className="scroll-mt-24"
+      >
+        <RateLimiterSandbox />
       </motion.div>
 
       {/* 3. Architectural Design Pillars Strip */}

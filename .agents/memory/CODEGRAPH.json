@@ -1,6 +1,6 @@
 {
   "version": "1.0.0",
-  "generatedAt": "2026-10-27T14:18:26.224Z",
+  "generatedAt": "2026-10-27T14:36:57.659Z",
   "nodes": {
     "src/components/architecture/AdrExplorer.tsx": {
       "file": "src/components/architecture/AdrExplorer.tsx",
@@ -169,6 +169,18 @@
       ],
       "loc": 411
     },
+    "src/components/architecture/RateLimiterSandbox.tsx": {
+      "file": "src/components/architecture/RateLimiterSandbox.tsx",
+      "imports": [
+        "react",
+        "lucide-react",
+        "@/data/rateLimitingAlgorithms"
+      ],
+      "exports": [
+        "RateLimiterSandbox"
+      ],
+      "loc": 470
+    },
     "src/components/architecture/SvgPrimitives.tsx": {
       "file": "src/components/architecture/SvgPrimitives.tsx",
       "imports": [
@@ -286,6 +298,7 @@
         "@/components/architecture/ApiGatewayPlayground",
         "@/components/architecture/DistributedTraceInspector",
         "@/components/architecture/KafkaStreamMonitor",
+        "@/components/architecture/RateLimiterSandbox",
         "@/data/architectureSystems",
         "@/data/architecturalDecisions",
         "@/data/architecturalTradeoffs",
@@ -293,12 +306,13 @@
         "@/data/chaosDrills",
         "@/data/gatewayRoutes",
         "@/data/distributedTraces",
-        "@/data/kafkaStreams"
+        "@/data/kafkaStreams",
+        "@/data/rateLimitingAlgorithms"
       ],
       "exports": [
         "ArchitectureLab"
       ],
-      "loc": 537
+      "loc": 575
     },
     "src/components/portfolio/ContactTerminal.tsx": {
       "file": "src/components/portfolio/ContactTerminal.tsx",
@@ -352,12 +366,13 @@
         "@/data/gatewayRoutes",
         "@/data/distributedTraces",
         "@/data/kafkaStreams",
+        "@/data/rateLimitingAlgorithms",
         "@/data/executiveBriefing"
       ],
       "exports": [
         "InteractiveCli"
       ],
-      "loc": 1805
+      "loc": 1910
     },
     "src/components/portfolio/ProjectsShowcase.tsx": {
       "file": "src/components/portfolio/ProjectsShowcase.tsx",
@@ -409,7 +424,7 @@
       "exports": [
         "TerminalHero"
       ],
-      "loc": 553
+      "loc": 554
     },
     "src/components/ui/badge.tsx": {
       "file": "src/components/ui/badge.tsx",
@@ -578,6 +593,15 @@
       ],
       "loc": 280
     },
+    "src/data/rateLimitingAlgorithms.ts": {
+      "file": "src/data/rateLimitingAlgorithms.ts",
+      "imports": [],
+      "exports": [
+        "RateLimitingAlgorithm",
+        "RATE_LIMITING_ALGORITHMS"
+      ],
+      "loc": 467
+    },
     "src/main.tsx": {
       "file": "src/main.tsx",
       "imports": [
@@ -718,6 +742,7 @@
     "ChaosResilienceMatrix": "src/components/architecture/ChaosResilienceMatrix.tsx",
     "DistributedTraceInspector": "src/components/architecture/DistributedTraceInspector.tsx",
     "KafkaStreamMonitor": "src/components/architecture/KafkaStreamMonitor.tsx",
+    "RateLimiterSandbox": "src/components/architecture/RateLimiterSandbox.tsx",
     "BoundaryContainerProps": "src/components/architecture/SvgPrimitives.tsx",
     "BoundaryContainer": "src/components/architecture/SvgPrimitives.tsx",
     "DatabaseCylinderProps": "src/components/architecture/SvgPrimitives.tsx",
@@ -802,6 +827,8 @@
     "KafkaConsumerGroup": "src/data/kafkaStreams.ts",
     "KafkaTopicStream": "src/data/kafkaStreams.ts",
     "KAFKA_TOPIC_STREAMS": "src/data/kafkaStreams.ts",
+    "RateLimitingAlgorithm": "src/data/rateLimitingAlgorithms.ts",
+    "RATE_LIMITING_ALGORITHMS": "src/data/rateLimitingAlgorithms.ts",
     "Layout": "src/pages/Layout.tsx",
     "Portfolio": "src/pages/Portfolio.tsx"
   }

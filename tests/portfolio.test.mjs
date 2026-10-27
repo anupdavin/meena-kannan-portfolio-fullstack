@@ -846,6 +846,44 @@ describe('Production Architectural Decision Records (ADR) & CLI Integration', ()
     assert.ok(indexHtml.includes('id="architecture-event-streams"'), 'index.html must include #architecture-event-streams landmark');
     assert.ok(!/[\u2013\u2014]/.test(indexHtml), 'index.html must contain zero em/en-dashes');
   });
+
+  test('RateLimiterSandbox and rateLimitingAlgorithms.ts define distributed traffic shaping with CLI integration', () => {
+    const rateDataPath = path.join(rootDir, 'src', 'data', 'rateLimitingAlgorithms.ts');
+    assert.ok(fs.existsSync(rateDataPath), 'rateLimitingAlgorithms.ts must exist');
+    const rateDataCode = fs.readFileSync(rateDataPath, 'utf8');
+    assert.ok(rateDataCode.includes('token-bucket'), 'Must define token-bucket algorithm');
+    assert.ok(rateDataCode.includes('leaky-bucket'), 'Must define leaky-bucket algorithm');
+    assert.ok(rateDataCode.includes('fixed-window'), 'Must define fixed-window algorithm');
+    assert.ok(rateDataCode.includes('sliding-window-log'), 'Must define sliding-window-log algorithm');
+    assert.ok(rateDataCode.includes('sliding-window-counter'), 'Must define sliding-window-counter algorithm');
+    assert.ok(!/[\u2013\u2014]/.test(rateDataCode), 'rateLimitingAlgorithms.ts must contain zero em/en-dashes');
+
+    const componentPath = path.join(rootDir, 'src', 'components', 'architecture', 'RateLimiterSandbox.tsx');
+    assert.ok(fs.existsSync(componentPath), 'RateLimiterSandbox.tsx must exist');
+    const compCode = fs.readFileSync(componentPath, 'utf8');
+    assert.ok(compCode.includes('handleCopyRfc'), 'RateLimiterSandbox must support 1-click RFC copy');
+    assert.ok(compCode.includes('handleCopyLua'), 'RateLimiterSandbox must support 1-click Lua copy');
+    assert.ok(compCode.includes('RATE_LIMITING_ALGORITHMS'), 'RateLimiterSandbox must render RATE_LIMITING_ALGORITHMS');
+    assert.ok(!/[\u2013\u2014]/.test(compCode), 'RateLimiterSandbox.tsx must contain zero em/en-dashes');
+
+    const labCode = fs.readFileSync(path.join(rootDir, 'src', 'components', 'portfolio', 'ArchitectureLab.tsx'), 'utf8');
+    assert.ok(labCode.includes('RateLimiterSandbox'), 'ArchitectureLab must mount RateLimiterSandbox');
+    assert.ok(labCode.includes('id="architecture-rate-limiter"'), 'ArchitectureLab must define anchor #architecture-rate-limiter');
+
+    const cliCode = fs.readFileSync(path.join(rootDir, 'src', 'components', 'portfolio', 'InteractiveCli.tsx'), 'utf8');
+    assert.ok(cliCode.includes("'ratelimit'"), "InteractiveCli must support 'ratelimit' command");
+    assert.ok(cliCode.includes('[ $ ratelimit ]'), "InteractiveCli must include '[ $ ratelimit ]' quick chip");
+    assert.ok(cliCode.includes('RATE_LIMITING_ALGORITHMS'), 'InteractiveCli must search across RATE_LIMITING_ALGORITHMS');
+    assert.ok(!/[\u2013\u2014]/.test(cliCode), 'InteractiveCli.tsx must contain zero em/en-dashes');
+
+    const chatIndex = fs.readFileSync(path.join(rootDir, 'public', 'chat', 'index.json'), 'utf8');
+    assert.ok(chatIndex.includes('distributed-rate-limiting'), 'public/chat/index.json must index distributed-rate-limiting');
+    assert.ok(!/[\u2013\u2014]/.test(chatIndex), 'public/chat/index.json must contain zero em/en-dashes');
+
+    const indexHtml = fs.readFileSync(path.join(rootDir, 'index.html'), 'utf8');
+    assert.ok(indexHtml.includes('id="architecture-rate-limiter"'), 'index.html must include #architecture-rate-limiter landmark');
+    assert.ok(!/[\u2013\u2014]/.test(indexHtml), 'index.html must contain zero em/en-dashes');
+  });
 });
 
 
