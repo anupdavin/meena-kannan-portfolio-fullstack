@@ -731,6 +731,45 @@ describe('Production Architectural Decision Records (ADR) & CLI Integration', ()
     assert.ok(indexHtml.includes('id="architecture-chaos-matrix"'), 'index.html must include #architecture-chaos-matrix landmark');
     assert.ok(!/[\u2013\u2014]/.test(indexHtml), 'index.html must contain zero em/en-dashes');
   });
+
+  test('ApiGatewayPlayground and gatewayRoutes.ts define zero-trust edge ingress routes with CLI integration', () => {
+    const routeDataPath = path.join(rootDir, 'src', 'data', 'gatewayRoutes.ts');
+    assert.ok(fs.existsSync(routeDataPath), 'gatewayRoutes.ts must exist');
+    const routeDataCode = fs.readFileSync(routeDataPath, 'utf8');
+    assert.ok(routeDataCode.includes('saas-iam-ingress'), 'Must define saas-iam-ingress route');
+    assert.ok(routeDataCode.includes('saga-checkout-ingress'), 'Must define saga-checkout-ingress route');
+    assert.ok(routeDataCode.includes('realtime-websocket-ingress'), 'Must define realtime-websocket-ingress route');
+    assert.ok(routeDataCode.includes('fintech-vault-ingress'), 'Must define fintech-vault-ingress route');
+    assert.ok(routeDataCode.includes('agentic-mcp-ingress'), 'Must define agentic-mcp-ingress route');
+    assert.ok(!/[\u2013\u2014]/.test(routeDataCode), 'gatewayRoutes.ts must contain zero em/en-dashes');
+
+    const componentPath = path.join(rootDir, 'src', 'components', 'architecture', 'ApiGatewayPlayground.tsx');
+    assert.ok(fs.existsSync(componentPath), 'ApiGatewayPlayground.tsx must exist');
+    const compCode = fs.readFileSync(componentPath, 'utf8');
+    assert.ok(compCode.includes('handleCopyEnvoy'), 'ApiGatewayPlayground must support 1-click Envoy YAML copy');
+    assert.ok(compCode.includes('handleCopyRfc'), 'ApiGatewayPlayground must support 1-click RFC copy');
+    assert.ok(compCode.includes('GATEWAY_ROUTES'), 'ApiGatewayPlayground must render GATEWAY_ROUTES');
+    assert.ok(!/[\u2013\u2014]/.test(compCode), 'ApiGatewayPlayground.tsx must contain zero em/en-dashes');
+
+    const labCode = fs.readFileSync(path.join(rootDir, 'src', 'components', 'portfolio', 'ArchitectureLab.tsx'), 'utf8');
+    assert.ok(labCode.includes('ApiGatewayPlayground'), 'ArchitectureLab must mount ApiGatewayPlayground');
+    assert.ok(labCode.includes('id="architecture-api-gateway"'), 'ArchitectureLab must define anchor #architecture-api-gateway');
+
+    const cliCode = fs.readFileSync(path.join(rootDir, 'src', 'components', 'portfolio', 'InteractiveCli.tsx'), 'utf8');
+    assert.ok(cliCode.includes("'gateway'"), "InteractiveCli must support 'gateway' command");
+    assert.ok(cliCode.includes("'ingress'"), "InteractiveCli must support 'ingress' command");
+    assert.ok(cliCode.includes('[ $ gateway ]'), "InteractiveCli must include '[ $ gateway ]' quick chip");
+    assert.ok(cliCode.includes('GATEWAY_ROUTES'), 'InteractiveCli must search across GATEWAY_ROUTES');
+    assert.ok(!/[\u2013\u2014]/.test(cliCode), 'InteractiveCli.tsx must contain zero em/en-dashes');
+
+    const chatIndex = fs.readFileSync(path.join(rootDir, 'public', 'chat', 'index.json'), 'utf8');
+    assert.ok(chatIndex.includes('api-gateway-mesh'), 'public/chat/index.json must index api-gateway-mesh');
+    assert.ok(!/[\u2013\u2014]/.test(chatIndex), 'public/chat/index.json must contain zero em/en-dashes');
+
+    const indexHtml = fs.readFileSync(path.join(rootDir, 'index.html'), 'utf8');
+    assert.ok(indexHtml.includes('id="architecture-api-gateway"'), 'index.html must include #architecture-api-gateway landmark');
+    assert.ok(!/[\u2013\u2014]/.test(indexHtml), 'index.html must contain zero em/en-dashes');
+  });
 });
 
 

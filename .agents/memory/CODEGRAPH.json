@@ -1,6 +1,6 @@
 {
   "version": "1.0.0",
-  "generatedAt": "2026-10-27T13:10:03.124Z",
+  "generatedAt": "2026-10-27T13:37:01.314Z",
   "nodes": {
     "src/components/architecture/AdrExplorer.tsx": {
       "file": "src/components/architecture/AdrExplorer.tsx",
@@ -50,6 +50,18 @@
         "AnimatedConnection"
       ],
       "loc": 171
+    },
+    "src/components/architecture/ApiGatewayPlayground.tsx": {
+      "file": "src/components/architecture/ApiGatewayPlayground.tsx",
+      "imports": [
+        "react",
+        "lucide-react",
+        "@/data/gatewayRoutes"
+      ],
+      "exports": [
+        "ApiGatewayPlayground"
+      ],
+      "loc": 469
     },
     "src/components/architecture/ArchitectureEvolutionDiff.tsx": {
       "file": "src/components/architecture/ArchitectureEvolutionDiff.tsx",
@@ -247,16 +259,18 @@
         "@/components/architecture/TradeoffMatrix",
         "@/components/architecture/ArchitectureEvolutionDiff",
         "@/components/architecture/ChaosResilienceMatrix",
+        "@/components/architecture/ApiGatewayPlayground",
         "@/data/architectureSystems",
         "@/data/architecturalDecisions",
         "@/data/architecturalTradeoffs",
         "@/data/architectureEvolutions",
-        "@/data/chaosDrills"
+        "@/data/chaosDrills",
+        "@/data/gatewayRoutes"
       ],
       "exports": [
         "ArchitectureLab"
       ],
-      "loc": 424
+      "loc": 462
     },
     "src/components/portfolio/ContactTerminal.tsx": {
       "file": "src/components/portfolio/ContactTerminal.tsx",
@@ -307,12 +321,13 @@
         "@/data/architectureSystems",
         "@/data/architectureEvolutions",
         "@/data/chaosDrills",
+        "@/data/gatewayRoutes",
         "@/data/executiveBriefing"
       ],
       "exports": [
         "InteractiveCli"
       ],
-      "loc": 1486
+      "loc": 1594
     },
     "src/components/portfolio/ProjectsShowcase.tsx": {
       "file": "src/components/portfolio/ProjectsShowcase.tsx",
@@ -502,6 +517,16 @@
       ],
       "loc": 121
     },
+    "src/data/gatewayRoutes.ts": {
+      "file": "src/data/gatewayRoutes.ts",
+      "imports": [],
+      "exports": [
+        "GatewayFilter",
+        "GatewayRoute",
+        "GATEWAY_ROUTES"
+      ],
+      "loc": 413
+    },
     "src/main.tsx": {
       "file": "src/main.tsx",
       "imports": [
@@ -629,6 +654,7 @@
     "PacketType": "src/components/architecture/AnimatedConnection.tsx",
     "AnimatedConnectionProps": "src/components/architecture/AnimatedConnection.tsx",
     "AnimatedConnection": "src/components/architecture/AnimatedConnection.tsx",
+    "ApiGatewayPlayground": "src/components/architecture/ApiGatewayPlayground.tsx",
     "ArchitectureEvolutionDiff": "src/components/architecture/ArchitectureEvolutionDiff.tsx",
     "ArchNodeData": "src/components/architecture/ArchNode.tsx",
     "ArchNode": "src/components/architecture/ArchNode.tsx",
@@ -713,6 +739,9 @@
     "CHAOS_DRILLS": "src/data/chaosDrills.ts",
     "ExecutiveBriefingData": "src/data/executiveBriefing.ts",
     "EXECUTIVE_BRIEFING": "src/data/executiveBriefing.ts",
+    "GatewayFilter": "src/data/gatewayRoutes.ts",
+    "GatewayRoute": "src/data/gatewayRoutes.ts",
+    "GATEWAY_ROUTES": "src/data/gatewayRoutes.ts",
     "Layout": "src/pages/Layout.tsx",
     "Portfolio": "src/pages/Portfolio.tsx"
   }

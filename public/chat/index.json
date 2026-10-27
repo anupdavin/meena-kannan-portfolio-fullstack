@@ -124,5 +124,11 @@
     "title": "Enterprise SLA & Chaos Engineering Drill Matrix",
     "text": "Meena designs automated disaster recovery drills across 5 failure scenarios: (1) AWS AZ blackhole with Aurora replica promotion in 11.8s (RPO 0.0s, RTO 13.1s), (2) Kafka poison pill with non-blocking DLQ routing in 12ms (0 consumer lag), (3) WebSocket thundering herd with Redis Sentinel election in 1.35s (50k Virtual Threads parked at 2KB), (4) Banking rail 504 timeout with Redlock idempotency lease (0 double-charges), and (5) MCP tool memory leak with cgroups v2 512MB SIGKILL in <2ms and ReAct DAG fallback.",
     "url": "#architecture-chaos-matrix"
+  },
+  {
+    "id": "api-gateway-mesh",
+    "title": "Enterprise API Gateway & Ingress Routing Sandbox",
+    "text": "Meena architects zero-trust edge ingress with Envoy proxy, SPIFFE mTLS, and custom Lua/Wasm filter pipelines across 5 systems: (1) Multi-Tenant IAM: RS256 JWT claims extraction and downstream PostgreSQL RLS header injection (P99 < 8.2ms), (2) Distributed Saga Checkout: Redis Redlock idempotency gate and JSON to gRPC protobuf transcoding, (3) Real-Time WebSocket Mesh: RFC 6455 101 Switching Protocols with 50,000 concurrent sockets and drop-tail ring buffers, (4) FinTech Payment Vault: PCI-DSS PAN card tokenization in <2ms via AWS KMS, and (5) Agentic MCP Gateway: gVisor container sandbox gate and token budget circuit breaker.",
+    "url": "#architecture-api-gateway"
   }
 ]

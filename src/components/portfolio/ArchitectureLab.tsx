@@ -14,6 +14,7 @@ import {
   Sliders,
   Search,
   Flame,
+  Globe,
   X
 } from 'lucide-react'
 import ByteByteGoDiagram from '@/components/architecture/ByteByteGoDiagram'
@@ -22,11 +23,13 @@ import AdrExplorer from '@/components/architecture/AdrExplorer'
 import TradeoffMatrix from '@/components/architecture/TradeoffMatrix'
 import ArchitectureEvolutionDiff from '@/components/architecture/ArchitectureEvolutionDiff'
 import ChaosResilienceMatrix from '@/components/architecture/ChaosResilienceMatrix'
+import ApiGatewayPlayground from '@/components/architecture/ApiGatewayPlayground'
 import { ARCHITECTURE_SYSTEMS } from '@/data/architectureSystems'
 import { ARCHITECTURAL_DECISIONS } from '@/data/architecturalDecisions'
 import { ARCHITECTURAL_TRADEOFFS } from '@/data/architecturalTradeoffs'
 import { ARCHITECTURE_EVOLUTIONS } from '@/data/architectureEvolutions'
 import { CHAOS_DRILLS } from '@/data/chaosDrills'
+import { GATEWAY_ROUTES } from '@/data/gatewayRoutes'
 
 const AI_TERMS_SUMMARY = [
   { id: 'agentic-ai', title: 'Agentic AI', text: 'Perception-action loop, DAG memory, tool execution, LangGraph' },
@@ -50,6 +53,7 @@ export default function ArchitectureLab() {
         tradeoffs: 4,
         evolutions: 5,
         drills: 5,
+        gateway: 5,
         isActive: false
       }
     }
@@ -103,14 +107,25 @@ export default function ArchitectureLab() {
       d.governingAdr.toLowerCase().includes(q)
     ).length
 
+    const gatewayCount = GATEWAY_ROUTES.filter(r => 
+      r.title.toLowerCase().includes(q) ||
+      r.routePath.toLowerCase().includes(q) ||
+      r.systemName.toLowerCase().includes(q) ||
+      r.upstreamService.toLowerCase().includes(q) ||
+      r.protocol.toLowerCase().includes(q) ||
+      r.summary.toLowerCase().includes(q) ||
+      r.governingAdr.toLowerCase().includes(q)
+    ).length
+
     return {
-      total: workbenchCount + aiCount + adrCount + tradeoffCount + evolutionCount + chaosCount,
+      total: workbenchCount + aiCount + adrCount + tradeoffCount + evolutionCount + chaosCount + gatewayCount,
       workbench: workbenchCount,
       aiCodex: aiCount,
       adr: adrCount,
       tradeoffs: tradeoffCount,
       evolutions: evolutionCount,
       drills: chaosCount,
+      gateway: gatewayCount,
       isActive: true
     }
   }, [searchQuery])
@@ -289,6 +304,17 @@ export default function ArchitectureLab() {
             <Flame className="w-3.5 h-3.5 text-orange-400" />
             <span>Chaos Drills ({matchStats.drills})</span>
           </a>
+          <a 
+            href="#architecture-api-gateway"
+            className={`px-3 py-1.5 rounded-lg border transition-all flex items-center gap-1.5 cursor-pointer ${
+              matchStats.isActive && matchStats.gateway > 0
+                ? 'bg-blue-500/10 border-blue-500/50 text-blue-400 shadow-[0_0_10px_rgba(59,130,246,0.15)] font-bold'
+                : 'bg-slate-900 border-slate-800 hover:border-blue-500/50 hover:text-blue-400 text-slate-300'
+            }`}
+          >
+            <Globe className="w-3.5 h-3.5 text-blue-400" />
+            <span>API Gateway ({matchStats.gateway})</span>
+          </a>
         </div>
       </div>
 
@@ -366,6 +392,18 @@ export default function ArchitectureLab() {
         className="scroll-mt-24"
       >
         <ChaosResilienceMatrix />
+      </motion.div>
+
+      {/* 2.10. Enterprise API Gateway & Ingress Routing Playground */}
+      <motion.div
+        id="architecture-api-gateway"
+        initial={{ opacity: 0, y: 25 }}
+        whileInView={{ opacity: 1, y: 0 }}
+        viewport={{ once: true }}
+        transition={{ duration: 0.6, delay: 0.35 }}
+        className="scroll-mt-24"
+      >
+        <ApiGatewayPlayground />
       </motion.div>
 
       {/* 3. Architectural Design Pillars Strip */}

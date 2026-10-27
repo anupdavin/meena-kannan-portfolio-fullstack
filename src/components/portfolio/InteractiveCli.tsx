@@ -6,6 +6,7 @@ import { ARCHITECTURAL_TRADEOFFS } from '@/data/architecturalTradeoffs'
 import { ARCHITECTURE_SYSTEMS } from '@/data/architectureSystems'
 import { ARCHITECTURE_EVOLUTIONS } from '@/data/architectureEvolutions'
 import { CHAOS_DRILLS } from '@/data/chaosDrills'
+import { GATEWAY_ROUTES } from '@/data/gatewayRoutes'
 import { EXECUTIVE_BRIEFING } from '@/data/executiveBriefing'
 
 interface HistoryEntry {
@@ -39,6 +40,10 @@ const AVAILABLE_COMMANDS = [
   'drills',
   'runbook',
   'runbooks',
+  'gateway',
+  'ingress',
+  'routes',
+  'proxy',
   'adr',
   'decisions',
   'tradeoffs',
@@ -77,6 +82,7 @@ const QUICK_CHIPS = [
   { label: '[ $ architecture ]', cmd: 'architecture' },
   { label: '[ $ diff ]', cmd: 'diff' },
   { label: '[ $ chaos ]', cmd: 'chaos' },
+  { label: '[ $ gateway ]', cmd: 'gateway' },
   { label: '[ $ find kafka ]', cmd: 'find kafka' },
   { label: '[ $ tradeoffs ]', cmd: 'tradeoffs' },
   { label: '[ $ adr ]', cmd: 'adr' },
@@ -103,6 +109,7 @@ const COMMAND_HELP = [
   '  experience      - Output career journey, or type "experience <id>" for deep milestone review',
   '  diff            - Compare Legacy Monolith anti-patterns vs Modern Mesh (or "diff <id>")',
   '  chaos           - Execute automated chaos disaster recovery drills & SLA logs (or "chaos <id>")',
+  '  gateway         - Inspect Envoy API gateway routes, mTLS & filters (or "gateway <id>")',
   '  find <query>    - Search cross-cutting architecture systems, ADRs, AI codex & trade-offs',
   '  tradeoffs       - Evaluate system design decision trade-offs (or "compare <topic>")',
   '  stats           - View production performance & impact metrics (99.99% SLA)',
@@ -829,6 +836,19 @@ export default function InteractiveCli() {
           ]
           break
         }
+        if (sub === 'gateway' || sub === 'ingress' || sub === 'routes' || args.some(a => a.toLowerCase().includes('gateway') || a.toLowerCase().includes('ingress'))) {
+          output = [
+            'Routing to Enterprise API Gateway & Ingress Routing Playground (#architecture-api-gateway):',
+            '  1. Multi-Tenant IAM Ingress  : Envoy SPIFFE mTLS, JWT claims injection, P99 < 8.2ms',
+            '  2. Distributed Saga Checkout : Redis Redlock idempotency gate, JSON to gRPC transcoding',
+            '  3. Real-Time WebSocket Loom  : 101 Switching Protocols, 50k sockets, drop-tail ring buffer',
+            '  4. FinTech Vault Tokenizer   : HSM mTLS termination, AWS KMS PAN card tokenization in <2ms',
+            '  5. Agentic AI & MCP Ingress  : gVisor sandbox container gate, token quota circuit breaker',
+            '--------------------------------------------------------------------------------',
+            'Interactive Playground: Live in #architecture-api-gateway with live request simulator.'
+          ]
+          break
+        }
         output = [
           'ByteByteGo Interactive Architecture Lab Navigator:',
           '--------------------------------------------------------------------------------',
@@ -839,6 +859,7 @@ export default function InteractiveCli() {
           '  [ 4 ] "architecture tradeoffs" : System Design Decision Matrix (#architecture-tradeoff-matrix)',
           '  [ 5 ] "architecture diff"      : Monolith-to-Mesh Comparison Diffs (#architecture-evolution-diff)',
           '  [ 6 ] "architecture chaos"     : Chaos Disaster Recovery Drills (#architecture-chaos-matrix)',
+          '  [ 7 ] "architecture gateway"   : Ingress Routing & Envoy Filters (#architecture-api-gateway)',
           '--------------------------------------------------------------------------------',
           'Clean Architecture Principles Enforced:',
           '  + Domain Isolation     : Core business domains decouple from libraries and vendor SDKs',
@@ -1081,6 +1102,73 @@ export default function InteractiveCli() {
         ]
         break
       }
+      case 'gateway':
+      case 'ingress':
+      case 'routes':
+      case 'proxy': {
+        const target = args[0]?.toLowerCase().trim()
+        if (target) {
+          const matched = GATEWAY_ROUTES.find(r => 
+            r.id === target ||
+            r.id.includes(target) ||
+            r.routePath.toLowerCase().includes(target) ||
+            r.systemName.toLowerCase().includes(target) ||
+            r.title.toLowerCase().includes(target) ||
+            (target === '1' && r.id === 'saas-iam-ingress') ||
+            (target === '2' && r.id === 'saga-checkout-ingress') ||
+            (target === '3' && r.id === 'realtime-websocket-ingress') ||
+            (target === '4' && r.id === 'fintech-vault-ingress') ||
+            (target === '5' && r.id === 'agentic-mcp-ingress')
+          )
+          if (matched) {
+            output = [
+              `API Gateway Ingress Route: ${matched.title}`,
+              `Route Path : ${matched.method} ${matched.routePath}`,
+              `Target     : ${matched.systemName} -> ${matched.upstreamService}`,
+              `Protocol   : ${matched.protocol} | Governance: ${matched.governingAdr}`,
+              '--------------------------------------------------------------------------------',
+              `Summary: ${matched.summary}`,
+              '',
+              'INGRESS SLA & THROUGHPUT TARGETS:',
+              `  - Rate Limit SLA    : ${matched.rateLimitSla}`,
+              `  - Latency Target    : ${matched.latencyTarget}`,
+              '',
+              'ENVOY FILTER PIPELINE & OVERHEAD:',
+              ...matched.filters.map(f => 
+                `  * [${f.type.toUpperCase()}] ${f.name.padEnd(30, ' ')} (+${f.overheadMs.toFixed(1)}ms) : ${f.description}`
+              ),
+              '',
+              'SAMPLE REQUEST HEADERS:',
+              ...Object.entries(matched.sampleRequest.headers).map(([k, v]) => `  ${k}: ${v}`),
+              '',
+              'SAMPLE UPSTREAM RESPONSE:',
+              `  Status: ${matched.sampleResponse.statusCode} ${matched.sampleResponse.statusText}`,
+              ...Object.entries(matched.sampleResponse.headers).map(([k, v]) => `  ${k}: ${v}`),
+              `  Payload: ${matched.sampleResponse.bodySnippet}`,
+              '--------------------------------------------------------------------------------',
+              'Full interactive sandbox simulator available in #architecture-api-gateway.'
+            ]
+            break
+          }
+        }
+
+        output = [
+          'Enterprise API Gateway & Ingress Routing Sandbox:',
+          '--------------------------------------------------------------------------------',
+          'Inspect Envoy zero-trust ingress routes and security filter pipelines across 5 architectures:',
+          '',
+          ...GATEWAY_ROUTES.flatMap((r, idx) => [
+            `${idx + 1}. [ ${r.method} ${r.routePath} ] : ${r.title}`,
+            `   Target Service : ${r.upstreamService} (${r.protocol})`,
+            `   SLA Target     : ${r.latencyTarget} | ${r.rateLimitSla}`,
+            `   Deep Dive      : "gateway ${idx + 1}" or "gateway ${r.id.split('-')[0]}" (e.g. "gateway saas", "gateway saga", "gateway realtime", "gateway fintech", "gateway mcp")`,
+            ''
+          ]),
+          '--------------------------------------------------------------------------------',
+          'Tip: Run "gateway <id>" (e.g. "gateway 1" or "gateway mcp") to inspect filter overhead and Envoy YAML.'
+        ]
+        break
+      }
       case 'find':
       case 'search': {
         const query = args.join(' ').toLowerCase().trim()
@@ -1090,7 +1178,7 @@ export default function InteractiveCli() {
             '--------------------------------------------------------------------------------',
             'Search cross-cutting distributed systems, ADRs, AI paradigms, and trade-offs.',
             'Usage: find <query> (e.g. "find kafka", "find redis", "find mcp", "find saga")',
-            'Available Domains: Systems, ADR Governance, AI Codex, Trade-Off Matrix, Evolution Diffs, Chaos Drills'
+            'Available Domains: Systems, ADR Governance, AI Codex, Trade-Off Matrix, Evolution Diffs, Chaos Drills, API Gateway'
           ]
           break
         }
@@ -1206,6 +1294,26 @@ export default function InteractiveCli() {
               `[Chaos Drill] ${d.title}`,
               `  Recovery   : RTO: ${d.impactMetrics.rto} | RPO: ${d.impactMetrics.rpo}`,
               `  Anchor     : #architecture-chaos-matrix`,
+              ''
+            )
+          }
+        })
+
+        // 7. Search Gateway Routes
+        GATEWAY_ROUTES.forEach(r => {
+          if (
+            r.title.toLowerCase().includes(query) ||
+            r.routePath.toLowerCase().includes(query) ||
+            r.systemName.toLowerCase().includes(query) ||
+            r.upstreamService.toLowerCase().includes(query) ||
+            r.protocol.toLowerCase().includes(query) ||
+            r.summary.toLowerCase().includes(query) ||
+            r.governingAdr.toLowerCase().includes(query)
+          ) {
+            results.push(
+              `[Gateway Ingress] ${r.method} ${r.routePath}`,
+              `  Target     : ${r.upstreamService} (${r.latencyTarget})`,
+              `  Anchor     : #architecture-api-gateway`,
               ''
             )
           }
