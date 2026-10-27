@@ -1,6 +1,6 @@
 {
   "version": "1.0.0",
-  "generatedAt": "2026-10-27T12:50:04.314Z",
+  "generatedAt": "2026-10-27T13:10:03.124Z",
   "nodes": {
     "src/components/architecture/AdrExplorer.tsx": {
       "file": "src/components/architecture/AdrExplorer.tsx",
@@ -111,6 +111,19 @@
         "ByteByteGoWorkbench"
       ],
       "loc": 1435
+    },
+    "src/components/architecture/ChaosResilienceMatrix.tsx": {
+      "file": "src/components/architecture/ChaosResilienceMatrix.tsx",
+      "imports": [
+        "react",
+        "framer-motion",
+        "lucide-react",
+        "@/data/chaosDrills"
+      ],
+      "exports": [
+        "ChaosResilienceMatrix"
+      ],
+      "loc": 474
     },
     "src/components/architecture/CleanArchitectureRadar.tsx": {
       "file": "src/components/architecture/CleanArchitectureRadar.tsx",
@@ -233,15 +246,17 @@
         "@/components/architecture/AdrExplorer",
         "@/components/architecture/TradeoffMatrix",
         "@/components/architecture/ArchitectureEvolutionDiff",
+        "@/components/architecture/ChaosResilienceMatrix",
         "@/data/architectureSystems",
         "@/data/architecturalDecisions",
         "@/data/architecturalTradeoffs",
-        "@/data/architectureEvolutions"
+        "@/data/architectureEvolutions",
+        "@/data/chaosDrills"
       ],
       "exports": [
         "ArchitectureLab"
       ],
-      "loc": 386
+      "loc": 424
     },
     "src/components/portfolio/ContactTerminal.tsx": {
       "file": "src/components/portfolio/ContactTerminal.tsx",
@@ -291,12 +306,13 @@
         "@/data/architecturalTradeoffs",
         "@/data/architectureSystems",
         "@/data/architectureEvolutions",
+        "@/data/chaosDrills",
         "@/data/executiveBriefing"
       ],
       "exports": [
         "InteractiveCli"
       ],
-      "loc": 1358
+      "loc": 1486
     },
     "src/components/portfolio/ProjectsShowcase.tsx": {
       "file": "src/components/portfolio/ProjectsShowcase.tsx",
@@ -467,6 +483,16 @@
       ],
       "loc": 2016
     },
+    "src/data/chaosDrills.ts": {
+      "file": "src/data/chaosDrills.ts",
+      "imports": [],
+      "exports": [
+        "ChaosTraceStep",
+        "ChaosDrill",
+        "CHAOS_DRILLS"
+      ],
+      "loc": 524
+    },
     "src/data/executiveBriefing.ts": {
       "file": "src/data/executiveBriefing.ts",
       "imports": [],
@@ -612,6 +638,7 @@
     "ByteByteGoDiagram": "src/components/architecture/ByteByteGoDiagram.tsx",
     "ByteByteGoWorkbenchProps": "src/components/architecture/ByteByteGoWorkbench.tsx",
     "ByteByteGoWorkbench": "src/components/architecture/ByteByteGoWorkbench.tsx",
+    "ChaosResilienceMatrix": "src/components/architecture/ChaosResilienceMatrix.tsx",
     "BoundaryContainerProps": "src/components/architecture/SvgPrimitives.tsx",
     "BoundaryContainer": "src/components/architecture/SvgPrimitives.tsx",
     "DatabaseCylinderProps": "src/components/architecture/SvgPrimitives.tsx",
@@ -681,6 +708,9 @@
     "ARCHITECTURE_SYSTEMS": "src/data/architectureSystems.ts",
     "ByteByteGoSystemConfig": "src/data/byteByteGoConfigs.ts",
     "BYTEBYTEGO_SYSTEMS": "src/data/byteByteGoConfigs.ts",
+    "ChaosTraceStep": "src/data/chaosDrills.ts",
+    "ChaosDrill": "src/data/chaosDrills.ts",
+    "CHAOS_DRILLS": "src/data/chaosDrills.ts",
     "ExecutiveBriefingData": "src/data/executiveBriefing.ts",
     "EXECUTIVE_BRIEFING": "src/data/executiveBriefing.ts",
     "Layout": "src/pages/Layout.tsx",

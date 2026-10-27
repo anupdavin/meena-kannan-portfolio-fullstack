@@ -696,6 +696,41 @@ describe('Production Architectural Decision Records (ADR) & CLI Integration', ()
     assert.ok(cliCode.includes('[ $ briefing ]'), "InteractiveCli must include '[ $ briefing ]' quick chip");
     assert.ok(!/[\u2013\u2014]/.test(cliCode), 'InteractiveCli.tsx must contain zero em/en-dashes');
   });
+
+  test('ChaosResilienceMatrix and chaosDrills.ts define enterprise chaos engineering drill matrix with CLI integration', () => {
+    const drillDataPath = path.join(rootDir, 'src', 'data', 'chaosDrills.ts');
+    assert.ok(fs.existsSync(drillDataPath), 'chaosDrills.ts must exist');
+    const drillDataCode = fs.readFileSync(drillDataPath, 'utf8');
+    assert.ok(drillDataCode.includes('az-partition-failover'), 'Must define az-partition-failover drill');
+    assert.ok(drillDataCode.includes('kafka-poison-pill-isolation'), 'Must define kafka-poison-pill-isolation drill');
+    assert.ok(drillDataCode.includes('websocket-thundering-herd'), 'Must define websocket-thundering-herd drill');
+    assert.ok(drillDataCode.includes('banking-rail-timeout-idempotency'), 'Must define banking-rail-timeout-idempotency drill');
+    assert.ok(drillDataCode.includes('mcp-sandbox-oom-sigkill'), 'Must define mcp-sandbox-oom-sigkill drill');
+    assert.ok(!/[\u2013\u2014]/.test(drillDataCode), 'chaosDrills.ts must contain zero em/en-dashes');
+
+    const componentPath = path.join(rootDir, 'src', 'components', 'architecture', 'ChaosResilienceMatrix.tsx');
+    assert.ok(fs.existsSync(componentPath), 'ChaosResilienceMatrix.tsx must exist');
+    const compCode = fs.readFileSync(componentPath, 'utf8');
+    assert.ok(compCode.includes('handleCopyReport'), 'ChaosResilienceMatrix must support 1-click report copy');
+    assert.ok(compCode.includes('handleCopyRunbook'), 'ChaosResilienceMatrix must support 1-click runbook copy');
+    assert.ok(compCode.includes('CHAOS_DRILLS'), 'ChaosResilienceMatrix must render CHAOS_DRILLS');
+    assert.ok(!/[\u2013\u2014]/.test(compCode), 'ChaosResilienceMatrix.tsx must contain zero em/en-dashes');
+
+    const labCode = fs.readFileSync(path.join(rootDir, 'src', 'components', 'portfolio', 'ArchitectureLab.tsx'), 'utf8');
+    assert.ok(labCode.includes('ChaosResilienceMatrix'), 'ArchitectureLab must mount ChaosResilienceMatrix');
+    assert.ok(labCode.includes('id="architecture-chaos-matrix"'), 'ArchitectureLab must define anchor #architecture-chaos-matrix');
+
+    const cliCode = fs.readFileSync(path.join(rootDir, 'src', 'components', 'portfolio', 'InteractiveCli.tsx'), 'utf8');
+    assert.ok(cliCode.includes("'chaos'"), "InteractiveCli must support 'chaos' command");
+    assert.ok(cliCode.includes("'resilience'"), "InteractiveCli must support 'resilience' command");
+    assert.ok(cliCode.includes('[ $ chaos ]'), "InteractiveCli must include '[ $ chaos ]' quick chip");
+    assert.ok(cliCode.includes('CHAOS_DRILLS'), 'InteractiveCli must search across CHAOS_DRILLS');
+    assert.ok(!/[\u2013\u2014]/.test(cliCode), 'InteractiveCli.tsx must contain zero em/en-dashes');
+
+    const indexHtml = fs.readFileSync(path.join(rootDir, 'index.html'), 'utf8');
+    assert.ok(indexHtml.includes('id="architecture-chaos-matrix"'), 'index.html must include #architecture-chaos-matrix landmark');
+    assert.ok(!/[\u2013\u2014]/.test(indexHtml), 'index.html must contain zero em/en-dashes');
+  });
 });
 
 

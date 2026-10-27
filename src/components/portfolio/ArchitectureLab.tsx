@@ -13,6 +13,7 @@ import {
   GitCompare,
   Sliders,
   Search,
+  Flame,
   X
 } from 'lucide-react'
 import ByteByteGoDiagram from '@/components/architecture/ByteByteGoDiagram'
@@ -20,10 +21,12 @@ import ByteByteGoAiCodex from '@/components/architecture/ByteByteGoAiCodex'
 import AdrExplorer from '@/components/architecture/AdrExplorer'
 import TradeoffMatrix from '@/components/architecture/TradeoffMatrix'
 import ArchitectureEvolutionDiff from '@/components/architecture/ArchitectureEvolutionDiff'
+import ChaosResilienceMatrix from '@/components/architecture/ChaosResilienceMatrix'
 import { ARCHITECTURE_SYSTEMS } from '@/data/architectureSystems'
 import { ARCHITECTURAL_DECISIONS } from '@/data/architecturalDecisions'
 import { ARCHITECTURAL_TRADEOFFS } from '@/data/architecturalTradeoffs'
 import { ARCHITECTURE_EVOLUTIONS } from '@/data/architectureEvolutions'
+import { CHAOS_DRILLS } from '@/data/chaosDrills'
 
 const AI_TERMS_SUMMARY = [
   { id: 'agentic-ai', title: 'Agentic AI', text: 'Perception-action loop, DAG memory, tool execution, LangGraph' },
@@ -46,6 +49,7 @@ export default function ArchitectureLab() {
         adr: 6,
         tradeoffs: 4,
         evolutions: 5,
+        drills: 5,
         isActive: false
       }
     }
@@ -89,13 +93,24 @@ export default function ArchitectureLab() {
       e.modernArchitecture.title.toLowerCase().includes(q)
     ).length
 
+    const chaosCount = CHAOS_DRILLS.filter(d => 
+      d.title.toLowerCase().includes(q) ||
+      d.systemName.toLowerCase().includes(q) ||
+      d.category.toLowerCase().includes(q) ||
+      d.failureType.toLowerCase().includes(q) ||
+      d.injectedFault.toLowerCase().includes(q) ||
+      d.sreHypothesis.toLowerCase().includes(q) ||
+      d.governingAdr.toLowerCase().includes(q)
+    ).length
+
     return {
-      total: workbenchCount + aiCount + adrCount + tradeoffCount + evolutionCount,
+      total: workbenchCount + aiCount + adrCount + tradeoffCount + evolutionCount + chaosCount,
       workbench: workbenchCount,
       aiCodex: aiCount,
       adr: adrCount,
       tradeoffs: tradeoffCount,
       evolutions: evolutionCount,
+      drills: chaosCount,
       isActive: true
     }
   }, [searchQuery])
@@ -263,6 +278,17 @@ export default function ArchitectureLab() {
             <Sliders className="w-3.5 h-3.5 text-rose-400" />
             <span>Evolution Diff ({matchStats.evolutions})</span>
           </a>
+          <a 
+            href="#architecture-chaos-matrix"
+            className={`px-3 py-1.5 rounded-lg border transition-all flex items-center gap-1.5 cursor-pointer ${
+              matchStats.isActive && matchStats.drills > 0
+                ? 'bg-orange-500/10 border-orange-500/50 text-orange-400 shadow-[0_0_10px_rgba(249,115,22,0.15)] font-bold'
+                : 'bg-slate-900 border-slate-800 hover:border-orange-500/50 hover:text-orange-400 text-slate-300'
+            }`}
+          >
+            <Flame className="w-3.5 h-3.5 text-orange-400" />
+            <span>Chaos Drills ({matchStats.drills})</span>
+          </a>
         </div>
       </div>
 
@@ -328,6 +354,18 @@ export default function ArchitectureLab() {
         className="scroll-mt-24"
       >
         <ArchitectureEvolutionDiff />
+      </motion.div>
+
+      {/* 2.9. Enterprise SLA & Chaos Engineering Drill Matrix */}
+      <motion.div
+        id="architecture-chaos-matrix"
+        initial={{ opacity: 0, y: 25 }}
+        whileInView={{ opacity: 1, y: 0 }}
+        viewport={{ once: true }}
+        transition={{ duration: 0.6, delay: 0.3 }}
+        className="scroll-mt-24"
+      >
+        <ChaosResilienceMatrix />
       </motion.div>
 
       {/* 3. Architectural Design Pillars Strip */}

@@ -5,6 +5,7 @@ import { ARCHITECTURAL_DECISIONS } from '@/data/architecturalDecisions'
 import { ARCHITECTURAL_TRADEOFFS } from '@/data/architecturalTradeoffs'
 import { ARCHITECTURE_SYSTEMS } from '@/data/architectureSystems'
 import { ARCHITECTURE_EVOLUTIONS } from '@/data/architectureEvolutions'
+import { CHAOS_DRILLS } from '@/data/chaosDrills'
 import { EXECUTIVE_BRIEFING } from '@/data/executiveBriefing'
 
 interface HistoryEntry {
@@ -32,6 +33,12 @@ const AVAILABLE_COMMANDS = [
   'diff',
   'evolution',
   'migration',
+  'chaos',
+  'resilience',
+  'drill',
+  'drills',
+  'runbook',
+  'runbooks',
   'adr',
   'decisions',
   'tradeoffs',
@@ -69,6 +76,7 @@ const QUICK_CHIPS = [
   { label: '[ $ briefing ]', cmd: 'briefing' },
   { label: '[ $ architecture ]', cmd: 'architecture' },
   { label: '[ $ diff ]', cmd: 'diff' },
+  { label: '[ $ chaos ]', cmd: 'chaos' },
   { label: '[ $ find kafka ]', cmd: 'find kafka' },
   { label: '[ $ tradeoffs ]', cmd: 'tradeoffs' },
   { label: '[ $ adr ]', cmd: 'adr' },
@@ -94,6 +102,7 @@ const COMMAND_HELP = [
   '  projects        - List featured systems, or type "project <id>" for deep architecture review',
   '  experience      - Output career journey, or type "experience <id>" for deep milestone review',
   '  diff            - Compare Legacy Monolith anti-patterns vs Modern Mesh (or "diff <id>")',
+  '  chaos           - Execute automated chaos disaster recovery drills & SLA logs (or "chaos <id>")',
   '  find <query>    - Search cross-cutting architecture systems, ADRs, AI codex & trade-offs',
   '  tradeoffs       - Evaluate system design decision trade-offs (or "compare <topic>")',
   '  stats           - View production performance & impact metrics (99.99% SLA)',
@@ -794,14 +803,42 @@ export default function InteractiveCli() {
           ]
           break
         }
+        if (sub === 'diff' || sub === 'evolution' || args.some(a => a.toLowerCase().includes('diff') || a.toLowerCase().includes('evolution'))) {
+          output = [
+            'Routing to Architecture Evolution & Monolith-to-Mesh Comparison Diff (#architecture-evolution-diff):',
+            '  1. Multi-Tenant SaaS     : DB Contention -> PostgreSQL Row-Level Security (RLS)',
+            '  2. Distributed Checkout  : 2PC Distributed Row Locks -> Choreographed Saga CDC',
+            '  3. Real-Time Streaming   : OS Thread Exhaustion -> Java 21 Virtual Threads',
+            '  4. FinTech Gateway       : Mutable Balance Writes -> Append-Only Cryptographic Ledger',
+            '  5. Autonomous Agentic AI : Monolithic Prompt Stuffing -> Decoupled Model Context Protocol',
+            '--------------------------------------------------------------------------------',
+            'Interactive Explorer: Live in #architecture-evolution-diff with visual diff slider.'
+          ]
+          break
+        }
+        if (sub === 'chaos' || sub === 'resilience' || sub === 'drills' || args.some(a => a.toLowerCase().includes('chaos') || a.toLowerCase().includes('drill'))) {
+          output = [
+            'Routing to Enterprise SLA & Chaos Engineering Drill Matrix (#architecture-chaos-matrix):',
+            '  1. AWS AZ Network Blackhole : PgBouncer circuit breaker, Aurora replica promotion in 11.8s',
+            '  2. Kafka Poison Pill        : Non-blocking DLQ routing in 12ms, 0 consumer lag',
+            '  3. WebSocket Herd           : Redis Sentinel election in 1.35s, 50k Virtual Threads parked',
+            '  4. Banking 504 Timeout      : Redis Redlock idempotency lease, 0 double charges',
+            '  5. MCP Tool Sandbox OOM     : Linux cgroups v2 512MB SIGKILL in <2ms, ReAct DAG fallback',
+            '--------------------------------------------------------------------------------',
+            'Interactive Simulator: Live in #architecture-chaos-matrix with live terminal execution trace.'
+          ]
+          break
+        }
         output = [
           'ByteByteGo Interactive Architecture Lab Navigator:',
           '--------------------------------------------------------------------------------',
           'Explore Meena Kannan\'s production distributed architectures & system designs:',
-          '  [ 1 ] "architecture systems"   : 4 Enterprise Workbenches (#architecture-workbench)',
+          '  [ 1 ] "architecture systems"   : 5 Enterprise Workbenches (#architecture-workbench)',
           '  [ 2 ] "architecture ai"        : 5-Pillar ByteByteGo AI Codex (#architecture-ai-codex)',
           '  [ 3 ] "architecture adr"       : 6 Production Governance ADRs (#architecture-adr-ledger)',
           '  [ 4 ] "architecture tradeoffs" : System Design Decision Matrix (#architecture-tradeoff-matrix)',
+          '  [ 5 ] "architecture diff"      : Monolith-to-Mesh Comparison Diffs (#architecture-evolution-diff)',
+          '  [ 6 ] "architecture chaos"     : Chaos Disaster Recovery Drills (#architecture-chaos-matrix)',
           '--------------------------------------------------------------------------------',
           'Clean Architecture Principles Enforced:',
           '  + Domain Isolation     : Core business domains decouple from libraries and vendor SDKs',
@@ -973,6 +1010,77 @@ export default function InteractiveCli() {
         ]
         break
       }
+      case 'chaos':
+      case 'resilience':
+      case 'drill':
+      case 'drills':
+      case 'runbook':
+      case 'runbooks': {
+        const target = args[0]?.toLowerCase().trim()
+        if (target) {
+          const matched = CHAOS_DRILLS.find(d => 
+            d.id === target ||
+            d.id.includes(target) ||
+            d.systemName.toLowerCase().includes(target) ||
+            d.title.toLowerCase().includes(target) ||
+            (target === '1' && d.id === 'az-partition-failover') ||
+            (target === '2' && d.id === 'kafka-poison-pill-isolation') ||
+            (target === '3' && d.id === 'websocket-thundering-herd') ||
+            (target === '4' && d.id === 'banking-rail-timeout-idempotency') ||
+            (target === '5' && d.id === 'mcp-sandbox-oom-sigkill')
+          )
+          if (matched) {
+            output = [
+              `Chaos Engineering Drill: ${matched.title}`,
+              `System   : ${matched.systemName}`,
+              `Category : ${matched.category} | Governance: ${matched.governingAdr}`,
+              '--------------------------------------------------------------------------------',
+              `Failure Injected: ${matched.injectedFault}`,
+              '',
+              'SRE HYPOTHESIS & INVARIANTS:',
+              `  ${matched.sreHypothesis}`,
+              '  Invariants Enforced:',
+              ...matched.steadyStateInvariants.map(inv => `    * [OK] ${inv}`),
+              '',
+              'VERIFIED SLA & RESILIENCE TELEMETRY:',
+              `  - Recovery Point Objective (RPO) : ${matched.impactMetrics.rpo}`,
+              `  - Recovery Time Objective (RTO)  : ${matched.impactMetrics.rto}`,
+              `  - Availability SLA Target        : ${matched.impactMetrics.availabilitySla}`,
+              `  - Data Divergence Rate           : ${matched.impactMetrics.divergenceRate}`,
+              `  - Max Latency Spike              : ${matched.impactMetrics.maxLatencySpike}`,
+              '',
+              'DISASTER RECOVERY EXECUTION TRACE:',
+              ...matched.executionTrace.map(s => 
+                `  [${s.timestamp}] ${s.phase.padEnd(14, ' ')} : ${s.actor} -> ${s.action} (${s.status.toUpperCase()}) | ${s.detail}`
+              ),
+              '',
+              'SRE PRODUCTION RUNBOOK COMMAND:',
+              ...matched.runbookSnippet.command.split('\n').map(line => `  ${line}`),
+              '--------------------------------------------------------------------------------',
+              'Full interactive execution simulator available in #architecture-chaos-matrix.'
+            ]
+            break
+          }
+        }
+
+        output = [
+          'Enterprise SLA & Chaos Engineering Drill Matrix:',
+          '--------------------------------------------------------------------------------',
+          'Inspect automated disaster recovery scenarios across all 5 distributed cloud architectures:',
+          '',
+          ...CHAOS_DRILLS.flatMap((d, idx) => [
+            `${idx + 1}. [ ${d.id} ] : ${d.title}`,
+            `   Target System : ${d.systemName} (${d.category})`,
+            `   Failure Mode  : ${d.failureType}`,
+            `   Recovery SLA  : RPO = ${d.impactMetrics.rpo} | RTO = ${d.impactMetrics.rto}`,
+            `   Deep Dive     : "chaos ${idx + 1}" or "chaos ${d.id.split('-')[0]}" (e.g. "chaos saas", "chaos kafka", "chaos websocket", "chaos banking", "chaos mcp")`,
+            ''
+          ]),
+          '--------------------------------------------------------------------------------',
+          'Tip: Run "chaos <id>" (e.g. "chaos 1" or "chaos mcp") to inspect step-by-step trace and SRE runbook.'
+        ]
+        break
+      }
       case 'find':
       case 'search': {
         const query = args.join(' ').toLowerCase().trim()
@@ -982,7 +1090,7 @@ export default function InteractiveCli() {
             '--------------------------------------------------------------------------------',
             'Search cross-cutting distributed systems, ADRs, AI paradigms, and trade-offs.',
             'Usage: find <query> (e.g. "find kafka", "find redis", "find mcp", "find saga")',
-            'Available Domains: Systems, ADR Governance, AI Codex, Trade-Off Matrix'
+            'Available Domains: Systems, ADR Governance, AI Codex, Trade-Off Matrix, Evolution Diffs, Chaos Drills'
           ]
           break
         }
@@ -1078,6 +1186,26 @@ export default function InteractiveCli() {
               `[Evolution Diff] ${e.systemName}: ${e.headline}`,
               `  Governing  : ${e.adrReference} (${e.category})`,
               `  Anchor     : #architecture-evolution-diff`,
+              ''
+            )
+          }
+        })
+
+        // 6. Search Chaos Drills
+        CHAOS_DRILLS.forEach(d => {
+          if (
+            d.title.toLowerCase().includes(query) ||
+            d.systemName.toLowerCase().includes(query) ||
+            d.category.toLowerCase().includes(query) ||
+            d.failureType.toLowerCase().includes(query) ||
+            d.injectedFault.toLowerCase().includes(query) ||
+            d.sreHypothesis.toLowerCase().includes(query) ||
+            d.governingAdr.toLowerCase().includes(query)
+          ) {
+            results.push(
+              `[Chaos Drill] ${d.title}`,
+              `  Recovery   : RTO: ${d.impactMetrics.rto} | RPO: ${d.impactMetrics.rpo}`,
+              `  Anchor     : #architecture-chaos-matrix`,
               ''
             )
           }
