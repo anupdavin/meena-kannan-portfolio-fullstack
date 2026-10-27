@@ -12,6 +12,7 @@ import { KAFKA_TOPIC_STREAMS } from '@/data/kafkaStreams'
 import { RATE_LIMITING_ALGORITHMS } from '@/data/rateLimitingAlgorithms'
 import { MULTI_REGION_STRATEGIES } from '@/data/multiRegionReplication'
 import { DATABASE_SHARDING_STRATEGIES } from '@/data/databaseSharding'
+import { EDGE_CDN_STRATEGIES } from '@/data/edgeCdnCaching'
 import { EXECUTIVE_BRIEFING } from '@/data/executiveBriefing'
 
 interface HistoryEntry {
@@ -71,6 +72,10 @@ const AVAILABLE_COMMANDS = [
   'consistenthashing',
   'reshard',
   'ring',
+  'cdn',
+  'cachepurge',
+  'surrogate',
+  'stale',
   'adr',
   'decisions',
   'tradeoffs',
@@ -115,6 +120,7 @@ const QUICK_CHIPS = [
   { label: '[ $ ratelimit ]', cmd: 'ratelimit' },
   { label: '[ $ multiregion ]', cmd: 'multiregion' },
   { label: '[ $ sharding ]', cmd: 'sharding' },
+  { label: '[ $ cdn ]', cmd: 'cdn' },
   { label: '[ $ find kafka ]', cmd: 'find kafka' },
   { label: '[ $ tradeoffs ]', cmd: 'tradeoffs' },
   { label: '[ $ adr ]', cmd: 'adr' },
@@ -147,6 +153,7 @@ const COMMAND_HELP = [
   '  ratelimit       - Evaluate distributed rate limiters & traffic shaping algorithms (or "ratelimit <id>")',
   '  multiregion     - Inspect multi-region replication topologies & conflict resolution (or "replication <id>")',
   '  sharding        - Inspect database sharding topologies & consistent hash ring (or "sharding <id>")',
+  '  cdn             - Inspect Edge CDN caching, surrogate-key purges & SWR flows (or "cdn <id>")',
   '  find <query>    - Search cross-cutting architecture systems, ADRs, AI codex & trade-offs',
   '  tradeoffs       - Evaluate system design decision trade-offs (or "compare <topic>")',
   '  stats           - View production performance & impact metrics (99.99% SLA)',
@@ -951,6 +958,19 @@ export default function InteractiveCli() {
           ]
           break
         }
+        if (sub === 'cdn' || sub === 'caching' || sub === 'cachepurge' || sub === 'surrogate' || sub === 'stale' || args.some(a => a.toLowerCase().includes('cdn') || a.toLowerCase().includes('purge') || a.toLowerCase().includes('cache'))) {
+          output = [
+            'Routing to Edge CDN Caching & Stale-While-Revalidate Invalidation Sandbox (#architecture-edge-cdn):',
+            '  1. Surrogate-Key Tag Purge  : Instant targeted invalidation across 300+ PoPs (<150ms)',
+            '  2. Stale-While-Revalidate   : RFC 5861 asynchronous background origin refresh (sub-4ms hit)',
+            '  3. Origin Shield Hierarchy  : AWS CloudFront REC concentrating regional misses (99.1% offload)',
+            '  4. Collapsed Forwarding     : Mutex lock consolidating parallel misses into 1 query',
+            '  5. Edge Compute Workers     : V8 isolate JWT validation and micro-routing at the edge (1.8ms)',
+            '--------------------------------------------------------------------------------',
+            'Interactive Sandbox: Live in #architecture-edge-cdn with PoP mesh & purge simulator.'
+          ]
+          break
+        }
         output = [
           'ByteByteGo Interactive Architecture Lab Navigator:',
           '--------------------------------------------------------------------------------',
@@ -967,6 +987,7 @@ export default function InteractiveCli() {
           '  [ 10 ] "architecture ratelimit": Distributed Rate Limiting Algorithms (#architecture-rate-limiter)',
           '  [ 11 ] "architecture multiregion": Multi-Region Database Replication (#architecture-multi-region)',
           '  [ 12 ] "architecture sharding": Database Sharding & Consistent Hashing (#architecture-database-sharding)',
+          '  [ 13 ] "architecture cdn"     : Edge CDN Caching & Invalidation (#architecture-edge-cdn)',
           '--------------------------------------------------------------------------------',
           'Clean Architecture Principles Enforced:',
           '  + Domain Isolation     : Core business domains decouple from libraries and vendor SDKs',
@@ -1594,6 +1615,74 @@ export default function InteractiveCli() {
         ]
         break
       }
+      case 'cdn':
+      case 'cachepurge':
+      case 'surrogate':
+      case 'stale': {
+        const target = args[0]?.toLowerCase().trim()
+        if (target) {
+          const matched = EDGE_CDN_STRATEGIES.find(c => 
+            c.id === target ||
+            c.id.includes(target) ||
+            c.name.toLowerCase().includes(target) ||
+            c.strategyName.toLowerCase().includes(target) ||
+            (target === '1' && c.id === 'surrogate-key-purge') ||
+            (target === '2' && c.id === 'stale-while-revalidate') ||
+            (target === '3' && c.id === 'origin-shield-hierarchy') ||
+            (target === '4' && c.id === 'collapsed-forwarding') ||
+            (target === '5' && c.id === 'edge-compute-workers')
+          )
+          if (matched) {
+            output = [
+              '--------------------------------------------------------------------------------',
+              `Edge CDN Architecture: ${matched.name} (${matched.subtitle})`,
+              '--------------------------------------------------------------------------------',
+              `Core Paradigm       : ${matched.strategyName}`,
+              `Cache Header Policy : ${matched.cachePolicyHeader}`,
+              `Purge Propagation   : ${matched.purgeLatencyTarget}`,
+              `Origin Offload Ratio: ${matched.originOffloadPct}%`,
+              `Stampede Defense    : ${matched.stampedeProtection}`,
+              `Governing ADR       : ${matched.governingAdr}`,
+              '--------------------------------------------------------------------------------',
+              'GLOBAL EDGE POP TOPOLOGY:',
+              ...matched.pops.map(p =>
+                `  * ${p.city} [${p.region}] :: Latency: ${p.edgeLatencyMs}ms | Hit Ratio: ${p.hitRatioPct}% | Cached: ${Math.round(p.cachedObjects / 1000)}k objects`
+              ),
+              '--------------------------------------------------------------------------------',
+              'SURROGATE KEY TAG SPECIFICATIONS:',
+              ...matched.surrogateKeys.map(k =>
+                `  - Tag: "${k.tag}" (${k.scope}) -> Path: ${k.resourcePath}`
+              ),
+              '--------------------------------------------------------------------------------',
+              'PRODUCTION WORKLOAD JUSTIFICATION:',
+              `  System: ${matched.productionUseCase.system}`,
+              `  Entity: ${matched.productionUseCase.entity} (${matched.productionUseCase.workload})`,
+              `  Reason: "${matched.productionUseCase.justification}"`,
+              '--------------------------------------------------------------------------------',
+              'Full live PoP mesh & tag purge simulator in #architecture-edge-cdn.'
+            ]
+            break
+          }
+        }
+
+        output = [
+          'Edge CDN Caching & Stale-While-Revalidate Invalidation Sandbox:',
+          '--------------------------------------------------------------------------------',
+          'Explore 5 edge caching architectures across 300+ global data centers:',
+          '',
+          ...EDGE_CDN_STRATEGIES.flatMap((c, idx) => [
+            `${idx + 1}. [ ${c.id} ] : ${c.name} (${c.subtitle})`,
+            `   Paradigm      : ${c.strategyName} | Offload: ${c.originOffloadPct}%`,
+            `   Purge Target  : ${c.purgeLatencyTarget}`,
+            `   Stampede Guard: ${c.stampedeProtection.split(' ')[0]}`,
+            `   Deep Dive     : "cdn ${idx + 1}" or "cdn ${c.id.split('-')[0]}" (e.g. "cdn surrogate", "cdn stale", "cdn origin", "cdn collapsed", "cdn edge")`,
+            ''
+          ]),
+          '--------------------------------------------------------------------------------',
+          'Tip: Run "cdn <id>" (e.g. "cdn 1" or "cdn surrogate") to inspect purge mechanics.'
+        ]
+        break
+      }
       case 'find':
       case 'search': {
         const query = args.join(' ').toLowerCase().trim()
@@ -1603,7 +1692,7 @@ export default function InteractiveCli() {
             '--------------------------------------------------------------------------------',
             'Search cross-cutting distributed systems, ADRs, AI paradigms, and trade-offs.',
             'Usage: find <query> (e.g. "find kafka", "find redis", "find mcp", "find saga")',
-            'Available Domains: Systems, ADR Governance, AI Codex, Trade-Off Matrix, Evolution Diffs, Chaos Drills, API Gateway, Distributed Traces, Kafka Event Streams, Distributed Rate Limiting, Multi-Region Replication, Database Sharding'
+            'Available Domains: Systems, ADR Governance, AI Codex, Trade-Off Matrix, Evolution Diffs, Chaos Drills, API Gateway, Distributed Traces, Kafka Event Streams, Distributed Rate Limiting, Multi-Region Replication, Database Sharding, Edge CDN Caching'
           ]
           break
         }
@@ -1846,6 +1935,29 @@ export default function InteractiveCli() {
               `[Database Sharding] ${s.name}`,
               `  Strategy   : ${s.strategyName} (${s.shards.length} Shards)`,
               `  Anchor     : #architecture-database-sharding`,
+              ''
+            )
+          }
+        })
+
+        // 13. Search Edge CDN Caching & Invalidation
+        EDGE_CDN_STRATEGIES.forEach(c => {
+          if (
+            c.name.toLowerCase().includes(query) ||
+            c.id.toLowerCase().includes(query) ||
+            c.strategyName.toLowerCase().includes(query) ||
+            c.subtitle.toLowerCase().includes(query) ||
+            c.cachePolicyHeader.toLowerCase().includes(query) ||
+            c.summary.toLowerCase().includes(query) ||
+            c.governingAdr.toLowerCase().includes(query) ||
+            c.productionUseCase.system.toLowerCase().includes(query) ||
+            c.pops.some(p => p.city.toLowerCase().includes(query) || p.region.toLowerCase().includes(query)) ||
+            c.surrogateKeys.some(sk => sk.tag.toLowerCase().includes(query) || sk.resourcePath.toLowerCase().includes(query))
+          ) {
+            results.push(
+              `[Edge CDN Caching] ${c.name}`,
+              `  Strategy   : ${c.strategyName} (${c.originOffloadPct}% offload)`,
+              `  Anchor     : #architecture-edge-cdn`,
               ''
             )
           }

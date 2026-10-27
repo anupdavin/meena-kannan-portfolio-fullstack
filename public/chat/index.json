@@ -160,5 +160,11 @@
     "title": "Database Sharding & Consistent Hashing Topology Playground",
     "text": "Meena architects horizontal database sharding and distributed cluster topologies across 5 enterprise strategies: (1) Consistent Hashing Ring: 360-degree virtual node token ring (150 vnodes per physical shard) minimizing key churn to K/N during dynamic scale-out in real-time WebSocket state clusters, (2) Hash-Based Modulo Sharding: Deterministic MurmurHash3 modulo arithmetic achieving uniform key distribution with zero lookup metadata for multi-tenant SaaS platforms, (3) Range-Based Sharding: Contiguous temporal and lexicographical slicing enabling sub-millisecond local scans for FinTech audit journals, (4) Directory-Based Lookup Sharding: Dynamic metadata catalog with Redis L1 cache allowing seamless dedicated hardware promotion for Tier-1 enterprise accounts, and (5) Geo-Partitioning: Regulatory data sovereignty pinning customer records to Frankfurt (GDPR), Virginia (CCPA), and Singapore (MAS) storage clusters.",
     "url": "#architecture-database-sharding"
+  },
+  {
+    "id": "edge-cdn-caching-swr",
+    "title": "Edge CDN Caching & Stale-While-Revalidate Invalidation Sandbox",
+    "text": "Meena designs high-scale global CDN edge caching architectures across 5 enterprise tiers: (1) Surrogate-Key / Cache-Tag Purge: Instant targeted invalidation across 300+ global edge PoPs in under 150ms for thousands of localized e-commerce catalog variants, (2) RFC 5861 Stale-While-Revalidate Edge Shield: Delivers sub-4ms instant edge cache hits from memory while asynchronously revalidating expired content against the origin in the background, (3) AWS CloudFront Origin Shield Tiered Caching: Concentrates cross-continental regional cache misses into a primary origin shield zone achieving 99.1% offload, (4) Collapsed Forwarding Mutex Locks: Merges parallel incoming cache misses into exactly 1 backend query to eliminate thundering herd stampedes, and (5) Programmable Edge Compute Workers: Validates RS256 JWT tokens and executes geo-routing in 1.8ms inside V8 isolates at the edge.",
+    "url": "#architecture-edge-cdn"
   }
 ]

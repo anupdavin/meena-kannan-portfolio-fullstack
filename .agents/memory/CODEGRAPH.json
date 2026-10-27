@@ -1,6 +1,6 @@
 {
   "version": "1.0.0",
-  "generatedAt": "2026-10-27T15:12:17.599Z",
+  "generatedAt": "2026-10-27T15:23:18.660Z",
   "nodes": {
     "src/components/architecture/AdrExplorer.tsx": {
       "file": "src/components/architecture/AdrExplorer.tsx",
@@ -169,6 +169,18 @@
       ],
       "loc": 443
     },
+    "src/components/architecture/EdgeCdnSandbox.tsx": {
+      "file": "src/components/architecture/EdgeCdnSandbox.tsx",
+      "imports": [
+        "react",
+        "lucide-react",
+        "@/data/edgeCdnCaching"
+      ],
+      "exports": [
+        "EdgeCdnSandbox"
+      ],
+      "loc": 459
+    },
     "src/components/architecture/KafkaStreamMonitor.tsx": {
       "file": "src/components/architecture/KafkaStreamMonitor.tsx",
       "imports": [
@@ -325,6 +337,7 @@
         "@/components/architecture/RateLimiterSandbox",
         "@/components/architecture/MultiRegionReplicationSandbox",
         "@/components/architecture/DatabaseShardingSandbox",
+        "@/components/architecture/EdgeCdnSandbox",
         "@/data/architectureSystems",
         "@/data/architecturalDecisions",
         "@/data/architecturalTradeoffs",
@@ -335,12 +348,13 @@
         "@/data/kafkaStreams",
         "@/data/rateLimitingAlgorithms",
         "@/data/multiRegionReplication",
-        "@/data/databaseSharding"
+        "@/data/databaseSharding",
+        "@/data/edgeCdnCaching"
       ],
       "exports": [
         "ArchitectureLab"
       ],
-      "loc": 653
+      "loc": 692
     },
     "src/components/portfolio/ContactTerminal.tsx": {
       "file": "src/components/portfolio/ContactTerminal.tsx",
@@ -397,12 +411,13 @@
         "@/data/rateLimitingAlgorithms",
         "@/data/multiRegionReplication",
         "@/data/databaseSharding",
+        "@/data/edgeCdnCaching",
         "@/data/executiveBriefing"
       ],
       "exports": [
         "InteractiveCli"
       ],
-      "loc": 2126
+      "loc": 2238
     },
     "src/components/portfolio/ProjectsShowcase.tsx": {
       "file": "src/components/portfolio/ProjectsShowcase.tsx",
@@ -454,7 +469,7 @@
       "exports": [
         "TerminalHero"
       ],
-      "loc": 558
+      "loc": 560
     },
     "src/components/ui/badge.tsx": {
       "file": "src/components/ui/badge.tsx",
@@ -603,6 +618,19 @@
         "DISTRIBUTED_TRACES"
       ],
       "loc": 694
+    },
+    "src/data/edgeCdnCaching.ts": {
+      "file": "src/data/edgeCdnCaching.ts",
+      "imports": [
+        "jose"
+      ],
+      "exports": [
+        "EdgePopNode",
+        "SurrogateTagRecord",
+        "EdgeCdnStrategy",
+        "EDGE_CDN_STRATEGIES"
+      ],
+      "loc": 382
     },
     "src/data/executiveBriefing.ts": {
       "file": "src/data/executiveBriefing.ts",
@@ -793,6 +821,7 @@
     "ChaosResilienceMatrix": "src/components/architecture/ChaosResilienceMatrix.tsx",
     "DatabaseShardingSandbox": "src/components/architecture/DatabaseShardingSandbox.tsx",
     "DistributedTraceInspector": "src/components/architecture/DistributedTraceInspector.tsx",
+    "EdgeCdnSandbox": "src/components/architecture/EdgeCdnSandbox.tsx",
     "KafkaStreamMonitor": "src/components/architecture/KafkaStreamMonitor.tsx",
     "MultiRegionReplicationSandbox": "src/components/architecture/MultiRegionReplicationSandbox.tsx",
     "RateLimiterSandbox": "src/components/architecture/RateLimiterSandbox.tsx",
@@ -875,6 +904,10 @@
     "SpanRecord": "src/data/distributedTraces.ts",
     "DistributedTrace": "src/data/distributedTraces.ts",
     "DISTRIBUTED_TRACES": "src/data/distributedTraces.ts",
+    "EdgePopNode": "src/data/edgeCdnCaching.ts",
+    "SurrogateTagRecord": "src/data/edgeCdnCaching.ts",
+    "EdgeCdnStrategy": "src/data/edgeCdnCaching.ts",
+    "EDGE_CDN_STRATEGIES": "src/data/edgeCdnCaching.ts",
     "ExecutiveBriefingData": "src/data/executiveBriefing.ts",
     "EXECUTIVE_BRIEFING": "src/data/executiveBriefing.ts",
     "GatewayFilter": "src/data/gatewayRoutes.ts",

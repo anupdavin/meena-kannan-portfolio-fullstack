@@ -20,6 +20,7 @@ import {
   Radio,
   ShieldAlert,
   Database,
+  CloudLightning,
   X
 } from 'lucide-react'
 import ByteByteGoDiagram from '@/components/architecture/ByteByteGoDiagram'
@@ -34,6 +35,7 @@ import KafkaStreamMonitor from '@/components/architecture/KafkaStreamMonitor'
 import RateLimiterSandbox from '@/components/architecture/RateLimiterSandbox'
 import MultiRegionReplicationSandbox from '@/components/architecture/MultiRegionReplicationSandbox'
 import DatabaseShardingSandbox from '@/components/architecture/DatabaseShardingSandbox'
+import EdgeCdnSandbox from '@/components/architecture/EdgeCdnSandbox'
 import { ARCHITECTURE_SYSTEMS } from '@/data/architectureSystems'
 import { ARCHITECTURAL_DECISIONS } from '@/data/architecturalDecisions'
 import { ARCHITECTURAL_TRADEOFFS } from '@/data/architecturalTradeoffs'
@@ -45,6 +47,7 @@ import { KAFKA_TOPIC_STREAMS } from '@/data/kafkaStreams'
 import { RATE_LIMITING_ALGORITHMS } from '@/data/rateLimitingAlgorithms'
 import { MULTI_REGION_STRATEGIES } from '@/data/multiRegionReplication'
 import { DATABASE_SHARDING_STRATEGIES } from '@/data/databaseSharding'
+import { EDGE_CDN_STRATEGIES } from '@/data/edgeCdnCaching'
 
 const AI_TERMS_SUMMARY = [
   { id: 'agentic-ai', title: 'Agentic AI', text: 'Perception-action loop, DAG memory, tool execution, LangGraph' },
@@ -74,6 +77,7 @@ export default function ArchitectureLab() {
         ratelimit: 5,
         multiregion: 5,
         sharding: 5,
+        cdn: 5,
         isActive: false
       }
     }
@@ -188,8 +192,19 @@ export default function ArchitectureLab() {
       s.productionUseCase.system.toLowerCase().includes(q)
     ).length
 
+    const cdnCount = EDGE_CDN_STRATEGIES.filter(c => 
+      c.name.toLowerCase().includes(q) ||
+      c.id.toLowerCase().includes(q) ||
+      c.strategyName.toLowerCase().includes(q) ||
+      c.subtitle.toLowerCase().includes(q) ||
+      c.cachePolicyHeader.toLowerCase().includes(q) ||
+      c.summary.toLowerCase().includes(q) ||
+      c.governingAdr.toLowerCase().includes(q) ||
+      c.productionUseCase.system.toLowerCase().includes(q)
+    ).length
+
     return {
-      total: workbenchCount + aiCount + adrCount + tradeoffCount + evolutionCount + chaosCount + gatewayCount + traceCount + kafkaCount + ratelimitCount + multiregionCount + shardingCount,
+      total: workbenchCount + aiCount + adrCount + tradeoffCount + evolutionCount + chaosCount + gatewayCount + traceCount + kafkaCount + ratelimitCount + multiregionCount + shardingCount + cdnCount,
       workbench: workbenchCount,
       aiCodex: aiCount,
       adr: adrCount,
@@ -202,6 +217,7 @@ export default function ArchitectureLab() {
       ratelimit: ratelimitCount,
       multiregion: multiregionCount,
       sharding: shardingCount,
+      cdn: cdnCount,
       isActive: true
     }
   }, [searchQuery])
@@ -446,6 +462,17 @@ export default function ArchitectureLab() {
             <Database className="w-3.5 h-3.5 text-emerald-400" />
             <span>Database Sharding ({matchStats.sharding})</span>
           </a>
+          <a 
+            href="#architecture-edge-cdn"
+            className={`px-3 py-1.5 rounded-lg border transition-all flex items-center gap-1.5 cursor-pointer ${
+              matchStats.isActive && matchStats.cdn > 0
+                ? 'bg-cyan-500/10 border-cyan-500/50 text-cyan-400 shadow-[0_0_10px_rgba(6,182,212,0.15)] font-bold'
+                : 'bg-slate-900 border-slate-800 hover:border-cyan-500/50 hover:text-cyan-400 text-slate-300'
+            }`}
+          >
+            <CloudLightning className="w-3.5 h-3.5 text-cyan-400" />
+            <span>Edge CDN ({matchStats.cdn})</span>
+          </a>
         </div>
       </div>
 
@@ -595,6 +622,18 @@ export default function ArchitectureLab() {
         className="scroll-mt-24"
       >
         <DatabaseShardingSandbox />
+      </motion.div>
+
+      {/* 2.16. Edge CDN Caching & Stale-While-Revalidate Invalidation Sandbox */}
+      <motion.div
+        id="architecture-edge-cdn"
+        initial={{ opacity: 0, y: 25 }}
+        whileInView={{ opacity: 1, y: 0 }}
+        viewport={{ once: true }}
+        transition={{ duration: 0.6, delay: 0.65 }}
+        className="scroll-mt-24"
+      >
+        <EdgeCdnSandbox />
       </motion.div>
 
       {/* 3. Architectural Design Pillars Strip */}
