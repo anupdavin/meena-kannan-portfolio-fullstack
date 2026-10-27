@@ -111,6 +111,14 @@ describe('Interactive CLI & Assistant Query Engine', () => {
     assert.equal(findAnswerCategory('What projects have you built?'), 'projects');
     assert.equal(findAnswerCategory('Random question'), 'general');
   });
+
+  test('InteractiveCli.tsx supports deep project inspection via project <id>', () => {
+    const cliCode = fs.readFileSync(path.join(rootDir, 'src', 'components', 'portfolio', 'InteractiveCli.tsx'), 'utf8');
+    assert.ok(cliCode.includes("'project'"), "InteractiveCli must include 'project' in AVAILABLE_COMMANDS");
+    assert.ok(cliCode.includes('PROJECT_DETAILS'), 'InteractiveCli must define PROJECT_DETAILS');
+    assert.ok(cliCode.includes("case 'project':"), "InteractiveCli switch must handle 'project'");
+    assert.ok(!/[\u2013\u2014]/.test(cliCode), 'InteractiveCli.tsx must contain zero em/en-dashes');
+  });
 });
 
 describe('Mobile & Cross-Device Responsiveness Verification', () => {

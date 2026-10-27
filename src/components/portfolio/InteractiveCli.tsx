@@ -14,6 +14,7 @@ const AVAILABLE_COMMANDS = [
   'whoami',
   'skills',
   'projects',
+  'project',
   'experience',
   'contact',
   'hire',
@@ -54,7 +55,7 @@ const COMMAND_HELP = [
   '  help            - Show this command reference list',
   '  whoami          - Display Meena Kannan\'s professional background & role',
   '  skills          - Print summary of core technology stack & competencies',
-  '  projects        - List featured enterprise systems, SAGAs & metrics',
+  '  projects        - List featured systems, or type "project <id>" for deep architecture review',
   '  experience      - Output career journey summary & 8+ years leadership milestones',
   '  stats           - View production performance & impact metrics (99.99% SLA)',
   '  metrics         - Print live architecture cluster telemetry, throughput & cache stats',
@@ -72,6 +73,107 @@ const COMMAND_HELP = [
   '  clear           - Clear terminal history',
   '  easteregg       - Run a fun surprise terminal routine'
 ]
+
+const PROJECT_DETAILS: Record<string, string[]> = {
+  '1': [
+    '--------------------------------------------------------------------------------',
+    '[Project 1] Multi-Tenant B2B IAM & Subscription Core (Enterprise SaaS)',
+    'Client Type : Tier-1 Enterprise B2B SaaS & Financial Platforms',
+    'Tech Stack  : Java 21, Spring Boot 3, React 19, PostgreSQL, Redis, Docker, Flyway',
+    '--------------------------------------------------------------------------------',
+    'Problem Driver & Bottleneck:',
+    '  Multi-tenant customers suffered database connection starvation and noisy-neighbor',
+    '  query latency exceeding 480ms P99 across 1,200+ tenant accounts.',
+    '',
+    'Architecture Solution:',
+    '  Hexagonal Architecture with PostgreSQL Row-Level Security (RLS) policies bound to',
+    '  tenant session context in Spring Security filter chains + Redis L2 cache-aside.',
+    '',
+    'Production Impact Metrics:',
+    '  + P99 Latency   : 480ms -> 78ms (-84%)',
+    '  + RDS Hosting   : -68% ($12k -> $3.8k/mo spend reduction)',
+    '  + Tenant Safety : 100% RLS Policy Isolation Pass',
+    '  + Availability  : 99.99% Multi-AZ SLA Uptime',
+    '',
+    'Architectural Decision Record (ADR):',
+    '  ADR-001: Row-Level Security Shared Schema vs Database-per-Tenant.',
+    '  Accepted write amplification on tenant-filtered indexes to avoid idle pool exhaustion.',
+    '--------------------------------------------------------------------------------'
+  ],
+  '2': [
+    '--------------------------------------------------------------------------------',
+    '[Project 2] Distributed Order Checkout & Saga Engine (Microservices)',
+    'Client Type : High-Volume Retail & Global Supply Chains',
+    'Tech Stack  : Spring Boot 3, Apache Kafka, Debezium CDC, Redis Cluster, EKS, RDS',
+    '--------------------------------------------------------------------------------',
+    'Problem Driver & Bottleneck:',
+    '  Legacy retail monolith crashed under 15,000 RPS flash-sale surges, generating',
+    '  distributed database deadlocks and checkout timeouts exceeding 3.5 seconds.',
+    '',
+    'Architecture Solution:',
+    '  Asynchronous Choreographed Saga with Transactional Outbox (Debezium CDC tailing',
+    '  PostgreSQL WAL). Idempotent consumers coordinate inventory with Redis mutex leases.',
+    '',
+    'Production Impact Metrics:',
+    '  + Throughput    : 15,000+ Peak TPS Sustained',
+    '  + P99 Latency   : 3.5s -> 138ms',
+    '  + Overselling   : 0.00% Defect / Double-Spend Rate',
+    '  + Compute Spend : -42% ($28k -> $16.2k/mo via Kubernetes HPA)',
+    '',
+    'Architectural Decision Record (ADR):',
+    '  ADR-002: Choreographed Saga & Transactional Outbox vs Two-Phase Commit (2PC).',
+    '  Accepted 35ms eventual consistency lag in exchange for zero distributed lock blocking.',
+    '--------------------------------------------------------------------------------'
+  ],
+  '3': [
+    '--------------------------------------------------------------------------------',
+    '[Project 3] High-Throughput Real-Time Task & State Engine (Real-Time)',
+    'Client Type : Collaborative Enterprise Workflow & Telemetry Platforms',
+    'Tech Stack  : Java 21 Virtual Threads, Redis Pub/Sub, WebSockets, PostgreSQL, Docker',
+    '--------------------------------------------------------------------------------',
+    'Problem Driver & Bottleneck:',
+    '  Traditional OS thread-per-connection exhausted JVM memory at 8,000 concurrent WebSockets,',
+    '  causing connection drops and 450ms state propagation lag.',
+    '',
+    'Architecture Solution:',
+    '  Java 21 Virtual Threads dispatcher paired with Redis Pub/Sub channel sharding for',
+    '  cross-node broadcast and optimistic concurrency state merging.',
+    '',
+    'Production Impact Metrics:',
+    '  + Concurrent WS : 50,000+ Concurrent WebSockets per Node',
+    '  + Sync Latency  : <20ms Multi-Region Event Propagation',
+    '  + Memory Footprint: -72% JVM Heap Usage under Full Connection Saturation',
+    '',
+    'Architectural Decision Record (ADR):',
+    '  ADR-003: Java 21 Virtual Threads vs Reactive WebFlux for WebSockets.',
+    '  Preserved synchronous debugging traces while achieving 50k+ connection capacity.',
+    '--------------------------------------------------------------------------------'
+  ],
+  '4': [
+    '--------------------------------------------------------------------------------',
+    '[Project 4] FinTech Payment & Compliance Gateway (FinTech)',
+    'Client Type : Regulated Payment Institutions & Cross-Border Money Movement',
+    'Tech Stack  : Java 21, Spring Boot 3, AWS CloudHSM, PostgreSQL (Partitioned), Kafka',
+    '--------------------------------------------------------------------------------',
+    'Problem Driver & Bottleneck:',
+    '  High-frequency financial transactions required double-entry immutable ledgers,',
+    '  strict PCI-DSS tokenization, and zero-loss auditability under $10M+ daily volume.',
+    '',
+    'Architecture Solution:',
+    '  Append-only double-entry ledger with cryptographic SHA-256 chain verification,',
+    '  envelope encryption via AWS CloudHSM, and partition-keyed Kafka audit streams.',
+    '',
+    'Production Impact Metrics:',
+    '  + Daily Volume  : $10M+ Daily Settled Volume',
+    '  + Reconciliation: 100% Zero-Discrepancy Automated Daily Audits',
+    '  + P99 Latency   : 65ms Signature Verification & Ledger Commit',
+    '',
+    'Architectural Decision Record (ADR):',
+    '  ADR-004: Immutable Double-Entry Ledger with Cryptographic Hash Chaining.',
+    '  Passed SOC-2 Type II and PCI-DSS Level 1 compliance with zero findings.',
+    '--------------------------------------------------------------------------------'
+  ]
+}
 
 export default function InteractiveCli() {
   const [input, setInput] = useState('')
@@ -147,14 +249,38 @@ export default function InteractiveCli() {
           '[AI Systems]    Model Context Protocol (MCP), RAG, pgvector (HNSW), Agentic AI Loops, LRMs'
         ]
         break
-      case 'projects':
+      case 'project':
+      case 'projects': {
+        const query = args[0]?.toLowerCase()
+        if (query) {
+          if (query === '1' || query.includes('saas') || query.includes('iam')) {
+            output = PROJECT_DETAILS['1']
+            break
+          }
+          if (query === '2' || query.includes('saga') || query.includes('ecommerce') || query.includes('checkout')) {
+            output = PROJECT_DETAILS['2']
+            break
+          }
+          if (query === '3' || query.includes('realtime') || query.includes('task') || query.includes('websocket')) {
+            output = PROJECT_DETAILS['3']
+            break
+          }
+          if (query === '4' || query.includes('fintech') || query.includes('payment') || query.includes('gateway')) {
+            output = PROJECT_DETAILS['4']
+            break
+          }
+        }
         output = [
-          '1. Meena Kannan Enterprise SaaS Platform  - Spring Boot 3, React 19, Redis, Docker (99.99% SLA, <80ms)',
-          '2. Distributed E-Commerce Checkout Engine - 15k+ TPS, Choreographed Saga, Debezium CDC Outbox, Kafka',
-          '3. High-Throughput Real-Time Task Engine  - 50K+ Concurrent WebSockets (<20ms Sync via Redis Pub/Sub)',
-          '4. FinTech Payment & Compliance Gateway   - $10M+ Daily Volume, Double-Entry Immutable Ledger, PCI-DSS'
+          'Enterprise Architecture Projects:',
+          '  1. Multi-Tenant B2B IAM Core   : 1,200+ tenants, PostgreSQL RLS, 78ms P99, -68% RDS spend',
+          '  2. Distributed Checkout Engine : 15k+ TPS, Choreographed Saga, Debezium CDC, Kafka',
+          '  3. Real-Time Task Engine       : 50K+ WebSockets, Java 21 Virtual Threads, Redis Pub/Sub',
+          '  4. FinTech Payment Gateway     : $10M+ daily volume, Immutable double-entry ledger, PCI-DSS',
+          '--------------------------------------------------------------------------------',
+          'Tip: Type "project <id>" (e.g. "project 1" or "project saga") to inspect deep architecture telemetry.'
         ]
         break
+      }
       case 'stats':
         output = [
           'Production Impact Metrics:',

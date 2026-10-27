@@ -20,6 +20,9 @@
 
 | Run Timestamp | Focus Area | Action Completed | Lessons Learned / Gotchas |
 | :--- | :--- | :--- | :--- |
+| `2026-10-27 08:03:13` | Autonomous Verification | All 35 tests passed, 0 lint warnings, CodeGraph synchronized. | Verified zero regressions under Superpowers TDD protocol. |
+| `2026-10-27 08:02:00` | Deep Project Telemetry (Track H) | Implemented `project <id>` deep-dive command in `InteractiveCli.tsx` (`project 1`/`saas`, `project 2`/`saga`, `project 3`/`realtime`, `project 4`/`fintech`) with bottleneck drivers, metrics, and ADR rationale; expanded test suite to 41/41 passing tests. | Providing instant terminal access to deep enterprise project telemetry allows technical recruiters and leads to inspect architectural impact metrics without clicking through modals. |
+| `2026-10-27 08:02:09` | Autonomous Verification | All 35 tests passed, 0 lint warnings, CodeGraph synchronized. | Verified zero regressions under Superpowers TDD protocol. |
 | `2026-10-27 07:47:53` | Autonomous Verification | All 35 tests passed, 0 lint warnings, CodeGraph synchronized. | Verified zero regressions under Superpowers TDD protocol. |
 | `2026-10-27 07:47:00` | AI Systems & Tech Stack (Track G) | Added dedicated 'AI Systems & Protocols' category to `TechStack.tsx` (MCP, RAG, pgvector, Agentic AI, LRMs), updated CLI `skills` command in `InteractiveCli.tsx`, expanded test suite to 40/40 passing tests. | Anchoring modern agentic and vector capabilities into the tech stack directly reinforces the ByteByteGo AI systems codex and JSON-LD structured schemas. |
 | `2026-10-27 07:46:58` | Autonomous Verification | All 35 tests passed, 0 lint warnings, CodeGraph synchronized. | Verified zero regressions under Superpowers TDD protocol. |
@@ -103,6 +106,11 @@
 - [x] **Task G1:** Add 'AI Systems & Protocols' category to `TechStack.tsx` with production metrics and tags for MCP, RAG, pgvector, Agentic AI, and LRMs.
 - [x] **Task G2:** Update CLI `skills` command in `InteractiveCli.tsx` with `[AI Systems]` output.
 - [x] **Task G3:** Add automated TDD assertions for AI categories and zero em/en-dashes (40/40 passing tests).
+
+### Track H: Deep Project Telemetry & CLI Inspection
+- [x] **Task H1:** Implement `project <id>` deep-dive query in `InteractiveCli.tsx` (`project 1`/`saas`, `project 2`/`saga`, `project 3`/`realtime`, `project 4`/`fintech`).
+- [x] **Task H2:** Provide structured bottleneck drivers, architecture solutions, production metrics, and ADR context directly in CLI.
+- [x] **Task H3:** Add automated unit test assertions for `project` command and zero em/en-dashes (41/41 passing tests).
 
 ---
 
