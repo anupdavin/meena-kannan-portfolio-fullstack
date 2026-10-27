@@ -1,6 +1,6 @@
 {
   "version": "1.0.0",
-  "generatedAt": "2026-10-27T21:10:08.985Z",
+  "generatedAt": "2026-10-27T21:20:40.035Z",
   "nodes": {
     "src/components/architecture/AdrExplorer.tsx": {
       "file": "src/components/architecture/AdrExplorer.tsx",
@@ -467,6 +467,17 @@
       ],
       "loc": 490
     },
+    "src/components/architecture/WebhookIngressSandbox.tsx": {
+      "file": "src/components/architecture/WebhookIngressSandbox.tsx",
+      "imports": [
+        "lucide-react",
+        "../../data/webhookIngressModels"
+      ],
+      "exports": [
+        "WebhookIngressSandbox"
+      ],
+      "loc": 747
+    },
     "src/components/architecture/workbenchConfigs.ts": {
       "file": "src/components/architecture/workbenchConfigs.ts",
       "imports": [],
@@ -561,6 +572,7 @@
         "@/components/architecture/SplitBrainResolverSandbox",
         "@/components/architecture/GslbAnycastSandbox",
         "@/components/architecture/DistributedLockSandbox",
+        "@/components/architecture/WebhookIngressSandbox",
         "@/data/architectureSystems",
         "@/data/architecturalDecisions",
         "@/data/architecturalTradeoffs",
@@ -589,12 +601,13 @@
         "@/data/zeroTrustMeshModels",
         "@/data/splitBrainResolverModels",
         "@/data/gslbAnycastModels",
-        "@/data/distributedLockModels"
+        "@/data/distributedLockModels",
+        "@/data/webhookIngressModels"
       ],
       "exports": [
         "ArchitectureLab"
       ],
-      "loc": 1355
+      "loc": 1395
     },
     "src/components/portfolio/ContactTerminal.tsx": {
       "file": "src/components/portfolio/ContactTerminal.tsx",
@@ -669,12 +682,13 @@
         "@/data/splitBrainResolverModels",
         "@/data/gslbAnycastModels",
         "@/data/distributedLockModels",
+        "@/data/webhookIngressModels",
         "@/data/executiveBriefing"
       ],
       "exports": [
         "InteractiveCli"
       ],
-      "loc": 4077
+      "loc": 4185
     },
     "src/components/portfolio/ProjectsShowcase.tsx": {
       "file": "src/components/portfolio/ProjectsShowcase.tsx",
@@ -727,7 +741,7 @@
       "exports": [
         "TerminalHero"
       ],
-      "loc": 628
+      "loc": 629
     },
     "src/components/ui/badge.tsx": {
       "file": "src/components/ui/badge.tsx",
@@ -1124,6 +1138,20 @@
       ],
       "loc": 325
     },
+    "src/data/webhookIngressModels.ts": {
+      "file": "src/data/webhookIngressModels.ts",
+      "imports": [
+        "node:crypto"
+      ],
+      "exports": [
+        "WebhookDeliveryLog",
+        "WebhookIngressModel",
+        "INITIAL_WEBHOOK_LOGS",
+        "WEBHOOK_INGRESS_MODELS",
+        "WEBHOOK_INGRESS_PARADIGMS"
+      ],
+      "loc": 436
+    },
     "src/data/zeroTrustMeshModels.ts": {
       "file": "src/data/zeroTrustMeshModels.ts",
       "imports": [],
@@ -1263,6 +1291,11 @@
       "type": "import"
     },
     {
+      "source": "src/components/architecture/WebhookIngressSandbox.tsx",
+      "target": "src/data/webhookIngressModels.ts",
+      "type": "import"
+    },
+    {
       "source": "src/main.tsx",
       "target": "src/pages/Portfolio.tsx",
       "type": "import"
@@ -1344,6 +1377,7 @@
     "TradeoffMatrix": "src/components/architecture/TradeoffMatrix.tsx",
     "TrafficPrioritySandbox": "src/components/architecture/TrafficPrioritySandbox.tsx",
     "VectorSearchSandbox": "src/components/architecture/VectorSearchSandbox.tsx",
+    "WebhookIngressSandbox": "src/components/architecture/WebhookIngressSandbox.tsx",
     "SystemStepDef": "src/components/architecture/workbenchConfigs.ts",
     "NodeRuntimeSpec": "src/components/architecture/workbenchConfigs.ts",
     "WorkbenchSystemConfig": "src/components/architecture/workbenchConfigs.ts",
@@ -1493,6 +1527,11 @@
     "VectorSearchModel": "src/data/vectorSearch.ts",
     "VECTOR_SEARCH_MODELS": "src/data/vectorSearch.ts",
     "reciprocalRankFusion": "src/data/vectorSearch.ts",
+    "WebhookDeliveryLog": "src/data/webhookIngressModels.ts",
+    "WebhookIngressModel": "src/data/webhookIngressModels.ts",
+    "INITIAL_WEBHOOK_LOGS": "src/data/webhookIngressModels.ts",
+    "WEBHOOK_INGRESS_MODELS": "src/data/webhookIngressModels.ts",
+    "WEBHOOK_INGRESS_PARADIGMS": "src/data/webhookIngressModels.ts",
     "WorkloadIdentityProfile": "src/data/zeroTrustMeshModels.ts",
     "ServiceMeshModel": "src/data/zeroTrustMeshModels.ts",
     "HandshakeStep": "src/data/zeroTrustMeshModels.ts",

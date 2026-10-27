@@ -30,6 +30,7 @@ import { ZERO_TRUST_MESH_MODELS } from '@/data/zeroTrustMeshModels'
 import { SPLIT_BRAIN_PARADIGMS } from '@/data/splitBrainResolverModels'
 import { GSLB_ANYCAST_MODELS } from '@/data/gslbAnycastModels'
 import { DISTRIBUTED_LOCK_MODELS } from '@/data/distributedLockModels'
+import { WEBHOOK_INGRESS_MODELS } from '@/data/webhookIngressModels'
 import { EXECUTIVE_BRIEFING } from '@/data/executiveBriefing'
 
 interface HistoryEntry {
@@ -179,6 +180,10 @@ const AVAILABLE_COMMANDS = [
   'lease',
   'dlm',
   'zookeeper',
+  'webhook',
+  'hmac',
+  'signature',
+  'replaydefense',
   'adr',
   'decisions',
   'tradeoffs',
@@ -241,6 +246,7 @@ const QUICK_CHIPS = [
   { label: '[ $ splitbrain ]', cmd: 'splitbrain' },
   { label: '[ $ gslb ]', cmd: 'gslb' },
   { label: '[ $ lock ]', cmd: 'lock' },
+  { label: '[ $ webhook ]', cmd: 'webhook' },
   { label: '[ $ find kafka ]', cmd: 'find kafka' },
   { label: '[ $ tradeoffs ]', cmd: 'tradeoffs' },
   { label: '[ $ adr ]', cmd: 'adr' },
@@ -289,6 +295,7 @@ const COMMAND_HELP = [
   '  splitbrain      - Inspect split-brain quorum fencing & semi-lattice vector healing (or "splitbrain <id>")',
   '  gslb            - Inspect BGP Anycast AS 13335, ECMP & GeoDNS routing (or "gslb <id>")',
   '  lock            - Inspect Redis Redlock, etcd Raft & ZooKeeper distributed leases (or "lock <id>")',
+  '  webhook         - Inspect distributed webhook ingress, HMAC-SHA256 & replay defense (or "webhook <id>")',
   '  find <query>    - Search cross-cutting architecture systems, ADRs, AI codex & trade-offs',
   '  tradeoffs       - Evaluate system design decision trade-offs (or "compare <topic>")',
   '  stats           - View production performance & impact metrics (99.99% SLA)',
@@ -1327,6 +1334,19 @@ export default function InteractiveCli() {
           ]
           break
         }
+        if (sub === 'webhook' || sub === 'hmac' || sub === 'signature' || sub === 'replaydefense' || args.some(a => a.toLowerCase().includes('webhook') || a.toLowerCase().includes('hmac'))) {
+          output = [
+            'Routing to Distributed Webhook Ingress & Cryptographic Signature Verification (#architecture-webhook-ingress):',
+            '  1. HMAC-SHA256 Timing-Safe  : Constant-time digest comparison eliminating side-channel leakage (sub-180µs)',
+            '  2. RFC 8941 Timestamp Replay: 300-second sliding window with atomic Redis SETNX nonce deduplication',
+            '  3. Asynchronous Kafka Buffer: Decoupled ingress absorbing 50,000 req/s flash bursts with instant HTTP 202',
+            '  4. Multi-Tenant Fanout      : Isolated delivery worker pools with exponential backoff & circuit breakers',
+            '  5. Dead-Letter Quarantine   : Encrypted tamper-evident cold storage with 1-click batch re-drive console',
+            '--------------------------------------------------------------------------------',
+            'Interactive Sandbox: Live in #architecture-webhook-ingress with live replay & tamper injectors.'
+          ]
+          break
+        }
         output = [
           'ByteByteGo Interactive Architecture Lab Navigator:',
           '--------------------------------------------------------------------------------',
@@ -1361,6 +1381,7 @@ export default function InteractiveCli() {
           '  [ 28 ] "architecture splitbrain": Split-Brain Quorum Fencing & Partition Healing (#architecture-split-brain-resolver)',
           '  [ 29 ] "architecture gslb"      : Global Anycast & BGP Flowspec Routing (#architecture-gslb-anycast)',
           '  [ 30 ] "architecture lock"      : Distributed Lock Manager & Consensus Leases (#architecture-distributed-lock)',
+          '  [ 31 ] "architecture webhook"   : Distributed Webhook Ingress & HMAC-SHA256 (#architecture-webhook-ingress)',
           '--------------------------------------------------------------------------------',
           'Clean Architecture Principles Enforced:',
           '  + Domain Isolation     : Core business domains decouple from libraries and vendor SDKs',
@@ -3137,6 +3158,69 @@ export default function InteractiveCli() {
         ]
         break
       }
+      case 'webhook':
+      case 'hmac':
+      case 'signature':
+      case 'replaydefense': {
+        const target = args[0]?.toLowerCase().trim()
+        if (target) {
+          const matched = WEBHOOK_INGRESS_MODELS.find(m =>
+            m.id === target ||
+            m.id.includes(target) ||
+            m.name.toLowerCase().includes(target) ||
+            m.badge.toLowerCase().includes(target) ||
+            (target === '1' && m.id === 'hmac-sha256-constant-time') ||
+            (target === '2' && m.id === 'replay-defense-nonce-window') ||
+            (target === '3' && m.id === 'decoupled-kafka-ingress-buffer') ||
+            (target === '4' && m.id === 'fanout-circuit-exponential-retry') ||
+            (target === '5' && m.id === 'dlq-quarantine-redrive-console')
+          )
+          if (matched) {
+            output = [
+              '--------------------------------------------------------------------------------',
+              `Webhook Ingress Model: ${matched.name} [${matched.badge}]`,
+              '--------------------------------------------------------------------------------',
+              `Category            : ${matched.category}`,
+              `Throughput SLA      : ${matched.throughputSla}`,
+              `Verification SLA    : ${matched.verificationLatency}`,
+              `Replay Defense SLA  : ${matched.safetyGuaranteeSla}`,
+              `Mathematical Formula: ${matched.algorithmFormula}`,
+              `Blast Radius Guard  : ${matched.blastRadiusContainment}`,
+              '--------------------------------------------------------------------------------',
+              'WORKFLOW PHASES & VERIFICATION INVARIANTS:',
+              ...matched.workflowPhases.map(p =>
+                `  * [${p.name}] :: ${p.description} -> Invariant: ${p.invariants}`
+              ),
+              '--------------------------------------------------------------------------------',
+              'PRODUCTION OUTCOMES & INVARIANTS:',
+              ...Object.entries(matched.productionOutcomes).map(([k, v]) => `  + ${k}: ${v}`),
+              '',
+              `Architectural Invariant: "${matched.architecturalInvariant}"`,
+              '--------------------------------------------------------------------------------',
+              'Full live interactive replay attack & tamper injector in #architecture-webhook-ingress.'
+            ]
+            break
+          }
+        }
+
+        output = [
+          'Distributed Webhook Ingress & Cryptographic Signature Verification Sandbox:',
+          '--------------------------------------------------------------------------------',
+          'Explore 5 enterprise webhook ingress, HMAC verification & replay defense architectures:',
+          '',
+          ...WEBHOOK_INGRESS_MODELS.flatMap((m, idx) => [
+            `${idx + 1}. [ ${m.id} ] : ${m.name} (${m.badge})`,
+            `   Category   : ${m.category}`,
+            `   Latency    : ${m.verificationLatency.split(';')[0]}`,
+            `   Throughput : ${m.throughputSla.split(';')[0]}`,
+            `   Deep Dive  : "webhook ${idx + 1}" or "webhook ${m.id.split('-')[0]}" (e.g. "webhook hmac", "webhook replay", "webhook kafka", "webhook fanout", "webhook dlq")`,
+            ''
+          ]),
+          '--------------------------------------------------------------------------------',
+          'Tip: Run "webhook <id>" (e.g. "webhook 1" or "webhook hmac") to inspect HMAC verification invariants.'
+        ]
+        break
+      }
       case 'find':
       case 'search': {
         const query = args.join(' ').toLowerCase().trim()
@@ -3146,7 +3230,7 @@ export default function InteractiveCli() {
             '--------------------------------------------------------------------------------',
             'Search cross-cutting distributed systems, ADRs, AI paradigms, and trade-offs.',
             'Usage: find <query> (e.g. "find kafka", "find redis", "find mcp", "find saga")',
-            'Available Domains: Systems, ADR Governance, AI Codex, Trade-Off Matrix, Evolution Diffs, Chaos Drills, API Gateway, Distributed Traces, Kafka Event Streams, Distributed Rate Limiting, Multi-Region Replication, Database Sharding, Edge CDN Caching, Circuit Breakers, Concurrency & Deadlocks, Raft Consensus, Vector Search, Traffic Priority & QoS, Distributed Sagas & Compensations, Distributed Cache Stampede & Coherence, Distributed Event Sourcing & CQRS, Distributed DLQ & Retries, Distributed Idempotency & CAS Locks, Distributed 2PC vs Saga Commit & Drift Reconciler, Dynamic Feature Flagging & Canary Splitter, Multi-Tenant RLS & Cryptographic Isolation, Zero-Trust Service Mesh & SPIFFE mTLS, Split-Brain Quorum Fencing & Partition Healing, GSLB & BGP Anycast Routing, Distributed Lock Manager & Leases'
+            'Available Domains: Systems, ADR Governance, AI Codex, Trade-Off Matrix, Evolution Diffs, Chaos Drills, API Gateway, Distributed Traces, Kafka Event Streams, Distributed Rate Limiting, Multi-Region Replication, Database Sharding, Edge CDN Caching, Circuit Breakers, Concurrency & Deadlocks, Raft Consensus, Vector Search, Traffic Priority & QoS, Distributed Sagas & Compensations, Distributed Cache Stampede & Coherence, Distributed Event Sourcing & CQRS, Distributed DLQ & Retries, Distributed Idempotency & CAS Locks, Distributed 2PC vs Saga Commit & Drift Reconciler, Dynamic Feature Flagging & Canary Splitter, Multi-Tenant RLS & Cryptographic Isolation, Zero-Trust Service Mesh & SPIFFE mTLS, Split-Brain Quorum Fencing & Partition Healing, GSLB & BGP Anycast Routing, Distributed Lock Manager & Leases, Webhook Ingress & HMAC Verification'
           ]
           break
         }
@@ -3797,6 +3881,30 @@ export default function InteractiveCli() {
               `  Category   : ${dl.category} (${dl.badge})`,
               `  Acquisition: ${dl.acquisitionLatency.split(';')[0]}`,
               `  Anchor     : #architecture-distributed-lock`,
+              ''
+            )
+          }
+        })
+
+        // 31. Search Webhook Ingress & Cryptographic Signature Verification
+        WEBHOOK_INGRESS_MODELS.forEach(wh => {
+          if (
+            wh.name.toLowerCase().includes(query) ||
+            wh.id.toLowerCase().includes(query) ||
+            wh.category.toLowerCase().includes(query) ||
+            wh.badge.toLowerCase().includes(query) ||
+            wh.algorithmFormula.toLowerCase().includes(query) ||
+            (wh.verificationLatency || '').toLowerCase().includes(query) ||
+            (wh.throughputSla || '').toLowerCase().includes(query) ||
+            (wh.safetyGuaranteeSla || '').toLowerCase().includes(query) ||
+            wh.architecturalInvariant.toLowerCase().includes(query) ||
+            wh.description.toLowerCase().includes(query)
+          ) {
+            results.push(
+              `[Webhook Ingress & HMAC] ${wh.name}`,
+              `  Category    : ${wh.category} (${wh.badge})`,
+              `  Verification: ${wh.verificationLatency.split(';')[0]}`,
+              `  Anchor      : #architecture-webhook-ingress`,
               ''
             )
           }

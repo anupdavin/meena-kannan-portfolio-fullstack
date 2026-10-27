@@ -1645,6 +1645,43 @@ describe('Production Architectural Decision Records (ADR) & CLI Integration', ()
     assert.ok(indexHtml.includes('id="architecture-distributed-lock"'), 'index.html must include #architecture-distributed-lock landmark');
     assert.ok(!/[\u2013\u2014]/.test(indexHtml), 'index.html must contain zero em/en-dashes');
   });
+
+  test('WebhookIngressSandbox and webhookIngressModels.ts define HMAC verification, replay defense, and Kafka buffering with CLI integration', () => {
+    const webhookDataPath = path.join(rootDir, 'src', 'data', 'webhookIngressModels.ts');
+    assert.ok(fs.existsSync(webhookDataPath), 'webhookIngressModels.ts must exist');
+    const webhookDataCode = fs.readFileSync(webhookDataPath, 'utf8');
+    assert.ok(webhookDataCode.includes('hmac-sha256-constant-time'), 'Must define hmac-sha256-constant-time model');
+    assert.ok(webhookDataCode.includes('replay-defense-nonce-window'), 'Must define replay-defense-nonce-window model');
+    assert.ok(webhookDataCode.includes('decoupled-kafka-ingress-buffer'), 'Must define decoupled-kafka-ingress-buffer model');
+    assert.ok(webhookDataCode.includes('fanout-circuit-exponential-retry'), 'Must define fanout-circuit-exponential-retry model');
+    assert.ok(webhookDataCode.includes('dlq-quarantine-redrive-console'), 'Must define dlq-quarantine-redrive-console model');
+    assert.ok(!/[\u2013\u2014]/.test(webhookDataCode), 'webhookIngressModels.ts must contain zero em/en-dashes');
+
+    const componentPath = path.join(rootDir, 'src', 'components', 'architecture', 'WebhookIngressSandbox.tsx');
+    assert.ok(fs.existsSync(componentPath), 'WebhookIngressSandbox.tsx must exist');
+    const compCode = fs.readFileSync(componentPath, 'utf8');
+    assert.ok(compCode.includes('copyRfcReport'), 'WebhookIngressSandbox must support 1-click RFC copy');
+    assert.ok(compCode.includes('WEBHOOK_INGRESS_MODELS'), 'WebhookIngressSandbox must render WEBHOOK_INGRESS_MODELS');
+    assert.ok(!/[\u2013\u2014]/.test(compCode), 'WebhookIngressSandbox.tsx must contain zero em/en-dashes');
+
+    const labCode = fs.readFileSync(path.join(rootDir, 'src', 'components', 'portfolio', 'ArchitectureLab.tsx'), 'utf8');
+    assert.ok(labCode.includes('WebhookIngressSandbox'), 'ArchitectureLab must mount WebhookIngressSandbox');
+    assert.ok(labCode.includes('id="architecture-webhook-ingress"'), 'ArchitectureLab must define anchor #architecture-webhook-ingress');
+
+    const cliCode = fs.readFileSync(path.join(rootDir, 'src', 'components', 'portfolio', 'InteractiveCli.tsx'), 'utf8');
+    assert.ok(cliCode.includes("'webhook'"), "InteractiveCli must support 'webhook' command");
+    assert.ok(cliCode.includes('[ $ webhook ]'), "InteractiveCli must include '[ $ webhook ]' quick chip");
+    assert.ok(cliCode.includes('WEBHOOK_INGRESS_MODELS'), 'InteractiveCli must search across WEBHOOK_INGRESS_MODELS');
+    assert.ok(!/[\u2013\u2014]/.test(cliCode), 'InteractiveCli.tsx must contain zero em/en-dashes');
+
+    const chatIndex = fs.readFileSync(path.join(rootDir, 'public', 'chat', 'index.json'), 'utf8');
+    assert.ok(chatIndex.includes('distributed-webhook-ingress'), 'public/chat/index.json must index distributed-webhook-ingress');
+    assert.ok(!/[\u2013\u2014]/.test(chatIndex), 'public/chat/index.json must contain zero em/en-dashes');
+
+    const indexHtml = fs.readFileSync(path.join(rootDir, 'index.html'), 'utf8');
+    assert.ok(indexHtml.includes('id="architecture-webhook-ingress"'), 'index.html must include #architecture-webhook-ingress landmark');
+    assert.ok(!/[\u2013\u2014]/.test(indexHtml), 'index.html must contain zero em/en-dashes');
+  });
 });
 
 

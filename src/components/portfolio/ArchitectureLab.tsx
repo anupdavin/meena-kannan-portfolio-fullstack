@@ -61,6 +61,7 @@ import { ZeroTrustMeshSandbox } from '@/components/architecture/ZeroTrustMeshSan
 import { SplitBrainResolverSandbox } from '@/components/architecture/SplitBrainResolverSandbox'
 import GslbAnycastSandbox from '@/components/architecture/GslbAnycastSandbox'
 import DistributedLockSandbox from '@/components/architecture/DistributedLockSandbox'
+import { WebhookIngressSandbox } from '@/components/architecture/WebhookIngressSandbox'
 import { ARCHITECTURE_SYSTEMS } from '@/data/architectureSystems'
 import { ARCHITECTURAL_DECISIONS } from '@/data/architecturalDecisions'
 import { ARCHITECTURAL_TRADEOFFS } from '@/data/architecturalTradeoffs'
@@ -90,6 +91,7 @@ import { ZERO_TRUST_MESH_MODELS } from '@/data/zeroTrustMeshModels'
 import { SPLIT_BRAIN_PARADIGMS } from '@/data/splitBrainResolverModels'
 import { GSLB_ANYCAST_MODELS } from '@/data/gslbAnycastModels'
 import { DISTRIBUTED_LOCK_MODELS } from '@/data/distributedLockModels'
+import { WEBHOOK_INGRESS_MODELS } from '@/data/webhookIngressModels'
 
 const AI_TERMS_SUMMARY = [
   { id: 'agentic-ai', title: 'Agentic AI', text: 'Perception-action loop, DAG memory, tool execution, LangGraph' },
@@ -137,6 +139,7 @@ export default function ArchitectureLab() {
         splitbrain: 5,
         gslbanycast: 5,
         distributedlock: 5,
+        webhookingress: 5,
         isActive: false
       }
     }
@@ -458,8 +461,21 @@ export default function ArchitectureLab() {
       l.description.toLowerCase().includes(q)
     ).length
 
+    const webhookIngressCount = WEBHOOK_INGRESS_MODELS.filter(w =>
+      w.name.toLowerCase().includes(q) ||
+      w.id.toLowerCase().includes(q) ||
+      w.category.toLowerCase().includes(q) ||
+      w.badge.toLowerCase().includes(q) ||
+      w.algorithmFormula.toLowerCase().includes(q) ||
+      (w.verificationLatency || '').toLowerCase().includes(q) ||
+      (w.throughputSla || '').toLowerCase().includes(q) ||
+      (w.safetyGuaranteeSla || '').toLowerCase().includes(q) ||
+      w.architecturalInvariant.toLowerCase().includes(q) ||
+      w.description.toLowerCase().includes(q)
+    ).length
+
     return {
-      total: workbenchCount + aiCount + adrCount + tradeoffCount + evolutionCount + chaosCount + gatewayCount + traceCount + kafkaCount + ratelimitCount + multiregionCount + shardingCount + cdnCount + circuitBreakerCount + concurrencyCount + raftCount + vectorCount + priorityCount + sagasCount + cacheCount + eventSourcingCount + dlqCount + idempotencyCount + atomicCommitCount + featureFlagCount + tenantIsolationCount + zeroTrustMeshCount + splitBrainCount + gslbAnycastCount + distributedLockCount,
+      total: workbenchCount + aiCount + adrCount + tradeoffCount + evolutionCount + chaosCount + gatewayCount + traceCount + kafkaCount + ratelimitCount + multiregionCount + shardingCount + cdnCount + circuitBreakerCount + concurrencyCount + raftCount + vectorCount + priorityCount + sagasCount + cacheCount + eventSourcingCount + dlqCount + idempotencyCount + atomicCommitCount + featureFlagCount + tenantIsolationCount + zeroTrustMeshCount + splitBrainCount + gslbAnycastCount + distributedLockCount + webhookIngressCount,
       workbench: workbenchCount,
       aiCodex: aiCount,
       adr: adrCount,
@@ -490,6 +506,7 @@ export default function ArchitectureLab() {
       splitbrain: splitBrainCount,
       gslbanycast: gslbAnycastCount,
       distributedlock: distributedLockCount,
+      webhookingress: webhookIngressCount,
       isActive: true
     }
   }, [searchQuery])
@@ -932,6 +949,17 @@ export default function ArchitectureLab() {
             <Lock className="w-3.5 h-3.5 text-amber-400" />
             <span>DLM Consensus Leases ({matchStats.distributedlock})</span>
           </a>
+          <a 
+            href="#architecture-webhook-ingress"
+            className={`px-3 py-1.5 rounded-lg border transition-all flex items-center gap-1.5 cursor-pointer ${
+              matchStats.isActive && matchStats.webhookingress > 0
+                ? 'bg-emerald-500/10 border-emerald-500/50 text-emerald-400 shadow-[0_0_10px_rgba(16,185,129,0.15)] font-bold'
+                : 'bg-slate-900 border-slate-800 hover:border-emerald-500/50 hover:text-emerald-400 text-slate-300'
+            }`}
+          >
+            <Radio className="w-3.5 h-3.5 text-emerald-400" />
+            <span>Webhook Ingress ({matchStats.webhookingress})</span>
+          </a>
         </div>
       </div>
 
@@ -1297,6 +1325,18 @@ export default function ArchitectureLab() {
         className="scroll-mt-24"
       >
         <DistributedLockSandbox />
+      </motion.div>
+
+      {/* 2.34. Distributed Webhook Ingress & Cryptographic Signature Verification Sandbox */}
+      <motion.div
+        id="architecture-webhook-ingress"
+        initial={{ opacity: 0, y: 25 }}
+        whileInView={{ opacity: 1, y: 0 }}
+        viewport={{ once: true }}
+        transition={{ duration: 0.6, delay: 1.55 }}
+        className="scroll-mt-24"
+      >
+        <WebhookIngressSandbox />
       </motion.div>
 
       {/* 3. Architectural Design Pillars Strip */}

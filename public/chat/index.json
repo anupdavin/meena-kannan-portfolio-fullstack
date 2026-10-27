@@ -268,5 +268,11 @@
     "title": "Distributed Consensus-Backed Lock Manager (DLM) & Mutex Leases Sandbox",
     "text": "Meena architects enterprise distributed mutual exclusion and consensus lease engines across 5 paradigms: (1) Redis Redlock Multi-Master Quorum Leases: Quorum-based locking across 5 independent Redis masters (3-of-5 nodes) with clock drift epsilon calculation and sub-2.4ms acquisition, (2) etcd Raft Monotonic Revision Leases with Heartbeats: Linearizable 64-bit revision locks with automatic TTL lease renewal and point-to-point watches eliminating thundering herds, (3) ZooKeeper Ephemeral Sequential Znodes: Strict FIFO fair queuing with lock-release watches guaranteeing zero starvation, (4) Storage-Layer Monotonic Fencing Token Validation: Kleppmann fencing theorem rejecting delayed zombie writes via atomic CAS checks (WHERE fencing_token < incoming_token), and (5) Distributed Reader-Writer Leases with Write-Preference: Concurrent shared read leases with write-priority starvation prevention.",
     "url": "#architecture-distributed-lock"
+  },
+  {
+    "id": "distributed-webhook-ingress",
+    "title": "Distributed Webhook Ingress & Cryptographic Signature Verification Sandbox",
+    "text": "Meena architects enterprise high-throughput webhook ingress decoupling and cryptographic verification engines across 5 paradigms: (1) HMAC-SHA256 Constant-Time Verification: Constant-time digest comparison via crypto.timingSafeEqual or MessageDigest.isEqual executing in sub-180 microseconds to eliminate side-channel timing attacks, (2) RFC 8941 Timestamp Tolerance & Redis Nonce Tracking: 300-second sliding window with atomic SETNX nonce reservation guaranteeing 100% replay attack defense, (3) Asynchronous Kafka Buffer Ingress Decoupling: Partitioned event buffering absorbing 50,000 req/s flash bursts with instant HTTP 202 Accepted and zero database thread pool exhaustion, (4) Multi-Tenant Fanout with Circuit-Guarded Exponential Retries: Bulkhead-isolated delivery worker pools with decorrelated full jitter and 50% threshold circuit breaker tripping, and (5) Dead-Letter Webhook Quarantine & Audit Trail Re-Drive: Tamper-evident S3 cold storage archive with 1-click rate-limited 500 msg/s re-drive console for SRE recovery.",
+    "url": "#architecture-webhook-ingress"
   }
 ]

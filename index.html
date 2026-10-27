@@ -749,6 +749,16 @@
                 Distributed mutual exclusion, consensus leases, and linearizable storage-layer fencing across 5 enterprise architectures: Redis Redlock Multi-Master Quorum Leases (3-of-5 independent node quorum with clock drift compensation and sub-2.4ms acquisition), etcd Raft Monotonic Revision Leases with Heartbeats (64-bit CreateRevision with linearizable watch handoffs), ZooKeeper Ephemeral Sequential Znodes &amp; Condition Queues (strict FIFO ordering with point-to-point watches eliminating thundering herd storms), Storage-Layer Monotonic Fencing Token Validation (Kleppmann fencing theorem rejecting zombie GC pause writes with HTTP 409 Conflict), and Distributed Reader-Writer Leases with Write-Preference (concurrent shared reads with write-priority starvation prevention).
               </p>
             </div>
+
+            <!-- Sub-Section 31: Distributed Webhook Ingress & Cryptographic Signature Verification Sandbox -->
+            <div id="architecture-webhook-ingress" style="background: rgba(9, 14, 24, 0.7); border: 1px solid #1e293b; border-radius: 16px; padding: 1.5rem; margin-top: 1rem;">
+              <h3 style="color: #34d399; font-size: 1.25rem; font-weight: bold; margin-bottom: 0.5rem;">
+                Distributed Webhook Ingress &amp; Cryptographic Signature Verification Sandbox
+              </h3>
+              <p style="color: #94a3b8; font-size: 0.85rem; line-height: 1.6;">
+                High-throughput webhook ingress decoupling, constant-time cryptographic verification, and replay defense across 5 enterprise architectures: HMAC-SHA256 Constant-Time Verification (constant-time digest comparison in sub-180 microseconds eliminating side-channel leakage), RFC 8941 Timestamp Tolerance &amp; Redis Nonce Tracking (300-second sliding window with atomic SETNX deduplication), Asynchronous Kafka Buffer Ingress Decoupling (absorbing 50,000 req/s flash bursts with instant HTTP 202 Accepted and zero database thread pool starvation), Multi-Tenant Fanout with Circuit-Guarded Exponential Retries (isolated delivery worker pools with decorrelated full jitter and breaker trip), and Dead-Letter Webhook Quarantine &amp; Audit Trail Re-Drive (encrypted cold storage with 1-click batch re-drive console).
+              </p>
+            </div>
           </section>
 
           <!-- Projects & Interactive Architecture Section Landmark -->
