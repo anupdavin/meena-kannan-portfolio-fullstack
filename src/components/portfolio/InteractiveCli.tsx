@@ -580,28 +580,76 @@ export default function InteractiveCli() {
           '  4. Full-Stack SaaS MVP to Resilient Production Architecture'
         ]
         break
-      case 'architecture':
-        if (args.some(a => a.toLowerCase().includes('ai') || a.toLowerCase().includes('codex'))) {
+      case 'architecture': {
+        const sub = args[0]?.toLowerCase()
+        if (sub === 'ai' || sub === 'codex' || args.some(a => a.toLowerCase().includes('ai') || a.toLowerCase().includes('codex'))) {
           output = [
-            'Routing to ByteByteGo AI & Distributed Systems Architecture Codex:',
+            'Routing to ByteByteGo AI & Distributed Systems Architecture Codex (#architecture-ai-codex):',
             '  1. Agentic AI           : Goal-driven perception/action loop (Memory, Tools, Invariants)',
             '  2. Large Reasoning (LRM): Multi-step Chain-of-Thought (CoT) internal verification traces',
             '  3. Vector Database      : High-dimensional similarity search over dense embeddings',
             '  4. RAG Pipeline         : Hybrid BM25 keyword + semantic dense vector context augmentation',
             '  5. MCP Interface        : Model Context Protocol (Host -> Client -> MCP Server Tool bus)',
             '--------------------------------------------------------------------------------',
-            'Interactive Visualizer: Live in the #architecture section ("AI Terms You Need to Know").'
+            'Interactive Visualizer: Live in #architecture-ai-codex ("AI Terms You Need to Know").'
+          ]
+          break
+        }
+        if (sub === 'adr' || sub === 'decisions' || args.some(a => a.toLowerCase().includes('adr'))) {
+          output = [
+            'Routing to Architectural Decision Records (ADR) Ledger (#architecture-adr-ledger):',
+            '  - ADR-001: Choreographed Saga Pattern for Payment Processing',
+            '  - ADR-002: Transactional Outbox Pattern with Debezium CDC',
+            '  - ADR-003: Java 21 Virtual Threads for High-Throughput I/O',
+            '  - ADR-004: Dual-Tier Caching Architecture (Caffeine L1 + Redis L2)',
+            '  - ADR-005: Zero-Trust Envoy Edge Ingress with mTLS',
+            '  - ADR-006: Model Context Protocol (MCP) Enterprise Architecture',
+            '--------------------------------------------------------------------------------',
+            'Interactive Explorer: Live in #architecture-adr-ledger.'
+          ]
+          break
+        }
+        if (sub === 'tradeoffs' || sub === 'compare' || args.some(a => a.toLowerCase().includes('tradeoff') || a.toLowerCase().includes('compare'))) {
+          output = [
+            'Routing to System Design Decision Matrix & Tradeoffs (#architecture-tradeoff-matrix):',
+            '  1. Distributed Transactions : Choreographed Saga vs Orchestrated Saga vs Two-Phase Commit',
+            '  2. AI Context Augmentation  : Hybrid RAG vs Domain Fine-Tuning vs In-Context Prompt Caching',
+            '  3. Concurrency Runtimes     : Java 21 Virtual Threads vs Reactive WebFlux vs OS Platform Threads',
+            '  4. Service Protocols        : gRPC Protobuf vs REST OpenAPI vs Model Context Protocol (MCP)',
+            '--------------------------------------------------------------------------------',
+            'Interactive Explorer: Live in #architecture-tradeoff-matrix.'
+          ]
+          break
+        }
+        if (sub === 'systems' || sub === 'workbench' || args.some(a => a.toLowerCase().includes('system') || a.toLowerCase().includes('workbench'))) {
+          output = [
+            'Routing to ByteByteGo Interactive Distributed Workbench (#architecture-workbench):',
+            '  1. Cloud-Native SaaS Core : Multi-tenant auth, Redis cache cluster, PostgreSQL read replica',
+            '  2. High-Throughput E-Commerce : Choreographed Saga, Kafka CDC outbox, order state machine',
+            '  3. Real-Time Collaboration : 50K+ WebSockets, Redis pub/sub mesh, optimistic mutations',
+            '  4. FinTech Payment Gateway : Tokenized vault, idempotent charge verification, KMS encryption',
+            '--------------------------------------------------------------------------------',
+            'Interactive Simulator: Live in #architecture-workbench with live chaos injection.'
           ]
           break
         }
         output = [
-          'Clean Architecture & Distributed Systems Principles:',
-          '  1. Independent of Frameworks: Core business domains decouple from libraries and vendor SDKs',
-          '  2. Dependency Inversion: High-level business policies do not depend on low-level infrastructure',
-          '  3. Choreographed Sagas: Asynchronous eventual consistency replaces blocking 2PC coordinators',
-          '  4. Transactional Outbox: Guaranteed atomic dual-writes to Postgres and Kafka via Debezium CDC'
+          'ByteByteGo Interactive Architecture Lab Navigator:',
+          '--------------------------------------------------------------------------------',
+          'Explore Meena Kannan\'s production distributed architectures & system designs:',
+          '  [ 1 ] "architecture systems"   : 4 Enterprise Workbenches (#architecture-workbench)',
+          '  [ 2 ] "architecture ai"        : 5-Pillar ByteByteGo AI Codex (#architecture-ai-codex)',
+          '  [ 3 ] "architecture adr"       : 6 Production Governance ADRs (#architecture-adr-ledger)',
+          '  [ 4 ] "architecture tradeoffs" : System Design Decision Matrix (#architecture-tradeoff-matrix)',
+          '--------------------------------------------------------------------------------',
+          'Clean Architecture Principles Enforced:',
+          '  + Domain Isolation     : Core business domains decouple from libraries and vendor SDKs',
+          '  + Dependency Inversion : High-level policies do not depend on low-level infrastructure',
+          '  + Eventual Consistency : Choreographed Sagas replace blocking 2PC locks',
+          '  + Zero Data Loss       : Transactional Outbox pattern guarantees atomic dual-writes'
         ]
         break
+      }
       case 'adr':
       case 'decisions': {
         const targetId = args[0]?.toUpperCase()

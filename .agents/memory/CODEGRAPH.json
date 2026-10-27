@@ -1,6 +1,6 @@
 {
   "version": "1.0.0",
-  "generatedAt": "2026-10-27T10:21:51.379Z",
+  "generatedAt": "2026-10-27T10:35:03.401Z",
   "nodes": {
     "src/components/architecture/AdrExplorer.tsx": {
       "file": "src/components/architecture/AdrExplorer.tsx",
@@ -185,7 +185,7 @@
       "exports": [
         "ChatWidget"
       ],
-      "loc": 396
+      "loc": 404
     },
     "src/components/MatrixBackground.tsx": {
       "file": "src/components/MatrixBackground.tsx",
@@ -224,7 +224,7 @@
       "exports": [
         "ArchitectureLab"
       ],
-      "loc": 158
+      "loc": 200
     },
     "src/components/portfolio/ContactTerminal.tsx": {
       "file": "src/components/portfolio/ContactTerminal.tsx",
@@ -264,7 +264,7 @@
       "exports": [
         "InteractiveCli"
       ],
-      "loc": 957
+      "loc": 1005
     },
     "src/components/portfolio/ProjectsShowcase.tsx": {
       "file": "src/components/portfolio/ProjectsShowcase.tsx",

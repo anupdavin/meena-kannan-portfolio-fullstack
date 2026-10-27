@@ -25,6 +25,7 @@ interface ChatDoc {
 const QUICK_QUESTIONS = [
   "What is Meena's primary tech stack?",
   "Explain Meena's AI architecture & MCP codex",
+  "How does Meena evaluate architecture trade-offs (e.g. Saga vs 2PC)?",
   "What are Meena's Architectural Decision Records (ADR)?",
   "Tell me about the Enterprise SaaS project",
   "Is Meena open to remote engineering roles?",
@@ -51,7 +52,11 @@ const FAQ_MAP: Record<string, { answer: string; url?: string }> = {
   },
   'adr': {
     answer: "Meena documents engineering trade-offs using formal Architectural Decision Records (ADRs). Her ledger includes ADR-001 (Choreographed Saga), ADR-002 (Transactional Outbox CDC), ADR-003 (Java 21 Virtual Threads), ADR-004 (L1 Caffeine + L2 Redis Caching), ADR-005 (Zero-Trust Envoy mTLS), and ADR-006 (Model Context Protocol). Inspect them in the interactive ADR Explorer in the Architecture Lab.",
-    url: "#architecture"
+    url: "#architecture-adr-ledger"
+  },
+  'tradeoffs': {
+    answer: "Meena evaluates distributed architecture tradeoffs across four core domains in the System Design Decision Matrix: (1) Choreographed Saga vs Orchestrated Saga vs 2PC, (2) Hybrid RAG vs Domain Fine-Tuning vs Prompt Caching, (3) Java 21 Virtual Threads vs Reactive WebFlux vs OS Thread Pools, and (4) gRPC vs REST vs Model Context Protocol (MCP). Inspect full criteria scores and production verdicts in the Architecture Lab.",
+    url: "#architecture-tradeoff-matrix"
   },
   'saga': {
     answer: "Meena implements Choreographed Saga transactions using Kafka event streaming and compensating transactions. When payment or inventory steps fail, automated rollback events restore ledger consistency without blocking distributed 2PC locks.",
@@ -149,7 +154,10 @@ export default function ChatWidget() {
     if (q.includes('agent') || q.includes('rag') || q.includes('vector') || q.includes('lrm') || q.includes('bytebytego') || q.includes('codex') || q.includes('ai systems') || q.includes('artificial intelligence') || /\bai\b/.test(q)) {
       return { text: FAQ_MAP.ai.answer, url: FAQ_MAP.ai.url }
     }
-    if (q.includes('adr') || q.includes('decision') || q.includes('tradeoff')) {
+    if (q.includes('tradeoff') || q.includes('compare') || q.includes('2pc') || q.includes('threads vs reactive')) {
+      return { text: FAQ_MAP.tradeoffs.answer, url: FAQ_MAP.tradeoffs.url }
+    }
+    if (q.includes('adr') || q.includes('decision')) {
       return { text: FAQ_MAP.adr.answer, url: FAQ_MAP.adr.url }
     }
     if (q.includes('saga') || q.includes('outbox') || q.includes('cdc') || q.includes('compensat')) {

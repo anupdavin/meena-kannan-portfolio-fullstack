@@ -442,8 +442,10 @@ describe('Quality, Antislop, Accessibility & Performance Hygiene Verification', 
     assert.ok(chatCode.includes("'mcp': {"), 'ChatWidget must define FAQ for MCP');
     assert.ok(chatCode.includes("'ai': {"), 'ChatWidget must define FAQ for AI architectures');
     assert.ok(chatCode.includes("'adr': {"), 'ChatWidget must define FAQ for ADRs');
+    assert.ok(chatCode.includes("'tradeoffs': {"), 'ChatWidget must define FAQ for system design tradeoffs');
     assert.ok(chatCode.includes("'saga': {"), 'ChatWidget must define FAQ for Saga transactions');
     assert.ok(chatCode.includes('Explain Meena\'s AI architecture & MCP codex'), 'ChatWidget must include MCP codex quick question');
+    assert.ok(chatCode.includes('How does Meena evaluate architecture trade-offs'), 'ChatWidget must include Tradeoffs quick question');
     assert.ok(chatCode.includes('What are Meena\'s Architectural Decision Records (ADR)?'), 'ChatWidget must include ADR quick question');
     assert.ok(!/[\u2013\u2014]/.test(chatCode), 'ChatWidget must contain zero em/en-dashes');
   });
@@ -554,6 +556,26 @@ describe('Production Architectural Decision Records (ADR) & CLI Integration', ()
     assert.ok(cliCode.includes("'compare'"), "InteractiveCli must support 'compare' command");
     assert.ok(cliCode.includes('[ $ tradeoffs ]'), "InteractiveCli must include '[ $ tradeoffs ]' quick chip");
     assert.ok(!/[\u2013\u2014]/.test(cliCode), 'InteractiveCli.tsx must contain zero em/en-dashes');
+  });
+
+  test('ArchitectureLab implements Fast-Jump Navigator and sub-section anchors for deep linking', () => {
+    const labCode = fs.readFileSync(path.join(rootDir, 'src', 'components', 'portfolio', 'ArchitectureLab.tsx'), 'utf8');
+    assert.ok(labCode.includes('id="architecture-workbench"'), 'ArchitectureLab must define anchor #architecture-workbench');
+    assert.ok(labCode.includes('id="architecture-ai-codex"'), 'ArchitectureLab must define anchor #architecture-ai-codex');
+    assert.ok(labCode.includes('id="architecture-adr-ledger"'), 'ArchitectureLab must define anchor #architecture-adr-ledger');
+    assert.ok(labCode.includes('id="architecture-tradeoff-matrix"'), 'ArchitectureLab must define anchor #architecture-tradeoff-matrix');
+    assert.ok(labCode.includes('Fast Jump:'), 'ArchitectureLab must render Fast Jump navigator label');
+    assert.ok(labCode.includes('href="#architecture-workbench"'), 'Must provide link to workbench');
+    assert.ok(labCode.includes('href="#architecture-ai-codex"'), 'Must provide link to ai codex');
+    assert.ok(labCode.includes('href="#architecture-adr-ledger"'), 'Must provide link to adr ledger');
+    assert.ok(labCode.includes('href="#architecture-tradeoff-matrix"'), 'Must provide link to tradeoff matrix');
+    assert.ok(!/[\u2013\u2014]/.test(labCode), 'ArchitectureLab.tsx must contain zero em/en-dashes');
+
+    const cliCode = fs.readFileSync(path.join(rootDir, 'src', 'components', 'portfolio', 'InteractiveCli.tsx'), 'utf8');
+    assert.ok(cliCode.includes('"architecture systems"'), 'InteractiveCli must support "architecture systems"');
+    assert.ok(cliCode.includes('"architecture ai"'), 'InteractiveCli must support "architecture ai"');
+    assert.ok(cliCode.includes('"architecture adr"'), 'InteractiveCli must support "architecture adr"');
+    assert.ok(cliCode.includes('"architecture tradeoffs"'), 'InteractiveCli must support "architecture tradeoffs"');
   });
 });
 

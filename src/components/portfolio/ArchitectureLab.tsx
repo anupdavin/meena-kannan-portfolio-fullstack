@@ -6,7 +6,10 @@ import {
   Terminal, 
   Download, 
   Activity, 
-  GitBranch
+  GitBranch,
+  Bot,
+  FileText,
+  GitCompare
 } from 'lucide-react'
 import ByteByteGoDiagram from '@/components/architecture/ByteByteGoDiagram'
 import ByteByteGoAiCodex from '@/components/architecture/ByteByteGoAiCodex'
@@ -57,8 +60,44 @@ export default function ArchitectureLab() {
         </div>
       </div>
 
+      {/* 1.5. Architecture Topology Fast-Jump Navigator */}
+      <div className="flex flex-wrap items-center gap-2 p-2 rounded-xl bg-slate-950/80 border border-slate-800/80 font-mono text-xs">
+        <span className="text-slate-400 px-2 py-1 uppercase text-[10px] tracking-wider font-semibold">
+          Fast Jump:
+        </span>
+        <a 
+          href="#architecture-workbench"
+          className="px-3 py-1.5 rounded-lg bg-slate-900 border border-slate-800 hover:border-cyan-500/50 hover:text-cyan-400 text-slate-300 transition-all flex items-center gap-1.5 cursor-pointer"
+        >
+          <Activity className="w-3.5 h-3.5 text-cyan-400" />
+          <span>Distributed Workbench (4)</span>
+        </a>
+        <a 
+          href="#architecture-ai-codex"
+          className="px-3 py-1.5 rounded-lg bg-slate-900 border border-slate-800 hover:border-teal-500/50 hover:text-teal-400 text-slate-300 transition-all flex items-center gap-1.5 cursor-pointer"
+        >
+          <Bot className="w-3.5 h-3.5 text-teal-400" />
+          <span>AI Systems Codex (5)</span>
+        </a>
+        <a 
+          href="#architecture-adr-ledger"
+          className="px-3 py-1.5 rounded-lg bg-slate-900 border border-slate-800 hover:border-indigo-500/50 hover:text-indigo-400 text-slate-300 transition-all flex items-center gap-1.5 cursor-pointer"
+        >
+          <FileText className="w-3.5 h-3.5 text-indigo-400" />
+          <span>ADR Governance Ledger (6)</span>
+        </a>
+        <a 
+          href="#architecture-tradeoff-matrix"
+          className="px-3 py-1.5 rounded-lg bg-slate-900 border border-slate-800 hover:border-amber-500/50 hover:text-amber-400 text-slate-300 transition-all flex items-center gap-1.5 cursor-pointer"
+        >
+          <GitCompare className="w-3.5 h-3.5 text-amber-400" />
+          <span>Decision Trade-Offs (4)</span>
+        </a>
+      </div>
+
       {/* 2. Interactive Flagship Workbench */}
       <motion.div
+        id="architecture-workbench"
         initial={{ opacity: 0, y: 25 }}
         whileInView={{ opacity: 1, y: 0 }}
         viewport={{ once: true }}
@@ -74,6 +113,7 @@ export default function ArchitectureLab() {
 
       {/* 2.5. ByteByteGo AI Architecture Codex (Interactive Infographic) */}
       <motion.div
+        id="architecture-ai-codex"
         initial={{ opacity: 0, y: 25 }}
         whileInView={{ opacity: 1, y: 0 }}
         viewport={{ once: true }}
@@ -84,6 +124,7 @@ export default function ArchitectureLab() {
 
       {/* 2.6. Production Architectural Decision Records (ADR) Explorer */}
       <motion.div
+        id="architecture-adr-ledger"
         initial={{ opacity: 0, y: 25 }}
         whileInView={{ opacity: 1, y: 0 }}
         viewport={{ once: true }}
@@ -94,6 +135,7 @@ export default function ArchitectureLab() {
 
       {/* 2.7. Architectural Trade-Off & Evaluation Matrix */}
       <motion.div
+        id="architecture-tradeoff-matrix"
         initial={{ opacity: 0, y: 25 }}
         whileInView={{ opacity: 1, y: 0 }}
         viewport={{ once: true }}
