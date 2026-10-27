@@ -62,6 +62,7 @@ import { SplitBrainResolverSandbox } from '@/components/architecture/SplitBrainR
 import GslbAnycastSandbox from '@/components/architecture/GslbAnycastSandbox'
 import DistributedLockSandbox from '@/components/architecture/DistributedLockSandbox'
 import { WebhookIngressSandbox } from '@/components/architecture/WebhookIngressSandbox'
+import TopologyMeshSandbox from '@/components/architecture/TopologyMeshSandbox'
 import { ARCHITECTURE_SYSTEMS } from '@/data/architectureSystems'
 import { ARCHITECTURAL_DECISIONS } from '@/data/architecturalDecisions'
 import { ARCHITECTURAL_TRADEOFFS } from '@/data/architecturalTradeoffs'
@@ -92,6 +93,7 @@ import { SPLIT_BRAIN_PARADIGMS } from '@/data/splitBrainResolverModels'
 import { GSLB_ANYCAST_MODELS } from '@/data/gslbAnycastModels'
 import { DISTRIBUTED_LOCK_MODELS } from '@/data/distributedLockModels'
 import { WEBHOOK_INGRESS_MODELS } from '@/data/webhookIngressModels'
+import { TOPOLOGY_MESH_MODELS } from '@/data/topologyMeshModels'
 
 const AI_TERMS_SUMMARY = [
   { id: 'agentic-ai', title: 'Agentic AI', text: 'Perception-action loop, DAG memory, tool execution, LangGraph' },
@@ -140,6 +142,7 @@ export default function ArchitectureLab() {
         gslbanycast: 5,
         distributedlock: 5,
         webhookingress: 5,
+        topologymesh: 5,
         isActive: false
       }
     }
@@ -474,8 +477,21 @@ export default function ArchitectureLab() {
       w.description.toLowerCase().includes(q)
     ).length
 
+    const topologyMeshCount = TOPOLOGY_MESH_MODELS.filter(t =>
+      t.name.toLowerCase().includes(q) ||
+      t.id.toLowerCase().includes(q) ||
+      t.category.toLowerCase().includes(q) ||
+      t.badge.toLowerCase().includes(q) ||
+      t.algorithmFormula.toLowerCase().includes(q) ||
+      (t.convergenceLatency || '').toLowerCase().includes(q) ||
+      (t.healthCheckSla || '').toLowerCase().includes(q) ||
+      (t.partitionResilienceSla || '').toLowerCase().includes(q) ||
+      t.architecturalInvariant.toLowerCase().includes(q) ||
+      t.description.toLowerCase().includes(q)
+    ).length
+
     return {
-      total: workbenchCount + aiCount + adrCount + tradeoffCount + evolutionCount + chaosCount + gatewayCount + traceCount + kafkaCount + ratelimitCount + multiregionCount + shardingCount + cdnCount + circuitBreakerCount + concurrencyCount + raftCount + vectorCount + priorityCount + sagasCount + cacheCount + eventSourcingCount + dlqCount + idempotencyCount + atomicCommitCount + featureFlagCount + tenantIsolationCount + zeroTrustMeshCount + splitBrainCount + gslbAnycastCount + distributedLockCount + webhookIngressCount,
+      total: workbenchCount + aiCount + adrCount + tradeoffCount + evolutionCount + chaosCount + gatewayCount + traceCount + kafkaCount + ratelimitCount + multiregionCount + shardingCount + cdnCount + circuitBreakerCount + concurrencyCount + raftCount + vectorCount + priorityCount + sagasCount + cacheCount + eventSourcingCount + dlqCount + idempotencyCount + atomicCommitCount + featureFlagCount + tenantIsolationCount + zeroTrustMeshCount + splitBrainCount + gslbAnycastCount + distributedLockCount + webhookIngressCount + topologyMeshCount,
       workbench: workbenchCount,
       aiCodex: aiCount,
       adr: adrCount,
@@ -507,6 +523,7 @@ export default function ArchitectureLab() {
       gslbanycast: gslbAnycastCount,
       distributedlock: distributedLockCount,
       webhookingress: webhookIngressCount,
+      topologymesh: topologyMeshCount,
       isActive: true
     }
   }, [searchQuery])
@@ -960,6 +977,17 @@ export default function ArchitectureLab() {
             <Radio className="w-3.5 h-3.5 text-emerald-400" />
             <span>Webhook Ingress ({matchStats.webhookingress})</span>
           </a>
+          <a 
+            href="#architecture-topology-mesh"
+            className={`px-3 py-1.5 rounded-lg border transition-all flex items-center gap-1.5 cursor-pointer ${
+              matchStats.isActive && matchStats.topologymesh > 0
+                ? 'bg-cyan-500/10 border-cyan-500/50 text-cyan-400 shadow-[0_0_10px_rgba(6,182,212,0.15)] font-bold'
+                : 'bg-slate-900 border-slate-800 hover:border-cyan-500/50 hover:text-cyan-400 text-slate-300'
+            }`}
+          >
+            <Network className="w-3.5 h-3.5 text-cyan-400" />
+            <span>Topology Mesh ({matchStats.topologymesh})</span>
+          </a>
         </div>
       </div>
 
@@ -1337,6 +1365,18 @@ export default function ArchitectureLab() {
         className="scroll-mt-24"
       >
         <WebhookIngressSandbox />
+      </motion.div>
+
+      {/* 2.35. Distributed Dynamic Topology Mesh & Service Discovery Consensus Sandbox */}
+      <motion.div
+        id="architecture-topology-mesh"
+        initial={{ opacity: 0, y: 25 }}
+        whileInView={{ opacity: 1, y: 0 }}
+        viewport={{ once: true }}
+        transition={{ duration: 0.6, delay: 1.60 }}
+        className="scroll-mt-24"
+      >
+        <TopologyMeshSandbox />
       </motion.div>
 
       {/* 3. Architectural Design Pillars Strip */}

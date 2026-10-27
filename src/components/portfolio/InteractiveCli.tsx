@@ -31,6 +31,7 @@ import { SPLIT_BRAIN_PARADIGMS } from '@/data/splitBrainResolverModels'
 import { GSLB_ANYCAST_MODELS } from '@/data/gslbAnycastModels'
 import { DISTRIBUTED_LOCK_MODELS } from '@/data/distributedLockModels'
 import { WEBHOOK_INGRESS_MODELS } from '@/data/webhookIngressModels'
+import { TOPOLOGY_MESH_MODELS } from '@/data/topologyMeshModels'
 import { EXECUTIVE_BRIEFING } from '@/data/executiveBriefing'
 
 interface HistoryEntry {
@@ -184,6 +185,11 @@ const AVAILABLE_COMMANDS = [
   'hmac',
   'signature',
   'replaydefense',
+  'topologymesh',
+  'discovery',
+  'gossip',
+  'consul',
+  'xds',
   'adr',
   'decisions',
   'tradeoffs',
@@ -247,6 +253,7 @@ const QUICK_CHIPS = [
   { label: '[ $ gslb ]', cmd: 'gslb' },
   { label: '[ $ lock ]', cmd: 'lock' },
   { label: '[ $ webhook ]', cmd: 'webhook' },
+  { label: '[ $ discovery ]', cmd: 'discovery' },
   { label: '[ $ find kafka ]', cmd: 'find kafka' },
   { label: '[ $ tradeoffs ]', cmd: 'tradeoffs' },
   { label: '[ $ adr ]', cmd: 'adr' },
@@ -296,6 +303,7 @@ const COMMAND_HELP = [
   '  gslb            - Inspect BGP Anycast AS 13335, ECMP & GeoDNS routing (or "gslb <id>")',
   '  lock            - Inspect Redis Redlock, etcd Raft & ZooKeeper distributed leases (or "lock <id>")',
   '  webhook         - Inspect distributed webhook ingress, HMAC-SHA256 & replay defense (or "webhook <id>")',
+  '  discovery       - Inspect Serf SWIM gossip, Envoy xDS & DNS service discovery (or "discovery <id>")',
   '  find <query>    - Search cross-cutting architecture systems, ADRs, AI codex & trade-offs',
   '  tradeoffs       - Evaluate system design decision trade-offs (or "compare <topic>")',
   '  stats           - View production performance & impact metrics (99.99% SLA)',
@@ -1347,6 +1355,19 @@ export default function InteractiveCli() {
           ]
           break
         }
+        if (sub === 'discovery' || sub === 'gossip' || sub === 'consul' || sub === 'xds' || sub === 'topologymesh' || args.some(a => a.toLowerCase().includes('discovery') || a.toLowerCase().includes('gossip') || a.toLowerCase().includes('xds'))) {
+          output = [
+            'Routing to Distributed Dynamic Topology Mesh & Service Discovery (#architecture-topology-mesh):',
+            '  1. Serf SWIM Gossip Protocol : Decentralized UDP piggybacking with indirect k-probes (sub-4.2ms)',
+            '  2. Envoy Dynamic EDS Stream  : gRPC bi-directional DeltaEndpoints with zero connection drop',
+            '  3. CoreDNS SRV Dynamic Weight: RFC 2782 DNS SRV priority & weight records with health checking',
+            '  4. Eureka Self-Preservation  : AP model freezing lease evictions during network partitions (<85% renewal)',
+            '  5. Kademlia DHT XOR Routing  : Decentralized O(log N) lookup hops in 160-bit geometric metric space',
+            '--------------------------------------------------------------------------------',
+            'Interactive Sandbox: Live in #architecture-topology-mesh with live gossip & failure injectors.'
+          ]
+          break
+        }
         output = [
           'ByteByteGo Interactive Architecture Lab Navigator:',
           '--------------------------------------------------------------------------------',
@@ -1382,6 +1403,7 @@ export default function InteractiveCli() {
           '  [ 29 ] "architecture gslb"      : Global Anycast & BGP Flowspec Routing (#architecture-gslb-anycast)',
           '  [ 30 ] "architecture lock"      : Distributed Lock Manager & Consensus Leases (#architecture-distributed-lock)',
           '  [ 31 ] "architecture webhook"   : Distributed Webhook Ingress & HMAC-SHA256 (#architecture-webhook-ingress)',
+          '  [ 32 ] "architecture discovery" : Distributed Topology Mesh & Service Discovery (#architecture-topology-mesh)',
           '--------------------------------------------------------------------------------',
           'Clean Architecture Principles Enforced:',
           '  + Domain Isolation     : Core business domains decouple from libraries and vendor SDKs',
@@ -3221,6 +3243,70 @@ export default function InteractiveCli() {
         ]
         break
       }
+      case 'discovery':
+      case 'gossip':
+      case 'consul':
+      case 'xds':
+      case 'topologymesh': {
+        const target = args[0]?.toLowerCase().trim()
+        if (target) {
+          const matched = TOPOLOGY_MESH_MODELS.find(m =>
+            m.id === target ||
+            m.id.includes(target) ||
+            m.name.toLowerCase().includes(target) ||
+            m.badge.toLowerCase().includes(target) ||
+            (target === '1' && m.id === 'serf-swim-gossip') ||
+            (target === '2' && m.id === 'envoy-dynamic-eds') ||
+            (target === '3' && m.id === 'coredns-srv-records') ||
+            (target === '4' && m.id === 'eureka-heartbeat-leases') ||
+            (target === '5' && m.id === 'kademlia-dht-routing')
+          )
+          if (matched) {
+            output = [
+              '--------------------------------------------------------------------------------',
+              `Topology Mesh Model: ${matched.name} [${matched.badge}]`,
+              '--------------------------------------------------------------------------------',
+              `Category            : ${matched.category}`,
+              `Convergence Latency : ${matched.convergenceLatency}`,
+              `Health Check SLA    : ${matched.healthCheckSla}`,
+              `Partition SLA       : ${matched.partitionResilienceSla}`,
+              `Mathematical Formula: ${matched.algorithmFormula}`,
+              `Blast Radius Guard  : ${matched.blastRadiusContainment}`,
+              '--------------------------------------------------------------------------------',
+              'WORKFLOW PHASES & TOPOLOGY INVARIANTS:',
+              ...matched.workflowPhases.map(p =>
+                `  * [${p.name}] :: ${p.description} -> Invariant: ${p.invariants}`
+              ),
+              '--------------------------------------------------------------------------------',
+              'PRODUCTION OUTCOMES & INVARIANTS:',
+              ...Object.entries(matched.productionOutcomes).map(([k, v]) => `  + ${k}: ${v}`),
+              '',
+              `Architectural Invariant: "${matched.architecturalInvariant}"`,
+              '--------------------------------------------------------------------------------',
+              'Full live interactive SWIM gossip & xDS EDS simulator in #architecture-topology-mesh.'
+            ]
+            break
+          }
+        }
+
+        output = [
+          'Distributed Dynamic Topology Mesh & Service Discovery Consensus Sandbox:',
+          '--------------------------------------------------------------------------------',
+          'Explore 5 enterprise service discovery, SWIM gossip & xDS routing architectures:',
+          '',
+          ...TOPOLOGY_MESH_MODELS.flatMap((m, idx) => [
+            `${idx + 1}. [ ${m.id} ] : ${m.name} (${m.badge})`,
+            `   Category   : ${m.category}`,
+            `   Convergence: ${m.convergenceLatency.split(';')[0]}`,
+            `   Health SLA : ${m.healthCheckSla.split(';')[0]}`,
+            `   Deep Dive  : "discovery ${idx + 1}" or "discovery ${m.id.split('-')[0]}" (e.g. "discovery serf", "discovery envoy", "discovery coredns", "discovery eureka", "discovery kademlia")`,
+            ''
+          ]),
+          '--------------------------------------------------------------------------------',
+          'Tip: Run "discovery <id>" (e.g. "discovery 1" or "discovery serf") to inspect SWIM gossip invariants.'
+        ]
+        break
+      }
       case 'find':
       case 'search': {
         const query = args.join(' ').toLowerCase().trim()
@@ -3230,7 +3316,7 @@ export default function InteractiveCli() {
             '--------------------------------------------------------------------------------',
             'Search cross-cutting distributed systems, ADRs, AI paradigms, and trade-offs.',
             'Usage: find <query> (e.g. "find kafka", "find redis", "find mcp", "find saga")',
-            'Available Domains: Systems, ADR Governance, AI Codex, Trade-Off Matrix, Evolution Diffs, Chaos Drills, API Gateway, Distributed Traces, Kafka Event Streams, Distributed Rate Limiting, Multi-Region Replication, Database Sharding, Edge CDN Caching, Circuit Breakers, Concurrency & Deadlocks, Raft Consensus, Vector Search, Traffic Priority & QoS, Distributed Sagas & Compensations, Distributed Cache Stampede & Coherence, Distributed Event Sourcing & CQRS, Distributed DLQ & Retries, Distributed Idempotency & CAS Locks, Distributed 2PC vs Saga Commit & Drift Reconciler, Dynamic Feature Flagging & Canary Splitter, Multi-Tenant RLS & Cryptographic Isolation, Zero-Trust Service Mesh & SPIFFE mTLS, Split-Brain Quorum Fencing & Partition Healing, GSLB & BGP Anycast Routing, Distributed Lock Manager & Leases, Webhook Ingress & HMAC Verification'
+            'Available Domains: Systems, ADR Governance, AI Codex, Trade-Off Matrix, Evolution Diffs, Chaos Drills, API Gateway, Distributed Traces, Kafka Event Streams, Distributed Rate Limiting, Multi-Region Replication, Database Sharding, Edge CDN Caching, Circuit Breakers, Concurrency & Deadlocks, Raft Consensus, Vector Search, Traffic Priority & QoS, Distributed Sagas & Compensations, Distributed Cache Stampede & Coherence, Distributed Event Sourcing & CQRS, Distributed DLQ & Retries, Distributed Idempotency & CAS Locks, Distributed 2PC vs Saga Commit & Drift Reconciler, Dynamic Feature Flagging & Canary Splitter, Multi-Tenant RLS & Cryptographic Isolation, Zero-Trust Service Mesh & SPIFFE mTLS, Split-Brain Quorum Fencing & Partition Healing, GSLB & BGP Anycast Routing, Distributed Lock Manager & Leases, Webhook Ingress & HMAC Verification, Dynamic Topology Mesh & Service Discovery'
           ]
           break
         }
@@ -3905,6 +3991,30 @@ export default function InteractiveCli() {
               `  Category    : ${wh.category} (${wh.badge})`,
               `  Verification: ${wh.verificationLatency.split(';')[0]}`,
               `  Anchor      : #architecture-webhook-ingress`,
+              ''
+            )
+          }
+        })
+
+        // 32. Search Distributed Dynamic Topology Mesh & Service Discovery
+        TOPOLOGY_MESH_MODELS.forEach(tm => {
+          if (
+            tm.name.toLowerCase().includes(query) ||
+            tm.id.toLowerCase().includes(query) ||
+            tm.category.toLowerCase().includes(query) ||
+            tm.badge.toLowerCase().includes(query) ||
+            tm.algorithmFormula.toLowerCase().includes(query) ||
+            (tm.convergenceLatency || '').toLowerCase().includes(query) ||
+            (tm.healthCheckSla || '').toLowerCase().includes(query) ||
+            (tm.partitionResilienceSla || '').toLowerCase().includes(query) ||
+            tm.architecturalInvariant.toLowerCase().includes(query) ||
+            tm.description.toLowerCase().includes(query)
+          ) {
+            results.push(
+              `[Topology Mesh & Discovery] ${tm.name}`,
+              `  Category   : ${tm.category} (${tm.badge})`,
+              `  Convergence: ${tm.convergenceLatency.split(';')[0]}`,
+              `  Anchor     : #architecture-topology-mesh`,
               ''
             )
           }

@@ -156,10 +156,12 @@ This document serves as the persistent semantic memory layer for AI coding agent
 * **Decision:** Implemented an interactive 5-paradigm sandbox demonstrating HMAC-SHA256 Constant-Time Verification (`crypto.timingSafeEqual` / `MessageDigest.isEqual` evaluating byte arrays in sub-180 microseconds to eliminate side-channel timing attacks), RFC 8941 Timestamp Tolerance & Redis Nonce Tracking (300-second sliding window with atomic `SETNX` nonce reservation guaranteeing 100% replay defense), Asynchronous Kafka Buffer Ingress Decoupling (partitioned event buffering absorbing 50,000 req/s flash bursts with instant HTTP 202 Accepted and zero database thread exhaustion), Multi-Tenant Fanout with Circuit-Guarded Exponential Retries (bulkhead-isolated delivery worker pools with decorrelated full jitter and breaker trip), and Dead-Letter Webhook Quarantine & Audit Trail Re-Drive (encrypted cold storage with 1-click rate-limited 500 msg/s re-drive console for SRE recovery).
 * **Blast Radius:** Mounted in `ArchitectureLab.tsx` under `#architecture-webhook-ingress`; integrated into `InteractiveCli.tsx` with `webhook`, `hmac`, `signature`, `replaydefense` commands and `[ $ webhook ]` quick chip; indexed in `index.html` Sub-Section 31 and `public/chat/index.json`. Verified in test 35 of `tests/portfolio.test.mjs`.
 
+---
 
-
-
-
-
-
+## ADR-032: Distributed Dynamic Topology Mesh & Service Discovery Consensus Sandbox
+* **Status:** Accepted & Enforced
+* **Target Components:** [`TopologyMeshSandbox.tsx`](file:///src/components/architecture/TopologyMeshSandbox.tsx), [`topologyMeshModels.ts`](file:///src/data/topologyMeshModels.ts), [`ArchitectureLab.tsx`](file:///src/components/portfolio/ArchitectureLab.tsx)
+* **Context:** High-concurrency enterprise microservices meshes scaling across thousands of ephemeral pods, heterogeneous availability zones, and multi-region clusters require resilient, low-latency service discovery and failure detection. Centralized registries (like single-coordinator ZooKeeper or Consul clusters) introduce single points of failure, network bottleneck serialization, and cascading cluster collapse during partition events.
+* **Decision:** Implemented an interactive 5-paradigm sandbox demonstrating HashiCorp Serf SWIM Gossip Protocol (SWIM failure detector with indirect pinging and monotonic incarnation numbers converging across 1,000 nodes in sub-250ms with sub-0.01% false positives), Envoy Dynamic Endpoint Discovery Service (gRPC xDS v3 Delta Discovery push streaming endpoint updates in sub-45ms without proxy process reloads or connection drops), CoreDNS Dynamic SRV Weight Records (RFC 2782 DNS SRV priority and weight load balancing with NodeLocal DNSCache resolving queries in sub-1.2ms without proprietary SDKs), Netflix Eureka Heartbeat Registry with Self-Preservation Mode (AP-mode registry freezing automated lease evictions when renewals drop below 85% during network splits to protect service availability), and Decentralized Kademlia Distributed Hash Table (160-bit XOR metric distance routing with $O(\log N)$ hop bounds and zero central coordinators).
+* **Blast Radius:** Mounted in `ArchitectureLab.tsx` under `#architecture-topology-mesh`; integrated into `InteractiveCli.tsx` with `discovery`, `gossip`, `consul`, `xds`, `topologymesh` commands and `[ $ discovery ]` quick chip; indexed in `index.html` Sub-Section 32 and `public/chat/index.json`. Verified in test 36 of `tests/portfolio.test.mjs`.
 

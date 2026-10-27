@@ -1,6 +1,6 @@
 {
   "version": "1.0.0",
-  "generatedAt": "2026-10-27T21:21:58.393Z",
+  "generatedAt": "2026-10-27T21:37:41.947Z",
   "nodes": {
     "src/components/architecture/AdrExplorer.tsx": {
       "file": "src/components/architecture/AdrExplorer.tsx",
@@ -430,6 +430,17 @@
       ],
       "loc": 660
     },
+    "src/components/architecture/TopologyMeshSandbox.tsx": {
+      "file": "src/components/architecture/TopologyMeshSandbox.tsx",
+      "imports": [
+        "lucide-react",
+        "../../data/topologyMeshModels"
+      ],
+      "exports": [
+        "TopologyMeshSandbox"
+      ],
+      "loc": 533
+    },
     "src/components/architecture/TradeoffMatrix.tsx": {
       "file": "src/components/architecture/TradeoffMatrix.tsx",
       "imports": [
@@ -573,6 +584,7 @@
         "@/components/architecture/GslbAnycastSandbox",
         "@/components/architecture/DistributedLockSandbox",
         "@/components/architecture/WebhookIngressSandbox",
+        "@/components/architecture/TopologyMeshSandbox",
         "@/data/architectureSystems",
         "@/data/architecturalDecisions",
         "@/data/architecturalTradeoffs",
@@ -602,12 +614,13 @@
         "@/data/splitBrainResolverModels",
         "@/data/gslbAnycastModels",
         "@/data/distributedLockModels",
-        "@/data/webhookIngressModels"
+        "@/data/webhookIngressModels",
+        "@/data/topologyMeshModels"
       ],
       "exports": [
         "ArchitectureLab"
       ],
-      "loc": 1395
+      "loc": 1435
     },
     "src/components/portfolio/ContactTerminal.tsx": {
       "file": "src/components/portfolio/ContactTerminal.tsx",
@@ -683,12 +696,13 @@
         "@/data/gslbAnycastModels",
         "@/data/distributedLockModels",
         "@/data/webhookIngressModels",
+        "@/data/topologyMeshModels",
         "@/data/executiveBriefing"
       ],
       "exports": [
         "InteractiveCli"
       ],
-      "loc": 4185
+      "loc": 4295
     },
     "src/components/portfolio/ProjectsShowcase.tsx": {
       "file": "src/components/portfolio/ProjectsShowcase.tsx",
@@ -741,7 +755,7 @@
       "exports": [
         "TerminalHero"
       ],
-      "loc": 629
+      "loc": 631
     },
     "src/components/ui/badge.tsx": {
       "file": "src/components/ui/badge.tsx",
@@ -1119,6 +1133,18 @@
       ],
       "loc": 414
     },
+    "src/data/topologyMeshModels.ts": {
+      "file": "src/data/topologyMeshModels.ts",
+      "imports": [],
+      "exports": [
+        "MeshNode",
+        "TopologyMeshModel",
+        "INITIAL_MESH_NODES",
+        "TOPOLOGY_MESH_MODELS",
+        "TOPOLOGY_MESH_PARADIGMS"
+      ],
+      "loc": 425
+    },
     "src/data/trafficPriority.ts": {
       "file": "src/data/trafficPriority.ts",
       "imports": [],
@@ -1291,6 +1317,11 @@
       "type": "import"
     },
     {
+      "source": "src/components/architecture/TopologyMeshSandbox.tsx",
+      "target": "src/data/topologyMeshModels.ts",
+      "type": "import"
+    },
+    {
       "source": "src/components/architecture/WebhookIngressSandbox.tsx",
       "target": "src/data/webhookIngressModels.ts",
       "type": "import"
@@ -1374,6 +1405,7 @@
     "SystemDesignCanvasProps": "src/components/architecture/SystemDesignCanvas.tsx",
     "SystemDesignCanvas": "src/components/architecture/SystemDesignCanvas.tsx",
     "TenantIsolationSandbox": "src/components/architecture/TenantIsolationSandbox.tsx",
+    "TopologyMeshSandbox": "src/components/architecture/TopologyMeshSandbox.tsx",
     "TradeoffMatrix": "src/components/architecture/TradeoffMatrix.tsx",
     "TrafficPrioritySandbox": "src/components/architecture/TrafficPrioritySandbox.tsx",
     "VectorSearchSandbox": "src/components/architecture/VectorSearchSandbox.tsx",
@@ -1522,6 +1554,11 @@
     "SecurityProbeResult": "src/data/tenantIsolationModels.ts",
     "MOCK_TENANTS": "src/data/tenantIsolationModels.ts",
     "TENANT_ISOLATION_MODELS": "src/data/tenantIsolationModels.ts",
+    "MeshNode": "src/data/topologyMeshModels.ts",
+    "TopologyMeshModel": "src/data/topologyMeshModels.ts",
+    "INITIAL_MESH_NODES": "src/data/topologyMeshModels.ts",
+    "TOPOLOGY_MESH_MODELS": "src/data/topologyMeshModels.ts",
+    "TOPOLOGY_MESH_PARADIGMS": "src/data/topologyMeshModels.ts",
     "TrafficPriorityModel": "src/data/trafficPriority.ts",
     "TRAFFIC_PRIORITY_MODELS": "src/data/trafficPriority.ts",
     "VectorSearchModel": "src/data/vectorSearch.ts",

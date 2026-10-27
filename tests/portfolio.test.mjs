@@ -1682,6 +1682,43 @@ describe('Production Architectural Decision Records (ADR) & CLI Integration', ()
     assert.ok(indexHtml.includes('id="architecture-webhook-ingress"'), 'index.html must include #architecture-webhook-ingress landmark');
     assert.ok(!/[\u2013\u2014]/.test(indexHtml), 'index.html must contain zero em/en-dashes');
   });
+
+  test('TopologyMeshSandbox and topologyMeshModels.ts define SWIM gossip, Envoy EDS, and Kademlia DHT with CLI integration', () => {
+    const meshDataPath = path.join(rootDir, 'src', 'data', 'topologyMeshModels.ts');
+    assert.ok(fs.existsSync(meshDataPath), 'topologyMeshModels.ts must exist');
+    const meshDataCode = fs.readFileSync(meshDataPath, 'utf8');
+    assert.ok(meshDataCode.includes('serf-swim-gossip'), 'Must define serf-swim-gossip model');
+    assert.ok(meshDataCode.includes('envoy-dynamic-eds'), 'Must define envoy-dynamic-eds model');
+    assert.ok(meshDataCode.includes('coredns-srv-records'), 'Must define coredns-srv-records model');
+    assert.ok(meshDataCode.includes('eureka-heartbeat-leases'), 'Must define eureka-heartbeat-leases model');
+    assert.ok(meshDataCode.includes('kademlia-dht-routing'), 'Must define kademlia-dht-routing model');
+    assert.ok(!/[\u2013\u2014]/.test(meshDataCode), 'topologyMeshModels.ts must contain zero em/en-dashes');
+
+    const componentPath = path.join(rootDir, 'src', 'components', 'architecture', 'TopologyMeshSandbox.tsx');
+    assert.ok(fs.existsSync(componentPath), 'TopologyMeshSandbox.tsx must exist');
+    const compCode = fs.readFileSync(componentPath, 'utf8');
+    assert.ok(compCode.includes('copyRfcReport'), 'TopologyMeshSandbox must support 1-click RFC copy');
+    assert.ok(compCode.includes('TOPOLOGY_MESH_MODELS'), 'TopologyMeshSandbox must render TOPOLOGY_MESH_MODELS');
+    assert.ok(!/[\u2013\u2014]/.test(compCode), 'TopologyMeshSandbox.tsx must contain zero em/en-dashes');
+
+    const labCode = fs.readFileSync(path.join(rootDir, 'src', 'components', 'portfolio', 'ArchitectureLab.tsx'), 'utf8');
+    assert.ok(labCode.includes('TopologyMeshSandbox'), 'ArchitectureLab must mount TopologyMeshSandbox');
+    assert.ok(labCode.includes('id="architecture-topology-mesh"'), 'ArchitectureLab must define anchor #architecture-topology-mesh');
+
+    const cliCode = fs.readFileSync(path.join(rootDir, 'src', 'components', 'portfolio', 'InteractiveCli.tsx'), 'utf8');
+    assert.ok(cliCode.includes("'discovery'"), "InteractiveCli must support 'discovery' command");
+    assert.ok(cliCode.includes('[ $ discovery ]'), "InteractiveCli must include '[ $ discovery ]' quick chip");
+    assert.ok(cliCode.includes('TOPOLOGY_MESH_MODELS'), 'InteractiveCli must search across TOPOLOGY_MESH_MODELS');
+    assert.ok(!/[\u2013\u2014]/.test(cliCode), 'InteractiveCli.tsx must contain zero em/en-dashes');
+
+    const chatIndex = fs.readFileSync(path.join(rootDir, 'public', 'chat', 'index.json'), 'utf8');
+    assert.ok(chatIndex.includes('distributed-topology-mesh'), 'public/chat/index.json must index distributed-topology-mesh');
+    assert.ok(!/[\u2013\u2014]/.test(chatIndex), 'public/chat/index.json must contain zero em/en-dashes');
+
+    const indexHtml = fs.readFileSync(path.join(rootDir, 'index.html'), 'utf8');
+    assert.ok(indexHtml.includes('id="architecture-topology-mesh"'), 'index.html must include #architecture-topology-mesh landmark');
+    assert.ok(!/[\u2013\u2014]/.test(indexHtml), 'index.html must contain zero em/en-dashes');
+  });
 });
 
 

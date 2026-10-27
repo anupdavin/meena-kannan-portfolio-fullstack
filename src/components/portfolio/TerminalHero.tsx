@@ -37,7 +37,8 @@ import {
   ToggleLeft,
   Fingerprint,
   Shield,
-  Split
+  Split,
+  Network
 } from 'lucide-react'
 import HeroArchitectureTopology from '@/components/architecture/HeroArchitectureTopology'
 
@@ -209,6 +210,7 @@ const ARCHITECTURE_ENGINES = [
   { id: 'architecture-gslb-anycast', label: 'BGP Anycast', badge: 'GSLB AS13335', icon: Globe, border: 'border-sky-500/40 text-sky-300 hover:bg-sky-500/10' },
   { id: 'architecture-distributed-lock', label: 'DLM Locks', badge: 'Redlock & etcd', icon: Lock, border: 'border-amber-500/40 text-amber-300 hover:bg-amber-500/10' },
   { id: 'architecture-webhook-ingress', label: 'Webhook Ingress', badge: 'HMAC & Kafka', icon: Radio, border: 'border-emerald-500/40 text-emerald-300 hover:bg-emerald-500/10' },
+  { id: 'architecture-topology-mesh', label: 'Topology Mesh', badge: 'SWIM Gossip', icon: Network, border: 'border-teal-500/40 text-teal-300 hover:bg-teal-500/10' },
 ]
 
 export default function TerminalHero() {
@@ -449,7 +451,7 @@ export default function TerminalHero() {
             <div className="flex items-center justify-between text-[11px] font-mono">
               <span className="text-slate-300 font-bold uppercase tracking-wider flex items-center gap-1.5">
                 <span className="w-2 h-2 rounded-full bg-cyan-400 animate-pulse" />
-                31 Interactive Architecture Engines
+                32 Interactive Architecture Engines
               </span>
               <span className="text-slate-500 text-[10px]">Direct Fast Jump &darr;</span>
             </div>
