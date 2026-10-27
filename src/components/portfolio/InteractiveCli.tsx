@@ -28,6 +28,9 @@ const AVAILABLE_COMMANDS = [
   'benchmark',
   'ai-codex',
   'codex',
+  'ai',
+  'ai-terms',
+  'paradigms',
   'mcp',
   'model-context-protocol',
   'resume',
@@ -390,6 +393,118 @@ export default function InteractiveCli() {
         break
       case 'ai-codex':
       case 'codex':
+      case 'ai':
+      case 'ai-terms':
+      case 'paradigms': {
+        const sub = args[0]?.toLowerCase()
+        if (sub) {
+          if (sub.includes('agent')) {
+            output = [
+              '--------------------------------------------------------------------------------',
+              '[AI Paradigm 1] Agentic AI (Autonomous Perception-Action Systems)',
+              'Category      : Autonomous Systems',
+              'Protocol      : ReAct / Plan-and-Solve (DAG Loop)',
+              'Latency Target: < 2.5s per reasoning iteration',
+              'Production Stk: Python LangGraph, Java 21 Spring AI, Docker Sandboxes',
+              '--------------------------------------------------------------------------------',
+              'Definition:',
+              '  Goal-driven AI agent operating in continuous perception-action loops with',
+              '  short-term and long-term memory, dynamic tool calling, and invariant checking.',
+              '',
+              'Key Invariant:',
+              '  Dynamic acyclic dependency validation prevents deadlock loops in multi-agent routing.',
+              '',
+              'Real-World Deployments:',
+              '  + AutoGPT, Devin, LangGraph Multi-Agent Workflows, Antigravity Autonomous Daemons',
+              '--------------------------------------------------------------------------------'
+            ]
+            break
+          }
+          if (sub.includes('lrm') || sub.includes('reason')) {
+            output = [
+              '--------------------------------------------------------------------------------',
+              '[AI Paradigm 2] Large Reasoning Models (LRM)',
+              'Category      : Cognitive Models',
+              'Protocol      : Chain-of-Thought (CoT) with Self-Reflection',
+              'Latency Target: Adaptive test-time compute (5s - 60s)',
+              'Production Stk: Reinforcement Learning via Verifiable Rewards (RLVR)',
+              '--------------------------------------------------------------------------------',
+              'Definition:',
+              '  Multi-step reasoning LLM using deliberate test-time compute and chain-of-thought traces.',
+              '',
+              'Key Invariant:',
+              '  Backtracking search over intermediate reasoning steps before final answer emission.',
+              '',
+              'Real-World Deployments:',
+              '  + OpenAI o3/o4, DeepSeek-R1, Anthropic Claude Extended Thinking',
+              '--------------------------------------------------------------------------------'
+            ]
+            break
+          }
+          if (sub.includes('vector')) {
+            output = [
+              '--------------------------------------------------------------------------------',
+              '[AI Paradigm 3] Vector Database (High-Dimensional Semantic Indexing)',
+              'Category      : Storage & Embeddings',
+              'Protocol      : HNSW (Hierarchical Navigable Small World) / IVFFlat',
+              'Latency Target: < 15ms P99 similarity retrieval',
+              'Production Stk: PostgreSQL 16 + pgvector, Redis Vector Search, Qdrant',
+              '--------------------------------------------------------------------------------',
+              'Definition:',
+              '  High-dimensional similarity search engine indexed for nearest neighbors over dense embeddings.',
+              '',
+              'Key Invariant:',
+              '  Cosine and dot product distance calculation across 1,536d - 3,072d float vectors.',
+              '',
+              'Real-World Deployments:',
+              '  + PostgreSQL pgvector, Pinecone, Weaviate, Milvus, Qdrant',
+              '--------------------------------------------------------------------------------'
+            ]
+            break
+          }
+          if (sub.includes('rag')) {
+            output = [
+              '--------------------------------------------------------------------------------',
+              '[AI Paradigm 4] Retrieval-Augmented Generation (RAG)',
+              'Category      : Context Augmentation',
+              'Protocol      : Hybrid Keyword (BM25) + Semantic Dense Vector Re-ranking',
+              'Latency Target: < 180ms chunk retrieval + rerank',
+              'Production Stk: LangChain, Cohere Rerank-3, AWS Bedrock Knowledge Bases',
+              '--------------------------------------------------------------------------------',
+              'Definition:',
+              '  Grounding generative models with real-time enterprise external knowledge without fine-tuning.',
+              '',
+              'Key Invariant:',
+              '  Strict provenance citation and context window boundary isolation prevents hallucinations.',
+              '',
+              'Real-World Deployments:',
+              '  + Enterprise Legal & Financial RAG, Perplexity AI, ChatGPT with Files',
+              '--------------------------------------------------------------------------------'
+            ]
+            break
+          }
+          if (sub.includes('mcp')) {
+            output = [
+              '--------------------------------------------------------------------------------',
+              '[AI Paradigm 5] Model Context Protocol (MCP)',
+              'Category      : Agent Protocols',
+              'Protocol      : JSON-RPC 2.0 over Stdio / Server-Sent Events (SSE)',
+              'Latency Target: < 8ms local tool discovery & handshake',
+              'Production Stk: Java 21 LTS / Spring Boot 3 / GraalVM Native Image',
+              '--------------------------------------------------------------------------------',
+              'Definition:',
+              '  Open standard protocol connecting AI models to secure local and cloud tools without credential leaks.',
+              '',
+              'Key Invariant:',
+              '  Stateless tool declaration schemas with zero ambient authority and read-replica isolation.',
+              '',
+              'Real-World Deployments:',
+              '  + Claude Desktop MCP, Cursor IDE MCP Tools, GitHub & PostgreSQL MCP Servers',
+              '--------------------------------------------------------------------------------'
+            ]
+            break
+          }
+        }
         output = [
           'ByteByteGo AI & Distributed Systems Architecture Codex:',
           '  1. Agentic AI           : Goal-driven perception/action loop (Memory, Tools, Invariants)',
@@ -403,9 +518,11 @@ export default function InteractiveCli() {
           '  5. MCP Interface        : Model Context Protocol (Host -> Client -> MCP Server Tool bus)',
           '                            Stack: JSON-RPC 2.0 over Stdio/SSE, Claude Desktop & Cursor tools',
           '--------------------------------------------------------------------------------',
+          'Tip: Type "ai agent", "ai lrm", "ai vector", "ai rag", or "ai mcp" for deep-dive specs.',
           'Interactive Visualizer: Live in the #architecture section ("AI Terms You Need to Know").'
         ]
         break
+      }
       case 'experience':
       case 'exp':
       case 'timeline': {

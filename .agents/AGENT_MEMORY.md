@@ -20,6 +20,7 @@
 
 | Run Timestamp | Focus Area | Action Completed | Lessons Learned / Gotchas |
 | :--- | :--- | :--- | :--- |
+| `2026-10-27 10:00:10` | Autonomous Verification | All 35 tests passed, 0 lint warnings, CodeGraph synchronized. | Verified zero regressions under Superpowers TDD protocol. |
 | `2026-10-27 09:48:46` | Autonomous Verification | All 35 tests passed, 0 lint warnings, CodeGraph synchronized. | Verified zero regressions under Superpowers TDD protocol. |
 | `2026-10-27 09:45:10` | Autonomous Verification | All 35 tests passed, 0 lint warnings, CodeGraph synchronized. | Verified zero regressions under Superpowers TDD protocol. |
 | `2026-10-27 09:33:35` | Autonomous Verification | All 35 tests passed, 0 lint warnings, CodeGraph synchronized. | Verified zero regressions under Superpowers TDD protocol. |
@@ -37,6 +38,7 @@
 | `2026-10-27 08:02:00` | Deep Project Telemetry (Track H) | Implemented `project <id>` deep-dive command in `InteractiveCli.tsx` (`project 1`/`saas`, `project 2`/`saga`, `project 3`/`realtime`, `project 4`/`fintech`) with bottleneck drivers, metrics, and ADR rationale; expanded test suite to 41/41 passing tests. | Providing instant terminal access to deep enterprise project telemetry allows technical recruiters and leads to inspect architectural impact metrics without clicking through modals. |
 | `2026-10-27 08:02:09` | Autonomous Verification | All 35 tests passed, 0 lint warnings, CodeGraph synchronized. | Verified zero regressions under Superpowers TDD protocol. |
 | `2026-10-27 07:47:53` | Autonomous Verification | All 35 tests passed, 0 lint warnings, CodeGraph synchronized. | Verified zero regressions under Superpowers TDD protocol. |
+| `2026-10-27 10:02:00` | Granular AI Paradigm Telemetry (Track P) | Added `ai` aliases (`ai-terms`, `paradigms`) and sub-command routing (`ai agent`, `ai lrm`, `ai vector`, `ai rag`, `ai mcp`) in `InteractiveCli.tsx` returning structured specs, protocols, and invariants; expanded test suite to 45/45 passing tests. | Enables hiring managers and engineers to inspect granular AI architecture contracts with single-token terminal queries. |
 | `2026-10-27 09:48:00` | SEO Architecture & Social Card Specialization (Track O) | Indexed `#architecture` deep-link anchor in `public/sitemap.xml` (0.95 priority); upgraded `public/og-image.svg` with 4th badge `MCP & AGENTIC AI` and tech subtitle; verified with 44/44 passing tests. | Ensures social card previews across LinkedIn, Twitter, and Discord prominently display Agentic AI and MCP competencies to prospective clients and recruiters. |
 | `2026-10-27 09:32:00` | Recruiter Keyboard Affordance & Studio Polish (Track N) | Added desktop indexed `[{idx + 1}]` section tracker tooltips and footer `[1-7]` fast jump pill in `Portfolio.tsx`; perfected dual-mode WCAG AAA canvas contrast in `ByteByteGoAiCodex.tsx`; verified with 44/44 passing tests. | Elevating tactile desktop affordances empowers senior technical interviewers and hiring managers to navigate high-density engineering artifacts with keyboard speed. |
 | `2026-10-27 09:19:00` | B2B AI Advisory Ingestion (Track M) | Expanded `ContactTerminal.tsx` with `'AI Systems & MCP'` engagement option in responsive 5-column grid, integrated Agentic AI & MCP pillar in terminal daemon script, verified with 44/44 tests passing. | Streamlines inbound B2B enterprise inquiries specifically targeted at Agentic AI workflows, MCP server development, and vector search modernizations. |
@@ -166,6 +168,11 @@
 - [x] **Task O1:** Add `#architecture` deep-link anchor to `public/sitemap.xml` with priority `0.95`.
 - [x] **Task O2:** Upgrade `public/og-image.svg` with `MCP / Agentic AI` in tech subtitle and a 4th badge `MCP & AGENTIC AI` (`#f59e0b` amber theme).
 - [x] **Task O3:** Expand automated unit tests in `tests/portfolio.test.mjs` verifying sitemap `#architecture` indexing and OG image MCP/Agentic badge geometry.
+
+### Track P: Granular AI Paradigm Telemetry & CLI Aliases
+- [x] **Task P1:** Add `'ai'`, `'ai-terms'`, `'paradigms'` to `AVAILABLE_COMMANDS` in `InteractiveCli.tsx`.
+- [x] **Task P2:** Implement sub-command paradigm routing for `ai agent`, `ai lrm`, `ai vector`, `ai rag`, and `ai mcp` returning structured specs, invariant rules, and production stacks.
+- [x] **Task P3:** Expand automated unit tests in `tests/portfolio.test.mjs` verifying `ai` command aliases, sub-command argument routing, and zero em/en-dashes (45/45 passing tests).
 
 ---
 

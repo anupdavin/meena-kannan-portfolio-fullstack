@@ -153,6 +153,18 @@ describe('Interactive CLI & Assistant Query Engine', () => {
     const aboutCode = fs.readFileSync(path.join(rootDir, 'src', 'components', 'portfolio', 'AboutTerminal.tsx'), 'utf8');
     assert.ok(aboutCode.includes('<InteractiveCli'), 'AboutTerminal must render InteractiveCli in the about section');
   });
+
+  test('InteractiveCli.tsx supports granular AI paradigm inspection via ai <term> and aliases', () => {
+    const cliCode = fs.readFileSync(path.join(rootDir, 'src', 'components', 'portfolio', 'InteractiveCli.tsx'), 'utf8');
+    assert.ok(cliCode.includes("'ai'"), "InteractiveCli must include 'ai' in AVAILABLE_COMMANDS");
+    assert.ok(cliCode.includes("'ai-terms'"), "InteractiveCli must include 'ai-terms' in AVAILABLE_COMMANDS");
+    assert.ok(cliCode.includes("'paradigms'"), "InteractiveCli must include 'paradigms' in AVAILABLE_COMMANDS");
+    assert.ok(cliCode.includes("sub.includes('agent')"), "InteractiveCli must handle agent paradigm deep-dive");
+    assert.ok(cliCode.includes("sub.includes('lrm')"), "InteractiveCli must handle lrm paradigm deep-dive");
+    assert.ok(cliCode.includes("sub.includes('vector')"), "InteractiveCli must handle vector paradigm deep-dive");
+    assert.ok(cliCode.includes("sub.includes('rag')"), "InteractiveCli must handle rag paradigm deep-dive");
+    assert.ok(!/[\u2013\u2014]/.test(cliCode), 'InteractiveCli.tsx must contain zero em/en-dashes');
+  });
 });
 
 describe('Mobile & Cross-Device Responsiveness Verification', () => {
