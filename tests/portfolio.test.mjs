@@ -436,6 +436,16 @@ describe('Production Architectural Decision Records (ADR) & CLI Integration', ()
     assert.ok(cliCode.includes("case 'adr':"), "InteractiveCli switch must handle 'adr' command");
     assert.ok(cliCode.includes('ARCHITECTURAL_DECISIONS'), 'InteractiveCli must reference ARCHITECTURAL_DECISIONS');
   });
+
+  test('TechStack.tsx includes AI Systems & Protocols category with MCP, RAG, pgvector, and LRMs', () => {
+    const techCode = fs.readFileSync(path.join(rootDir, 'src', 'components', 'portfolio', 'TechStack.tsx'), 'utf8');
+    assert.ok(techCode.includes("'AI Systems & Protocols'"), 'TechStack must define AI Systems & Protocols category');
+    assert.ok(techCode.includes('Model Context Protocol (MCP)'), 'TechStack must include Model Context Protocol');
+    assert.ok(techCode.includes('Retrieval-Augmented Generation (RAG)'), 'TechStack must include RAG');
+    assert.ok(techCode.includes('Vector Databases & pgvector'), 'TechStack must include pgvector');
+    assert.ok(techCode.includes('Large Reasoning Models (LRM)'), 'TechStack must include LRM');
+    assert.ok(!/[\u2013\u2014]/.test(techCode), 'TechStack.tsx must contain zero em/en-dashes');
+  });
 });
 
 

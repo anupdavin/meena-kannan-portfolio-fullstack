@@ -8,7 +8,8 @@ import {
   GitMerge, 
   Search, 
   Sparkles, 
-  Terminal
+  Terminal,
+  Bot
 } from 'lucide-react'
 
 interface Technology {
@@ -288,6 +289,58 @@ const TECH_DATA: Record<string, CategoryData> = {
         tags: ['API Design', 'OpenAPI', 'Contracts']
       }
     ]
+  },
+  'AI Systems & Protocols': {
+    icon: Bot,
+    color: 'text-purple-400',
+    border: 'border-purple-500/40',
+    technologies: [
+      {
+        name: 'Model Context Protocol (MCP)',
+        tier: 'System Architecture',
+        productionScale: 'JSON-RPC 2.0 / Tool Bus',
+        years: '2+ yrs',
+        description: 'Standardized client-server context protocol, JSON-RPC 2.0 tool discovery, decoupling LLM reasoning from backend data repositories',
+        productionUse: 'Built custom MCP tool servers for automated PostgreSQL schema introspection, system health querying, and CI pipeline triggering.',
+        tags: ['MCP', 'JSON-RPC', 'Agent Tools', 'Context Protocol']
+      },
+      {
+        name: 'Retrieval-Augmented Generation (RAG)',
+        tier: 'Enterprise Production',
+        productionScale: 'Hybrid Search / Sub-120ms P95',
+        years: '2+ yrs',
+        description: 'Hybrid BM25 keyword + semantic dense vector search, reciprocal rank fusion (RRF), chunking and re-ranking pipelines',
+        productionUse: 'Engineered low-latency document retrieval pipelines achieving sub-120ms P95 semantic search over 500k+ technical specs.',
+        tags: ['RAG', 'Vector Search', 'Hybrid Search', 'RRF']
+      },
+      {
+        name: 'Vector Databases & pgvector',
+        tier: 'Enterprise Production',
+        productionScale: 'HNSW Graph Indexing / Cosine Search',
+        years: '2+ yrs',
+        description: 'High-dimensional vector storage, HNSW & IVFFlat index tuning, cosine distance similarity queries',
+        productionUse: 'Architected pgvector integration directly inside existing PostgreSQL clusters, saving 100% additional database licensing costs.',
+        tags: ['pgvector', 'HNSW', 'Embeddings', 'PostgreSQL']
+      },
+      {
+        name: 'Agentic AI & Orchestrator Graphs',
+        tier: 'System Architecture',
+        productionScale: 'Supervisor-Worker / HITL Loops',
+        years: '2+ yrs',
+        description: 'Stateful supervisor-worker agent graphs, self-correction reflection loops, tool use constraints, deterministic state machines',
+        productionUse: 'Designed autonomous self-healing agent pipelines with Human-in-the-Loop checkpoints for enterprise operations.',
+        tags: ['Agentic AI', 'LangGraph', 'Multi-Agent', 'HITL']
+      },
+      {
+        name: 'Large Reasoning Models (LRM)',
+        tier: 'Enterprise Production',
+        productionScale: 'System 2 / Test-Time Compute',
+        years: '2+ yrs',
+        description: 'System 2 deliberate reasoning, step verification traces, temperature tuning, structured output schemas',
+        productionUse: 'Deployed structured reasoning pipelines with strict JSON schema validation for automated code auditing.',
+        tags: ['LRM', 'System 2', 'Structured Outputs', 'Inference']
+      }
+    ]
   }
 }
 
@@ -315,7 +368,7 @@ export default function TechStack() {
       })
       return all
     }
-    return TECH_DATA[selectedCategory].technologies
+    return TECH_DATA[selectedCategory]?.technologies || []
   }, [searchQuery, selectedCategory])
 
   const currentBenchmarkTech = hoveredTech || activeTech || filteredTechs[0]
