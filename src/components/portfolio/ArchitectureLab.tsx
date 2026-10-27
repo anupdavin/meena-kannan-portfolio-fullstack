@@ -60,6 +60,7 @@ import { TenantIsolationSandbox } from '@/components/architecture/TenantIsolatio
 import { ZeroTrustMeshSandbox } from '@/components/architecture/ZeroTrustMeshSandbox'
 import { SplitBrainResolverSandbox } from '@/components/architecture/SplitBrainResolverSandbox'
 import GslbAnycastSandbox from '@/components/architecture/GslbAnycastSandbox'
+import DistributedLockSandbox from '@/components/architecture/DistributedLockSandbox'
 import { ARCHITECTURE_SYSTEMS } from '@/data/architectureSystems'
 import { ARCHITECTURAL_DECISIONS } from '@/data/architecturalDecisions'
 import { ARCHITECTURAL_TRADEOFFS } from '@/data/architecturalTradeoffs'
@@ -88,6 +89,7 @@ import { TENANT_ISOLATION_MODELS } from '@/data/tenantIsolationModels'
 import { ZERO_TRUST_MESH_MODELS } from '@/data/zeroTrustMeshModels'
 import { SPLIT_BRAIN_PARADIGMS } from '@/data/splitBrainResolverModels'
 import { GSLB_ANYCAST_MODELS } from '@/data/gslbAnycastModels'
+import { DISTRIBUTED_LOCK_MODELS } from '@/data/distributedLockModels'
 
 const AI_TERMS_SUMMARY = [
   { id: 'agentic-ai', title: 'Agentic AI', text: 'Perception-action loop, DAG memory, tool execution, LangGraph' },
@@ -134,6 +136,7 @@ export default function ArchitectureLab() {
         zerotrustmesh: 5,
         splitbrain: 5,
         gslbanycast: 5,
+        distributedlock: 5,
         isActive: false
       }
     }
@@ -443,8 +446,20 @@ export default function ArchitectureLab() {
       g.description.toLowerCase().includes(q)
     ).length
 
+    const distributedLockCount = DISTRIBUTED_LOCK_MODELS.filter(l =>
+      l.name.toLowerCase().includes(q) ||
+      l.id.toLowerCase().includes(q) ||
+      l.category.toLowerCase().includes(q) ||
+      l.badge.toLowerCase().includes(q) ||
+      l.algorithmFormula.toLowerCase().includes(q) ||
+      l.acquisitionLatency.toLowerCase().includes(q) ||
+      (l.leaseTtlSla || '').toLowerCase().includes(q) ||
+      l.architecturalInvariant.toLowerCase().includes(q) ||
+      l.description.toLowerCase().includes(q)
+    ).length
+
     return {
-      total: workbenchCount + aiCount + adrCount + tradeoffCount + evolutionCount + chaosCount + gatewayCount + traceCount + kafkaCount + ratelimitCount + multiregionCount + shardingCount + cdnCount + circuitBreakerCount + concurrencyCount + raftCount + vectorCount + priorityCount + sagasCount + cacheCount + eventSourcingCount + dlqCount + idempotencyCount + atomicCommitCount + featureFlagCount + tenantIsolationCount + zeroTrustMeshCount + splitBrainCount + gslbAnycastCount,
+      total: workbenchCount + aiCount + adrCount + tradeoffCount + evolutionCount + chaosCount + gatewayCount + traceCount + kafkaCount + ratelimitCount + multiregionCount + shardingCount + cdnCount + circuitBreakerCount + concurrencyCount + raftCount + vectorCount + priorityCount + sagasCount + cacheCount + eventSourcingCount + dlqCount + idempotencyCount + atomicCommitCount + featureFlagCount + tenantIsolationCount + zeroTrustMeshCount + splitBrainCount + gslbAnycastCount + distributedLockCount,
       workbench: workbenchCount,
       aiCodex: aiCount,
       adr: adrCount,
@@ -474,6 +489,7 @@ export default function ArchitectureLab() {
       zerotrustmesh: zeroTrustMeshCount,
       splitbrain: splitBrainCount,
       gslbanycast: gslbAnycastCount,
+      distributedlock: distributedLockCount,
       isActive: true
     }
   }, [searchQuery])
@@ -905,6 +921,17 @@ export default function ArchitectureLab() {
             <Globe className="w-3.5 h-3.5 text-sky-400" />
             <span>GSLB & Anycast ({matchStats.gslbanycast})</span>
           </a>
+          <a 
+            href="#architecture-distributed-lock"
+            className={`px-3 py-1.5 rounded-lg border transition-all flex items-center gap-1.5 cursor-pointer ${
+              matchStats.isActive && matchStats.distributedlock > 0
+                ? 'bg-amber-500/10 border-amber-500/50 text-amber-400 shadow-[0_0_10px_rgba(245,158,11,0.15)] font-bold'
+                : 'bg-slate-900 border-slate-800 hover:border-amber-500/50 hover:text-amber-400 text-slate-300'
+            }`}
+          >
+            <Lock className="w-3.5 h-3.5 text-amber-400" />
+            <span>DLM Consensus Leases ({matchStats.distributedlock})</span>
+          </a>
         </div>
       </div>
 
@@ -1258,6 +1285,18 @@ export default function ArchitectureLab() {
         className="scroll-mt-24"
       >
         <GslbAnycastSandbox />
+      </motion.div>
+
+      {/* 2.33. Distributed Consensus-Backed Lock Manager (DLM) & Mutex Leases Sandbox */}
+      <motion.div
+        id="architecture-distributed-lock"
+        initial={{ opacity: 0, y: 25 }}
+        whileInView={{ opacity: 1, y: 0 }}
+        viewport={{ once: true }}
+        transition={{ duration: 0.6, delay: 1.50 }}
+        className="scroll-mt-24"
+      >
+        <DistributedLockSandbox />
       </motion.div>
 
       {/* 3. Architectural Design Pillars Strip */}

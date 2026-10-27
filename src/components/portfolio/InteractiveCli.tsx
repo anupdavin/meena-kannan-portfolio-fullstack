@@ -29,6 +29,7 @@ import { TENANT_ISOLATION_MODELS } from '@/data/tenantIsolationModels'
 import { ZERO_TRUST_MESH_MODELS } from '@/data/zeroTrustMeshModels'
 import { SPLIT_BRAIN_PARADIGMS } from '@/data/splitBrainResolverModels'
 import { GSLB_ANYCAST_MODELS } from '@/data/gslbAnycastModels'
+import { DISTRIBUTED_LOCK_MODELS } from '@/data/distributedLockModels'
 import { EXECUTIVE_BRIEFING } from '@/data/executiveBriefing'
 
 interface HistoryEntry {
@@ -172,6 +173,12 @@ const AVAILABLE_COMMANDS = [
   'routing',
   'flowspec',
   'geodns',
+  'lock',
+  'redlock',
+  'etcd',
+  'lease',
+  'dlm',
+  'zookeeper',
   'adr',
   'decisions',
   'tradeoffs',
@@ -233,6 +240,7 @@ const QUICK_CHIPS = [
   { label: '[ $ mtls ]', cmd: 'mtls' },
   { label: '[ $ splitbrain ]', cmd: 'splitbrain' },
   { label: '[ $ gslb ]', cmd: 'gslb' },
+  { label: '[ $ lock ]', cmd: 'lock' },
   { label: '[ $ find kafka ]', cmd: 'find kafka' },
   { label: '[ $ tradeoffs ]', cmd: 'tradeoffs' },
   { label: '[ $ adr ]', cmd: 'adr' },
@@ -280,6 +288,7 @@ const COMMAND_HELP = [
   '  mtls            - Inspect Zero-Trust SPIFFE/SPIRE workload identity & Envoy mTLS (or "mtls <id>")',
   '  splitbrain      - Inspect split-brain quorum fencing & semi-lattice vector healing (or "splitbrain <id>")',
   '  gslb            - Inspect BGP Anycast AS 13335, ECMP & GeoDNS routing (or "gslb <id>")',
+  '  lock            - Inspect Redis Redlock, etcd Raft & ZooKeeper distributed leases (or "lock <id>")',
   '  find <query>    - Search cross-cutting architecture systems, ADRs, AI codex & trade-offs',
   '  tradeoffs       - Evaluate system design decision trade-offs (or "compare <topic>")',
   '  stats           - View production performance & impact metrics (99.99% SLA)',
@@ -1305,6 +1314,19 @@ export default function InteractiveCli() {
           ]
           break
         }
+        if (sub === 'lock' || sub === 'redlock' || sub === 'etcd' || sub === 'lease' || sub === 'dlm' || sub === 'zookeeper' || args.some(a => a.toLowerCase().includes('lock') || a.toLowerCase().includes('lease') || a.toLowerCase().includes('redlock'))) {
+          output = [
+            'Routing to Distributed Lock Manager & Consensus Leases (#architecture-distributed-lock):',
+            '  1. Redis Redlock Quorum     : Multi-master 3-of-5 quorum with clock drift validity window (sub-2.4ms)',
+            '  2. etcd Raft Revisions       : 64-bit monotonic CreateRevision with linearizable watch handoffs',
+            '  3. ZooKeeper Ephemeral Nodes : FIFO sequential znodes with lock-release watches eliminating storms',
+            '  4. Monotonic Fencing Tokens  : Storage-layer atomic CAS floor check rejecting zombie GC writes (HTTP 409)',
+            '  5. Distributed RW Leases     : Concurrent shared reads with write-preference starvation prevention',
+            '--------------------------------------------------------------------------------',
+            'Interactive Sandbox: Live in #architecture-distributed-lock with live contention race & zombie injector.'
+          ]
+          break
+        }
         output = [
           'ByteByteGo Interactive Architecture Lab Navigator:',
           '--------------------------------------------------------------------------------',
@@ -1338,6 +1360,7 @@ export default function InteractiveCli() {
           '  [ 27 ] "architecture zerotrust": Zero-Trust Service Mesh & Envoy mTLS (#architecture-zero-trust-mesh)',
           '  [ 28 ] "architecture splitbrain": Split-Brain Quorum Fencing & Partition Healing (#architecture-split-brain-resolver)',
           '  [ 29 ] "architecture gslb"      : Global Anycast & BGP Flowspec Routing (#architecture-gslb-anycast)',
+          '  [ 30 ] "architecture lock"      : Distributed Lock Manager & Consensus Leases (#architecture-distributed-lock)',
           '--------------------------------------------------------------------------------',
           'Clean Architecture Principles Enforced:',
           '  + Domain Isolation     : Core business domains decouple from libraries and vendor SDKs',
@@ -3050,6 +3073,70 @@ export default function InteractiveCli() {
         ]
         break
       }
+      case 'lock':
+      case 'redlock':
+      case 'etcd':
+      case 'lease':
+      case 'dlm':
+      case 'zookeeper': {
+        const target = args[0]?.toLowerCase().trim()
+        if (target) {
+          const matched = DISTRIBUTED_LOCK_MODELS.find(m =>
+            m.id === target ||
+            m.id.includes(target) ||
+            m.name.toLowerCase().includes(target) ||
+            m.badge.toLowerCase().includes(target) ||
+            (target === '1' && m.id === 'redis-redlock-quorum-leases') ||
+            (target === '2' && m.id === 'etcd-raft-monotonic-leases') ||
+            (target === '3' && m.id === 'zookeeper-ephemeral-sequential-znodes') ||
+            (target === '4' && m.id === 'monotonic-fencing-tokens') ||
+            (target === '5' && m.id === 'distributed-rw-shared-leases')
+          )
+          if (matched) {
+            output = [
+              '--------------------------------------------------------------------------------',
+              `Distributed Lock Model: ${matched.name} [${matched.badge}]`,
+              '--------------------------------------------------------------------------------',
+              `Category            : ${matched.category}`,
+              `Acquisition Latency : ${matched.acquisitionLatency}`,
+              `Safety Guarantee SLA: ${matched.safetyGuaranteeSla}`,
+              `Mathematical Formula: ${matched.algorithmFormula}`,
+              `Blast Radius Guard  : ${matched.blastRadiusContainment}`,
+              '--------------------------------------------------------------------------------',
+              'WORKFLOW PHASES & CONSENSUS INVARIANTS:',
+              ...matched.workflowPhases.map(p =>
+                `  * [${p.name}] :: ${p.description} -> Invariant: ${p.invariants}`
+              ),
+              '--------------------------------------------------------------------------------',
+              'PRODUCTION OUTCOMES & INVARIANTS:',
+              ...Object.entries(matched.productionOutcomes).map(([k, v]) => `  + ${k}: ${v}`),
+              '',
+              `Architectural Invariant: "${matched.architecturalInvariant}"`,
+              '--------------------------------------------------------------------------------',
+              'Full live interactive contention race & zombie write injector in #architecture-distributed-lock.'
+            ]
+            break
+          }
+        }
+
+        output = [
+          'Distributed Consensus-Backed Lock Manager (DLM) & Mutex Leases Sandbox:',
+          '--------------------------------------------------------------------------------',
+          'Explore 5 enterprise distributed locking, Raft leases & fencing token architectures:',
+          '',
+          ...DISTRIBUTED_LOCK_MODELS.flatMap((m, idx) => [
+            `${idx + 1}. [ ${m.id} ] : ${m.name} (${m.badge})`,
+            `   Category   : ${m.category}`,
+            `   Latency    : ${m.acquisitionLatency.split(';')[0]}`,
+            `   SLA        : ${m.safetyGuaranteeSla.split(';')[0]}`,
+            `   Deep Dive  : "lock ${idx + 1}" or "lock ${m.id.split('-')[0]}" (e.g. "lock redlock", "lock etcd", "lock zookeeper", "lock monotonic", "lock rw")`,
+            ''
+          ]),
+          '--------------------------------------------------------------------------------',
+          'Tip: Run "lock <id>" (e.g. "lock 1" or "lock redlock") to inspect Redlock quorum invariants.'
+        ]
+        break
+      }
       case 'find':
       case 'search': {
         const query = args.join(' ').toLowerCase().trim()
@@ -3059,7 +3146,7 @@ export default function InteractiveCli() {
             '--------------------------------------------------------------------------------',
             'Search cross-cutting distributed systems, ADRs, AI paradigms, and trade-offs.',
             'Usage: find <query> (e.g. "find kafka", "find redis", "find mcp", "find saga")',
-            'Available Domains: Systems, ADR Governance, AI Codex, Trade-Off Matrix, Evolution Diffs, Chaos Drills, API Gateway, Distributed Traces, Kafka Event Streams, Distributed Rate Limiting, Multi-Region Replication, Database Sharding, Edge CDN Caching, Circuit Breakers, Concurrency & Deadlocks, Raft Consensus, Vector Search, Traffic Priority & QoS, Distributed Sagas & Compensations, Distributed Cache Stampede & Coherence, Distributed Event Sourcing & CQRS, Distributed DLQ & Retries, Distributed Idempotency & CAS Locks, Distributed 2PC vs Saga Commit & Drift Reconciler, Dynamic Feature Flagging & Canary Splitter, Multi-Tenant RLS & Cryptographic Isolation, Zero-Trust Service Mesh & SPIFFE mTLS, Split-Brain Quorum Fencing & Partition Healing, GSLB & BGP Anycast Routing'
+            'Available Domains: Systems, ADR Governance, AI Codex, Trade-Off Matrix, Evolution Diffs, Chaos Drills, API Gateway, Distributed Traces, Kafka Event Streams, Distributed Rate Limiting, Multi-Region Replication, Database Sharding, Edge CDN Caching, Circuit Breakers, Concurrency & Deadlocks, Raft Consensus, Vector Search, Traffic Priority & QoS, Distributed Sagas & Compensations, Distributed Cache Stampede & Coherence, Distributed Event Sourcing & CQRS, Distributed DLQ & Retries, Distributed Idempotency & CAS Locks, Distributed 2PC vs Saga Commit & Drift Reconciler, Dynamic Feature Flagging & Canary Splitter, Multi-Tenant RLS & Cryptographic Isolation, Zero-Trust Service Mesh & SPIFFE mTLS, Split-Brain Quorum Fencing & Partition Healing, GSLB & BGP Anycast Routing, Distributed Lock Manager & Leases'
           ]
           break
         }
@@ -3687,6 +3774,29 @@ export default function InteractiveCli() {
               `  Category   : ${g.category} (${g.badge})`,
               `  Convergence: ${g.routingConvergenceLatency.split(';')[0]}`,
               `  Anchor     : #architecture-gslb-anycast`,
+              ''
+            )
+          }
+        })
+
+        // 30. Search Distributed Lock Manager & Consensus Leases
+        DISTRIBUTED_LOCK_MODELS.forEach(dl => {
+          if (
+            dl.name.toLowerCase().includes(query) ||
+            dl.id.toLowerCase().includes(query) ||
+            dl.category.toLowerCase().includes(query) ||
+            dl.badge.toLowerCase().includes(query) ||
+            dl.algorithmFormula.toLowerCase().includes(query) ||
+            dl.acquisitionLatency.toLowerCase().includes(query) ||
+            dl.safetyGuaranteeSla.toLowerCase().includes(query) ||
+            dl.architecturalInvariant.toLowerCase().includes(query) ||
+            dl.description.toLowerCase().includes(query)
+          ) {
+            results.push(
+              `[Distributed Lock Manager] ${dl.name}`,
+              `  Category   : ${dl.category} (${dl.badge})`,
+              `  Acquisition: ${dl.acquisitionLatency.split(';')[0]}`,
+              `  Anchor     : #architecture-distributed-lock`,
               ''
             )
           }

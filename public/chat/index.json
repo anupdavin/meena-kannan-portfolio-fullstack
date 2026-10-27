@@ -262,5 +262,11 @@
     "title": "Distributed Global Server Load Balancing (GSLB) & BGP Anycast Routing Sandbox",
     "text": "Meena architects enterprise global ingress routing and perimeter DDoS mitigation systems across 5 paradigms: (1) BGP Anycast with ECMP Equal-Cost Multi-Path: Tier-1 AS-PATH shortest route with hardware flow hashing and sub-12ms edge convergence across 200+ PoPs, (2) GeoDNS & Latency-Based Dynamic Proximity Routing: RFC 7871 EDNS0 Client Subnet inspection with RUM latency matrix and sub-2.4ms DNS resolution, (3) Cross-Continent TCP Anycast with Maglev Consistent Hashing: M=65537 lookup table eliminating TCP resets during route flaps and supporting QUIC connection migration, (4) Multi-Cloud GSLB Traffic Steering with Weighted Canaries: Automated regional evacuation across AWS/GCP with weighted canaries in sub-8 seconds, and (5) Distributed PoP DDoS Scrubbing & BGP Flowspec Rate Limiting: RFC 5575 volumetric attack drop rules absorbing 1.2 Tbps floods in sub-350ms.",
     "url": "#architecture-gslb-anycast"
+  },
+  {
+    "id": "distributed-lock-manager",
+    "title": "Distributed Consensus-Backed Lock Manager (DLM) & Mutex Leases Sandbox",
+    "text": "Meena architects enterprise distributed mutual exclusion and consensus lease engines across 5 paradigms: (1) Redis Redlock Multi-Master Quorum Leases: Quorum-based locking across 5 independent Redis masters (3-of-5 nodes) with clock drift epsilon calculation and sub-2.4ms acquisition, (2) etcd Raft Monotonic Revision Leases with Heartbeats: Linearizable 64-bit revision locks with automatic TTL lease renewal and point-to-point watches eliminating thundering herds, (3) ZooKeeper Ephemeral Sequential Znodes: Strict FIFO fair queuing with lock-release watches guaranteeing zero starvation, (4) Storage-Layer Monotonic Fencing Token Validation: Kleppmann fencing theorem rejecting delayed zombie writes via atomic CAS checks (WHERE fencing_token < incoming_token), and (5) Distributed Reader-Writer Leases with Write-Preference: Concurrent shared read leases with write-priority starvation prevention.",
+    "url": "#architecture-distributed-lock"
   }
 ]

@@ -1608,6 +1608,43 @@ describe('Production Architectural Decision Records (ADR) & CLI Integration', ()
     assert.ok(indexHtml.includes('id="architecture-gslb-anycast"'), 'index.html must include #architecture-gslb-anycast landmark');
     assert.ok(!/[\u2013\u2014]/.test(indexHtml), 'index.html must contain zero em/en-dashes');
   });
+
+  test('DistributedLockSandbox and distributedLockModels.ts define Redlock, etcd leases and fencing tokens with CLI integration', () => {
+    const lockDataPath = path.join(rootDir, 'src', 'data', 'distributedLockModels.ts');
+    assert.ok(fs.existsSync(lockDataPath), 'distributedLockModels.ts must exist');
+    const lockDataCode = fs.readFileSync(lockDataPath, 'utf8');
+    assert.ok(lockDataCode.includes('redis-redlock-quorum-leases'), 'Must define redis-redlock-quorum-leases model');
+    assert.ok(lockDataCode.includes('etcd-raft-monotonic-leases'), 'Must define etcd-raft-monotonic-leases model');
+    assert.ok(lockDataCode.includes('zookeeper-ephemeral-sequential-znodes'), 'Must define zookeeper-ephemeral-sequential-znodes model');
+    assert.ok(lockDataCode.includes('monotonic-fencing-tokens'), 'Must define monotonic-fencing-tokens model');
+    assert.ok(lockDataCode.includes('distributed-rw-shared-leases'), 'Must define distributed-rw-shared-leases model');
+    assert.ok(!/[\u2013\u2014]/.test(lockDataCode), 'distributedLockModels.ts must contain zero em/en-dashes');
+
+    const componentPath = path.join(rootDir, 'src', 'components', 'architecture', 'DistributedLockSandbox.tsx');
+    assert.ok(fs.existsSync(componentPath), 'DistributedLockSandbox.tsx must exist');
+    const compCode = fs.readFileSync(componentPath, 'utf8');
+    assert.ok(compCode.includes('copyRfcReport'), 'DistributedLockSandbox must support 1-click RFC copy');
+    assert.ok(compCode.includes('DISTRIBUTED_LOCK_MODELS'), 'DistributedLockSandbox must render DISTRIBUTED_LOCK_MODELS');
+    assert.ok(!/[\u2013\u2014]/.test(compCode), 'DistributedLockSandbox.tsx must contain zero em/en-dashes');
+
+    const labCode = fs.readFileSync(path.join(rootDir, 'src', 'components', 'portfolio', 'ArchitectureLab.tsx'), 'utf8');
+    assert.ok(labCode.includes('DistributedLockSandbox'), 'ArchitectureLab must mount DistributedLockSandbox');
+    assert.ok(labCode.includes('id="architecture-distributed-lock"'), 'ArchitectureLab must define anchor #architecture-distributed-lock');
+
+    const cliCode = fs.readFileSync(path.join(rootDir, 'src', 'components', 'portfolio', 'InteractiveCli.tsx'), 'utf8');
+    assert.ok(cliCode.includes("'lock'"), "InteractiveCli must support 'lock' command");
+    assert.ok(cliCode.includes('[ $ lock ]'), "InteractiveCli must include '[ $ lock ]' quick chip");
+    assert.ok(cliCode.includes('DISTRIBUTED_LOCK_MODELS'), 'InteractiveCli must search across DISTRIBUTED_LOCK_MODELS');
+    assert.ok(!/[\u2013\u2014]/.test(cliCode), 'InteractiveCli.tsx must contain zero em/en-dashes');
+
+    const chatIndex = fs.readFileSync(path.join(rootDir, 'public', 'chat', 'index.json'), 'utf8');
+    assert.ok(chatIndex.includes('distributed-lock-manager'), 'public/chat/index.json must index distributed-lock-manager');
+    assert.ok(!/[\u2013\u2014]/.test(chatIndex), 'public/chat/index.json must contain zero em/en-dashes');
+
+    const indexHtml = fs.readFileSync(path.join(rootDir, 'index.html'), 'utf8');
+    assert.ok(indexHtml.includes('id="architecture-distributed-lock"'), 'index.html must include #architecture-distributed-lock landmark');
+    assert.ok(!/[\u2013\u2014]/.test(indexHtml), 'index.html must contain zero em/en-dashes');
+  });
 });
 
 

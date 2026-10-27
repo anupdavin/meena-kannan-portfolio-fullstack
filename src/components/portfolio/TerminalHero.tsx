@@ -207,6 +207,7 @@ const ARCHITECTURE_ENGINES = [
   { id: 'architecture-zero-trust-mesh', label: 'Zero-Trust Mesh', badge: 'SPIFFE mTLS', icon: Shield, border: 'border-cyan-500/40 text-cyan-300 hover:bg-cyan-500/10' },
   { id: 'architecture-split-brain-resolver', label: 'Split-Brain Resolver', badge: 'Quorum Fencing', icon: Split, border: 'border-amber-500/40 text-amber-300 hover:bg-amber-500/10' },
   { id: 'architecture-gslb-anycast', label: 'BGP Anycast', badge: 'GSLB AS13335', icon: Globe, border: 'border-sky-500/40 text-sky-300 hover:bg-sky-500/10' },
+  { id: 'architecture-distributed-lock', label: 'DLM Locks', badge: 'Redlock & etcd', icon: Lock, border: 'border-amber-500/40 text-amber-300 hover:bg-amber-500/10' },
 ]
 
 export default function TerminalHero() {
@@ -447,7 +448,7 @@ export default function TerminalHero() {
             <div className="flex items-center justify-between text-[11px] font-mono">
               <span className="text-slate-300 font-bold uppercase tracking-wider flex items-center gap-1.5">
                 <span className="w-2 h-2 rounded-full bg-cyan-400 animate-pulse" />
-                29 Interactive Architecture Engines
+                30 Interactive Architecture Engines
               </span>
               <span className="text-slate-500 text-[10px]">Direct Fast Jump &darr;</span>
             </div>

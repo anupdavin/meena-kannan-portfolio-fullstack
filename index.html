@@ -739,6 +739,16 @@
                 Global edge ingress routing, multi-cloud traffic steering, and perimeter DDoS mitigation across 5 enterprise architectures: BGP Anycast with ECMP Equal-Cost Multi-Path (Tier-1 AS-PATH shortest route with hardware flow hashing and sub-12ms edge convergence), GeoDNS &amp; Latency-Based Dynamic Proximity Routing (RFC 7871 EDNS0 Client Subnet inspection with RUM latency matrix), Cross-Continent TCP Anycast with Maglev Consistent Hashing (M=65537 lookup table eliminating TCP resets during route flaps), Multi-Cloud GSLB Traffic Steering with Weighted Canaries (automated regional evacuation across AWS/GCP with weighted canaries in sub-8 seconds), and Distributed PoP DDoS Scrubbing &amp; BGP Flowspec Rate Limiting (RFC 5575 volumetric attack drop rules absorbing 1.2 Tbps floods in sub-350ms).
               </p>
             </div>
+
+            <!-- Sub-Section 30: Distributed Consensus-Backed Lock Manager (DLM) & Mutex Leases Sandbox -->
+            <div id="architecture-distributed-lock" style="background: rgba(9, 14, 24, 0.7); border: 1px solid #1e293b; border-radius: 16px; padding: 1.5rem; margin-top: 1rem;">
+              <h3 style="color: #fbbf24; font-size: 1.25rem; font-weight: bold; margin-bottom: 0.5rem;">
+                Distributed Consensus-Backed Lock Manager (DLM) &amp; Mutex Leases Sandbox
+              </h3>
+              <p style="color: #94a3b8; font-size: 0.85rem; line-height: 1.6;">
+                Distributed mutual exclusion, consensus leases, and linearizable storage-layer fencing across 5 enterprise architectures: Redis Redlock Multi-Master Quorum Leases (3-of-5 independent node quorum with clock drift compensation and sub-2.4ms acquisition), etcd Raft Monotonic Revision Leases with Heartbeats (64-bit CreateRevision with linearizable watch handoffs), ZooKeeper Ephemeral Sequential Znodes &amp; Condition Queues (strict FIFO ordering with point-to-point watches eliminating thundering herd storms), Storage-Layer Monotonic Fencing Token Validation (Kleppmann fencing theorem rejecting zombie GC pause writes with HTTP 409 Conflict), and Distributed Reader-Writer Leases with Write-Preference (concurrent shared reads with write-priority starvation prevention).
+              </p>
+            </div>
           </section>
 
           <!-- Projects & Interactive Architecture Section Landmark -->

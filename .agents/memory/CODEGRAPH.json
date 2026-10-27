@@ -1,6 +1,6 @@
 {
   "version": "1.0.0",
-  "generatedAt": "2026-10-27T20:50:54.237Z",
+  "generatedAt": "2026-10-27T21:08:42.615Z",
   "nodes": {
     "src/components/architecture/AdrExplorer.tsx": {
       "file": "src/components/architecture/AdrExplorer.tsx",
@@ -202,6 +202,17 @@
         "DistributedConcurrencySandbox"
       ],
       "loc": 391
+    },
+    "src/components/architecture/DistributedLockSandbox.tsx": {
+      "file": "src/components/architecture/DistributedLockSandbox.tsx",
+      "imports": [
+        "lucide-react",
+        "../../data/distributedLockModels"
+      ],
+      "exports": [
+        "DistributedLockSandbox"
+      ],
+      "loc": 506
     },
     "src/components/architecture/DistributedSagasSandbox.tsx": {
       "file": "src/components/architecture/DistributedSagasSandbox.tsx",
@@ -549,6 +560,7 @@
         "@/components/architecture/ZeroTrustMeshSandbox",
         "@/components/architecture/SplitBrainResolverSandbox",
         "@/components/architecture/GslbAnycastSandbox",
+        "@/components/architecture/DistributedLockSandbox",
         "@/data/architectureSystems",
         "@/data/architecturalDecisions",
         "@/data/architecturalTradeoffs",
@@ -576,12 +588,13 @@
         "@/data/tenantIsolationModels",
         "@/data/zeroTrustMeshModels",
         "@/data/splitBrainResolverModels",
-        "@/data/gslbAnycastModels"
+        "@/data/gslbAnycastModels",
+        "@/data/distributedLockModels"
       ],
       "exports": [
         "ArchitectureLab"
       ],
-      "loc": 1316
+      "loc": 1355
     },
     "src/components/portfolio/ContactTerminal.tsx": {
       "file": "src/components/portfolio/ContactTerminal.tsx",
@@ -655,12 +668,13 @@
         "@/data/zeroTrustMeshModels",
         "@/data/splitBrainResolverModels",
         "@/data/gslbAnycastModels",
+        "@/data/distributedLockModels",
         "@/data/executiveBriefing"
       ],
       "exports": [
         "InteractiveCli"
       ],
-      "loc": 3967
+      "loc": 4077
     },
     "src/components/portfolio/ProjectsShowcase.tsx": {
       "file": "src/components/portfolio/ProjectsShowcase.tsx",
@@ -713,7 +727,7 @@
       "exports": [
         "TerminalHero"
       ],
-      "loc": 627
+      "loc": 628
     },
     "src/components/ui/badge.tsx": {
       "file": "src/components/ui/badge.tsx",
@@ -895,6 +909,19 @@
         "findDeadlockCycles"
       ],
       "loc": 335
+    },
+    "src/data/distributedLockModels.ts": {
+      "file": "src/data/distributedLockModels.ts",
+      "imports": [],
+      "exports": [
+        "LockClusterNode",
+        "DistributedLockModel",
+        "SyntheticLockRequest",
+        "INITIAL_LOCK_NODES",
+        "DISTRIBUTED_LOCK_MODELS",
+        "DISTRIBUTED_LOCK_PARADIGMS"
+      ],
+      "loc": 461
     },
     "src/data/distributedSagas.ts": {
       "file": "src/data/distributedSagas.ts",
@@ -1206,6 +1233,11 @@
       "type": "import"
     },
     {
+      "source": "src/components/architecture/DistributedLockSandbox.tsx",
+      "target": "src/data/distributedLockModels.ts",
+      "type": "import"
+    },
+    {
       "source": "src/components/architecture/FeatureFlagSandbox.tsx",
       "target": "src/data/featureFlagModels.ts",
       "type": "import"
@@ -1272,6 +1304,7 @@
     "DatabaseShardingSandbox": "src/components/architecture/DatabaseShardingSandbox.tsx",
     "DistributedCacheSandbox": "src/components/architecture/DistributedCacheSandbox.tsx",
     "DistributedConcurrencySandbox": "src/components/architecture/DistributedConcurrencySandbox.tsx",
+    "DistributedLockSandbox": "src/components/architecture/DistributedLockSandbox.tsx",
     "DistributedSagasSandbox": "src/components/architecture/DistributedSagasSandbox.tsx",
     "DistributedTraceInspector": "src/components/architecture/DistributedTraceInspector.tsx",
     "DlqRetrySandbox": "src/components/architecture/DlqRetrySandbox.tsx",
@@ -1381,6 +1414,12 @@
     "CONCURRENCY_MODELS": "src/data/distributedConcurrency.ts",
     "validateTransaction": "src/data/distributedConcurrency.ts",
     "findDeadlockCycles": "src/data/distributedConcurrency.ts",
+    "LockClusterNode": "src/data/distributedLockModels.ts",
+    "DistributedLockModel": "src/data/distributedLockModels.ts",
+    "SyntheticLockRequest": "src/data/distributedLockModels.ts",
+    "INITIAL_LOCK_NODES": "src/data/distributedLockModels.ts",
+    "DISTRIBUTED_LOCK_MODELS": "src/data/distributedLockModels.ts",
+    "DISTRIBUTED_LOCK_PARADIGMS": "src/data/distributedLockModels.ts",
     "SagaStep": "src/data/distributedSagas.ts",
     "DistributedSagaModel": "src/data/distributedSagas.ts",
     "DISTRIBUTED_SAGA_MODELS": "src/data/distributedSagas.ts",
