@@ -74,6 +74,10 @@ describe('Portfolio Verification & Asset Integrity', () => {
     assert.ok(codexCode.includes('rag'), 'Must specify RAG paradigm');
     assert.ok(codexCode.includes('mcp'), 'Must specify MCP paradigm');
     assert.ok(codexCode.includes('AI Terms You Need to Know'), 'Must feature ByteByteGo headline');
+    assert.ok(codexCode.includes('handleCopyMermaid'), 'Must support copying Mermaid syntax to clipboard');
+    assert.ok(codexCode.includes('handleDownloadSvg'), 'Must support downloading diagram as pure SVG vector file');
+    assert.ok(codexCode.includes('mermaidDiagram'), 'Must define Mermaid diagram representations for enterprise architectures');
+    assert.ok(!/[\u2013\u2014]/.test(codexCode), 'ByteByteGoAiCodex must contain zero em/en-dashes');
 
     const labCode = fs.readFileSync(path.join(rootDir, 'src', 'components', 'portfolio', 'ArchitectureLab.tsx'), 'utf8');
     assert.ok(labCode.includes('ByteByteGoAiCodex'), 'ArchitectureLab must render ByteByteGoAiCodex');

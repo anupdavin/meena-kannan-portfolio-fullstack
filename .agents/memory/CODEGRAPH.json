@@ -1,6 +1,6 @@
 {
   "version": "1.0.0",
-  "generatedAt": "2026-10-27T10:04:41.606Z",
+  "generatedAt": "2026-10-27T10:08:54.501Z",
   "nodes": {
     "src/components/architecture/AdrExplorer.tsx": {
       "file": "src/components/architecture/AdrExplorer.tsx",
@@ -73,7 +73,7 @@
         "AiTermSpec",
         "ByteByteGoAiCodex"
       ],
-      "loc": 724
+      "loc": 827
     },
     "src/components/architecture/ByteByteGoDiagram.tsx": {
       "file": "src/components/architecture/ByteByteGoDiagram.tsx",

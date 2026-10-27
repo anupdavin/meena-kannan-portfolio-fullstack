@@ -13,7 +13,9 @@ import {
   Play,
   Pause,
   ChevronLeft,
-  ChevronRight
+  ChevronRight,
+  FileCode,
+  Copy
 } from 'lucide-react'
 
 export interface AiTermSpec {
@@ -31,6 +33,7 @@ export interface AiTermSpec {
   definition: string
   realWorldExamples: string[]
   svgSchematicType: 'agent' | 'reasoning' | 'vectordb' | 'rag' | 'mcp'
+  mermaidDiagram: string
   technicalSpecs: {
     protocol: string
     latencyTarget: string
@@ -55,6 +58,16 @@ const AI_TERMS: AiTermSpec[] = [
     definition: 'Goal-driven AI agent operating in continuous perception-action loops',
     realWorldExamples: ['AutoGPT', 'Devin', 'LangGraph Multi-Agent Workflows'],
     svgSchematicType: 'agent',
+    mermaidDiagram: `flowchart LR
+  subgraph Inputs[Inputs]
+    M[Memory: VectorDB / Redis]
+    T[Tools: REST / SDKs]
+    G[Goals: User Prompt]
+  end
+  Inputs --> Agent[🤖 ReAct Agent Loop]
+  Agent --> Actions[▶ Actions / Tool Calls]
+  Actions --> Env[(Execution Environment)]
+  Env -.->|Observations / State Feedback| Agent`,
     technicalSpecs: {
       protocol: 'ReAct / Plan-and-Solve (DAG Loop)',
       latencyTarget: '< 2.5s per reasoning iteration',
@@ -77,6 +90,14 @@ const AI_TERMS: AiTermSpec[] = [
     definition: 'Multi-step reasoning LLM using test-time compute & chain-of-thought traces',
     realWorldExamples: ['OpenAI o3 / o4', 'DeepSeek-R1', 'Anthropic Claude Extended Thinking'],
     svgSchematicType: 'reasoning',
+    mermaidDiagram: `flowchart LR
+  User[User Question] --> Engine[Large Reasoning Model]
+  subgraph Engine[Test-Time Compute Engine]
+    S1[① CoT: Parse Goal & Invariants] --> S2[② CoT: Intermediate Verification]
+    S2 --> S3[③ CoT: Self-Correction Trace]
+    S3 --> S4[④ Solution Confirmed ✓]
+  end
+  Engine --> Answer[Verified Answer]`,
     technicalSpecs: {
       protocol: 'Chain-of-Thought (CoT) with Self-Reflection',
       latencyTarget: 'Adaptive test-time compute (5s - 60s)',
@@ -99,6 +120,15 @@ const AI_TERMS: AiTermSpec[] = [
     definition: 'High-dimensional similarity search engine indexed for nearest neighbors',
     realWorldExamples: ['Pinecone', 'Weaviate', 'Milvus', 'PostgreSQL pgvector'],
     svgSchematicType: 'vectordb',
+    mermaidDiagram: `flowchart LR
+  subgraph Ingestion[Multi-Modal Source Data]
+    D1[Text / Markdown]
+    D2[Images / Media]
+    D3[Code / Schemas]
+  end
+  Ingestion --> Embed[Embedding Model 1536d]
+  Embed --> Vectors[Dense Float Vectors]
+  Vectors --> VDB[(Vector Database: HNSW Index)]`,
     technicalSpecs: {
       protocol: 'HNSW (Hierarchical Navigable Small World) / IVFFlat',
       latencyTarget: '< 15ms p99 similarity retrieval',
@@ -121,6 +151,17 @@ const AI_TERMS: AiTermSpec[] = [
     definition: 'Grounding generative models with real-time enterprise external knowledge',
     realWorldExamples: ['ChatGPT with Files', 'Perplexity AI', 'Enterprise Legal & Financial RAG'],
     svgSchematicType: 'rag',
+    mermaidDiagram: `sequenceDiagram
+  autonumber
+  actor User as User
+  participant Retriever as Hybrid Retriever (BM25 + Dense)
+  participant KB as Enterprise Knowledge Base
+  participant LLM as LLM Synthesis Engine
+  User->>Retriever: 1. Enterprise Query
+  Retriever->>KB: 2. Search Knowledge Base
+  KB-->>Retriever: 3. Relevant Chunks & Provenance
+  Retriever->>LLM: 4. Query + Grounded Context
+  LLM-->>User: 5. Grounded Fact Response`,
     technicalSpecs: {
       protocol: 'Hybrid Keyword (BM25) + Semantic Dense Vector Re-ranking',
       latencyTarget: '< 180ms chunk retrieval + rerank',
@@ -143,6 +184,15 @@ const AI_TERMS: AiTermSpec[] = [
     definition: 'Open standard protocol connecting AI models to secure local and cloud tools',
     realWorldExamples: ['Claude Desktop MCP', 'Cursor MCP Tools', 'GitHub & Postgres MCP Servers'],
     svgSchematicType: 'mcp',
+    mermaidDiagram: `flowchart LR
+  subgraph Host[MCP Host Application]
+    App[Claude / Cursor / CLI]
+    Client[MCP Client]
+  end
+  Client <==>|JSON-RPC 2.0 / SSE| Wire[Model Context Protocol Wire]
+  Wire <==> S1[Server A: GitHub, Slack, JIRA]
+  Wire <==> S2[Server B: PostgreSQL, Redis]
+  Wire <==> S3[Server C: Local Filesystem & Git]`,
     technicalSpecs: {
       protocol: 'JSON-RPC 2.0 over Stdio / Server-Sent Events (SSE)',
       latencyTarget: '< 8ms local tool discovery & handshake',
@@ -156,6 +206,7 @@ export default function ByteByteGoAiCodex() {
   const [activeTermId, setActiveTermId] = useState<string>('agentic-ai')
   const [isStudioMode, setIsStudioMode] = useState<boolean>(false)
   const [copiedBadge, setCopiedBadge] = useState<boolean>(false)
+  const [copiedMermaid, setCopiedMermaid] = useState<boolean>(false)
   const [isPlaying, setIsPlaying] = useState<boolean>(false)
 
   // Auto-play step-through
@@ -183,6 +234,33 @@ export default function ByteByteGoAiCodex() {
 
   const activeTerm = AI_TERMS.find(t => t.id === activeTermId) || AI_TERMS[0]
 
+  const handleCopyMermaid = () => {
+    if (typeof navigator !== 'undefined' && navigator.clipboard) {
+      navigator.clipboard.writeText(activeTerm.mermaidDiagram)
+    }
+    setCopiedMermaid(true)
+    setTimeout(() => setCopiedMermaid(false), 2000)
+  }
+
+  const handleDownloadSvg = () => {
+    const svgEl = document.getElementById(`schematic-svg-${activeTerm.id}`)
+    if (!svgEl) return
+    const serializer = new XMLSerializer()
+    let source = serializer.serializeToString(svgEl)
+    if (!source.match(/^<svg[^>]+xmlns="http:\/\/www\.w3\.org\/2000\/svg"/)) {
+      source = source.replace(/^<svg/, '<svg xmlns="http://www.w3.org/2000/svg"')
+    }
+    const blob = new Blob([source], { type: 'image/svg+xml;charset=utf-8' })
+    const url = URL.createObjectURL(blob)
+    const downloadLink = document.createElement('a')
+    downloadLink.href = url
+    downloadLink.download = `${activeTerm.id}-bytebytego-architecture.svg`
+    document.body.appendChild(downloadLink)
+    downloadLink.click()
+    document.body.removeChild(downloadLink)
+    URL.revokeObjectURL(url)
+  }
+
   const handleExportSvg = () => {
     const exportData = {
       specVersion: '1.0.0',
@@ -192,6 +270,7 @@ export default function ByteByteGoAiCodex() {
       definition: activeTerm.definition,
       realWorldExamples: activeTerm.realWorldExamples,
       technicalSpecs: activeTerm.technicalSpecs,
+      mermaid: activeTerm.mermaidDiagram,
       exportedAt: new Date().toISOString()
     }
     if (typeof navigator !== 'undefined' && navigator.clipboard) {
@@ -228,7 +307,7 @@ export default function ByteByteGoAiCodex() {
         </div>
 
         {/* Studio Canvas Mode, Step Tour & Export */}
-        <div className="flex items-center gap-2 shrink-0">
+        <div className="flex flex-wrap items-center gap-2 shrink-0">
           {/* Step Controls: Prev, Tour, Next */}
           <div className="flex items-center gap-0.5 bg-slate-900/90 border border-slate-800 rounded-lg p-0.5">
             <button
@@ -268,13 +347,37 @@ export default function ByteByteGoAiCodex() {
             <span>{isStudioMode ? 'Terminal Dark' : 'ByteByteGo Canvas'}</span>
           </button>
 
+          {/* Copy Mermaid Diagram Syntax */}
+          <button
+            onClick={handleCopyMermaid}
+            className="px-2.5 py-1.5 rounded-lg border border-slate-800 bg-slate-900/80 hover:bg-slate-800 text-slate-300 text-xs font-mono flex items-center gap-1.5 transition-all cursor-pointer"
+            aria-label="Copy Mermaid Diagram Syntax"
+            title="Copy Mermaid syntax for GitHub / Confluence"
+          >
+            {copiedMermaid ? <CheckCircle2 className="w-3.5 h-3.5 text-emerald-400" /> : <FileCode className="w-3.5 h-3.5 text-indigo-400" />}
+            <span>{copiedMermaid ? 'Mermaid Copied!' : 'Mermaid'}</span>
+          </button>
+
+          {/* Download Pure SVG */}
+          <button
+            onClick={handleDownloadSvg}
+            className="px-2.5 py-1.5 rounded-lg border border-slate-800 bg-slate-900/80 hover:bg-slate-800 text-slate-300 text-xs font-mono flex items-center gap-1.5 transition-all cursor-pointer"
+            aria-label="Download Architecture SVG Vector"
+            title="Download pure SVG vector diagram"
+          >
+            <Download className="w-3.5 h-3.5 text-cyan-400" />
+            <span>SVG</span>
+          </button>
+
+          {/* Export Spec JSON */}
           <button
             onClick={handleExportSvg}
-            className="px-3 py-1.5 rounded-lg border border-slate-800 bg-slate-900/80 hover:bg-slate-800 text-slate-300 text-xs font-mono flex items-center gap-1.5 transition-all cursor-pointer"
-            aria-label="Export Architecture Diagram"
+            className="px-2.5 py-1.5 rounded-lg border border-slate-800 bg-slate-900/80 hover:bg-slate-800 text-slate-300 text-xs font-mono flex items-center gap-1.5 transition-all cursor-pointer"
+            aria-label="Export Architecture JSON Spec"
+            title="Copy complete architecture JSON spec"
           >
-            {copiedBadge ? <CheckCircle2 className="w-3.5 h-3.5 text-emerald-400" /> : <Download className="w-3.5 h-3.5 text-slate-400" />}
-            <span>{copiedBadge ? 'Copied!' : 'Export Spec'}</span>
+            {copiedBadge ? <CheckCircle2 className="w-3.5 h-3.5 text-emerald-400" /> : <Copy className="w-3.5 h-3.5 text-slate-400" />}
+            <span>{copiedBadge ? 'Copied!' : 'Spec JSON'}</span>
           </button>
         </div>
       </div>
@@ -365,7 +468,7 @@ export default function ByteByteGoAiCodex() {
               {/* Dynamic SVG Schematic Based on Type */}
               <div className="w-full flex items-center justify-center min-h-[220px]">
                 {activeTerm.svgSchematicType === 'agent' && (
-                  <svg viewBox="0 0 520 220" className="w-full h-auto max-w-[500px]">
+                  <svg id="schematic-svg-agentic-ai" viewBox="0 0 520 220" className="w-full h-auto max-w-[500px]">
                     <defs>
                       <marker id="arrow-agent" viewBox="0 0 10 10" refX="6" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse">
                         <path d="M 0 1 L 8 5 L 0 9 z" fill="#10b981" />
@@ -425,7 +528,7 @@ export default function ByteByteGoAiCodex() {
                 )}
 
                 {activeTerm.svgSchematicType === 'reasoning' && (
-                  <svg viewBox="0 0 520 220" className="w-full h-auto max-w-[500px]">
+                  <svg id="schematic-svg-lrm" viewBox="0 0 520 220" className="w-full h-auto max-w-[500px]">
                     <defs>
                       <marker id="arrow-cyan" viewBox="0 0 10 10" refX="6" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse">
                         <path d="M 0 1 L 8 5 L 0 9 z" fill="#06b6d4" />
@@ -475,7 +578,7 @@ export default function ByteByteGoAiCodex() {
                 )}
 
                 {activeTerm.svgSchematicType === 'vectordb' && (
-                  <svg viewBox="0 0 520 220" className="w-full h-auto max-w-[500px]">
+                  <svg id="schematic-svg-vectordb" viewBox="0 0 520 220" className="w-full h-auto max-w-[500px]">
                     <defs>
                       <marker id="arrow-purple" viewBox="0 0 10 10" refX="6" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse">
                         <path d="M 0 1 L 8 5 L 0 9 z" fill="#8b5cf6" />
@@ -539,7 +642,7 @@ export default function ByteByteGoAiCodex() {
                 )}
 
                 {activeTerm.svgSchematicType === 'rag' && (
-                  <svg viewBox="0 0 520 220" className="w-full h-auto max-w-[500px]">
+                  <svg id="schematic-svg-rag" viewBox="0 0 520 220" className="w-full h-auto max-w-[500px]">
                     <defs>
                       <marker id="arrow-amber" viewBox="0 0 10 10" refX="6" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse">
                         <path d="M 0 1 L 8 5 L 0 9 z" fill="#f59e0b" />
@@ -594,7 +697,7 @@ export default function ByteByteGoAiCodex() {
                 )}
 
                 {activeTerm.svgSchematicType === 'mcp' && (
-                  <svg viewBox="0 0 520 220" className="w-full h-auto max-w-[500px]">
+                  <svg id="schematic-svg-mcp" viewBox="0 0 520 220" className="w-full h-auto max-w-[500px]">
                     <defs>
                       <marker id="arrow-pink" viewBox="0 0 10 10" refX="6" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse">
                         <path d="M 0 1 L 8 5 L 0 9 z" fill="#ec4899" />
