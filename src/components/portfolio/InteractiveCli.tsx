@@ -34,6 +34,9 @@ const AVAILABLE_COMMANDS = [
   'benchmark',
   'ai-codex',
   'codex',
+  'bytebytego',
+  'infographic',
+  'poster',
   'ai',
   'ai-terms',
   'paradigms',
@@ -55,6 +58,7 @@ const QUICK_CHIPS = [
   { label: '[ $ find kafka ]', cmd: 'find kafka' },
   { label: '[ $ tradeoffs ]', cmd: 'tradeoffs' },
   { label: '[ $ adr ]', cmd: 'adr' },
+  { label: '[ $ bytebytego ]', cmd: 'bytebytego' },
   { label: '[ $ ai-codex ]', cmd: 'ai-codex' },
   { label: '[ $ mcp ]', cmd: 'mcp' },
   { label: '[ $ skills ]', cmd: 'skills' },
@@ -78,6 +82,7 @@ const COMMAND_HELP = [
   '  stats           - View production performance & impact metrics (99.99% SLA)',
   '  metrics         - Print live architecture cluster telemetry, throughput & cache stats',
   '  benchmark       - Run simulated synthetic latency benchmark across distributed services',
+  '  bytebytego      - Display ByteByteGo 5-pillar AI systems architecture infographic',
   '  ai-codex        - Display ByteByteGo 5-pillar AI systems architecture codex',
   '  mcp             - Inspect enterprise Model Context Protocol (MCP) server architecture',
   '  architecture    - Display Clean Architecture, DDD & Saga design principles',
@@ -401,6 +406,9 @@ export default function InteractiveCli() {
           'Result: All SLA benchmarks PASSED. Architecture ready for high-concurrency enterprise load.'
         ]
         break
+      case 'bytebytego':
+      case 'infographic':
+      case 'poster':
       case 'ai-codex':
       case 'codex':
       case 'ai':

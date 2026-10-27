@@ -19,7 +19,9 @@ import {
   Layers,
   Sparkles,
   ExternalLink,
-  Eye
+  Eye,
+  FileText,
+  Zap
 } from 'lucide-react'
 
 export interface AiTermSpec {
@@ -222,7 +224,15 @@ const AI_TERMS: AiTermSpec[] = [
 // DETAILED HIGH-CRAFT SVG SCHEMATICS
 // ==========================================
 
-function AgenticAiSchematic({ isStudioMode }: { isStudioMode: boolean }) {
+function AgenticAiSchematic({ 
+  isStudioMode, 
+  activeNode, 
+  onSelectNode 
+}: { 
+  isStudioMode: boolean
+  activeNode: string | null
+  onSelectNode: (node: string | null) => void
+}) {
   const textColor = isStudioMode ? '#0f172a' : '#f8fafc'
   const subtextColor = isStudioMode ? '#64748b' : '#94a3b8'
   const boxFill = isStudioMode ? '#ffffff' : '#0f172a'
@@ -241,22 +251,49 @@ function AgenticAiSchematic({ isStudioMode }: { isStudioMode: boolean }) {
 
       {/* 1. Left Cluster: Memory, Tools, Goals */}
       {/* Memory */}
-      <g transform="translate(18, 10)">
-        <circle cx="20" cy="18" r="16" fill={isStudioMode ? '#fce7f3' : '#831843'} stroke="#ec4899" strokeWidth="1.5" />
+      <g 
+        transform="translate(18, 10)" 
+        className="cursor-pointer transition-transform hover:scale-105"
+        onClick={() => onSelectNode(activeNode === 'memory' ? null : 'memory')}
+      >
+        <circle 
+          cx="20" cy="18" r="16" 
+          fill={activeNode === 'memory' ? '#ec4899' : (isStudioMode ? '#fce7f3' : '#831843')} 
+          stroke="#ec4899" 
+          strokeWidth={activeNode === 'memory' ? '2.5' : '1.5'} 
+        />
         <text x="20" y="23" fontSize="16" textAnchor="middle">🧠</text>
         <text x="20" y="46" fill={textColor} fontSize="11" fontWeight="bold" textAnchor="middle" fontFamily="sans-serif">Memory</text>
       </g>
 
       {/* Tools */}
-      <g transform="translate(18, 70)">
-        <circle cx="20" cy="18" r="16" fill={isStudioMode ? '#fce7f3' : '#831843'} stroke="#f43f5e" strokeWidth="1.5" />
+      <g 
+        transform="translate(18, 70)" 
+        className="cursor-pointer transition-transform hover:scale-105"
+        onClick={() => onSelectNode(activeNode === 'tools' ? null : 'tools')}
+      >
+        <circle 
+          cx="20" cy="18" r="16" 
+          fill={activeNode === 'tools' ? '#f43f5e' : (isStudioMode ? '#fce7f3' : '#831843')} 
+          stroke="#f43f5e" 
+          strokeWidth={activeNode === 'tools' ? '2.5' : '1.5'} 
+        />
         <text x="20" y="23" fontSize="16" textAnchor="middle">🛠️</text>
         <text x="20" y="46" fill={textColor} fontSize="11" fontWeight="bold" textAnchor="middle" fontFamily="sans-serif">Tools</text>
       </g>
 
       {/* Goals */}
-      <g transform="translate(18, 130)">
-        <circle cx="20" cy="18" r="16" fill={isStudioMode ? '#ffe4e6' : '#881337'} stroke="#f43f5e" strokeWidth="1.5" />
+      <g 
+        transform="translate(18, 130)" 
+        className="cursor-pointer transition-transform hover:scale-105"
+        onClick={() => onSelectNode(activeNode === 'goals' ? null : 'goals')}
+      >
+        <circle 
+          cx="20" cy="18" r="16" 
+          fill={activeNode === 'goals' ? '#f43f5e' : (isStudioMode ? '#ffe4e6' : '#881337')} 
+          stroke="#f43f5e" 
+          strokeWidth={activeNode === 'goals' ? '2.5' : '1.5'} 
+        />
         <text x="20" y="23" fontSize="16" textAnchor="middle">🎯</text>
         <text x="20" y="46" fill={textColor} fontSize="11" fontWeight="bold" textAnchor="middle" fontFamily="sans-serif">Goals</text>
       </g>
@@ -267,8 +304,17 @@ function AgenticAiSchematic({ isStudioMode }: { isStudioMode: boolean }) {
       <path d="M 58 148 C 110 148, 110 100, 160 100" fill="none" stroke={subtextColor} strokeWidth="1.5" strokeDasharray="4 3" markerEnd="url(#arrow-agent-std)" />
 
       {/* 2. Center: Illustrated Robot Agent */}
-      <g transform="translate(170, 50)">
-        <rect x="0" y="0" width="105" height="96" rx="14" fill={isStudioMode ? '#f0fdf4' : '#022c22'} stroke="#10b981" strokeWidth="2" />
+      <g 
+        transform="translate(170, 50)" 
+        className="cursor-pointer transition-transform hover:scale-105"
+        onClick={() => onSelectNode(activeNode === 'agent' ? null : 'agent')}
+      >
+        <rect 
+          x="0" y="0" width="105" height="96" rx="14" 
+          fill={activeNode === 'agent' ? '#047857' : (isStudioMode ? '#f0fdf4' : '#022c22')} 
+          stroke="#10b981" 
+          strokeWidth={activeNode === 'agent' ? '3' : '2'} 
+        />
         {/* Screen inside robot */}
         <rect x="14" y="10" width="77" height="42" rx="6" fill="#0284c7" />
         <text x="52" y="24" fill="#ffffff" fontSize="8" fontWeight="bold" textAnchor="middle" fontFamily="monospace">print</text>
@@ -286,9 +332,18 @@ function AgenticAiSchematic({ isStudioMode }: { isStudioMode: boolean }) {
       <path d="M 285 100 L 335 100" fill="none" stroke="#10b981" strokeWidth="2" markerEnd="url(#arrow-agent-action)" />
       
       {/* Actions Icon with Play Gear */}
-      <g transform="translate(345, 68)">
-        <circle cx="28" cy="22" r="18" fill={isStudioMode ? '#dcfce7' : '#064e3b'} stroke="#10b981" strokeWidth="1.5" />
-        <polygon points="24,14 36,22 24,30" fill="#10b981" />
+      <g 
+        transform="translate(345, 68)" 
+        className="cursor-pointer transition-transform hover:scale-105"
+        onClick={() => onSelectNode(activeNode === 'actions' ? null : 'actions')}
+      >
+        <circle 
+          cx="28" cy="22" r="18" 
+          fill={activeNode === 'actions' ? '#10b981' : (isStudioMode ? '#dcfce7' : '#064e3b')} 
+          stroke="#10b981" 
+          strokeWidth={activeNode === 'actions' ? '2.5' : '1.5'} 
+        />
+        <polygon points="24,14 36,22 24,30" fill={activeNode === 'actions' ? '#ffffff' : '#10b981'} />
         <text x="28" y="56" fill={textColor} fontSize="11" fontWeight="bold" textAnchor="middle" fontFamily="sans-serif">Actions</text>
       </g>
 
@@ -296,8 +351,17 @@ function AgenticAiSchematic({ isStudioMode }: { isStudioMode: boolean }) {
       <path d="M 405 100 L 445 100" fill="none" stroke={subtextColor} strokeWidth="1.5" strokeDasharray="4 3" markerEnd="url(#arrow-agent-std)" />
 
       {/* 4. Environment: Clean Cloud */}
-      <g transform="translate(455, 60)">
-        <path d="M 20 40 A 18 18 0 0 1 38 18 A 24 24 0 0 1 76 18 A 18 18 0 0 1 96 40 A 12 12 0 0 1 92 52 L 18 52 A 12 12 0 0 1 20 40 Z" fill={boxFill} stroke={boxStroke} strokeWidth="1.5" />
+      <g 
+        transform="translate(455, 60)" 
+        className="cursor-pointer transition-transform hover:scale-105"
+        onClick={() => onSelectNode(activeNode === 'env' ? null : 'env')}
+      >
+        <path 
+          d="M 20 40 A 18 18 0 0 1 38 18 A 24 24 0 0 1 76 18 A 18 18 0 0 1 96 40 A 12 12 0 0 1 92 52 L 18 52 A 12 12 0 0 1 20 40 Z" 
+          fill={activeNode === 'env' ? (isStudioMode ? '#e0f2fe' : '#0369a1') : boxFill} 
+          stroke={activeNode === 'env' ? '#0284c7' : boxStroke} 
+          strokeWidth={activeNode === 'env' ? '2' : '1.5'} 
+        />
         <text x="56" y="70" fill={textColor} fontSize="11" fontWeight="bold" textAnchor="middle" fontFamily="sans-serif">Environment</text>
       </g>
 
@@ -305,8 +369,17 @@ function AgenticAiSchematic({ isStudioMode }: { isStudioMode: boolean }) {
       <path d="M 510 55 C 510 18, 410 18, 385 18 C 340 18, 240 18, 222 45" fill="none" stroke={subtextColor} strokeWidth="1.5" strokeDasharray="4 3" markerEnd="url(#arrow-agent-std)" />
       
       {/* Eye icon in the middle */}
-      <g transform="translate(370, 4)">
-        <circle cx="15" cy="14" r="13" fill={isStudioMode ? '#e0f2fe' : '#0c4a6e'} stroke="#0284c7" strokeWidth="1.2" />
+      <g 
+        transform="translate(370, 4)" 
+        className="cursor-pointer transition-transform hover:scale-105"
+        onClick={() => onSelectNode(activeNode === 'observations' ? null : 'observations')}
+      >
+        <circle 
+          cx="15" cy="14" r="13" 
+          fill={activeNode === 'observations' ? '#38bdf8' : (isStudioMode ? '#e0f2fe' : '#0c4a6e')} 
+          stroke="#0284c7" 
+          strokeWidth={activeNode === 'observations' ? '2' : '1.2'} 
+        />
         <text x="15" y="19" fontSize="13" textAnchor="middle">👁️</text>
         <text x="15" y="38" fill={subtextColor} fontSize="10" fontWeight="bold" textAnchor="middle" fontFamily="sans-serif">Observations</text>
       </g>
@@ -314,7 +387,15 @@ function AgenticAiSchematic({ isStudioMode }: { isStudioMode: boolean }) {
   )
 }
 
-function LargeReasoningModelSchematic({ isStudioMode }: { isStudioMode: boolean }) {
+function LargeReasoningModelSchematic({ 
+  isStudioMode,
+  isCotTraced,
+  onToggleCot
+}: { 
+  isStudioMode: boolean
+  isCotTraced: boolean
+  onToggleCot: () => void
+}) {
   const textColor = isStudioMode ? '#0f172a' : '#f8fafc'
   const subtextColor = isStudioMode ? '#64748b' : '#94a3b8'
   
@@ -323,9 +404,6 @@ function LargeReasoningModelSchematic({ isStudioMode }: { isStudioMode: boolean 
       <defs>
         <marker id="arrow-lrm-down" viewBox="0 0 10 10" refX="5" refY="6" markerWidth="6" markerHeight="6" orient="auto-start-reverse">
           <path d="M 1 0 L 5 8 L 9 0 z" fill="#0284c7" />
-        </marker>
-        <marker id="arrow-lrm-cot" viewBox="0 0 10 10" refX="5" refY="6" markerWidth="6" markerHeight="6" orient="auto-start-reverse">
-          <path d="M 1 0 L 5 8 L 9 0 z" fill="#f43f5e" />
         </marker>
       </defs>
 
@@ -374,9 +452,9 @@ function LargeReasoningModelSchematic({ isStudioMode }: { isStudioMode: boolean 
       </g>
 
       {/* ================= BIG ARROW: EXAMPLE ================= */}
-      <g transform="translate(230, 75)">
-        <polygon points="0,12 35,12 35,0 60,24 35,48 35,36 0,36" fill="#06b6d4" stroke="#0891b2" strokeWidth="1" />
-        <text x="25" y="28" fill="#ffffff" fontSize="11" fontWeight="extrabold" textAnchor="middle" fontFamily="sans-serif">Example</text>
+      <g transform="translate(230, 75)" className="cursor-pointer" onClick={onToggleCot}>
+        <polygon points="0,12 35,12 35,0 60,24 35,48 35,36 0,36" fill={isCotTraced ? '#10b981' : '#06b6d4'} stroke={isCotTraced ? '#059669' : '#0891b2'} strokeWidth="1" />
+        <text x="25" y="28" fill="#ffffff" fontSize="10" fontWeight="extrabold" textAnchor="middle" fontFamily="sans-serif">Example</text>
       </g>
 
       {/* ================= RIGHT FLOW: CONCRETE APPLES EXAMPLE ================= */}
@@ -401,14 +479,29 @@ function LargeReasoningModelSchematic({ isStudioMode }: { isStudioMode: boolean 
         <path d="M 115 88 L 115 97" stroke="#0284c7" strokeWidth="1.5" markerEnd="url(#arrow-lrm-down)" />
 
         {/* Concrete CoT Capsules */}
-        <g transform="translate(42, 98)">
-          <rect x="0" y="0" width="150" height="18" rx="9" fill="#ffe4e6" stroke="#fb7185" strokeWidth="1" />
+        <g transform="translate(42, 98)" className="cursor-pointer" onClick={onToggleCot}>
+          <rect 
+            x="0" y="0" width="150" height="18" rx="9" 
+            fill={isCotTraced ? '#fecdd3' : '#ffe4e6'} 
+            stroke={isCotTraced ? '#e11d48' : '#fb7185'} 
+            strokeWidth={isCotTraced ? '1.5' : '1'} 
+          />
           <text x="75" y="12" fill="#e11d48" fontSize="7.5" fontWeight="bold" textAnchor="middle" fontFamily="sans-serif">You have 10 apples</text>
           
-          <rect x="0" y="21" width="150" height="18" rx="9" fill="#ffe4e6" stroke="#fb7185" strokeWidth="1" />
+          <rect 
+            x="0" y="21" width="150" height="18" rx="9" 
+            fill={isCotTraced ? '#fecdd3' : '#ffe4e6'} 
+            stroke={isCotTraced ? '#e11d48' : '#fb7185'} 
+            strokeWidth={isCotTraced ? '1.5' : '1'} 
+          />
           <text x="75" y="33" fill="#e11d48" fontSize="7.5" fontWeight="bold" textAnchor="middle" fontFamily="sans-serif">You gave 2 away and have 8 left</text>
           
-          <rect x="0" y="42" width="150" height="18" rx="9" fill="#ffe4e6" stroke="#fb7185" strokeWidth="1" />
+          <rect 
+            x="0" y="42" width="150" height="18" rx="9" 
+            fill={isCotTraced ? '#fecdd3' : '#ffe4e6'} 
+            stroke={isCotTraced ? '#e11d48' : '#fb7185'} 
+            strokeWidth={isCotTraced ? '1.5' : '1'} 
+          />
           <text x="75" y="54" fill="#e11d48" fontSize="7.5" fontWeight="bold" textAnchor="middle" fontFamily="sans-serif">You ate 1 and have 7 left</text>
         </g>
 
@@ -421,7 +514,10 @@ function LargeReasoningModelSchematic({ isStudioMode }: { isStudioMode: boolean 
 
         {/* Final Answer */}
         <g transform="translate(45, 170)">
-          <rect x="0" y="0" width="145" height="23" rx="11" fill="#0284c7" />
+          <rect 
+            x="0" y="0" width="145" height="23" rx="11" 
+            fill={isCotTraced ? '#059669' : '#0284c7'} 
+          />
           <text x="72" y="15" fill="#ffffff" fontSize="10" fontWeight="bold" textAnchor="middle" fontFamily="sans-serif">You have 7 apples</text>
           <path d="M 175 12 C 160 12, 155 12, 148 12" fill="none" stroke="#0f172a" strokeWidth="1" markerEnd="url(#arrow-lrm-down)" />
           <text x="180" y="14" fill={textColor} fontSize="7.5" fontFamily="sans-serif">final answer</text>
@@ -431,7 +527,15 @@ function LargeReasoningModelSchematic({ isStudioMode }: { isStudioMode: boolean 
   )
 }
 
-function VectorDatabaseSchematic({ isStudioMode }: { isStudioMode: boolean }) {
+function VectorDatabaseSchematic({ 
+  isStudioMode,
+  selectedDataType,
+  onSelectDataType
+}: { 
+  isStudioMode: boolean
+  selectedDataType: 'text' | 'image' | 'audio' | 'video'
+  onSelectDataType: (type: 'text' | 'image' | 'audio' | 'video') => void
+}) {
   const textColor = isStudioMode ? '#0f172a' : '#f8fafc'
   const subtextColor = isStudioMode ? '#64748b' : '#94a3b8'
   const boxFill = isStudioMode ? '#ffffff' : '#0f172a'
@@ -451,29 +555,65 @@ function VectorDatabaseSchematic({ isStudioMode }: { isStudioMode: boolean }) {
         
         {/* 2x2 grid */}
         {/* Text */}
-        <g transform="translate(15, 15)">
-          <rect x="0" y="0" width="38" height="38" rx="6" fill={boxFill} stroke={boxStroke} />
+        <g 
+          transform="translate(15, 15)" 
+          className="cursor-pointer transition-transform hover:scale-105"
+          onClick={() => onSelectDataType('text')}
+        >
+          <rect 
+            x="0" y="0" width="38" height="38" rx="6" 
+            fill={selectedDataType === 'text' ? (isStudioMode ? '#dbeafe' : '#1e3a8a') : boxFill} 
+            stroke={selectedDataType === 'text' ? '#2563eb' : boxStroke} 
+            strokeWidth={selectedDataType === 'text' ? '2' : '1'} 
+          />
           <text x="19" y="24" fontSize="16" textAnchor="middle">📄</text>
           <text x="19" y="50" fill={textColor} fontSize="9" fontWeight="bold" textAnchor="middle" fontFamily="sans-serif">Text</text>
         </g>
 
         {/* Image */}
-        <g transform="translate(70, 15)">
-          <rect x="0" y="0" width="38" height="38" rx="6" fill={boxFill} stroke={boxStroke} />
+        <g 
+          transform="translate(70, 15)" 
+          className="cursor-pointer transition-transform hover:scale-105"
+          onClick={() => onSelectDataType('image')}
+        >
+          <rect 
+            x="0" y="0" width="38" height="38" rx="6" 
+            fill={selectedDataType === 'image' ? (isStudioMode ? '#dbeafe' : '#1e3a8a') : boxFill} 
+            stroke={selectedDataType === 'image' ? '#2563eb' : boxStroke} 
+            strokeWidth={selectedDataType === 'image' ? '2' : '1'} 
+          />
           <text x="19" y="24" fontSize="16" textAnchor="middle">🖼️</text>
           <text x="19" y="50" fill={textColor} fontSize="9" fontWeight="bold" textAnchor="middle" fontFamily="sans-serif">Image</text>
         </g>
 
         {/* Audio */}
-        <g transform="translate(15, 75)">
-          <rect x="0" y="0" width="38" height="38" rx="6" fill={boxFill} stroke={boxStroke} />
+        <g 
+          transform="translate(15, 75)" 
+          className="cursor-pointer transition-transform hover:scale-105"
+          onClick={() => onSelectDataType('audio')}
+        >
+          <rect 
+            x="0" y="0" width="38" height="38" rx="6" 
+            fill={selectedDataType === 'audio' ? (isStudioMode ? '#dbeafe' : '#1e3a8a') : boxFill} 
+            stroke={selectedDataType === 'audio' ? '#2563eb' : boxStroke} 
+            strokeWidth={selectedDataType === 'audio' ? '2' : '1'} 
+          />
           <text x="19" y="24" fontSize="16" textAnchor="middle">🔊</text>
           <text x="19" y="50" fill={textColor} fontSize="9" fontWeight="bold" textAnchor="middle" fontFamily="sans-serif">Audio</text>
         </g>
 
         {/* Video */}
-        <g transform="translate(70, 75)">
-          <rect x="0" y="0" width="38" height="38" rx="6" fill={boxFill} stroke={boxStroke} />
+        <g 
+          transform="translate(70, 75)" 
+          className="cursor-pointer transition-transform hover:scale-105"
+          onClick={() => onSelectDataType('video')}
+        >
+          <rect 
+            x="0" y="0" width="38" height="38" rx="6" 
+            fill={selectedDataType === 'video' ? (isStudioMode ? '#dbeafe' : '#1e3a8a') : boxFill} 
+            stroke={selectedDataType === 'video' ? '#2563eb' : boxStroke} 
+            strokeWidth={selectedDataType === 'video' ? '2' : '1'} 
+          />
           <text x="19" y="24" fontSize="16" textAnchor="middle">🎬</text>
           <text x="19" y="50" fill={textColor} fontSize="9" fontWeight="bold" textAnchor="middle" fontFamily="sans-serif">Video</text>
         </g>
@@ -486,7 +626,6 @@ function VectorDatabaseSchematic({ isStudioMode }: { isStudioMode: boolean }) {
 
       {/* 2. Embedding Model (Isometric 3D Cube) */}
       <g transform="translate(190, 48)">
-        {/* 3D Cube Geometry */}
         {/* Top Face */}
         <polygon points="38,0 76,18 38,36 0,18" fill="#4ade80" stroke="#16a34a" strokeWidth="1.5" />
         {/* Left Face */}
@@ -562,18 +701,11 @@ function VectorDatabaseSchematic({ isStudioMode }: { isStudioMode: boolean }) {
 
       {/* 4. Vector Database (3D Cylindrical Layers) */}
       <g transform="translate(545, 45)">
-        {/* Top Cylinder */}
         <ellipse cx="42" cy="16" rx="36" ry="12" fill="#93c5fd" stroke="#2563eb" strokeWidth="1.5" />
-        
-        {/* Body 1 */}
         <path d="M 6 16 L 6 36 A 36 12 0 0 0 78 36 L 78 16" fill="#60a5fa" stroke="#2563eb" strokeWidth="1.5" />
         <ellipse cx="42" cy="36" rx="36" ry="12" fill="#93c5fd" stroke="#2563eb" strokeWidth="1.5" />
-
-        {/* Body 2 */}
         <path d="M 6 36 L 6 56 A 36 12 0 0 0 78 56 L 78 36" fill="#3b82f6" stroke="#2563eb" strokeWidth="1.5" />
         <ellipse cx="42" cy="56" rx="36" ry="12" fill="#60a5fa" stroke="#2563eb" strokeWidth="1.5" />
-
-        {/* Body 3 */}
         <path d="M 6 56 L 6 76 A 36 12 0 0 0 78 76 L 78 56" fill="#1d4ed8" stroke="#2563eb" strokeWidth="1.5" />
 
         <text x="42" y="105" fill={textColor} fontSize="11" fontWeight="bold" textAnchor="middle" fontFamily="sans-serif">Vector</text>
@@ -583,7 +715,15 @@ function VectorDatabaseSchematic({ isStudioMode }: { isStudioMode: boolean }) {
   )
 }
 
-function RagSchematic({ isStudioMode }: { isStudioMode: boolean }) {
+function RagSchematic({ 
+  isStudioMode,
+  activeStep,
+  onTriggerStep
+}: { 
+  isStudioMode: boolean
+  activeStep: number | null
+  onTriggerStep: (step: number) => void
+}) {
   const textColor = isStudioMode ? '#0f172a' : '#f8fafc'
   const subtextColor = isStudioMode ? '#64748b' : '#94a3b8'
   const boxFill = isStudioMode ? '#ffffff' : '#0f172a'
@@ -606,12 +746,12 @@ function RagSchematic({ isStudioMode }: { isStudioMode: boolean }) {
       </g>
 
       {/* Step 1: Query Arrow to Retriever */}
-      <path d="M 85 70 L 170 70" fill="none" stroke={subtextColor} strokeWidth="1.5" strokeDasharray="4 3" markerEnd="url(#arrow-rag)" />
+      <path d="M 85 70 L 170 70" fill="none" stroke={activeStep === 1 ? '#ea580c' : subtextColor} strokeWidth={activeStep === 1 ? '2.5' : '1.5'} strokeDasharray="4 3" markerEnd="url(#arrow-rag)" />
       
       {/* Step 1 Number Badge & Label */}
-      <g transform="translate(110, 48)">
-        <circle cx="10" cy="10" r="9" fill="#fed7aa" stroke="#ea580c" strokeWidth="1" />
-        <text x="10" y="14" fill="#9a3412" fontSize="9" fontWeight="bold" textAnchor="middle" fontFamily="sans-serif">1</text>
+      <g transform="translate(110, 48)" className="cursor-pointer" onClick={() => onTriggerStep(1)}>
+        <circle cx="10" cy="10" r="9" fill={activeStep === 1 ? '#ea580c' : '#fed7aa'} stroke="#ea580c" strokeWidth="1" />
+        <text x="10" y="14" fill={activeStep === 1 ? '#ffffff' : '#9a3412'} fontSize="9" fontWeight="bold" textAnchor="middle" fontFamily="sans-serif">1</text>
         <text x="10" y="32" fill={textColor} fontSize="9" fontWeight="bold" textAnchor="middle" fontFamily="sans-serif">Query</text>
       </g>
 
@@ -623,12 +763,12 @@ function RagSchematic({ isStudioMode }: { isStudioMode: boolean }) {
       </g>
 
       {/* Step 2: Upward curved Search arrow to Knowledge Base */}
-      <path d="M 235 60 C 265 25, 300 25, 350 25" fill="none" stroke={subtextColor} strokeWidth="1.5" strokeDasharray="4 3" markerEnd="url(#arrow-rag)" />
+      <path d="M 235 60 C 265 25, 300 25, 350 25" fill="none" stroke={activeStep === 2 ? '#ea580c' : subtextColor} strokeWidth={activeStep === 2 ? '2.5' : '1.5'} strokeDasharray="4 3" markerEnd="url(#arrow-rag)" />
       
       {/* Step 2 Number Badge & Label */}
-      <g transform="translate(265, 8)">
-        <circle cx="10" cy="10" r="9" fill="#fed7aa" stroke="#ea580c" strokeWidth="1" />
-        <text x="10" y="14" fill="#9a3412" fontSize="9" fontWeight="bold" textAnchor="middle" fontFamily="sans-serif">2</text>
+      <g transform="translate(265, 8)" className="cursor-pointer" onClick={() => onTriggerStep(2)}>
+        <circle cx="10" cy="10" r="9" fill={activeStep === 2 ? '#ea580c' : '#fed7aa'} stroke="#ea580c" strokeWidth="1" />
+        <text x="10" y="14" fill={activeStep === 2 ? '#ffffff' : '#9a3412'} fontSize="9" fontWeight="bold" textAnchor="middle" fontFamily="sans-serif">2</text>
         <text x="36" y="14" fill={textColor} fontSize="9" fontWeight="bold" fontFamily="sans-serif">Search</text>
       </g>
 
@@ -636,26 +776,22 @@ function RagSchematic({ isStudioMode }: { isStudioMode: boolean }) {
       <g transform="translate(365, 12)">
         <rect x="0" y="0" width="160" height="96" rx="12" fill={isStudioMode ? '#fffbeb' : '#1c1917'} stroke="#d97706" strokeWidth="1.5" strokeDasharray="4 3" />
         
-        {/* Header Pill */}
         <rect x="25" y="-10" width="110" height="20" rx="6" fill="#fde68a" stroke="#d97706" strokeWidth="1" />
         <text x="80" y="4" fill="#92400e" fontSize="9.5" fontWeight="bold" textAnchor="middle" fontFamily="sans-serif">Knowledge Base</text>
 
         {/* 3 Items: PDF, Vector DB, Code */}
-        {/* PDF */}
         <g transform="translate(14, 25)">
           <rect x="0" y="0" width="36" height="42" rx="4" fill={boxFill} stroke={boxStroke} />
           <text x="18" y="24" fontSize="14" textAnchor="middle">📄</text>
           <text x="18" y="55" fill={textColor} fontSize="9" fontWeight="bold" textAnchor="middle" fontFamily="sans-serif">PDF</text>
         </g>
 
-        {/* Vector DB */}
         <g transform="translate(62, 25)">
           <ellipse cx="18" cy="8" rx="16" ry="6" fill="#cbd5e1" stroke={boxStroke} />
           <path d="M 2 8 L 2 28 A 16 6 0 0 0 34 28 L 34 8" fill="#94a3b8" stroke={boxStroke} />
           <text x="18" y="55" fill={textColor} fontSize="8.5" fontWeight="bold" textAnchor="middle" fontFamily="sans-serif">Vector DB</text>
         </g>
 
-        {/* Code */}
         <g transform="translate(110, 25)">
           <rect x="0" y="0" width="36" height="42" rx="4" fill={boxFill} stroke={boxStroke} />
           <text x="18" y="26" fontSize="11" fontWeight="bold" fill="#0284c7" textAnchor="middle" fontFamily="monospace">&lt;/&gt;</text>
@@ -664,22 +800,22 @@ function RagSchematic({ isStudioMode }: { isStudioMode: boolean }) {
       </g>
 
       {/* Step 3: Downward curved Relevant Text arrow back to Retriever */}
-      <path d="M 360 85 C 310 100, 260 100, 235 85" fill="none" stroke={subtextColor} strokeWidth="1.5" strokeDasharray="4 3" markerEnd="url(#arrow-rag)" />
+      <path d="M 360 85 C 310 100, 260 100, 235 85" fill="none" stroke={activeStep === 3 ? '#ea580c' : subtextColor} strokeWidth={activeStep === 3 ? '2.5' : '1.5'} strokeDasharray="4 3" markerEnd="url(#arrow-rag)" />
       
       {/* Step 3 Number Badge & Label */}
-      <g transform="translate(265, 88)">
-        <circle cx="10" cy="10" r="9" fill="#fed7aa" stroke="#ea580c" strokeWidth="1" />
-        <text x="10" y="14" fill="#9a3412" fontSize="9" fontWeight="bold" textAnchor="middle" fontFamily="sans-serif">3</text>
+      <g transform="translate(265, 88)" className="cursor-pointer" onClick={() => onTriggerStep(3)}>
+        <circle cx="10" cy="10" r="9" fill={activeStep === 3 ? '#ea580c' : '#fed7aa'} stroke="#ea580c" strokeWidth="1" />
+        <text x="10" y="14" fill={activeStep === 3 ? '#ffffff' : '#9a3412'} fontSize="9" fontWeight="bold" textAnchor="middle" fontFamily="sans-serif">3</text>
         <text x="36" y="14" fill={textColor} fontSize="8.5" fontWeight="bold" fontFamily="sans-serif">Relevant text</text>
       </g>
 
       {/* Step 4: Retriever -> LLM arrow */}
-      <path d="M 205 110 L 205 145" fill="none" stroke={subtextColor} strokeWidth="1.5" strokeDasharray="4 3" markerEnd="url(#arrow-rag)" />
+      <path d="M 205 110 L 205 145" fill="none" stroke={activeStep === 4 ? '#ea580c' : subtextColor} strokeWidth={activeStep === 4 ? '2.5' : '1.5'} strokeDasharray="4 3" markerEnd="url(#arrow-rag)" />
       
       {/* Step 4 Number Badge & Label */}
-      <g transform="translate(130, 120)">
-        <circle cx="10" cy="10" r="9" fill="#fed7aa" stroke="#ea580c" strokeWidth="1" />
-        <text x="10" y="14" fill="#9a3412" fontSize="9" fontWeight="bold" textAnchor="middle" fontFamily="sans-serif">4</text>
+      <g transform="translate(130, 120)" className="cursor-pointer" onClick={() => onTriggerStep(4)}>
+        <circle cx="10" cy="10" r="9" fill={activeStep === 4 ? '#ea580c' : '#fed7aa'} stroke="#ea580c" strokeWidth="1" />
+        <text x="10" y="14" fill={activeStep === 4 ? '#ffffff' : '#9a3412'} fontSize="9" fontWeight="bold" textAnchor="middle" fontFamily="sans-serif">4</text>
         <text x="55" y="14" fill={textColor} fontSize="9" fontWeight="bold" textAnchor="middle" fontFamily="sans-serif">Query + Text</text>
       </g>
 
@@ -692,19 +828,27 @@ function RagSchematic({ isStudioMode }: { isStudioMode: boolean }) {
       </g>
 
       {/* Step 5: Generate response curved line from LLM back to User */}
-      <path d="M 180 167 C 100 170, 55 150, 55 115" fill="none" stroke={subtextColor} strokeWidth="1.5" strokeDasharray="4 3" markerEnd="url(#arrow-rag)" />
+      <path d="M 180 167 C 100 170, 55 150, 55 115" fill="none" stroke={activeStep === 5 ? '#10b981' : subtextColor} strokeWidth={activeStep === 5 ? '2.5' : '1.5'} strokeDasharray="4 3" markerEnd="url(#arrow-rag)" />
       
       {/* Step 5 Badge & Label */}
-      <g transform="translate(68, 165)">
-        <circle cx="10" cy="10" r="9" fill="#fed7aa" stroke="#ea580c" strokeWidth="1" />
-        <text x="10" y="14" fill="#9a3412" fontSize="9" fontWeight="bold" textAnchor="middle" fontFamily="sans-serif">5</text>
+      <g transform="translate(68, 165)" className="cursor-pointer" onClick={() => onTriggerStep(5)}>
+        <circle cx="10" cy="10" r="9" fill={activeStep === 5 ? '#10b981' : '#fed7aa'} stroke="#10b981" strokeWidth="1" />
+        <text x="10" y="14" fill={activeStep === 5 ? '#ffffff' : '#9a3412'} fontSize="9" fontWeight="bold" textAnchor="middle" fontFamily="sans-serif">5</text>
         <text x="68" y="14" fill={textColor} fontSize="9" fontWeight="bold" textAnchor="middle" fontFamily="sans-serif">Generate response</text>
       </g>
     </svg>
   )
 }
 
-function McpSchematic({ isStudioMode }: { isStudioMode: boolean }) {
+function McpSchematic({ 
+  isStudioMode,
+  selectedServer,
+  onSelectServer
+}: { 
+  isStudioMode: boolean
+  selectedServer: 'A' | 'B' | 'C' | null
+  onSelectServer: (server: 'A' | 'B' | 'C' | null) => void
+}) {
   const textColor = isStudioMode ? '#0f172a' : '#f8fafc'
   const subtextColor = isStudioMode ? '#64748b' : '#94a3b8'
   const boxFill = isStudioMode ? '#ffffff' : '#0f172a'
@@ -746,25 +890,30 @@ function McpSchematic({ isStudioMode }: { isStudioMode: boolean }) {
 
       {/* 3 Parallel Communication Rows */}
       {/* ================= ROW 1: SERVER A ================= */}
-      <g transform="translate(125, 25)">
-        {/* MCP Client */}
+      <g 
+        transform="translate(125, 25)" 
+        className="cursor-pointer transition-transform hover:scale-[1.01]"
+        onClick={() => onSelectServer(selectedServer === 'A' ? null : 'A')}
+      >
         <rect x="0" y="0" width="60" height="26" rx="6" fill={boxFill} stroke={boxStroke} />
         <text x="30" y="11" fill={textColor} fontSize="7" fontWeight="bold" textAnchor="middle" fontFamily="sans-serif">MCP</text>
         <text x="30" y="20" fill={textColor} fontSize="7" fontWeight="bold" textAnchor="middle" fontFamily="sans-serif">Client</text>
 
-        {/* Connector */}
         <line x1="60" y1="13" x2="80" y2="13" stroke={subtextColor} strokeWidth="1.2" />
 
-        {/* MCP Protocol Capsule */}
         <rect x="80" y="4" width="76" height="18" rx="9" fill={isStudioMode ? '#f1f5f9' : '#1e293b'} stroke={boxStroke} />
         <text x="118" y="16" fill={textColor} fontSize="7.5" fontWeight="bold" textAnchor="middle" fontFamily="sans-serif">MCP Protocol</text>
 
-        {/* Connector */}
         <line x1="156" y1="13" x2="185" y2="13" stroke={subtextColor} strokeWidth="1.2" />
 
         {/* MCP Server A (Server Rack) */}
         <g transform="translate(185, -2)">
-          <rect x="0" y="0" width="55" height="30" rx="4" fill={isStudioMode ? '#e2e8f0' : '#1e293b'} stroke={boxStroke} />
+          <rect 
+            x="0" y="0" width="55" height="30" rx="4" 
+            fill={selectedServer === 'A' ? '#0369a1' : (isStudioMode ? '#e2e8f0' : '#1e293b')} 
+            stroke={selectedServer === 'A' ? '#38bdf8' : boxStroke} 
+            strokeWidth={selectedServer === 'A' ? '2' : '1'} 
+          />
           <circle cx="8" cy="8" r="2" fill="#22c55e" />
           <circle cx="8" cy="15" r="2" fill="#22c55e" />
           <circle cx="8" cy="22" r="2" fill="#22c55e" />
@@ -774,10 +923,8 @@ function McpSchematic({ isStudioMode }: { isStudioMode: boolean }) {
           <text x="27" y="40" fill={textColor} fontSize="7.5" fontWeight="bold" textAnchor="middle" fontFamily="sans-serif">MCP Server A</text>
         </g>
 
-        {/* Connector to Web APIs */}
         <path d="M 245 13 L 290 13" fill="none" stroke={subtextColor} strokeWidth="1.5" strokeDasharray="3 2" markerEnd="url(#arrow-mcp)" />
 
-        {/* Web APIs */}
         <g transform="translate(295, -2)">
           <circle cx="15" cy="15" r="14" fill="#0f172a" />
           <text x="15" y="20" fontSize="14" textAnchor="middle">🐙</text>
@@ -792,23 +939,29 @@ function McpSchematic({ isStudioMode }: { isStudioMode: boolean }) {
       </g>
 
       {/* ================= ROW 2: SERVER B ================= */}
-      <g transform="translate(125, 85)">
-        {/* MCP Client */}
+      <g 
+        transform="translate(125, 85)" 
+        className="cursor-pointer transition-transform hover:scale-[1.01]"
+        onClick={() => onSelectServer(selectedServer === 'B' ? null : 'B')}
+      >
         <rect x="0" y="0" width="60" height="26" rx="6" fill={boxFill} stroke={boxStroke} />
         <text x="30" y="11" fill={textColor} fontSize="7" fontWeight="bold" textAnchor="middle" fontFamily="sans-serif">MCP</text>
         <text x="30" y="20" fill={textColor} fontSize="7" fontWeight="bold" textAnchor="middle" fontFamily="sans-serif">Client</text>
 
         <line x1="60" y1="13" x2="80" y2="13" stroke={subtextColor} strokeWidth="1.2" />
 
-        {/* MCP Protocol Capsule */}
         <rect x="80" y="4" width="76" height="18" rx="9" fill={isStudioMode ? '#f1f5f9' : '#1e293b'} stroke={boxStroke} />
         <text x="118" y="16" fill={textColor} fontSize="7.5" fontWeight="bold" textAnchor="middle" fontFamily="sans-serif">MCP Protocol</text>
 
         <line x1="156" y1="13" x2="185" y2="13" stroke={subtextColor} strokeWidth="1.2" />
 
-        {/* MCP Server B */}
         <g transform="translate(185, -2)">
-          <rect x="0" y="0" width="55" height="30" rx="4" fill={isStudioMode ? '#e2e8f0' : '#1e293b'} stroke={boxStroke} />
+          <rect 
+            x="0" y="0" width="55" height="30" rx="4" 
+            fill={selectedServer === 'B' ? '#047857' : (isStudioMode ? '#e2e8f0' : '#1e293b')} 
+            stroke={selectedServer === 'B' ? '#34d399' : boxStroke} 
+            strokeWidth={selectedServer === 'B' ? '2' : '1'} 
+          />
           <circle cx="8" cy="8" r="2" fill="#22c55e" />
           <circle cx="8" cy="15" r="2" fill="#22c55e" />
           <circle cx="8" cy="22" r="2" fill="#22c55e" />
@@ -820,7 +973,6 @@ function McpSchematic({ isStudioMode }: { isStudioMode: boolean }) {
 
         <path d="M 245 13 L 290 13" fill="none" stroke={subtextColor} strokeWidth="1.5" strokeDasharray="3 2" markerEnd="url(#arrow-mcp)" />
 
-        {/* Database */}
         <g transform="translate(305, -5)">
           <ellipse cx="20" cy="10" rx="16" ry="6" fill="#93c5fd" stroke="#2563eb" />
           <path d="M 4 10 L 4 28 A 16 6 0 0 0 36 28 L 36 10" fill="#60a5fa" stroke="#2563eb" />
@@ -829,23 +981,29 @@ function McpSchematic({ isStudioMode }: { isStudioMode: boolean }) {
       </g>
 
       {/* ================= ROW 3: SERVER C ================= */}
-      <g transform="translate(125, 145)">
-        {/* MCP Client */}
+      <g 
+        transform="translate(125, 145)" 
+        className="cursor-pointer transition-transform hover:scale-[1.01]"
+        onClick={() => onSelectServer(selectedServer === 'C' ? null : 'C')}
+      >
         <rect x="0" y="0" width="60" height="26" rx="6" fill={boxFill} stroke={boxStroke} />
         <text x="30" y="11" fill={textColor} fontSize="7" fontWeight="bold" textAnchor="middle" fontFamily="sans-serif">MCP</text>
         <text x="30" y="20" fill={textColor} fontSize="7" fontWeight="bold" textAnchor="middle" fontFamily="sans-serif">Client</text>
 
         <line x1="60" y1="13" x2="80" y2="13" stroke={subtextColor} strokeWidth="1.2" />
 
-        {/* MCP Protocol Capsule */}
         <rect x="80" y="4" width="76" height="18" rx="9" fill={isStudioMode ? '#f1f5f9' : '#1e293b'} stroke={boxStroke} />
         <text x="118" y="16" fill={textColor} fontSize="7.5" fontWeight="bold" textAnchor="middle" fontFamily="sans-serif">MCP Protocol</text>
 
         <line x1="156" y1="13" x2="185" y2="13" stroke={subtextColor} strokeWidth="1.2" />
 
-        {/* MCP Server C */}
         <g transform="translate(185, -2)">
-          <rect x="0" y="0" width="55" height="30" rx="4" fill={isStudioMode ? '#e2e8f0' : '#1e293b'} stroke={boxStroke} />
+          <rect 
+            x="0" y="0" width="55" height="30" rx="4" 
+            fill={selectedServer === 'C' ? '#b45309' : (isStudioMode ? '#e2e8f0' : '#1e293b')} 
+            stroke={selectedServer === 'C' ? '#fbbf24' : boxStroke} 
+            strokeWidth={selectedServer === 'C' ? '2' : '1'} 
+          />
           <circle cx="8" cy="8" r="2" fill="#22c55e" />
           <circle cx="8" cy="15" r="2" fill="#22c55e" />
           <circle cx="8" cy="22" r="2" fill="#22c55e" />
@@ -857,7 +1015,6 @@ function McpSchematic({ isStudioMode }: { isStudioMode: boolean }) {
 
         <path d="M 245 13 L 290 13" fill="none" stroke={subtextColor} strokeWidth="1.5" strokeDasharray="3 2" markerEnd="url(#arrow-mcp)" />
 
-        {/* Filesystem */}
         <g transform="translate(305, -5)">
           <rect x="0" y="0" width="36" height="26" rx="4" fill="#fef08a" stroke="#ca8a04" strokeDasharray="3 2" />
           <path d="M 0 6 L 14 6 L 18 10 L 36 10" fill="none" stroke="#ca8a04" />
@@ -868,23 +1025,6 @@ function McpSchematic({ isStudioMode }: { isStudioMode: boolean }) {
   )
 }
 
-function renderSchematic(type: AiTermSpec['svgSchematicType'], isStudioMode: boolean) {
-  switch (type) {
-    case 'agent':
-      return <AgenticAiSchematic isStudioMode={isStudioMode} />
-    case 'reasoning':
-      return <LargeReasoningModelSchematic isStudioMode={isStudioMode} />
-    case 'vectordb':
-      return <VectorDatabaseSchematic isStudioMode={isStudioMode} />
-    case 'rag':
-      return <RagSchematic isStudioMode={isStudioMode} />
-    case 'mcp':
-      return <McpSchematic isStudioMode={isStudioMode} />
-    default:
-      return null
-  }
-}
-
 // ==========================================
 // MAIN COMPONENT: BYTEBYTEGO AI CODEX
 // ==========================================
@@ -892,10 +1032,18 @@ function renderSchematic(type: AiTermSpec['svgSchematicType'], isStudioMode: boo
 export default function ByteByteGoAiCodex() {
   const [viewMode, setViewMode] = useState<'poster' | 'explorer' | 'reference'>('poster')
   const [activeTermId, setActiveTermId] = useState<string>('agentic-ai')
-  const [isStudioMode, setIsStudioMode] = useState<boolean>(true) // default to crisp ByteByteGo Editorial Canvas!
+  const [isStudioMode, setIsStudioMode] = useState<boolean>(true) // default to crisp ByteByteGo Editorial Canvas
   const [copiedBadge, setCopiedBadge] = useState<boolean>(false)
   const [copiedMermaid, setCopiedMermaid] = useState<boolean>(false)
   const [isPlaying, setIsPlaying] = useState<boolean>(false)
+
+  // Interactive node inspection state
+  const [activeAgentNode, setActiveAgentNode] = useState<string | null>(null)
+  const [isCotTraced, setIsCotTraced] = useState<boolean>(false)
+  const [selectedDataType, setSelectedDataType] = useState<'text' | 'image' | 'audio' | 'video'>('text')
+  const [activeRagStep, setActiveRagStep] = useState<number | null>(null)
+  const [selectedMcpServer, setSelectedMcpServer] = useState<'A' | 'B' | 'C' | null>(null)
+  const [copiedSpecId, setCopiedSpecId] = useState<string | null>(null)
 
   // Auto-play step-through for Explorer Mode
   useEffect(() => {
@@ -966,6 +1114,28 @@ export default function ByteByteGoAiCodex() {
     }
     setCopiedBadge(true)
     setTimeout(() => setCopiedBadge(false), 2000)
+  }
+
+  const handleCopyRfcSpec = (term: AiTermSpec) => {
+    const rfcMarkdown = [
+      `### Architectural RFC: ${term.title} (${term.category})`,
+      `- Definition: ${term.definition}`,
+      `- Standard Protocol: ${term.technicalSpecs.protocol}`,
+      `- Latency Target: ${term.technicalSpecs.latencyTarget}`,
+      `- Key Invariant: ${term.technicalSpecs.keyInvariant}`,
+      `- Production Stack: ${term.technicalSpecs.productionStack}`,
+      `- Real-World Deployments: ${term.realWorldExamples.join(', ')}`,
+      '',
+      '```mermaid',
+      term.mermaidDiagram,
+      '```'
+    ].join('\n')
+
+    if (typeof navigator !== 'undefined' && navigator.clipboard) {
+      navigator.clipboard.writeText(rfcMarkdown)
+    }
+    setCopiedSpecId(term.id)
+    setTimeout(() => setCopiedSpecId(null), 2000)
   }
 
   return (
@@ -1101,11 +1271,16 @@ export default function ByteByteGoAiCodex() {
       {/* ========================================================= */}
       {viewMode === 'poster' && (
         <div className="space-y-6">
-          <div className="text-xs font-sans text-slate-500 dark:text-slate-400 pb-2">
-            Complete high-fidelity vector recreation of the ByteByteGo architecture infographic. Each paradigm is engineered with precise data flows, memory structures, and enterprise production anchors.
+          <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-2 text-xs font-sans text-slate-500 dark:text-slate-400 pb-2">
+            <span>
+              Complete high-fidelity vector recreation of the ByteByteGo architecture infographic. Click any node or step to simulate live data flows.
+            </span>
+            <span className="font-mono text-[11px] text-[#00a884] font-semibold shrink-0">
+              [ Interactive Execution Active ]
+            </span>
           </div>
 
-          <div className="space-y-4">
+          <div className="space-y-6">
             {AI_TERMS.map((term, index) => {
               return (
                 <div 
@@ -1149,17 +1324,150 @@ export default function ByteByteGoAiCodex() {
                       <div className="text-xs font-sans text-slate-500 dark:text-slate-400 leading-relaxed">
                         Modeled after ByteByteGo system design standards for enterprise engineering.
                       </div>
+
+                      {/* 1-Click Copy RFC Specification */}
+                      <button
+                        onClick={() => handleCopyRfcSpec(term)}
+                        className={`w-full px-3 py-1.5 rounded-lg border text-xs font-mono flex items-center justify-center gap-1.5 transition-colors cursor-pointer ${
+                          copiedSpecId === term.id
+                            ? 'bg-emerald-500 text-white border-emerald-600'
+                            : isStudioMode
+                              ? 'bg-slate-50 hover:bg-slate-100 text-slate-700 border-slate-200'
+                              : 'bg-slate-900 hover:bg-slate-800 text-slate-300 border-slate-800'
+                        }`}
+                        title="Copy Markdown specification for Engineering RFC / PR"
+                      >
+                        {copiedSpecId === term.id ? <CheckCircle2 className="w-3.5 h-3.5" /> : <FileText className="w-3.5 h-3.5 text-teal-500" />}
+                        <span>{copiedSpecId === term.id ? 'RFC Copied!' : 'Copy RFC Spec'}</span>
+                      </button>
                     </div>
 
-                    {/* Middle Column: The Full Illustrated Schematic */}
+                    {/* Middle Column: The Full Illustrated Schematic with Interactive Overlays */}
                     <div 
-                      className="lg:col-span-6 rounded-xl border p-3 sm:p-4 flex items-center justify-center min-h-[200px]"
+                      className="lg:col-span-6 rounded-xl border p-3 sm:p-4 flex flex-col items-center justify-center min-h-[220px]"
                       style={{ 
                         backgroundColor: isStudioMode ? '#fcfcfc' : 'rgba(2, 6, 23, 0.7)',
                         borderColor: isStudioMode ? '#e2e8f0' : '#1e293b' 
                       }}
                     >
-                      {renderSchematic(term.svgSchematicType, isStudioMode)}
+                      {term.id === 'agentic-ai' && (
+                        <div className="w-full space-y-2">
+                          <AgenticAiSchematic 
+                            isStudioMode={isStudioMode} 
+                            activeNode={activeAgentNode}
+                            onSelectNode={setActiveAgentNode}
+                          />
+                          {/* Node Highlight Pill */}
+                          <div className="pt-2 border-t border-slate-200 dark:border-slate-800/80 flex items-center justify-between text-[11px] font-mono">
+                            <span className="text-slate-500">Node Inspector:</span>
+                            <span className="text-emerald-600 dark:text-emerald-400 font-semibold truncate max-w-[320px]">
+                              {activeAgentNode === 'memory' && 'Memory: Redis 7.2 cluster & PostgreSQL pgvector episodic storage'}
+                              {activeAgentNode === 'tools' && 'Tools: Declarative JSON-RPC 2.0 MCP tool declarations'}
+                              {activeAgentNode === 'goals' && 'Goals: User intent policy guardrails & spend ceilings'}
+                              {activeAgentNode === 'agent' && 'Agent: ReAct autonomous loop with LangGraph cycle prevention'}
+                              {activeAgentNode === 'actions' && 'Actions: Ephemeral Docker sandbox container execution'}
+                              {activeAgentNode === 'env' && 'Environment: Target AWS EKS & Kafka streaming topology'}
+                              {activeAgentNode === 'observations' && 'Observations: Perception feedback parsing exit status'}
+                              {!activeAgentNode && 'Click any node to inspect runtime architecture'}
+                            </span>
+                          </div>
+                        </div>
+                      )}
+
+                      {term.id === 'lrm' && (
+                        <div className="w-full space-y-2">
+                          <LargeReasoningModelSchematic 
+                            isStudioMode={isStudioMode}
+                            isCotTraced={isCotTraced}
+                            onToggleCot={() => setIsCotTraced(!isCotTraced)}
+                          />
+                          <div className="pt-2 border-t border-slate-200 dark:border-slate-800/80 flex items-center justify-between text-[11px] font-mono">
+                            <button
+                              onClick={() => setIsCotTraced(!isCotTraced)}
+                              className="px-2 py-0.5 rounded bg-cyan-500/15 text-cyan-600 dark:text-cyan-400 hover:bg-cyan-500/25 transition-colors cursor-pointer flex items-center gap-1 font-semibold"
+                            >
+                              <Zap className="w-3 h-3" />
+                              <span>{isCotTraced ? 'Reset CoT Trace' : 'Trace CoT Reasoning'}</span>
+                            </button>
+                            <span className="text-cyan-600 dark:text-cyan-400 font-semibold">
+                              {isCotTraced ? 'Compute: 142 reasoning tokens / 38ms verified' : 'Click "Example" or "Trace" to inspect'}
+                            </span>
+                          </div>
+                        </div>
+                      )}
+
+                      {term.id === 'vectordb' && (
+                        <div className="w-full space-y-2">
+                          <VectorDatabaseSchematic 
+                            isStudioMode={isStudioMode}
+                            selectedDataType={selectedDataType}
+                            onSelectDataType={setSelectedDataType}
+                          />
+                          <div className="pt-2 border-t border-slate-200 dark:border-slate-800/80 flex items-center justify-between text-[11px] font-mono">
+                            <span className="text-slate-500">Active Modality:</span>
+                            <span className="text-purple-600 dark:text-purple-400 font-semibold">
+                              {selectedDataType === 'text' && 'Text: text-embedding-3-small (1536d) • Cosine Similarity'}
+                              {selectedDataType === 'image' && 'Image: CLIP ViT-L/14 (768d) • Multi-modal Contrastive'}
+                              {selectedDataType === 'audio' && 'Audio: Whisper-v3 Encodings (1280d) • Acoustic Embeddings'}
+                              {selectedDataType === 'video' && 'Video: VideoMAE-v2 (1024d) • Spatio-temporal Representations'}
+                            </span>
+                          </div>
+                        </div>
+                      )}
+
+                      {term.id === 'rag' && (
+                        <div className="w-full space-y-2">
+                          <RagSchematic 
+                            isStudioMode={isStudioMode}
+                            activeStep={activeRagStep}
+                            onTriggerStep={(s) => setActiveRagStep(activeRagStep === s ? null : s)}
+                          />
+                          <div className="pt-2 border-t border-slate-200 dark:border-slate-800/80 flex items-center justify-between text-[11px] font-mono">
+                            <div className="flex items-center gap-1">
+                              {[1, 2, 3, 4, 5].map((s) => (
+                                <button
+                                  key={s}
+                                  onClick={() => setActiveRagStep(activeRagStep === s ? null : s)}
+                                  className={`w-5 h-5 rounded-full text-[10px] font-bold flex items-center justify-center cursor-pointer transition-colors ${
+                                    activeRagStep === s 
+                                      ? 'bg-amber-500 text-white' 
+                                      : 'bg-slate-200 dark:bg-slate-800 text-slate-600 dark:text-slate-400'
+                                  }`}
+                                >
+                                  {s}
+                                </button>
+                              ))}
+                            </div>
+                            <span className="text-amber-600 dark:text-amber-400 font-semibold truncate max-w-[280px]">
+                              {activeRagStep === 1 && '1. Query: Inbound enterprise question'}
+                              {activeRagStep === 2 && '2. Search: Hybrid BM25 + pgvector HNSW'}
+                              {activeRagStep === 3 && '3. Relevant text: Top-k 3 grounded chunks'}
+                              {activeRagStep === 4 && '4. Synthesis: Prompt context window isolated'}
+                              {activeRagStep === 5 && '5. Fact response: Emitted with citations'}
+                              {!activeRagStep && 'Click steps 1-5 to trace pipeline'}
+                            </span>
+                          </div>
+                        </div>
+                      )}
+
+                      {term.id === 'mcp' && (
+                        <div className="w-full space-y-2">
+                          <McpSchematic 
+                            isStudioMode={isStudioMode}
+                            selectedServer={selectedMcpServer}
+                            onSelectServer={setSelectedMcpServer}
+                          />
+                          <div className="pt-2 border-t border-slate-200 dark:border-slate-800/80 flex items-center justify-between text-[11px] font-mono">
+                            <span className="text-slate-500">Wire Payload:</span>
+                            <span className="text-pink-600 dark:text-pink-400 font-semibold truncate max-w-[320px]">
+                              {selectedMcpServer === 'A' && 'Server A: tools/call {"name": "github_create_issue"}'}
+                              {selectedMcpServer === 'B' && 'Server B: resources/read {"uri": "postgres://audit_log"}'}
+                              {selectedMcpServer === 'C' && 'Server C: tools/call {"name": "fs_read_file"}'}
+                              {!selectedMcpServer && 'Click Server A, B, or C for JSON-RPC 2.0 wire payload'}
+                            </span>
+                          </div>
+                        </div>
+                      )}
                     </div>
 
                     {/* Right Column: Definition & Real-World Example Cards */}
@@ -1218,6 +1526,12 @@ export default function ByteByteGoAiCodex() {
                             </div>
                           ))}
                         </div>
+                      </div>
+
+                      {/* Architecture Metrics Pill */}
+                      <div className="flex items-center justify-between px-3 py-1.5 rounded-lg bg-slate-100 dark:bg-slate-900 border border-slate-200 dark:border-slate-800 text-[10px] font-mono">
+                        <span className="text-slate-500">Latency:</span>
+                        <span className="text-emerald-600 dark:text-emerald-400 font-bold">{term.technicalSpecs.latencyTarget}</span>
                       </div>
                     </div>
 
@@ -1350,17 +1664,66 @@ export default function ByteByteGoAiCodex() {
                       <span style={{ color: isStudioMode ? '#0f172a' : '#cbd5e1' }}>{activeTerm.technicalSpecs.productionStack}</span>
                     </div>
                   </div>
+
+                  {/* 1-Click Copy RFC Spec */}
+                  <button
+                    onClick={() => handleCopyRfcSpec(activeTerm)}
+                    className={`w-full px-3 py-1.5 rounded-lg border text-xs font-mono flex items-center justify-center gap-1.5 transition-colors cursor-pointer ${
+                      copiedSpecId === activeTerm.id
+                        ? 'bg-emerald-500 text-white border-emerald-600'
+                        : isStudioMode
+                          ? 'bg-slate-50 hover:bg-slate-100 text-slate-700 border-slate-200'
+                          : 'bg-slate-900 hover:bg-slate-800 text-slate-300 border-slate-800'
+                    }`}
+                  >
+                    {copiedSpecId === activeTerm.id ? <CheckCircle2 className="w-3.5 h-3.5" /> : <FileText className="w-3.5 h-3.5 text-teal-500" />}
+                    <span>{copiedSpecId === activeTerm.id ? 'RFC Spec Copied!' : 'Copy RFC Spec'}</span>
+                  </button>
                 </div>
 
                 {/* Column 2: Schematic */}
                 <div 
-                  className="lg:col-span-6 rounded-xl border p-4 flex items-center justify-center min-h-[240px]" 
+                  className="lg:col-span-6 rounded-xl border p-4 flex flex-col items-center justify-center min-h-[240px]" 
                   style={{ 
                     backgroundColor: isStudioMode ? '#f8fafc' : 'rgba(2, 6, 23, 0.6)',
                     borderColor: isStudioMode ? '#e2e8f0' : '#1e293b' 
                   }}
                 >
-                  {renderSchematic(activeTerm.svgSchematicType, isStudioMode)}
+                  {activeTerm.id === 'agentic-ai' && (
+                    <AgenticAiSchematic 
+                      isStudioMode={isStudioMode} 
+                      activeNode={activeAgentNode}
+                      onSelectNode={setActiveAgentNode}
+                    />
+                  )}
+                  {activeTerm.id === 'lrm' && (
+                    <LargeReasoningModelSchematic 
+                      isStudioMode={isStudioMode}
+                      isCotTraced={isCotTraced}
+                      onToggleCot={() => setIsCotTraced(!isCotTraced)}
+                    />
+                  )}
+                  {activeTerm.id === 'vectordb' && (
+                    <VectorDatabaseSchematic 
+                      isStudioMode={isStudioMode}
+                      selectedDataType={selectedDataType}
+                      onSelectDataType={setSelectedDataType}
+                    />
+                  )}
+                  {activeTerm.id === 'rag' && (
+                    <RagSchematic 
+                      isStudioMode={isStudioMode}
+                      activeStep={activeRagStep}
+                      onTriggerStep={(s) => setActiveRagStep(activeRagStep === s ? null : s)}
+                    />
+                  )}
+                  {activeTerm.id === 'mcp' && (
+                    <McpSchematic 
+                      isStudioMode={isStudioMode}
+                      selectedServer={selectedMcpServer}
+                      onSelectServer={setSelectedMcpServer}
+                    />
+                  )}
                 </div>
 
                 {/* Column 3: Definitions */}

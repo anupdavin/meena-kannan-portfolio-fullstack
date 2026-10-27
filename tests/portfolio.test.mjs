@@ -77,6 +77,9 @@ describe('Portfolio Verification & Asset Integrity', () => {
     assert.ok(codexCode.includes('AI Terms You Need to Know'), 'Must feature ByteByteGo headline');
     assert.ok(codexCode.includes('handleCopyMermaid'), 'Must support copying Mermaid syntax to clipboard');
     assert.ok(codexCode.includes('handleDownloadSvg'), 'Must support downloading diagram as pure SVG vector file');
+    assert.ok(codexCode.includes('handleCopyRfcSpec'), 'Must support copying RFC specification markdown');
+    assert.ok(codexCode.includes('activeAgentNode'), 'Must support interactive Agentic AI node inspection');
+    assert.ok(codexCode.includes('selectedDataType'), 'Must support multi-modal Vector DB format selection');
     assert.ok(codexCode.includes('mermaidDiagram'), 'Must define Mermaid diagram representations for enterprise architectures');
     assert.ok(!/[\u2013\u2014]/.test(codexCode), 'ByteByteGoAiCodex must contain zero em/en-dashes');
 
@@ -168,6 +171,16 @@ describe('Interactive CLI & Assistant Query Engine', () => {
     assert.ok(cliCode.includes("sub.includes('lrm')"), "InteractiveCli must handle lrm paradigm deep-dive");
     assert.ok(cliCode.includes("sub.includes('vector')"), "InteractiveCli must handle vector paradigm deep-dive");
     assert.ok(cliCode.includes("sub.includes('rag')"), "InteractiveCli must handle rag paradigm deep-dive");
+    assert.ok(!/[\u2013\u2014]/.test(cliCode), 'InteractiveCli.tsx must contain zero em/en-dashes');
+  });
+
+  test('InteractiveCli.tsx supports bytebytego command, infographic aliases and quick chip', () => {
+    const cliCode = fs.readFileSync(path.join(rootDir, 'src', 'components', 'portfolio', 'InteractiveCli.tsx'), 'utf8');
+    assert.ok(cliCode.includes("'bytebytego'"), "InteractiveCli must include 'bytebytego' in AVAILABLE_COMMANDS");
+    assert.ok(cliCode.includes("'infographic'"), "InteractiveCli must include 'infographic' in AVAILABLE_COMMANDS");
+    assert.ok(cliCode.includes("'poster'"), "InteractiveCli must include 'poster' in AVAILABLE_COMMANDS");
+    assert.ok(cliCode.includes('[ $ bytebytego ]'), "InteractiveCli must define [ $ bytebytego ] quick chip");
+    assert.ok(cliCode.includes("case 'bytebytego':"), "InteractiveCli switch must handle 'bytebytego'");
     assert.ok(!/[\u2013\u2014]/.test(cliCode), 'InteractiveCli.tsx must contain zero em/en-dashes');
   });
 });
