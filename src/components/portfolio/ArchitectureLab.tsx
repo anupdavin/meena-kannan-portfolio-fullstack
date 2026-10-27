@@ -26,6 +26,7 @@ import {
   History,
   AlertOctagon,
   Lock,
+  Scale,
   X
 } from 'lucide-react'
 import ByteByteGoDiagram from '@/components/architecture/ByteByteGoDiagram'
@@ -51,6 +52,7 @@ import DistributedCacheSandbox from '@/components/architecture/DistributedCacheS
 import EventSourcingSandbox from '@/components/architecture/EventSourcingSandbox'
 import DlqRetrySandbox from '@/components/architecture/DlqRetrySandbox'
 import IdempotencySandbox from '@/components/architecture/IdempotencySandbox'
+import { AtomicCommitSandbox } from '@/components/architecture/AtomicCommitSandbox'
 import { ARCHITECTURE_SYSTEMS } from '@/data/architectureSystems'
 import { ARCHITECTURAL_DECISIONS } from '@/data/architecturalDecisions'
 import { ARCHITECTURAL_TRADEOFFS } from '@/data/architecturalTradeoffs'
@@ -73,6 +75,7 @@ import { DISTRIBUTED_CACHE_MODELS } from '@/data/distributedCache'
 import { EVENT_SOURCING_MODELS } from '@/data/eventSourcing'
 import { DLQ_RETRY_MODELS } from '@/data/dlqRetryModels'
 import { IDEMPOTENCY_MODELS } from '@/data/idempotencyModels'
+import { ATOMIC_COMMIT_PARADIGMS } from '@/data/atomicCommitModels'
 
 const AI_TERMS_SUMMARY = [
   { id: 'agentic-ai', title: 'Agentic AI', text: 'Perception-action loop, DAG memory, tool execution, LangGraph' },
@@ -113,6 +116,7 @@ export default function ArchitectureLab() {
         eventsourcing: 5,
         dlq: 5,
         idempotency: 5,
+        atomiccommit: 5,
         isActive: false
       }
     }
@@ -351,8 +355,19 @@ export default function ArchitectureLab() {
       i.architecturalInvariant.toLowerCase().includes(q)
     ).length
 
+    const atomicCommitCount = ATOMIC_COMMIT_PARADIGMS.filter(a =>
+      a.title.toLowerCase().includes(q) ||
+      a.id.toLowerCase().includes(q) ||
+      a.category.toLowerCase().includes(q) ||
+      a.tagline.toLowerCase().includes(q) ||
+      a.blockingNature.toLowerCase().includes(q) ||
+      a.recoveryGuarantee.toLowerCase().includes(q) ||
+      a.description.toLowerCase().includes(q) ||
+      a.tradeOffSummary.toLowerCase().includes(q)
+    ).length
+
     return {
-      total: workbenchCount + aiCount + adrCount + tradeoffCount + evolutionCount + chaosCount + gatewayCount + traceCount + kafkaCount + ratelimitCount + multiregionCount + shardingCount + cdnCount + circuitBreakerCount + concurrencyCount + raftCount + vectorCount + priorityCount + sagasCount + cacheCount + eventSourcingCount + dlqCount + idempotencyCount,
+      total: workbenchCount + aiCount + adrCount + tradeoffCount + evolutionCount + chaosCount + gatewayCount + traceCount + kafkaCount + ratelimitCount + multiregionCount + shardingCount + cdnCount + circuitBreakerCount + concurrencyCount + raftCount + vectorCount + priorityCount + sagasCount + cacheCount + eventSourcingCount + dlqCount + idempotencyCount + atomicCommitCount,
       workbench: workbenchCount,
       aiCodex: aiCount,
       adr: adrCount,
@@ -376,6 +391,7 @@ export default function ArchitectureLab() {
       eventsourcing: eventSourcingCount,
       dlq: dlqCount,
       idempotency: idempotencyCount,
+      atomiccommit: atomicCommitCount,
       isActive: true
     }
   }, [searchQuery])
@@ -741,6 +757,17 @@ export default function ArchitectureLab() {
             <Lock className="w-3.5 h-3.5 text-indigo-400" />
             <span>Idempotency Keys ({matchStats.idempotency})</span>
           </a>
+          <a 
+            href="#architecture-atomic-commit"
+            className={`px-3 py-1.5 rounded-lg border transition-all flex items-center gap-1.5 cursor-pointer ${
+              matchStats.isActive && matchStats.atomiccommit > 0
+                ? 'bg-emerald-500/10 border-emerald-500/50 text-emerald-400 shadow-[0_0_10px_rgba(16,185,129,0.15)] font-bold'
+                : 'bg-slate-900 border-slate-800 hover:border-emerald-500/50 hover:text-emerald-400 text-slate-300'
+            }`}
+          >
+            <Scale className="w-3.5 h-3.5 text-emerald-400" />
+            <span>2PC vs Saga ({matchStats.atomiccommit})</span>
+          </a>
         </div>
       </div>
 
@@ -1022,6 +1049,18 @@ export default function ArchitectureLab() {
         className="scroll-mt-24"
       >
         <IdempotencySandbox />
+      </motion.div>
+
+      {/* 2.27. Distributed Two-Phase Commit (2PC) vs Saga & Dual-Write Invariant Matrix Sandbox */}
+      <motion.div
+        id="architecture-atomic-commit"
+        initial={{ opacity: 0, y: 25 }}
+        whileInView={{ opacity: 1, y: 0 }}
+        viewport={{ once: true }}
+        transition={{ duration: 0.6, delay: 1.20 }}
+        className="scroll-mt-24"
+      >
+        <AtomicCommitSandbox />
       </motion.div>
 
       {/* 3. Architectural Design Pillars Strip */}

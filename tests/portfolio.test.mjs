@@ -1386,6 +1386,43 @@ describe('Production Architectural Decision Records (ADR) & CLI Integration', ()
     assert.ok(indexHtml.includes('id="architecture-idempotency"'), 'index.html must include #architecture-idempotency landmark');
     assert.ok(!/[\u2013\u2014]/.test(indexHtml), 'index.html must contain zero em/en-dashes');
   });
+
+  test('AtomicCommitSandbox and atomicCommitModels.ts define distributed 2PC, non-blocking 3PC, sagas and drift reconciler with CLI integration', () => {
+    const commitDataPath = path.join(rootDir, 'src', 'data', 'atomicCommitModels.ts');
+    assert.ok(fs.existsSync(commitDataPath), 'atomicCommitModels.ts must exist');
+    const commitDataCode = fs.readFileSync(commitDataPath, 'utf8');
+    assert.ok(commitDataCode.includes('two-phase-commit'), 'Must define two-phase-commit model');
+    assert.ok(commitDataCode.includes('three-phase-commit'), 'Must define three-phase-commit model');
+    assert.ok(commitDataCode.includes('choreographed-outbox-saga'), 'Must define choreographed-outbox-saga model');
+    assert.ok(commitDataCode.includes('dual-write-drift-reconciler'), 'Must define dual-write-drift-reconciler model');
+    assert.ok(commitDataCode.includes('paxos-truetime-commit'), 'Must define paxos-truetime-commit model');
+    assert.ok(!/[\u2013\u2014]/.test(commitDataCode), 'atomicCommitModels.ts must contain zero em/en-dashes');
+
+    const componentPath = path.join(rootDir, 'src', 'components', 'architecture', 'AtomicCommitSandbox.tsx');
+    assert.ok(fs.existsSync(componentPath), 'AtomicCommitSandbox.tsx must exist');
+    const compCode = fs.readFileSync(componentPath, 'utf8');
+    assert.ok(compCode.includes('handleCopyRfc'), 'AtomicCommitSandbox must support 1-click RFC copy');
+    assert.ok(compCode.includes('ATOMIC_COMMIT_PARADIGMS'), 'AtomicCommitSandbox must render ATOMIC_COMMIT_PARADIGMS');
+    assert.ok(!/[\u2013\u2014]/.test(compCode), 'AtomicCommitSandbox.tsx must contain zero em/en-dashes');
+
+    const labCode = fs.readFileSync(path.join(rootDir, 'src', 'components', 'portfolio', 'ArchitectureLab.tsx'), 'utf8');
+    assert.ok(labCode.includes('AtomicCommitSandbox'), 'ArchitectureLab must mount AtomicCommitSandbox');
+    assert.ok(labCode.includes('id="architecture-atomic-commit"'), 'ArchitectureLab must define anchor #architecture-atomic-commit');
+
+    const cliCode = fs.readFileSync(path.join(rootDir, 'src', 'components', 'portfolio', 'InteractiveCli.tsx'), 'utf8');
+    assert.ok(cliCode.includes("'2pc'"), "InteractiveCli must support '2pc' command");
+    assert.ok(cliCode.includes('[ $ 2pc ]'), "InteractiveCli must include '[ $ 2pc ]' quick chip");
+    assert.ok(cliCode.includes('ATOMIC_COMMIT_PARADIGMS'), 'InteractiveCli must search across ATOMIC_COMMIT_PARADIGMS');
+    assert.ok(!/[\u2013\u2014]/.test(cliCode), 'InteractiveCli.tsx must contain zero em/en-dashes');
+
+    const chatIndex = fs.readFileSync(path.join(rootDir, 'public', 'chat', 'index.json'), 'utf8');
+    assert.ok(chatIndex.includes('distributed-atomic-commit'), 'public/chat/index.json must index distributed-atomic-commit');
+    assert.ok(!/[\u2013\u2014]/.test(chatIndex), 'public/chat/index.json must contain zero em/en-dashes');
+
+    const indexHtml = fs.readFileSync(path.join(rootDir, 'index.html'), 'utf8');
+    assert.ok(indexHtml.includes('id="architecture-atomic-commit"'), 'index.html must include #architecture-atomic-commit landmark');
+    assert.ok(!/[\u2013\u2014]/.test(indexHtml), 'index.html must contain zero em/en-dashes');
+  });
 });
 
 

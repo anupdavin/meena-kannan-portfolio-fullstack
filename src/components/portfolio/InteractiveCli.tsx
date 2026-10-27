@@ -23,6 +23,7 @@ import { DISTRIBUTED_CACHE_MODELS } from '@/data/distributedCache'
 import { EVENT_SOURCING_MODELS } from '@/data/eventSourcing'
 import { DLQ_RETRY_MODELS } from '@/data/dlqRetryModels'
 import { IDEMPOTENCY_MODELS } from '@/data/idempotencyModels'
+import { ATOMIC_COMMIT_PARADIGMS } from '@/data/atomicCommitModels'
 import { EXECUTIVE_BRIEFING } from '@/data/executiveBriefing'
 
 interface HistoryEntry {
@@ -134,6 +135,12 @@ const AVAILABLE_COMMANDS = [
   'fencingtoken',
   'idempotentkey',
   'replayhammer',
+  'atomiccommit',
+  'twophasecommit',
+  '2pc',
+  '3pc',
+  'indoubt',
+  'coordinator',
   'adr',
   'decisions',
   'tradeoffs',
@@ -189,6 +196,7 @@ const QUICK_CHIPS = [
   { label: '[ $ eventsourcing ]', cmd: 'eventsourcing' },
   { label: '[ $ dlq ]', cmd: 'dlq' },
   { label: '[ $ idempotency ]', cmd: 'idempotency' },
+  { label: '[ $ 2pc ]', cmd: '2pc' },
   { label: '[ $ find kafka ]', cmd: 'find kafka' },
   { label: '[ $ tradeoffs ]', cmd: 'tradeoffs' },
   { label: '[ $ adr ]', cmd: 'adr' },
@@ -230,6 +238,7 @@ const COMMAND_HELP = [
   '  eventsourcing   - Inspect distributed event sourcing, CQRS & snapshotting (or "eventsourcing <id>")',
   '  dlq             - Inspect dead-letter queue, poison-pill quarantine & retries (or "dlq <id>")',
   '  idempotency     - Inspect distributed idempotency keys, fencing tokens & CAS locks (or "idempotency <id>")',
+  '  2pc             - Inspect 2PC vs Saga execution, non-blocking 3PC & TrueTime (or "2pc <id>")',
   '  find <query>    - Search cross-cutting architecture systems, ADRs, AI codex & trade-offs',
   '  tradeoffs       - Evaluate system design decision trade-offs (or "compare <topic>")',
   '  stats           - View production performance & impact metrics (99.99% SLA)',
@@ -2538,6 +2547,68 @@ export default function InteractiveCli() {
         ]
         break
       }
+      case 'atomiccommit':
+      case 'twophasecommit':
+      case '2pc':
+      case '3pc':
+      case 'indoubt':
+      case 'coordinator': {
+        const target = args[0]?.toLowerCase().trim()
+        if (target) {
+          const matched = ATOMIC_COMMIT_PARADIGMS.find(m =>
+            m.id === target ||
+            m.id.includes(target) ||
+            m.title.toLowerCase().includes(target) ||
+            m.category.toLowerCase().includes(target) ||
+            (target === '1' && m.id === 'two-phase-commit') ||
+            (target === '2' && m.id === 'three-phase-commit') ||
+            (target === '3' && m.id === 'choreographed-outbox-saga') ||
+            (target === '4' && m.id === 'dual-write-drift-reconciler') ||
+            (target === '5' && m.id === 'paxos-truetime-commit')
+          )
+          if (matched) {
+            output = [
+              '--------------------------------------------------------------------------------',
+              `Atomic Commit Model: ${matched.title}`,
+              '--------------------------------------------------------------------------------',
+              `Category            : ${matched.category}`,
+              `Tagline             : ${matched.tagline}`,
+              `Blocking Invariant  : ${matched.blockingNature}`,
+              `Line Throughput     : ${matched.throughputTps}`,
+              `P99 Latency         : ${matched.latencyP99}`,
+              `Recovery Guarantee  : ${matched.recoveryGuarantee}`,
+              '--------------------------------------------------------------------------------',
+              'STATE TRANSITIONS & INVARIANTS:',
+              ...matched.steps.map(s =>
+                `  * [${s.phase}] (${s.actor}) -> Invariant: ${s.invariant}`
+              ),
+              '--------------------------------------------------------------------------------',
+              `Trade-Off Summary: ${matched.tradeOffSummary}`,
+              '--------------------------------------------------------------------------------',
+              'Full live interactive coordinator crash and drift reconciler in #architecture-atomic-commit.'
+            ]
+            break
+          }
+        }
+
+        output = [
+          'Distributed Two-Phase Commit (2PC) vs Saga & Dual-Write Invariant Matrix:',
+          '--------------------------------------------------------------------------------',
+          'Explore 5 enterprise atomic commit and distributed coordination architectures:',
+          '',
+          ...ATOMIC_COMMIT_PARADIGMS.flatMap((m, idx) => [
+            `${idx + 1}. [ ${m.id} ] : ${m.title}`,
+            `   Category   : ${m.category}`,
+            `   Blocking   : ${m.blockingNature}`,
+            `   Throughput : ${m.throughputTps}`,
+            `   Deep Dive  : "2pc ${idx + 1}" or "2pc ${m.id.split('-')[0]}" (e.g. "2pc 1", "2pc 2", "2pc saga", "2pc drift", "2pc paxos")`,
+            ''
+          ]),
+          '--------------------------------------------------------------------------------',
+          'Tip: Run "2pc <id>" (e.g. "2pc 1" or "2pc saga") to inspect step invariants and failure recovery.'
+        ]
+        break
+      }
       case 'find':
       case 'search': {
         const query = args.join(' ').toLowerCase().trim()
@@ -2547,7 +2618,7 @@ export default function InteractiveCli() {
             '--------------------------------------------------------------------------------',
             'Search cross-cutting distributed systems, ADRs, AI paradigms, and trade-offs.',
             'Usage: find <query> (e.g. "find kafka", "find redis", "find mcp", "find saga")',
-            'Available Domains: Systems, ADR Governance, AI Codex, Trade-Off Matrix, Evolution Diffs, Chaos Drills, API Gateway, Distributed Traces, Kafka Event Streams, Distributed Rate Limiting, Multi-Region Replication, Database Sharding, Edge CDN Caching, Circuit Breakers, Concurrency & Deadlocks, Raft Consensus, Vector Search, Traffic Priority & QoS, Distributed Sagas & Compensations, Distributed Cache Stampede & Coherence, Distributed Event Sourcing & CQRS, Distributed DLQ & Retries, Distributed Idempotency & CAS Locks'
+            'Available Domains: Systems, ADR Governance, AI Codex, Trade-Off Matrix, Evolution Diffs, Chaos Drills, API Gateway, Distributed Traces, Kafka Event Streams, Distributed Rate Limiting, Multi-Region Replication, Database Sharding, Edge CDN Caching, Circuit Breakers, Concurrency & Deadlocks, Raft Consensus, Vector Search, Traffic Priority & QoS, Distributed Sagas & Compensations, Distributed Cache Stampede & Coherence, Distributed Event Sourcing & CQRS, Distributed DLQ & Retries, Distributed Idempotency & CAS Locks, Distributed 2PC vs Saga Commit & Drift Reconciler'
           ]
           break
         }
@@ -3038,6 +3109,28 @@ export default function InteractiveCli() {
               `  Paradigm   : ${i.paradigm} (${i.badge})`,
               `  Defense    : ${i.doubleExecutionDefense.split(';')[0]}`,
               `  Anchor     : #architecture-idempotency`,
+              ''
+            )
+          }
+        })
+
+        // 24. Search Distributed 2PC vs Saga & Invariant Committer
+        ATOMIC_COMMIT_PARADIGMS.forEach(a => {
+          if (
+            a.title.toLowerCase().includes(query) ||
+            a.id.toLowerCase().includes(query) ||
+            a.category.toLowerCase().includes(query) ||
+            a.tagline.toLowerCase().includes(query) ||
+            a.blockingNature.toLowerCase().includes(query) ||
+            a.recoveryGuarantee.toLowerCase().includes(query) ||
+            a.description.toLowerCase().includes(query) ||
+            a.tradeOffSummary.toLowerCase().includes(query)
+          ) {
+            results.push(
+              `[2PC vs Saga Commit] ${a.title}`,
+              `  Category   : ${a.category} (${a.blockingNature})`,
+              `  Throughput : ${a.throughputTps}`,
+              `  Anchor     : #architecture-atomic-commit`,
               ''
             )
           }

@@ -1,6 +1,6 @@
 {
   "version": "1.0.0",
-  "generatedAt": "2026-10-27T19:39:12.747Z",
+  "generatedAt": "2026-10-27T19:48:50.629Z",
   "nodes": {
     "src/components/architecture/AdrExplorer.tsx": {
       "file": "src/components/architecture/AdrExplorer.tsx",
@@ -84,6 +84,16 @@
         "ArchNode"
       ],
       "loc": 394
+    },
+    "src/components/architecture/AtomicCommitSandbox.tsx": {
+      "file": "src/components/architecture/AtomicCommitSandbox.tsx",
+      "imports": [
+        "../../data/atomicCommitModels"
+      ],
+      "exports": [
+        "AtomicCommitSandbox"
+      ],
+      "loc": 625
     },
     "src/components/architecture/ByteByteGoAiCodex.tsx": {
       "file": "src/components/architecture/ByteByteGoAiCodex.tsx",
@@ -480,6 +490,7 @@
         "@/components/architecture/EventSourcingSandbox",
         "@/components/architecture/DlqRetrySandbox",
         "@/components/architecture/IdempotencySandbox",
+        "@/components/architecture/AtomicCommitSandbox",
         "@/data/architectureSystems",
         "@/data/architecturalDecisions",
         "@/data/architecturalTradeoffs",
@@ -501,12 +512,13 @@
         "@/data/distributedCache",
         "@/data/eventSourcing",
         "@/data/dlqRetryModels",
-        "@/data/idempotencyModels"
+        "@/data/idempotencyModels",
+        "@/data/atomicCommitModels"
       ],
       "exports": [
         "ArchitectureLab"
       ],
-      "loc": 1080
+      "loc": 1119
     },
     "src/components/portfolio/ContactTerminal.tsx": {
       "file": "src/components/portfolio/ContactTerminal.tsx",
@@ -574,12 +586,13 @@
         "@/data/eventSourcing",
         "@/data/dlqRetryModels",
         "@/data/idempotencyModels",
+        "@/data/atomicCommitModels",
         "@/data/executiveBriefing"
       ],
       "exports": [
         "InteractiveCli"
       ],
-      "loc": 3318
+      "loc": 3411
     },
     "src/components/portfolio/ProjectsShowcase.tsx": {
       "file": "src/components/portfolio/ProjectsShowcase.tsx",
@@ -632,7 +645,7 @@
       "exports": [
         "TerminalHero"
       ],
-      "loc": 616
+      "loc": 618
     },
     "src/components/ui/badge.tsx": {
       "file": "src/components/ui/badge.tsx",
@@ -741,6 +754,19 @@
         "ARCHITECTURE_SYSTEMS"
       ],
       "loc": 1453
+    },
+    "src/data/atomicCommitModels.ts": {
+      "file": "src/data/atomicCommitModels.ts",
+      "imports": [],
+      "exports": [
+        "CommitParticipant",
+        "AtomicCommitParadigm",
+        "InvariantDriftItem",
+        "ATOMIC_COMMIT_PARADIGMS",
+        "INITIAL_PARTICIPANTS",
+        "INITIAL_DRIFT_ITEMS"
+      ],
+      "loc": 475
     },
     "src/data/byteByteGoConfigs.ts": {
       "file": "src/data/byteByteGoConfigs.ts",
@@ -1019,6 +1045,11 @@
       "type": "import"
     },
     {
+      "source": "src/components/architecture/AtomicCommitSandbox.tsx",
+      "target": "src/data/atomicCommitModels.ts",
+      "type": "import"
+    },
+    {
       "source": "src/components/architecture/ByteByteGoDiagram.tsx",
       "target": "src/components/architecture/ByteByteGoWorkbench.tsx",
       "type": "import"
@@ -1078,6 +1109,7 @@
     "ArchitectureEvolutionDiff": "src/components/architecture/ArchitectureEvolutionDiff.tsx",
     "ArchNodeData": "src/components/architecture/ArchNode.tsx",
     "ArchNode": "src/components/architecture/ArchNode.tsx",
+    "AtomicCommitSandbox": "src/components/architecture/AtomicCommitSandbox.tsx",
     "AiTermSpec": "src/components/architecture/ByteByteGoAiCodex.tsx",
     "ByteByteGoAiCodex": "src/components/architecture/ByteByteGoAiCodex.tsx",
     "ByteByteGoDiagramProps": "src/components/architecture/ByteByteGoDiagram.tsx",
@@ -1169,6 +1201,12 @@
     "ChaosScenario": "src/data/architectureSystems.ts",
     "ArchitectureSystem": "src/data/architectureSystems.ts",
     "ARCHITECTURE_SYSTEMS": "src/data/architectureSystems.ts",
+    "CommitParticipant": "src/data/atomicCommitModels.ts",
+    "AtomicCommitParadigm": "src/data/atomicCommitModels.ts",
+    "InvariantDriftItem": "src/data/atomicCommitModels.ts",
+    "ATOMIC_COMMIT_PARADIGMS": "src/data/atomicCommitModels.ts",
+    "INITIAL_PARTICIPANTS": "src/data/atomicCommitModels.ts",
+    "INITIAL_DRIFT_ITEMS": "src/data/atomicCommitModels.ts",
     "ByteByteGoSystemConfig": "src/data/byteByteGoConfigs.ts",
     "BYTEBYTEGO_SYSTEMS": "src/data/byteByteGoConfigs.ts",
     "ChaosTraceStep": "src/data/chaosDrills.ts",
