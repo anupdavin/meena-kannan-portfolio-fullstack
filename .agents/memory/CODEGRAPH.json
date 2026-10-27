@@ -1,6 +1,6 @@
 {
   "version": "1.0.0",
-  "generatedAt": "2026-10-27T08:17:49.121Z",
+  "generatedAt": "2026-10-27T08:34:14.753Z",
   "nodes": {
     "src/components/architecture/AdrExplorer.tsx": {
       "file": "src/components/architecture/AdrExplorer.tsx",
@@ -13,7 +13,7 @@
       "exports": [
         "AdrExplorer"
       ],
-      "loc": 255
+      "loc": 252
     },
     "src/components/architecture/AgenticWorkflowDiagram.tsx": {
       "file": "src/components/architecture/AgenticWorkflowDiagram.tsx",
@@ -71,10 +71,9 @@
       ],
       "exports": [
         "AiTermSpec",
-        "AI_TERMS",
         "ByteByteGoAiCodex"
       ],
-      "loc": 718
+      "loc": 712
     },
     "src/components/architecture/ByteByteGoDiagram.tsx": {
       "file": "src/components/architecture/ByteByteGoDiagram.tsx",
@@ -301,7 +300,7 @@
       "exports": [
         "TerminalHero"
       ],
-      "loc": 460
+      "loc": 488
     },
     "src/components/ui/badge.tsx": {
       "file": "src/components/ui/badge.tsx",
@@ -528,7 +527,6 @@
     "ArchNodeData": "src/components/architecture/ArchNode.tsx",
     "ArchNode": "src/components/architecture/ArchNode.tsx",
     "AiTermSpec": "src/components/architecture/ByteByteGoAiCodex.tsx",
-    "AI_TERMS": "src/components/architecture/ByteByteGoAiCodex.tsx",
     "ByteByteGoAiCodex": "src/components/architecture/ByteByteGoAiCodex.tsx",
     "ByteByteGoDiagramProps": "src/components/architecture/ByteByteGoDiagram.tsx",
     "ByteByteGoDiagram": "src/components/architecture/ByteByteGoDiagram.tsx",

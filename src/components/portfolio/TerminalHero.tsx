@@ -13,10 +13,11 @@ import {
   Check, 
   RotateCcw, 
   Server, 
-  Send
+  Send,
+  Bot
 } from 'lucide-react'
 
-type FileTab = 'java' | 'k8s' | 'metrics'
+type FileTab = 'java' | 'k8s' | 'metrics' | 'mcp'
 
 interface TabContent {
   id: FileTab
@@ -114,6 +115,33 @@ const TABS: TabContent[] = [
       '    "cloud_cost_optimization": "-40%"',
       '  },',
       '  "deployment": "AWS EKS Multi-AZ"',
+      '}'
+    ]
+  },
+  {
+    id: 'mcp',
+    filename: 'mcp-server-config.json',
+    language: 'JSON-RPC / MCP',
+    icon: Bot,
+    badge: 'Model Context Protocol',
+    lines: [
+      '{',
+      '  "protocol": "Model Context Protocol (MCP)",',
+      '  "version": "2024-11-05",',
+      '  "server": "enterprise-architecture-tools",',
+      '  "transports": ["stdio", "sse"],',
+      '  "capabilities": {',
+      '    "tools": [',
+      '      "query_database_topology",',
+      '      "inspect_kafka_consumer_lag",',
+      '      "simulate_chaos_partition"',
+      '    ],',
+      '    "resources": [',
+      '      "postgres://schema/audit_log",',
+      '      "kafka://cluster/payment_events"',
+      '    ]',
+      '  },',
+      '  "runtime": "Java 21 LTS / GraalVM Native"',
       '}'
     ]
   }

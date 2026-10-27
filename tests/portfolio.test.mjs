@@ -257,6 +257,10 @@ describe('Terminal Hero & Route Fault-Tolerance Verification', () => {
     assert.ok(heroCode.includes('displayedCode = useMemo'), 'displayedCode must be derived via useMemo to avoid sparse state race conditions');
     assert.ok(heroCode.includes("const line = typeof rawLine === 'string' ? rawLine : ''"), 'Must sanitize rawLine to prevent undefined.startsWith crash');
     assert.ok(heroCode.includes('handleTabChange'), 'Must cleanly reset typewriter state synchronously on tab change');
+    assert.ok(heroCode.includes("'mcp'"), 'TerminalHero must include mcp tab');
+    assert.ok(heroCode.includes('mcp-server-config.json'), 'TerminalHero must define mcp-server-config.json');
+    assert.ok(heroCode.includes('Model Context Protocol'), 'TerminalHero must define Model Context Protocol badge');
+    assert.ok(!/[\u2013\u2014]/.test(heroCode), 'TerminalHero must contain zero em/en-dashes');
   });
 
   test('ContactTerminal guards against undefined line strings', () => {

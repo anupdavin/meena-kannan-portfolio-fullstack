@@ -7,10 +7,7 @@ import {
   Copy, 
   Check, 
   ShieldAlert, 
-  Sparkles,
-  GitCommit,
-  Terminal,
-  ExternalLink
+  GitCommit
 } from 'lucide-react'
 import { ARCHITECTURAL_DECISIONS, type ArchitecturalDecisionRecord } from '@/data/architecturalDecisions'
 

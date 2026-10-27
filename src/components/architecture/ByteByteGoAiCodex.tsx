@@ -6,16 +6,10 @@ import {
   Database, 
   Search, 
   Share2, 
-  Sparkles, 
-  Layers, 
-  Terminal, 
-  FileText, 
-  Code2, 
   Sun, 
   Moon, 
   Download,
   CheckCircle2,
-  Cpu,
   Play,
   Pause,
   ChevronLeft,
@@ -45,7 +39,7 @@ export interface AiTermSpec {
   }
 }
 
-export const AI_TERMS: AiTermSpec[] = [
+const AI_TERMS: AiTermSpec[] = [
   {
     id: 'agentic-ai',
     title: 'Agentic AI',
