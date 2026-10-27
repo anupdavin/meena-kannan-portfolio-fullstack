@@ -1,6 +1,6 @@
 {
   "version": "1.0.0",
-  "generatedAt": "2026-10-27T11:55:14.776Z",
+  "generatedAt": "2026-10-27T12:14:54.352Z",
   "nodes": {
     "src/components/architecture/AdrExplorer.tsx": {
       "file": "src/components/architecture/AdrExplorer.tsx",
@@ -99,7 +99,7 @@
         "ByteByteGoWorkbenchProps",
         "ByteByteGoWorkbench"
       ],
-      "loc": 1280
+      "loc": 1435
     },
     "src/components/architecture/CleanArchitectureRadar.tsx": {
       "file": "src/components/architecture/CleanArchitectureRadar.tsx",
@@ -149,7 +149,7 @@
         "SystemDesignCanvasProps",
         "SystemDesignCanvas"
       ],
-      "loc": 1413
+      "loc": 1414
     },
     "src/components/architecture/TradeoffMatrix.tsx": {
       "file": "src/components/architecture/TradeoffMatrix.tsx",
@@ -173,7 +173,7 @@
         "WorkbenchSystemConfig",
         "WORKBENCH_SYSTEMS"
       ],
-      "loc": 867
+      "loc": 1062
     },
     "src/components/ChatWidget.tsx": {
       "file": "src/components/ChatWidget.tsx",
@@ -269,7 +269,7 @@
       "exports": [
         "InteractiveCli"
       ],
-      "loc": 1189
+      "loc": 1219
     },
     "src/components/portfolio/ProjectsShowcase.tsx": {
       "file": "src/components/portfolio/ProjectsShowcase.tsx",
@@ -286,7 +286,7 @@
         "useFinancialTickSubscription",
         "ProjectsShowcase"
       ],
-      "loc": 941
+      "loc": 1020
     },
     "src/components/portfolio/RouteErrorBoundary.tsx": {
       "file": "src/components/portfolio/RouteErrorBoundary.tsx",
@@ -419,7 +419,7 @@
         "ArchitectureSystem",
         "ARCHITECTURE_SYSTEMS"
       ],
-      "loc": 1155
+      "loc": 1453
     },
     "src/data/byteByteGoConfigs.ts": {
       "file": "src/data/byteByteGoConfigs.ts",

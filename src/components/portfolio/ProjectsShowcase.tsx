@@ -36,7 +36,7 @@ export interface ArchitecturalDecisionRecord {
 export interface Project {
   id: string
   title: string
-  category: 'Enterprise SaaS' | 'Microservices' | 'FinTech' | 'Real-Time' | 'Cloud Infra'
+  category: 'Enterprise SaaS' | 'Microservices' | 'FinTech' | 'Real-Time' | 'Cloud Infra' | 'AI Systems & MCP'
   tagline: string
   description: string
   clientType: string
@@ -378,6 +378,85 @@ public class IdempotentPaymentExecutor {
 }`,
     codeLanguage: 'Java 21 / Security',
     githubUrl: 'https://github.com/meenak95/meena-kannan-portfolio-fullstack'
+  },
+  {
+    id: 'agentic-mcp-mesh',
+    title: 'Autonomous Agentic Orchestrator & Model Context Protocol (MCP) Mesh',
+    category: 'AI Systems & MCP',
+    tagline: 'LangGraph ReAct DAG Checkpointing, Java 21 LTS MCP Tool Gateway & pgvector Memory',
+    description: 'Enterprise autonomous AI agent orchestration mesh featuring LangGraph acyclic DAG state machine checkpointing, high-throughput Java 21 LTS Model Context Protocol (MCP) tool gateway, and pgvector HNSW episodic memory for sub-15ms semantic tool discovery.',
+    clientType: 'For Enterprise AI Platforms, Autonomous Agentic Swarms & Developer Platforms',
+    tech: ['Java 21 LTS', 'Spring AI', 'LangGraph', 'Python 3.12', 'pgvector', 'Redis 7.2', 'Docker', 'GraalVM'],
+    problemStatement: 'Autonomous AI agents suffered from unpredictable token blowups ($450/incident), tool hallucination, infinite plan loops, and security risks when granted ambient host OS permissions without isolation.',
+    architectureHighlights: [
+      'Acyclic ReAct DAG State Machine',
+      'Decoupled MCP JSON-RPC 2.0 Bus',
+      'HNSW Vector Semantic Tool Discovery',
+      'Ephemeral Docker Sandbox Isolation'
+    ],
+    metrics: {
+      'Token Spend': '-76% Dynamic Discovery',
+      'P99 Latency': '3.8ms MCP Handshake',
+      'Safety Containment': '100% Cgroups Sandbox',
+      'Task Success': '94.8% First-Pass Rate'
+    },
+    diagramNodes: [
+      'LangGraph ReAct Agent',
+      'pgvector Episodic Memory',
+      'Java 21 MCP Gateway',
+      'Docker Tool Sandbox',
+      'Redis State Store'
+    ],
+    adr: {
+      adrId: 'ADR-006',
+      title: 'Decoupled Model Context Protocol (MCP) Mesh vs Monolithic Tool Calling',
+      status: 'ACCEPTED & IMPLEMENTED',
+      contextAndScaleBottleneck: 'Direct hardcoded tool calling in monolithic LLM apps leaked cloud API keys into prompt contexts and lacked runtime isolation. An errant agent code execution script could delete host directories or exhaust $500 in unbudgeted external API calls within minutes.',
+      architectureChosen: 'Adopted Anthropic Model Context Protocol (MCP) over JSON-RPC 2.0 with a Java 21 LTS tool gateway, isolating all tool executions into ephemeral Docker containers with 512MB RAM cgroups and 30s watchdogs, paired with pgvector HNSW dynamic tool indexing.',
+      tradeOffAccepted: 'Accepted slight JSON-RPC serialization overhead (<4ms) in exchange for absolute least-privilege security boundaries, dynamic token reduction, and zero ambient credential leakage.',
+      verificationAndTelemetry: 'Cut prompt context consumption by 76% via semantic tool schema retrieval, eliminated 100% of unauthorized sandbox breakout attempts, and achieved 94.8% first-pass autonomous task completion across 5,000+ benchmark runs.',
+      context: 'Direct hardcoded tool calling in monolithic LLM apps leaked cloud API keys into prompt contexts and lacked runtime isolation. An errant agent code execution script could delete host directories or exhaust $500 in unbudgeted external API calls within minutes.',
+      decision: 'Adopted Anthropic Model Context Protocol (MCP) over JSON-RPC 2.0 with a Java 21 LTS tool gateway, isolating all tool executions into ephemeral Docker containers with 512MB RAM cgroups and 30s watchdogs, paired with pgvector HNSW dynamic tool indexing.',
+      tradeOffs: [
+        'Reduced token consumption by 76% via dynamic tool discovery rather than stuffing 50+ tool schemas into every prompt',
+        'Isolated all tool executions in 512MB disposable containers to guarantee zero host pollution',
+        'Accepted 3.8ms JSON-RPC wire latency overhead to decouple models from execution infrastructure'
+      ],
+      consequences: 'Secured 100% containment of tool code execution, prevented ambient credential leakage, and achieved sub-4ms tool dispatch latency.'
+    },
+    problemsSolved: [
+      'Eliminated infinite plan loops through LangGraph acyclic DAG cycle detection and step spending ceilings',
+      'Slashed prompt token costs by 76% using pgvector HNSW semantic tool schema retrieval',
+      'Protected infrastructure with 100% containment via disposable Docker containers and Linux cgroups v2',
+      'Achieved sub-4ms tool dispatch using Java 21 Virtual Threads (Project Loom) and JSON-RPC 2.0'
+    ],
+    details: {
+      challenge: 'Orchestrating autonomous agents across enterprise databases and APIs without leaking credentials, hallucinating tool parameters, or runaway execution loops.',
+      solution: 'Implemented an enterprise MCP mesh with LangGraph ReAct planning, vector tool schema retrieval, GraalVM native MCP gateway, and container sandboxing.',
+      architecture: 'Agent Request -> LangGraph DAG Planner -> pgvector HNSW Discovery -> Java 21 MCP Gateway (JSON-RPC 2.0) -> Docker Sandbox (cgroups) -> Redis Raft Checkpoint.',
+      impact: 'Saved 76% in context token spend, achieved 94.8% first-pass completion, and delivered 100% sandbox isolation.'
+    },
+    codeSnippet: `@Service
+public class McpToolExecutionGateway {
+    private final McpSchemaRegistry schemaRegistry;
+    private final DockerSandboxPool sandboxPool;
+
+    @Tool(name = "execute_sandboxed_command", description = "Executes command in ephemeral gVisor container")
+    public ToolExecutionResult dispatch(JsonRpcToolCall call) {
+        // Enforce least-privilege token validation without ambient secrets
+        McpSecurityContext.validateCallerPermissions(call.callerToken(), call.toolName());
+
+        // Spawn disposable container with 512MB cgroups limit and 30s watchdog
+        try (ContainerSandbox sandbox = sandboxPool.acquireDisposable(512, Duration.ofSeconds(30))) {
+            ExecutionOutput output = sandbox.runIsolated(call.parameters());
+            return ToolExecutionResult.success(output.stdout(), output.exitCode());
+        } catch (ContainerTimeoutException ex) {
+            return ToolExecutionResult.failure("WATCHDOG_TIMEOUT_EXCEEDED", 124);
+        }
+    }
+}`,
+    codeLanguage: 'Java 21 / Spring AI',
+    githubUrl: 'https://github.com/meenak95/meena-kannan-portfolio-fullstack'
   }
 ]
 
@@ -399,7 +478,7 @@ export default function ProjectsShowcase() {
     }
   }, [activeModalProject])
 
-  const categories = ['All', 'Enterprise SaaS', 'Microservices', 'Real-Time', 'FinTech']
+  const categories = ['All', 'Enterprise SaaS', 'Microservices', 'Real-Time', 'FinTech', 'AI Systems & MCP']
 
   const filteredProjects = selectedFilter === 'All'
     ? PROJECTS

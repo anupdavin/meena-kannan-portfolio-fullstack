@@ -926,7 +926,8 @@ export const SystemDesignCanvas: React.FC<SystemDesignCanvasProps> = ({
             { id: 'saas-platform', label: 'Multi-Tenant SaaS', icon: '🏢' },
             { id: 'ecommerce-engine', label: 'E-Commerce Engine', icon: '🛒' },
             { id: 'realtime-platform', label: 'Realtime WebSocket', icon: '⚡' },
-            { id: 'fintech-gateway', label: 'FinTech Ledger', icon: '💳' }
+            { id: 'fintech-gateway', label: 'FinTech Ledger', icon: '💳' },
+            { id: 'agentic-mcp-mesh', label: 'Agentic MCP Mesh', icon: '🤖' }
           ].map(sys => {
             const isCurrent = (currentSystemId || systemId) === sys.id
             return (

@@ -862,5 +862,200 @@ export const WORKBENCH_SYSTEMS: Record<string, WorkbenchSystemConfig> = {
         deepDive: 'Operates under SERIALIZABLE isolation to guarantee absence of write skews. Append-only journal with cryptographic hash chain.'
       }
     }
+  },
+  'agentic-mcp-mesh': {
+    id: 'agentic-mcp-mesh',
+    title: 'Autonomous Agentic Orchestrator & MCP Mesh',
+    tagline: 'LangGraph ReAct DAG Checkpointing, Java 21 LTS MCP Tool Gateway, and pgvector HNSW Episodic Memory',
+    subsystems: [
+      {
+        id: 'zone-agents',
+        label: 'AUTONOMOUS AGENT ORCHESTRATION',
+        sublabel: 'ReAct DAG State Machine',
+        x: 25,
+        y: 40,
+        width: 220,
+        height: 465,
+        accentColor: '#34d399'
+      },
+      {
+        id: 'zone-mcp',
+        label: 'MODEL CONTEXT PROTOCOL (MCP) BUS',
+        sublabel: 'JSON-RPC 2.0 Stdio / SSE Transport',
+        x: 265,
+        y: 40,
+        width: 240,
+        height: 465,
+        accentColor: '#ec4899'
+      },
+      {
+        id: 'zone-tools',
+        label: 'TOOL WORKERS & PERSISTENCE TIER',
+        sublabel: 'Ephemeral Sandboxes & Memory Store',
+        x: 525,
+        y: 40,
+        width: 410,
+        height: 465,
+        accentColor: '#38bdf8'
+      }
+    ],
+    normalSteps: [
+      {
+        step: 1,
+        title: 'Goal Ingestion & LangGraph DAG Plan Decomposition',
+        activeNodeIds: ['langgraph-agent'],
+        activeConnectionIds: ['flow-agent-vdb'],
+        protocol: 'ReAct DAG / Prompt Decomposition',
+        latencyEst: '320ms',
+        description: 'User prompt is parsed into an acyclic plan of sub-tasks with hard step budgets.',
+        impactMetric: 'Zero infinite recursion loops'
+      },
+      {
+        step: 2,
+        title: 'Semantic Tool Discovery via pgvector HNSW Index',
+        activeNodeIds: ['langgraph-agent', 'pgvector-memory'],
+        activeConnectionIds: ['flow-agent-vdb'],
+        protocol: 'pgvector Cosine (1536d Float32)',
+        latencyEst: '12ms',
+        description: 'Dynamically retrieves relevant tool schemas matching sub-task intent, slashing context tokens by 76%.',
+        impactMetric: '76% context token reduction'
+      },
+      {
+        step: 3,
+        title: 'MCP Handshake & JSON-RPC 2.0 Wire Dispatch',
+        activeNodeIds: ['langgraph-agent', 'mcp-gateway'],
+        activeConnectionIds: ['flow-agent-mcp'],
+        protocol: 'JSON-RPC 2.0 over Stdio / SSE',
+        latencyEst: '3.8ms',
+        description: 'Dispatches typed tool calls to Java 21 MCP server without exposing ambient infrastructure credentials.',
+        impactMetric: '0 ambient secrets exposed'
+      },
+      {
+        step: 4,
+        title: 'Ephemeral Docker Container Sandbox Execution',
+        activeNodeIds: ['mcp-gateway', 'docker-sandbox'],
+        activeConnectionIds: ['flow-mcp-sandbox'],
+        protocol: 'gVisor Container / Linux cgroups',
+        latencyEst: '68ms',
+        description: 'Executes verified command inside disposable container with 512MB RAM and 30s watchdog.',
+        impactMetric: '100% memory containment'
+      },
+      {
+        step: 5,
+        title: 'Observation Ingestion & Redis 7.2 State Checkpoint',
+        activeNodeIds: ['docker-sandbox', 'redis-checkpointer', 'langgraph-agent'],
+        activeConnectionIds: ['flow-sandbox-redis'],
+        protocol: 'Redis Raft / Mutex Checkpoint',
+        latencyEst: '8.4ms',
+        description: 'Tool exit output verified against invariants; agent loop advances to next step or emits final answer.',
+        impactMetric: '94.8% first-pass completion'
+      }
+    ],
+    failureSteps: [
+      {
+        step: 1,
+        title: 'Downstream MCP Server Returns HTTP 429 Too Many Requests',
+        activeNodeIds: ['mcp-gateway'],
+        activeConnectionIds: ['flow-agent-mcp'],
+        protocol: 'HTTP/2 429 Rate Limit',
+        latencyEst: '45ms',
+        description: 'Downstream tool API rate limit hit during burst autonomous analysis.',
+        impactMetric: '429 Rate limit detected'
+      },
+      {
+        step: 2,
+        title: 'Token Bucket Rate Limiter Trips Circuit Breaker',
+        activeNodeIds: ['mcp-gateway', 'redis-checkpointer'],
+        activeConnectionIds: ['flow-agent-mcp'],
+        protocol: 'Circuit Breaker OPEN',
+        latencyEst: '1.2ms',
+        description: 'MCP gateway isolates failing server and routes requests to fallback buffer in Redis.',
+        impactMetric: 'Zero workflow crashes'
+      },
+      {
+        step: 3,
+        title: 'Exponential Backoff Retries & Smooth Buffer Drain',
+        activeNodeIds: ['mcp-gateway', 'docker-sandbox'],
+        activeConnectionIds: ['flow-mcp-sandbox'],
+        protocol: 'Exponential Backoff with Jitter',
+        latencyEst: '350ms',
+        description: 'Pending tool calls successfully execute as downstream rate limits recover.',
+        impactMetric: '100% task recovery SLA'
+      }
+    ],
+    failureModeTitle: 'Downstream MCP Rate Limit & Circuit Breaker Backpressure',
+    failureModeDescription: 'Simulates API rate limit exhaustion on external tool servers. The Java 21 MCP Gateway activates token-bucket throttling and queues tool calls into a Redis backoff buffer without dropping agent workflow state.',
+    nodeSpecs: {
+      'langgraph-agent': {
+        id: 'langgraph-agent',
+        label: 'LangGraph ReAct Agent',
+        sublabel: 'Acyclic DAG State Machine',
+        role: 'Autonomous Agent Orchestration',
+        category: 'compute',
+        technology: 'Python 3.12, LangGraph, Java 21 Spring AI',
+        concurrencyModel: 'Async Event Loop with Redis Checkpointing',
+        p99Latency: '320ms',
+        throughput: '1,200 agent loops/s',
+        resiliencePattern: 'Acyclic DAG validation prevents infinite recursion',
+        targetSla: '99.99% Availability',
+        deepDive: 'Decomposes complex engineering goals into verifiable DAG sub-steps with hard cost ceilings.'
+      },
+      'pgvector-memory': {
+        id: 'pgvector-memory',
+        label: 'pgvector Episodic Memory',
+        sublabel: 'HNSW Semantic Vector Index',
+        role: 'Dynamic Tool & Memory Discovery',
+        category: 'database',
+        technology: 'PostgreSQL 16, pgvector (1536d Float32)',
+        concurrencyModel: 'HNSW Beam-Search Graph Traversal (M=16, ef=64)',
+        p99Latency: '11.8ms',
+        throughput: '6,500 queries/s',
+        resiliencePattern: 'Read-replica pooling with hot-standby promotion',
+        targetSla: '99.99% Durability',
+        deepDive: 'Indexes declared tool schemas and past agent episodic experiences for sub-15ms semantic matching.'
+      },
+      'mcp-gateway': {
+        id: 'mcp-gateway',
+        label: 'Java 21 MCP Gateway',
+        sublabel: 'JSON-RPC 2.0 Stdio / SSE Transport',
+        role: 'Decoupled Tool Protocol Bus',
+        category: 'gateway',
+        technology: 'Java 21 LTS, Spring Boot 3, GraalVM Native Image',
+        concurrencyModel: 'Virtual Threads (Project Loom) per connection',
+        p99Latency: '3.8ms',
+        throughput: '35,000 rpc/s',
+        resiliencePattern: 'Resilience4j Circuit Breaker & Token Bucket Limiter',
+        targetSla: '99.999% Availability',
+        deepDive: 'Stateless protocol bus implementing Anthropic Model Context Protocol specification with zero ambient credentials.'
+      },
+      'docker-sandbox': {
+        id: 'docker-sandbox',
+        label: 'Docker Tool Sandbox',
+        sublabel: 'Ephemeral Container Worker',
+        role: 'Isolated Command Execution',
+        category: 'compute',
+        technology: 'Docker, gVisor Runsc, Linux cgroups v2',
+        concurrencyModel: 'Ephemeral disposable container per task',
+        p99Latency: '68ms',
+        throughput: '450 sandboxes/s',
+        resiliencePattern: 'cgroups v2 512MB RAM limit + 30s SIGKILL watchdog',
+        targetSla: '99.99% Isolation',
+        deepDive: 'Runs potentially destructive operations inside isolated containers with strictly restricted network namespaces.'
+      },
+      'redis-checkpointer': {
+        id: 'redis-checkpointer',
+        label: 'Redis State Store',
+        sublabel: 'Acyclic DAG Checkpointer',
+        role: 'Workflow State Persistence',
+        category: 'cache',
+        technology: 'Redis 7.2 Cluster, Redis Raft Checkpoints',
+        concurrencyModel: 'Single-Threaded Event Loop with In-Memory Pipelining',
+        p99Latency: '1.4ms',
+        throughput: '85,000 ops/s',
+        resiliencePattern: 'AOF persistence with fsync every second',
+        targetSla: '99.999% Availability',
+        deepDive: 'Persists active agent workflow state machine checkpoints, enabling pause, resume, and human-in-the-loop approvals.'
+      }
+    }
   }
 }

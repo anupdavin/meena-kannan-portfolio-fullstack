@@ -242,7 +242,7 @@ describe('ByteByteGo Architecture & Stock Image Elimination Verification', () =>
     assert.ok(showcaseCode.includes('variant="workbench"'), 'Must provide full workbench simulator in modal');
   });
 
-  test('src/data/architectureSystems.ts defines complete specifications for all 4 enterprise systems', () => {
+  test('src/data/architectureSystems.ts and workbenchConfigs.ts define complete specifications for all 5 enterprise systems', () => {
     const archFilePath = path.join(rootDir, 'src', 'data', 'architectureSystems.ts');
     assert.ok(fs.existsSync(archFilePath), 'architectureSystems.ts must exist');
     const archCode = fs.readFileSync(archFilePath, 'utf8');
@@ -251,7 +251,18 @@ describe('ByteByteGo Architecture & Stock Image Elimination Verification', () =>
     assert.ok(archCode.includes("'ecommerce-engine'"), 'Must define ecommerce-engine system');
     assert.ok(archCode.includes("'realtime-platform'"), 'Must define realtime-platform system');
     assert.ok(archCode.includes("'fintech-gateway'"), 'Must define fintech-gateway system');
+    assert.ok(archCode.includes("'agentic-mcp-mesh'"), 'Must define agentic-mcp-mesh system');
     assert.ok(archCode.includes('chaosScenarios'), 'Must define chaos failure mode simulations');
+
+    const workbenchCfgPath = path.join(rootDir, 'src', 'components', 'architecture', 'workbenchConfigs.ts');
+    assert.ok(fs.existsSync(workbenchCfgPath), 'workbenchConfigs.ts must exist');
+    const wbCode = fs.readFileSync(workbenchCfgPath, 'utf8');
+    assert.ok(wbCode.includes("'agentic-mcp-mesh'"), 'workbenchConfigs must include agentic-mcp-mesh system');
+    assert.ok(wbCode.includes('langgraph-agent'), 'workbenchConfigs must define langgraph-agent spec');
+
+    const showcaseCode = fs.readFileSync(path.join(rootDir, 'src', 'components', 'portfolio', 'ProjectsShowcase.tsx'), 'utf8');
+    assert.ok(showcaseCode.includes("'agentic-mcp-mesh'"), 'ProjectsShowcase must define 5th project agentic-mcp-mesh');
+    assert.ok(showcaseCode.includes("'AI Systems & MCP'"), 'ProjectsShowcase must include AI Systems & MCP category');
   });
 
   test('AboutTerminal.tsx embeds Agentic AI Orchestrator-Worker Workflow Diagram in ByteByteGo style', () => {

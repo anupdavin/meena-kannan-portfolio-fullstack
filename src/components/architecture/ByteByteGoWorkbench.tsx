@@ -923,6 +923,158 @@ export const ByteByteGoWorkbench: React.FC<ByteByteGoWorkbenchProps> = ({
     )
   }
 
+  // System 5: Autonomous Agentic Orchestrator & Model Context Protocol (MCP) Mesh
+  const renderSystem5 = () => {
+    return (
+      <>
+        {config.subsystems.map((sub) => (
+          <BoundaryContainer
+            key={sub.id}
+            x={sub.x}
+            y={sub.y}
+            width={sub.width}
+            height={sub.height}
+            label={sub.label}
+            sublabel={sub.sublabel}
+            accentColor={sub.accentColor}
+          />
+        ))}
+
+        {!isFailureMode ? (
+          <>
+            <FlowingConnection
+              id="flow-agent-vdb"
+              pathD="M 135 250 L 135 310"
+              isActive={currentStep.activeConnectionIds.includes('flow-agent-vdb')}
+              color="#10b981"
+              duration={1.5}
+            />
+            <FlowingConnection
+              id="flow-agent-mcp"
+              pathD="M 225 180 L 325 240"
+              isActive={currentStep.activeConnectionIds.includes('flow-agent-mcp')}
+              color="#ec4899"
+              duration={1.6}
+            />
+            <FlowingConnection
+              id="flow-mcp-sandbox"
+              pathD="M 445 240 L 555 180"
+              isActive={currentStep.activeConnectionIds.includes('flow-mcp-sandbox')}
+              color="#38bdf8"
+              duration={1.6}
+            />
+            <FlowingConnection
+              id="flow-sandbox-redis"
+              pathD="M 730 180 L 755 230"
+              isActive={currentStep.activeConnectionIds.includes('flow-sandbox-redis')}
+              color="#a855f7"
+              duration={1.8}
+            />
+            <FlowingConnection
+              id="flow-redis-agent"
+              pathD="M 745 320 C 580 480 280 470 160 250"
+              isActive={currentStep.step === 5}
+              color="#34d399"
+              duration={2.0}
+            />
+
+            <SequenceBadge step="1" cx={135} cy={95} protocol="ReAct Plan" color="#34d399" isActive={currentStep.step === 1} />
+            <SequenceBadge step="2" cx={170} cy={280} protocol="pgvector HNSW" color="#10b981" isActive={currentStep.step === 2} />
+            <SequenceBadge step="3" cx={275} cy={200} protocol="JSON-RPC 2.0" color="#ec4899" isActive={currentStep.step === 3} />
+            <SequenceBadge step="4" cx={495} cy={200} protocol="gVisor cgroups" color="#38bdf8" isActive={currentStep.step === 4} />
+            <SequenceBadge step="5" cx={735} cy={200} protocol="Redis Raft" color="#a855f7" isActive={currentStep.step === 5} />
+          </>
+        ) : (
+          <>
+            <FlowingConnection
+              id="flow-mcp-rate-limit"
+              pathD="M 225 180 L 325 240"
+              isActive={currentStep.activeConnectionIds.includes('flow-agent-mcp')}
+              isChaos={true}
+              color="#f43f5e"
+              duration={1.4}
+            />
+            <FlowingConnection
+              id="flow-mcp-buffer-drain"
+              pathD="M 445 270 Q 590 380 745 310"
+              isActive={currentStep.activeConnectionIds.includes('flow-agent-mcp') || currentStep.activeConnectionIds.includes('flow-mcp-sandbox')}
+              isChaos={true}
+              color="#f59e0b"
+              duration={1.8}
+            />
+
+            <SequenceBadge step="!" cx={385} cy={175} protocol="HTTP 429 Throttle" color="#f43f5e" isActive={currentStep.step === 1} isChaos={true} />
+            <SequenceBadge step="2" cx={460} cy={295} protocol="Circuit Breaker" color="#f59e0b" isActive={currentStep.step === 2} isChaos={true} />
+            <SequenceBadge step="3" cx={635} cy={320} protocol="Exponential Backoff" color="#10b981" isActive={currentStep.step === 3} />
+          </>
+        )}
+
+        {renderComputeCard(
+          'langgraph-agent',
+          45,
+          110,
+          180,
+          140,
+          'LangGraph ReAct Agent',
+          'Acyclic DAG State Machine',
+          'ReAct Loop (Python 3.12)',
+          '#34d399'
+        )}
+
+        <DatabaseCylinder
+          x={45}
+          y={310}
+          width={180}
+          height={160}
+          label="pgvector Memory"
+          sublabel="HNSW Vector Index (1536d)"
+          accentColor="#10b981"
+          walStatus="M=16, ef=64 Cosine OK"
+          isHighlighted={selectedNodeId === 'pgvector-memory' || currentStep.activeNodeIds.includes('pgvector-memory')}
+          onClick={() => setSelectedNodeId('pgvector-memory')}
+        />
+
+        <HexShieldGateway
+          cx={385}
+          cy={260}
+          radius={62}
+          label="Java 21 MCP Gateway"
+          sublabel="JSON-RPC 2.0 (Loom)"
+          bucketFill={92}
+          isHighlighted={selectedNodeId === 'mcp-gateway' || currentStep.activeNodeIds.includes('mcp-gateway')}
+          isChaos={isFailureMode && currentStep.activeNodeIds.includes('mcp-gateway')}
+          rateLimitStatus={isFailureMode ? 'HTTP 429 [RATE LIMITED]' : 'Stdio / SSE Transport [SECURE]'}
+          onClick={() => setSelectedNodeId('mcp-gateway')}
+        />
+
+        {renderComputeCard(
+          'docker-sandbox',
+          550,
+          110,
+          175,
+          140,
+          'Docker Tool Sandbox',
+          'Ephemeral Container Worker',
+          isFailureMode ? 'BACKOFF BUFFER OK' : '512MB RAM / 30s Watchdog',
+          isFailureMode ? '#f59e0b' : '#38bdf8'
+        )}
+
+        <RedisMemoryGrid
+          x={745}
+          y={225}
+          width={175}
+          height={155}
+          label="Redis State Store"
+          sublabel="Acyclic DAG Checkpointer"
+          ttlStatus={isFailureMode ? 'CIRCUIT BREAKER BUFFER [OK]' : 'AOF Fsync / Raft Mutex'}
+          isHighlighted={selectedNodeId === 'redis-checkpointer' || currentStep.activeNodeIds.includes('redis-checkpointer')}
+          isChaos={isFailureMode && currentStep.activeNodeIds.includes('redis-checkpointer')}
+          onClick={() => setSelectedNodeId('redis-checkpointer')}
+        />
+      </>
+    )
+  }
+
   // Choose which diagram to render based on currentSystemId
   const renderDiagram = () => {
     switch (currentSystemId) {
@@ -932,6 +1084,8 @@ export const ByteByteGoWorkbench: React.FC<ByteByteGoWorkbenchProps> = ({
         return renderSystem3()
       case 'fintech-gateway':
         return renderSystem4()
+      case 'agentic-mcp-mesh':
+        return renderSystem5()
       case 'saas-platform':
       default:
         return renderSystem1()
@@ -994,7 +1148,8 @@ export const ByteByteGoWorkbench: React.FC<ByteByteGoWorkbenchProps> = ({
               { id: 'saas-platform', label: 'B2B IAM / RLS' },
               { id: 'ecommerce-engine', label: 'Distributed Saga' },
               { id: 'realtime-platform', label: 'Tick Stream Mesh' },
-              { id: 'fintech-gateway', label: 'Ledger Vault' }
+              { id: 'fintech-gateway', label: 'Ledger Vault' },
+              { id: 'agentic-mcp-mesh', label: 'Agentic MCP Mesh' }
             ].map((tab) => {
               const isActive = currentSystemId === tab.id
               return (

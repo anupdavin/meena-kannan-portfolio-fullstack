@@ -201,6 +201,31 @@ const PROJECT_DETAILS: Record<string, string[]> = {
     '  ADR-004: Immutable Double-Entry Ledger with Cryptographic Hash Chaining.',
     '  Passed SOC-2 Type II and PCI-DSS Level 1 compliance with zero findings.',
     '--------------------------------------------------------------------------------'
+  ],
+  '5': [
+    '--------------------------------------------------------------------------------',
+    '[Project 5] Autonomous Agentic Orchestrator & MCP Mesh (AI Systems & MCP)',
+    'Client Type : Enterprise AI Platforms, Autonomous Agentic Swarms & Developer Platforms',
+    'Tech Stack  : Java 21 LTS, Spring AI, LangGraph, Python 3.12, pgvector, Redis 7.2, Docker',
+    '--------------------------------------------------------------------------------',
+    'Problem Driver & Bottleneck:',
+    '  Autonomous AI agents suffered from unpredictable token blowups ($450/incident),',
+    '  tool hallucination, infinite plan loops, and security risks from ambient credentials.',
+    '',
+    'Architecture Solution:',
+    '  Acyclic ReAct DAG State Machine in LangGraph with dynamic semantic tool discovery via',
+    '  pgvector HNSW indexes, Java 21 LTS MCP Gateway, and ephemeral Docker sandbox cgroups.',
+    '',
+    'Production Impact Metrics:',
+    '  + Token Spend   : -76% Dynamic Schema Discovery',
+    '  + P99 Latency   : 3.8ms MCP JSON-RPC Handshake',
+    '  + Containment   : 100% Cgroups 512MB RAM & 30s Watchdog',
+    '  + Task Success  : 94.8% First-Pass Autonomous Rate',
+    '',
+    'Architectural Decision Record (ADR):',
+    '  ADR-006: Decoupled Model Context Protocol (MCP) Mesh vs Monolithic Tool Calling.',
+    '  Secured least-privilege containment with zero ambient secrets exposed to models.',
+    '--------------------------------------------------------------------------------'
   ]
 }
 
@@ -363,6 +388,10 @@ export default function InteractiveCli() {
             output = PROJECT_DETAILS['4']
             break
           }
+          if (query === '5' || query.includes('ai') || query.includes('agent') || query.includes('mcp') || query.includes('mesh')) {
+            output = PROJECT_DETAILS['5']
+            break
+          }
         }
         output = [
           'Enterprise Architecture Projects:',
@@ -370,8 +399,9 @@ export default function InteractiveCli() {
           '  2. Distributed Checkout Engine : 15k+ TPS, Choreographed Saga, Debezium CDC, Kafka',
           '  3. Real-Time Task Engine       : 50K+ WebSockets, Java 21 Virtual Threads, Redis Pub/Sub',
           '  4. FinTech Payment Gateway     : $10M+ daily volume, Immutable double-entry ledger, PCI-DSS',
+          '  5. Agentic MCP Mesh Orchestrator: LangGraph ReAct DAG, Java 21 MCP Gateway, pgvector HNSW',
           '--------------------------------------------------------------------------------',
-          'Tip: Type "project <id>" (e.g. "project 1" or "project saga") to inspect deep architecture telemetry.'
+          'Tip: Type "project <id>" (e.g. "project 5" or "project mcp") to inspect deep architecture telemetry.'
         ]
         break
       }
