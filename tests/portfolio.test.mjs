@@ -770,6 +770,44 @@ describe('Production Architectural Decision Records (ADR) & CLI Integration', ()
     assert.ok(indexHtml.includes('id="architecture-api-gateway"'), 'index.html must include #architecture-api-gateway landmark');
     assert.ok(!/[\u2013\u2014]/.test(indexHtml), 'index.html must contain zero em/en-dashes');
   });
+
+  test('DistributedTraceInspector and distributedTraces.ts define OpenTelemetry distributed traces with CLI integration', () => {
+    const traceDataPath = path.join(rootDir, 'src', 'data', 'distributedTraces.ts');
+    assert.ok(fs.existsSync(traceDataPath), 'distributedTraces.ts must exist');
+    const traceDataCode = fs.readFileSync(traceDataPath, 'utf8');
+    assert.ok(traceDataCode.includes('trace_saas_auth_01'), 'Must define trace_saas_auth_01');
+    assert.ok(traceDataCode.includes('trace_saga_checkout_02'), 'Must define trace_saga_checkout_02');
+    assert.ok(traceDataCode.includes('trace_collab_broadcast_03'), 'Must define trace_collab_broadcast_03');
+    assert.ok(traceDataCode.includes('trace_fintech_settlement_04'), 'Must define trace_fintech_settlement_04');
+    assert.ok(traceDataCode.includes('trace_agentic_mcp_05'), 'Must define trace_agentic_mcp_05');
+    assert.ok(!/[\u2013\u2014]/.test(traceDataCode), 'distributedTraces.ts must contain zero em/en-dashes');
+
+    const componentPath = path.join(rootDir, 'src', 'components', 'architecture', 'DistributedTraceInspector.tsx');
+    assert.ok(fs.existsSync(componentPath), 'DistributedTraceInspector.tsx must exist');
+    const compCode = fs.readFileSync(componentPath, 'utf8');
+    assert.ok(compCode.includes('handleCopyJson'), 'DistributedTraceInspector must support 1-click OTel JSON copy');
+    assert.ok(compCode.includes('handleCopyRfc'), 'DistributedTraceInspector must support 1-click RFC copy');
+    assert.ok(compCode.includes('DISTRIBUTED_TRACES'), 'DistributedTraceInspector must render DISTRIBUTED_TRACES');
+    assert.ok(!/[\u2013\u2014]/.test(compCode), 'DistributedTraceInspector.tsx must contain zero em/en-dashes');
+
+    const labCode = fs.readFileSync(path.join(rootDir, 'src', 'components', 'portfolio', 'ArchitectureLab.tsx'), 'utf8');
+    assert.ok(labCode.includes('DistributedTraceInspector'), 'ArchitectureLab must mount DistributedTraceInspector');
+    assert.ok(labCode.includes('id="architecture-distributed-tracing"'), 'ArchitectureLab must define anchor #architecture-distributed-tracing');
+
+    const cliCode = fs.readFileSync(path.join(rootDir, 'src', 'components', 'portfolio', 'InteractiveCli.tsx'), 'utf8');
+    assert.ok(cliCode.includes("'trace'"), "InteractiveCli must support 'trace' command");
+    assert.ok(cliCode.includes('[ $ trace ]'), "InteractiveCli must include '[ $ trace ]' quick chip");
+    assert.ok(cliCode.includes('DISTRIBUTED_TRACES'), 'InteractiveCli must search across DISTRIBUTED_TRACES');
+    assert.ok(!/[\u2013\u2014]/.test(cliCode), 'InteractiveCli.tsx must contain zero em/en-dashes');
+
+    const chatIndex = fs.readFileSync(path.join(rootDir, 'public', 'chat', 'index.json'), 'utf8');
+    assert.ok(chatIndex.includes('distributed-tracing-otel'), 'public/chat/index.json must index distributed-tracing-otel');
+    assert.ok(!/[\u2013\u2014]/.test(chatIndex), 'public/chat/index.json must contain zero em/en-dashes');
+
+    const indexHtml = fs.readFileSync(path.join(rootDir, 'index.html'), 'utf8');
+    assert.ok(indexHtml.includes('id="architecture-distributed-tracing"'), 'index.html must include #architecture-distributed-tracing landmark');
+    assert.ok(!/[\u2013\u2014]/.test(indexHtml), 'index.html must contain zero em/en-dashes');
+  });
 });
 
 

@@ -130,5 +130,11 @@
     "title": "Enterprise API Gateway & Ingress Routing Sandbox",
     "text": "Meena architects zero-trust edge ingress with Envoy proxy, SPIFFE mTLS, and custom Lua/Wasm filter pipelines across 5 systems: (1) Multi-Tenant IAM: RS256 JWT claims extraction and downstream PostgreSQL RLS header injection (P99 < 8.2ms), (2) Distributed Saga Checkout: Redis Redlock idempotency gate and JSON to gRPC protobuf transcoding, (3) Real-Time WebSocket Mesh: RFC 6455 101 Switching Protocols with 50,000 concurrent sockets and drop-tail ring buffers, (4) FinTech Payment Vault: PCI-DSS PAN card tokenization in <2ms via AWS KMS, and (5) Agentic MCP Gateway: gVisor container sandbox gate and token budget circuit breaker.",
     "url": "#architecture-api-gateway"
+  },
+  {
+    "id": "distributed-tracing-otel",
+    "title": "Distributed Tracing & OpenTelemetry Span Flamegraph",
+    "text": "Meena instruments end-to-end W3C distributed trace context propagation with OpenTelemetry across all 5 architectures: (1) SaaS IAM Auth trace with RS256 JWT verify and PostgreSQL RLS filter (24.5ms, bottleneck: DB RLS 6.4ms), (2) Distributed Saga Checkout with outbox CDC and Kafka partition publisher (48.2ms, bottleneck: payment authorization 18.5ms), (3) WebSocket Real-Time collaboration with Java 21 Virtual Thread unparking across 50,000 sockets (9.8ms, bottleneck: parallel push 4.2ms), (4) FinTech PCI-DSS payment charge with AWS KMS PAN tokenization and serializable ledger transaction (32.4ms, bottleneck: double-entry transfer 21.4ms), and (5) Agentic AI MCP tool execution with gVisor sandbox container dispatch and pgvector 1536d cosine similarity search (64.2ms, bottleneck: HNSW vector search 31.2ms).",
+    "url": "#architecture-distributed-tracing"
   }
 ]

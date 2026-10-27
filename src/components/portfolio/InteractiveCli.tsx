@@ -7,6 +7,7 @@ import { ARCHITECTURE_SYSTEMS } from '@/data/architectureSystems'
 import { ARCHITECTURE_EVOLUTIONS } from '@/data/architectureEvolutions'
 import { CHAOS_DRILLS } from '@/data/chaosDrills'
 import { GATEWAY_ROUTES } from '@/data/gatewayRoutes'
+import { DISTRIBUTED_TRACES } from '@/data/distributedTraces'
 import { EXECUTIVE_BRIEFING } from '@/data/executiveBriefing'
 
 interface HistoryEntry {
@@ -44,6 +45,11 @@ const AVAILABLE_COMMANDS = [
   'ingress',
   'routes',
   'proxy',
+  'trace',
+  'traces',
+  'spans',
+  'otel',
+  'jaeger',
   'adr',
   'decisions',
   'tradeoffs',
@@ -83,6 +89,7 @@ const QUICK_CHIPS = [
   { label: '[ $ diff ]', cmd: 'diff' },
   { label: '[ $ chaos ]', cmd: 'chaos' },
   { label: '[ $ gateway ]', cmd: 'gateway' },
+  { label: '[ $ trace ]', cmd: 'trace' },
   { label: '[ $ find kafka ]', cmd: 'find kafka' },
   { label: '[ $ tradeoffs ]', cmd: 'tradeoffs' },
   { label: '[ $ adr ]', cmd: 'adr' },
@@ -110,6 +117,7 @@ const COMMAND_HELP = [
   '  diff            - Compare Legacy Monolith anti-patterns vs Modern Mesh (or "diff <id>")',
   '  chaos           - Execute automated chaos disaster recovery drills & SLA logs (or "chaos <id>")',
   '  gateway         - Inspect Envoy API gateway routes, mTLS & filters (or "gateway <id>")',
+  '  trace           - Inspect OpenTelemetry distributed traces & span flamegraphs (or "trace <id>")',
   '  find <query>    - Search cross-cutting architecture systems, ADRs, AI codex & trade-offs',
   '  tradeoffs       - Evaluate system design decision trade-offs (or "compare <topic>")',
   '  stats           - View production performance & impact metrics (99.99% SLA)',
@@ -849,6 +857,19 @@ export default function InteractiveCli() {
           ]
           break
         }
+        if (sub === 'trace' || sub === 'traces' || sub === 'spans' || sub === 'otel' || args.some(a => a.toLowerCase().includes('trace') || a.toLowerCase().includes('span') || a.toLowerCase().includes('otel'))) {
+          output = [
+            'Routing to Distributed Tracing & OpenTelemetry Span Flamegraph (#architecture-distributed-tracing):',
+            '  1. SaaS IAM Auth Trace      : Envoy -> mTLS -> WAF -> PostgreSQL RLS (24.5ms)',
+            '  2. Saga Checkout Trace      : Redlock -> Order Outbox -> Debezium CDC -> Kafka (48.2ms)',
+            '  3. WebSocket Collab Trace   : 101 Switch -> Redis Pub/Sub -> 50k Virtual Threads (9.8ms)',
+            '  4. FinTech Settlement Trace : HSM -> AWS KMS Tokenize -> Double-Entry ACID (32.4ms)',
+            '  5. Agentic AI & MCP Trace   : ReAct DAG -> gVisor Sandbox -> pgvector HNSW (64.2ms)',
+            '--------------------------------------------------------------------------------',
+            'Interactive Inspector: Live in #architecture-distributed-tracing with span flamegraph.'
+          ]
+          break
+        }
         output = [
           'ByteByteGo Interactive Architecture Lab Navigator:',
           '--------------------------------------------------------------------------------',
@@ -860,6 +881,7 @@ export default function InteractiveCli() {
           '  [ 5 ] "architecture diff"      : Monolith-to-Mesh Comparison Diffs (#architecture-evolution-diff)',
           '  [ 6 ] "architecture chaos"     : Chaos Disaster Recovery Drills (#architecture-chaos-matrix)',
           '  [ 7 ] "architecture gateway"   : Ingress Routing & Envoy Filters (#architecture-api-gateway)',
+          '  [ 8 ] "architecture trace"     : OpenTelemetry Distributed Tracing (#architecture-distributed-tracing)',
           '--------------------------------------------------------------------------------',
           'Clean Architecture Principles Enforced:',
           '  + Domain Isolation     : Core business domains decouple from libraries and vendor SDKs',
@@ -1169,6 +1191,70 @@ export default function InteractiveCli() {
         ]
         break
       }
+      case 'trace':
+      case 'traces':
+      case 'spans':
+      case 'otel':
+      case 'jaeger': {
+        const target = args[0]?.toLowerCase().trim()
+        if (target) {
+          const matched = DISTRIBUTED_TRACES.find(t => 
+            t.traceId === target ||
+            t.traceId.includes(target) ||
+            t.rootEndpoint.toLowerCase().includes(target) ||
+            t.systemName.toLowerCase().includes(target) ||
+            t.title.toLowerCase().includes(target) ||
+            (target === '1' && t.traceId === 'trace_saas_auth_01') ||
+            (target === '2' && t.traceId === 'trace_saga_checkout_02') ||
+            (target === '3' && t.traceId === 'trace_collab_broadcast_03') ||
+            (target === '4' && t.traceId === 'trace_fintech_settlement_04') ||
+            (target === '5' && t.traceId === 'trace_agentic_mcp_05')
+          )
+          if (matched) {
+            output = [
+              `OpenTelemetry Distributed Trace: ${matched.title}`,
+              `Trace ID   : ${matched.traceId}`,
+              `Endpoint   : ${matched.rootEndpoint} | Duration: ${matched.totalDurationMs.toFixed(1)}ms`,
+              `System     : ${matched.systemName} (${matched.category})`,
+              `Governance : ${matched.governingAdr}`,
+              '--------------------------------------------------------------------------------',
+              `Summary: ${matched.summary}`,
+              `Critical Path Bottleneck: ${matched.criticalBottleneck}`,
+              '',
+              'DISTRIBUTED SPAN TIMELINE & HIERARCHY:',
+              ...matched.spans.map(s => {
+                const percent = ((s.durationMs / matched.totalDurationMs) * 100).toFixed(0)
+                const flag = s.isCriticalPath ? '[CRITICAL]' : '          '
+                return `  [+${s.startTimeMs.toFixed(1).padStart(4, ' ')}ms] ${flag} ${s.serviceName} :: ${s.operationName} (${s.durationMs.toFixed(1)}ms, ${percent}%)`
+              }),
+              '',
+              'CRITICAL SPAN ATTRIBUTES:',
+              ...Object.entries(matched.spans.find(s => s.isCriticalPath && s.parentSpanId)?.tags || matched.spans[0].tags).map(([k, v]) => `  * ${k}: ${v}`),
+              '--------------------------------------------------------------------------------',
+              'Full visual span flamegraph available in #architecture-distributed-tracing.'
+            ]
+            break
+          }
+        }
+
+        output = [
+          'Distributed Tracing & OpenTelemetry Span Flamegraph:',
+          '--------------------------------------------------------------------------------',
+          'Inspect end-to-end W3C distributed trace spans and latency bottlenecks across 5 architectures:',
+          '',
+          ...DISTRIBUTED_TRACES.flatMap((t, idx) => [
+            `${idx + 1}. [ ${t.traceId} ] : ${t.title}`,
+            `   Endpoint      : ${t.rootEndpoint} (${t.systemName})`,
+            `   Latency & Spans: ${t.totalDurationMs.toFixed(1)}ms (${t.spans.length} spans)`,
+            `   Bottleneck    : ${t.criticalBottleneck}`,
+            `   Deep Dive     : "trace ${idx + 1}" or "trace ${t.traceId.split('_')[1]}" (e.g. "trace saas", "trace saga", "trace collab", "trace fintech", "trace mcp")`,
+            ''
+          ]),
+          '--------------------------------------------------------------------------------',
+          'Tip: Run "trace <id>" (e.g. "trace 1" or "trace mcp") to inspect span timeline and tags.'
+        ]
+        break
+      }
       case 'find':
       case 'search': {
         const query = args.join(' ').toLowerCase().trim()
@@ -1178,7 +1264,7 @@ export default function InteractiveCli() {
             '--------------------------------------------------------------------------------',
             'Search cross-cutting distributed systems, ADRs, AI paradigms, and trade-offs.',
             'Usage: find <query> (e.g. "find kafka", "find redis", "find mcp", "find saga")',
-            'Available Domains: Systems, ADR Governance, AI Codex, Trade-Off Matrix, Evolution Diffs, Chaos Drills, API Gateway'
+            'Available Domains: Systems, ADR Governance, AI Codex, Trade-Off Matrix, Evolution Diffs, Chaos Drills, API Gateway, Distributed Traces'
           ]
           break
         }
@@ -1314,6 +1400,27 @@ export default function InteractiveCli() {
               `[Gateway Ingress] ${r.method} ${r.routePath}`,
               `  Target     : ${r.upstreamService} (${r.latencyTarget})`,
               `  Anchor     : #architecture-api-gateway`,
+              ''
+            )
+          }
+        })
+
+        // 8. Search Distributed Traces
+        DISTRIBUTED_TRACES.forEach(t => {
+          if (
+            t.title.toLowerCase().includes(query) ||
+            t.rootEndpoint.toLowerCase().includes(query) ||
+            t.systemName.toLowerCase().includes(query) ||
+            t.category.toLowerCase().includes(query) ||
+            t.criticalBottleneck.toLowerCase().includes(query) ||
+            t.summary.toLowerCase().includes(query) ||
+            t.governingAdr.toLowerCase().includes(query) ||
+            t.spans.some(s => s.operationName.toLowerCase().includes(query) || s.serviceName.toLowerCase().includes(query))
+          ) {
+            results.push(
+              `[Distributed Trace] ${t.title}`,
+              `  Endpoint   : ${t.rootEndpoint} (${t.totalDurationMs.toFixed(1)}ms)`,
+              `  Anchor     : #architecture-distributed-tracing`,
               ''
             )
           }

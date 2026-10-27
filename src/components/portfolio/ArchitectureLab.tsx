@@ -15,6 +15,7 @@ import {
   Search,
   Flame,
   Globe,
+  GitCommit,
   X
 } from 'lucide-react'
 import ByteByteGoDiagram from '@/components/architecture/ByteByteGoDiagram'
@@ -24,12 +25,14 @@ import TradeoffMatrix from '@/components/architecture/TradeoffMatrix'
 import ArchitectureEvolutionDiff from '@/components/architecture/ArchitectureEvolutionDiff'
 import ChaosResilienceMatrix from '@/components/architecture/ChaosResilienceMatrix'
 import ApiGatewayPlayground from '@/components/architecture/ApiGatewayPlayground'
+import DistributedTraceInspector from '@/components/architecture/DistributedTraceInspector'
 import { ARCHITECTURE_SYSTEMS } from '@/data/architectureSystems'
 import { ARCHITECTURAL_DECISIONS } from '@/data/architecturalDecisions'
 import { ARCHITECTURAL_TRADEOFFS } from '@/data/architecturalTradeoffs'
 import { ARCHITECTURE_EVOLUTIONS } from '@/data/architectureEvolutions'
 import { CHAOS_DRILLS } from '@/data/chaosDrills'
 import { GATEWAY_ROUTES } from '@/data/gatewayRoutes'
+import { DISTRIBUTED_TRACES } from '@/data/distributedTraces'
 
 const AI_TERMS_SUMMARY = [
   { id: 'agentic-ai', title: 'Agentic AI', text: 'Perception-action loop, DAG memory, tool execution, LangGraph' },
@@ -54,6 +57,7 @@ export default function ArchitectureLab() {
         evolutions: 5,
         drills: 5,
         gateway: 5,
+        traces: 5,
         isActive: false
       }
     }
@@ -117,8 +121,18 @@ export default function ArchitectureLab() {
       r.governingAdr.toLowerCase().includes(q)
     ).length
 
+    const traceCount = DISTRIBUTED_TRACES.filter(t => 
+      t.title.toLowerCase().includes(q) ||
+      t.rootEndpoint.toLowerCase().includes(q) ||
+      t.systemName.toLowerCase().includes(q) ||
+      t.category.toLowerCase().includes(q) ||
+      t.criticalBottleneck.toLowerCase().includes(q) ||
+      t.summary.toLowerCase().includes(q) ||
+      t.governingAdr.toLowerCase().includes(q)
+    ).length
+
     return {
-      total: workbenchCount + aiCount + adrCount + tradeoffCount + evolutionCount + chaosCount + gatewayCount,
+      total: workbenchCount + aiCount + adrCount + tradeoffCount + evolutionCount + chaosCount + gatewayCount + traceCount,
       workbench: workbenchCount,
       aiCodex: aiCount,
       adr: adrCount,
@@ -126,6 +140,7 @@ export default function ArchitectureLab() {
       evolutions: evolutionCount,
       drills: chaosCount,
       gateway: gatewayCount,
+      traces: traceCount,
       isActive: true
     }
   }, [searchQuery])
@@ -315,6 +330,17 @@ export default function ArchitectureLab() {
             <Globe className="w-3.5 h-3.5 text-blue-400" />
             <span>API Gateway ({matchStats.gateway})</span>
           </a>
+          <a 
+            href="#architecture-distributed-tracing"
+            className={`px-3 py-1.5 rounded-lg border transition-all flex items-center gap-1.5 cursor-pointer ${
+              matchStats.isActive && matchStats.traces > 0
+                ? 'bg-indigo-500/10 border-indigo-500/50 text-indigo-400 shadow-[0_0_10px_rgba(99,102,241,0.15)] font-bold'
+                : 'bg-slate-900 border-slate-800 hover:border-indigo-500/50 hover:text-indigo-400 text-slate-300'
+            }`}
+          >
+            <GitCommit className="w-3.5 h-3.5 text-indigo-400" />
+            <span>Distributed Traces ({matchStats.traces})</span>
+          </a>
         </div>
       </div>
 
@@ -404,6 +430,18 @@ export default function ArchitectureLab() {
         className="scroll-mt-24"
       >
         <ApiGatewayPlayground />
+      </motion.div>
+
+      {/* 2.11. Distributed Tracing & OpenTelemetry Span Flamegraph */}
+      <motion.div
+        id="architecture-distributed-tracing"
+        initial={{ opacity: 0, y: 25 }}
+        whileInView={{ opacity: 1, y: 0 }}
+        viewport={{ once: true }}
+        transition={{ duration: 0.6, delay: 0.4 }}
+        className="scroll-mt-24"
+      >
+        <DistributedTraceInspector />
       </motion.div>
 
       {/* 3. Architectural Design Pillars Strip */}

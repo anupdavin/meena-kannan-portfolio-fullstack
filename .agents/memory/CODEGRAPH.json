@@ -1,6 +1,6 @@
 {
   "version": "1.0.0",
-  "generatedAt": "2026-10-27T13:37:01.314Z",
+  "generatedAt": "2026-10-27T13:55:27.783Z",
   "nodes": {
     "src/components/architecture/AdrExplorer.tsx": {
       "file": "src/components/architecture/AdrExplorer.tsx",
@@ -145,6 +145,18 @@
       "exports": [],
       "loc": 5
     },
+    "src/components/architecture/DistributedTraceInspector.tsx": {
+      "file": "src/components/architecture/DistributedTraceInspector.tsx",
+      "imports": [
+        "react",
+        "lucide-react",
+        "@/data/distributedTraces"
+      ],
+      "exports": [
+        "DistributedTraceInspector"
+      ],
+      "loc": 443
+    },
     "src/components/architecture/SvgPrimitives.tsx": {
       "file": "src/components/architecture/SvgPrimitives.tsx",
       "imports": [
@@ -260,17 +272,19 @@
         "@/components/architecture/ArchitectureEvolutionDiff",
         "@/components/architecture/ChaosResilienceMatrix",
         "@/components/architecture/ApiGatewayPlayground",
+        "@/components/architecture/DistributedTraceInspector",
         "@/data/architectureSystems",
         "@/data/architecturalDecisions",
         "@/data/architecturalTradeoffs",
         "@/data/architectureEvolutions",
         "@/data/chaosDrills",
-        "@/data/gatewayRoutes"
+        "@/data/gatewayRoutes",
+        "@/data/distributedTraces"
       ],
       "exports": [
         "ArchitectureLab"
       ],
-      "loc": 462
+      "loc": 500
     },
     "src/components/portfolio/ContactTerminal.tsx": {
       "file": "src/components/portfolio/ContactTerminal.tsx",
@@ -322,12 +336,13 @@
         "@/data/architectureEvolutions",
         "@/data/chaosDrills",
         "@/data/gatewayRoutes",
+        "@/data/distributedTraces",
         "@/data/executiveBriefing"
       ],
       "exports": [
         "InteractiveCli"
       ],
-      "loc": 1594
+      "loc": 1701
     },
     "src/components/portfolio/ProjectsShowcase.tsx": {
       "file": "src/components/portfolio/ProjectsShowcase.tsx",
@@ -508,6 +523,16 @@
       ],
       "loc": 524
     },
+    "src/data/distributedTraces.ts": {
+      "file": "src/data/distributedTraces.ts",
+      "imports": [],
+      "exports": [
+        "SpanRecord",
+        "DistributedTrace",
+        "DISTRIBUTED_TRACES"
+      ],
+      "loc": 694
+    },
     "src/data/executiveBriefing.ts": {
       "file": "src/data/executiveBriefing.ts",
       "imports": [],
@@ -526,6 +551,17 @@
         "GATEWAY_ROUTES"
       ],
       "loc": 413
+    },
+    "src/data/kafkaStreams.ts": {
+      "file": "src/data/kafkaStreams.ts",
+      "imports": [],
+      "exports": [
+        "KafkaPartition",
+        "KafkaConsumerGroup",
+        "KafkaTopicStream",
+        "KAFKA_TOPIC_STREAMS"
+      ],
+      "loc": 280
     },
     "src/main.tsx": {
       "file": "src/main.tsx",
@@ -665,6 +701,7 @@
     "ByteByteGoWorkbenchProps": "src/components/architecture/ByteByteGoWorkbench.tsx",
     "ByteByteGoWorkbench": "src/components/architecture/ByteByteGoWorkbench.tsx",
     "ChaosResilienceMatrix": "src/components/architecture/ChaosResilienceMatrix.tsx",
+    "DistributedTraceInspector": "src/components/architecture/DistributedTraceInspector.tsx",
     "BoundaryContainerProps": "src/components/architecture/SvgPrimitives.tsx",
     "BoundaryContainer": "src/components/architecture/SvgPrimitives.tsx",
     "DatabaseCylinderProps": "src/components/architecture/SvgPrimitives.tsx",
@@ -737,11 +774,18 @@
     "ChaosTraceStep": "src/data/chaosDrills.ts",
     "ChaosDrill": "src/data/chaosDrills.ts",
     "CHAOS_DRILLS": "src/data/chaosDrills.ts",
+    "SpanRecord": "src/data/distributedTraces.ts",
+    "DistributedTrace": "src/data/distributedTraces.ts",
+    "DISTRIBUTED_TRACES": "src/data/distributedTraces.ts",
     "ExecutiveBriefingData": "src/data/executiveBriefing.ts",
     "EXECUTIVE_BRIEFING": "src/data/executiveBriefing.ts",
     "GatewayFilter": "src/data/gatewayRoutes.ts",
     "GatewayRoute": "src/data/gatewayRoutes.ts",
     "GATEWAY_ROUTES": "src/data/gatewayRoutes.ts",
+    "KafkaPartition": "src/data/kafkaStreams.ts",
+    "KafkaConsumerGroup": "src/data/kafkaStreams.ts",
+    "KafkaTopicStream": "src/data/kafkaStreams.ts",
+    "KAFKA_TOPIC_STREAMS": "src/data/kafkaStreams.ts",
     "Layout": "src/pages/Layout.tsx",
     "Portfolio": "src/pages/Portfolio.tsx"
   }
