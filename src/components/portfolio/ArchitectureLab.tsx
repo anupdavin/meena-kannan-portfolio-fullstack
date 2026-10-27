@@ -44,6 +44,7 @@ import RaftConsensusSandbox from '@/components/architecture/RaftConsensusSandbox
 import VectorSearchSandbox from '@/components/architecture/VectorSearchSandbox'
 import TrafficPrioritySandbox from '@/components/architecture/TrafficPrioritySandbox'
 import DistributedSagasSandbox from '@/components/architecture/DistributedSagasSandbox'
+import DistributedCacheSandbox from '@/components/architecture/DistributedCacheSandbox'
 import { ARCHITECTURE_SYSTEMS } from '@/data/architectureSystems'
 import { ARCHITECTURAL_DECISIONS } from '@/data/architecturalDecisions'
 import { ARCHITECTURAL_TRADEOFFS } from '@/data/architecturalTradeoffs'
@@ -62,6 +63,7 @@ import { CONSENSUS_MODELS } from '@/data/raftConsensus'
 import { VECTOR_SEARCH_MODELS } from '@/data/vectorSearch'
 import { TRAFFIC_PRIORITY_MODELS } from '@/data/trafficPriority'
 import { DISTRIBUTED_SAGA_MODELS } from '@/data/distributedSagas'
+import { DISTRIBUTED_CACHE_MODELS } from '@/data/distributedCache'
 
 const AI_TERMS_SUMMARY = [
   { id: 'agentic-ai', title: 'Agentic AI', text: 'Perception-action loop, DAG memory, tool execution, LangGraph' },
@@ -98,6 +100,7 @@ export default function ArchitectureLab() {
         vector: 5,
         priority: 5,
         sagas: 5,
+        cache: 5,
         isActive: false
       }
     }
@@ -287,8 +290,21 @@ export default function ArchitectureLab() {
       s.architecturalInvariant.toLowerCase().includes(q)
     ).length
 
+    const cacheCount = DISTRIBUTED_CACHE_MODELS.filter(c =>
+      c.name.toLowerCase().includes(q) ||
+      c.id.toLowerCase().includes(q) ||
+      c.paradigm.toLowerCase().includes(q) ||
+      c.badge.toLowerCase().includes(q) ||
+      c.algorithmFormula.toLowerCase().includes(q) ||
+      c.p99Latency.toLowerCase().includes(q) ||
+      c.originLoadReduction.toLowerCase().includes(q) ||
+      c.memoryFootprint.toLowerCase().includes(q) ||
+      c.concurrencyProtection.toLowerCase().includes(q) ||
+      c.architecturalInvariant.toLowerCase().includes(q)
+    ).length
+
     return {
-      total: workbenchCount + aiCount + adrCount + tradeoffCount + evolutionCount + chaosCount + gatewayCount + traceCount + kafkaCount + ratelimitCount + multiregionCount + shardingCount + cdnCount + circuitBreakerCount + concurrencyCount + raftCount + vectorCount + priorityCount + sagasCount,
+      total: workbenchCount + aiCount + adrCount + tradeoffCount + evolutionCount + chaosCount + gatewayCount + traceCount + kafkaCount + ratelimitCount + multiregionCount + shardingCount + cdnCount + circuitBreakerCount + concurrencyCount + raftCount + vectorCount + priorityCount + sagasCount + cacheCount,
       workbench: workbenchCount,
       aiCodex: aiCount,
       adr: adrCount,
@@ -308,6 +324,7 @@ export default function ArchitectureLab() {
       vector: vectorCount,
       priority: priorityCount,
       sagas: sagasCount,
+      cache: cacheCount,
       isActive: true
     }
   }, [searchQuery])
@@ -629,6 +646,17 @@ export default function ArchitectureLab() {
             <GitMerge className="w-3.5 h-3.5 text-cyan-400" />
             <span>Sagas &amp; Compensation ({matchStats.sagas})</span>
           </a>
+          <a 
+            href="#architecture-distributed-cache"
+            className={`px-3 py-1.5 rounded-lg border transition-all flex items-center gap-1.5 cursor-pointer ${
+              matchStats.isActive && matchStats.cache > 0
+                ? 'bg-cyan-500/10 border-cyan-500/50 text-cyan-400 shadow-[0_0_10px_rgba(6,182,212,0.15)] font-bold'
+                : 'bg-slate-900 border-slate-800 hover:border-cyan-500/50 hover:text-cyan-400 text-slate-300'
+            }`}
+          >
+            <Database className="w-3.5 h-3.5 text-cyan-400" />
+            <span>Cache Stampede ({matchStats.cache})</span>
+          </a>
         </div>
       </div>
 
@@ -862,6 +890,18 @@ export default function ArchitectureLab() {
         className="scroll-mt-24"
       >
         <DistributedSagasSandbox />
+      </motion.div>
+
+      {/* 2.23. Distributed Cache Stampede & Multi-Tier Mutex Leasing Sandbox */}
+      <motion.div
+        id="architecture-distributed-cache"
+        initial={{ opacity: 0, y: 25 }}
+        whileInView={{ opacity: 1, y: 0 }}
+        viewport={{ once: true }}
+        transition={{ duration: 0.6, delay: 1.0 }}
+        className="scroll-mt-24"
+      >
+        <DistributedCacheSandbox />
       </motion.div>
 
       {/* 3. Architectural Design Pillars Strip */}

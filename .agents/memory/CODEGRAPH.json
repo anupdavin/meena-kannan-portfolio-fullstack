@@ -1,6 +1,6 @@
 {
   "version": "1.0.0",
-  "generatedAt": "2026-10-27T17:00:25.125Z",
+  "generatedAt": "2026-10-27T17:10:21.824Z",
   "nodes": {
     "src/components/architecture/AdrExplorer.tsx": {
       "file": "src/components/architecture/AdrExplorer.tsx",
@@ -168,6 +168,18 @@
         "DatabaseShardingSandbox"
       ],
       "loc": 624
+    },
+    "src/components/architecture/DistributedCacheSandbox.tsx": {
+      "file": "src/components/architecture/DistributedCacheSandbox.tsx",
+      "imports": [
+        "react",
+        "lucide-react",
+        "@/data/distributedCache"
+      ],
+      "exports": [
+        "DistributedCacheSandbox"
+      ],
+      "loc": 412
     },
     "src/components/architecture/DistributedConcurrencySandbox.tsx": {
       "file": "src/components/architecture/DistributedConcurrencySandbox.tsx",
@@ -428,6 +440,7 @@
         "@/components/architecture/VectorSearchSandbox",
         "@/components/architecture/TrafficPrioritySandbox",
         "@/components/architecture/DistributedSagasSandbox",
+        "@/components/architecture/DistributedCacheSandbox",
         "@/data/architectureSystems",
         "@/data/architecturalDecisions",
         "@/data/architecturalTradeoffs",
@@ -445,12 +458,13 @@
         "@/data/raftConsensus",
         "@/data/vectorSearch",
         "@/data/trafficPriority",
-        "@/data/distributedSagas"
+        "@/data/distributedSagas",
+        "@/data/distributedCache"
       ],
       "exports": [
         "ArchitectureLab"
       ],
-      "loc": 920
+      "loc": 960
     },
     "src/components/portfolio/ContactTerminal.tsx": {
       "file": "src/components/portfolio/ContactTerminal.tsx",
@@ -514,12 +528,13 @@
         "@/data/vectorSearch",
         "@/data/trafficPriority",
         "@/data/distributedSagas",
+        "@/data/distributedCache",
         "@/data/executiveBriefing"
       ],
       "exports": [
         "InteractiveCli"
       ],
-      "loc": 2870
+      "loc": 2994
     },
     "src/components/portfolio/ProjectsShowcase.tsx": {
       "file": "src/components/portfolio/ProjectsShowcase.tsx",
@@ -572,7 +587,7 @@
       "exports": [
         "TerminalHero"
       ],
-      "loc": 609
+      "loc": 610
     },
     "src/components/ui/badge.tsx": {
       "file": "src/components/ui/badge.tsx",
@@ -721,6 +736,15 @@
         "DATABASE_SHARDING_STRATEGIES"
       ],
       "loc": 348
+    },
+    "src/data/distributedCache.ts": {
+      "file": "src/data/distributedCache.ts",
+      "imports": [],
+      "exports": [
+        "CacheCoherenceModel",
+        "DISTRIBUTED_CACHE_MODELS"
+      ],
+      "loc": 361
     },
     "src/data/distributedConcurrency.ts": {
       "file": "src/data/distributedConcurrency.ts",
@@ -985,6 +1009,7 @@
     "ChaosResilienceMatrix": "src/components/architecture/ChaosResilienceMatrix.tsx",
     "CircuitBreakerSandbox": "src/components/architecture/CircuitBreakerSandbox.tsx",
     "DatabaseShardingSandbox": "src/components/architecture/DatabaseShardingSandbox.tsx",
+    "DistributedCacheSandbox": "src/components/architecture/DistributedCacheSandbox.tsx",
     "DistributedConcurrencySandbox": "src/components/architecture/DistributedConcurrencySandbox.tsx",
     "DistributedSagasSandbox": "src/components/architecture/DistributedSagasSandbox.tsx",
     "DistributedTraceInspector": "src/components/architecture/DistributedTraceInspector.tsx",
@@ -1075,6 +1100,8 @@
     "RoutingProbe": "src/data/databaseSharding.ts",
     "DatabaseShardingStrategy": "src/data/databaseSharding.ts",
     "DATABASE_SHARDING_STRATEGIES": "src/data/databaseSharding.ts",
+    "CacheCoherenceModel": "src/data/distributedCache.ts",
+    "DISTRIBUTED_CACHE_MODELS": "src/data/distributedCache.ts",
     "ConcurrencyModel": "src/data/distributedConcurrency.ts",
     "CONCURRENCY_MODELS": "src/data/distributedConcurrency.ts",
     "validateTransaction": "src/data/distributedConcurrency.ts",

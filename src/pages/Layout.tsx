@@ -21,7 +21,7 @@ const NAV_LINKS = [
   { label: 'About', href: '#about', id: 'about' },
   { label: 'Skills', href: '#skills', id: 'skills' },
   { label: 'AI Codex', href: '#architecture-ai-codex', id: 'architecture-ai-codex', badge: 'ByteByteGo' },
-  { label: 'Architecture', href: '#architecture', id: 'architecture', badge: '19 Engines' },
+  { label: 'Architecture', href: '#architecture', id: 'architecture', badge: '20 Engines' },
   { label: 'Projects', href: '#projects', id: 'projects' },
   { label: 'Experience', href: '#experience', id: 'experience' },
   { label: 'Contact', href: '#contact', id: 'contact' },

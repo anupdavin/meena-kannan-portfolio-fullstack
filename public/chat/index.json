@@ -202,5 +202,11 @@
     "title": "Distributed Saga Orchestration vs Choreography & Compensation State Engine",
     "text": "Meena designs enterprise distributed transaction and compensation engines across 5 paradigms: (1) Orchestrated Saga with Temporal/Camunda State Machines: Unidirectional gRPC activity task dispatch with deterministic event histories and automated backward compensation cascades, (2) Choreographed Saga with Kafka Event Mesh: Decentralized event sourcing with Transactional Outbox CDC Debezium, consumer idempotency keys, and asynchronous failure event propagation, (3) Backward Compensation Recovery: Semantic LIFO undo logs with idempotent compensating transactions guaranteeing 0.00% double-spend and 99.98% automated rollback completion, (4) Forward Recovery with Exponential Jitter: Resilient retry loops using full jitter to eliminate thundering herd harmonics and route permanently exhausted tasks to dead-letter queues, and (5) Dual-Write Atomic Outbox: PostgreSQL ACID transactions writing entities and outbox rows atomically, tailed by Debezium CDC into Kafka with sub-8ms streaming lag.",
     "url": "#architecture-distributed-sagas"
+  },
+  {
+    "id": "distributed-cache-stampede",
+    "title": "Distributed Cache Stampede, Multi-Tier Coherence & Mutex Leasing Sandbox",
+    "text": "Meena architects enterprise cache coherence and stampede protection engines across 5 paradigms: (1) Probabilistic Early Expiration (XFetch): Asynchronous stochastic background recomputation delta * beta * ln(rand()) > expiry - now guaranteeing 99.4% origin protection and sub-1.4ms P99 read latency with zero stampede spikes, (2) Singleflight Request Coalescing: In-flight deduplication map collapsing 10,000 parallel cache misses into exactly 1 database query, (3) Redis Mutex Leasing with Redlock & Fencing Tokens: Quorum mutual exclusion (3 of 5 nodes) with 5-second auto-releasing hardware leases and monotonic fencing tokens to reject stale zombie writes, (4) Tiered Multi-Level Caching (L1 Caffeine + L2 Redis): In-process memory caching serving 95% of reads at sub-8 microseconds with Redis Pub/Sub invalidations keeping pod inconsistency under 5ms, and (5) Dual-Write Elimination via Debezium CDC: PostgreSQL WAL row mutation events streaming directly to Redis DEL key purges with sub-8.5ms latency.",
+    "url": "#architecture-distributed-cache"
   }
 ]

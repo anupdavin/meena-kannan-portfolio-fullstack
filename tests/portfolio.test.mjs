@@ -1238,6 +1238,43 @@ describe('Production Architectural Decision Records (ADR) & CLI Integration', ()
     assert.ok(indexHtml.includes('id="architecture-distributed-sagas"'), 'index.html must include #architecture-distributed-sagas landmark');
     assert.ok(!/[\u2013\u2014]/.test(indexHtml), 'index.html must contain zero em/en-dashes');
   });
+
+  test('DistributedCacheSandbox and distributedCache.ts define distributed cache stampede protection and mutex leasing with CLI integration', () => {
+    const cacheDataPath = path.join(rootDir, 'src', 'data', 'distributedCache.ts');
+    assert.ok(fs.existsSync(cacheDataPath), 'distributedCache.ts must exist');
+    const cacheDataCode = fs.readFileSync(cacheDataPath, 'utf8');
+    assert.ok(cacheDataCode.includes('probabilistic-early-expiration-xfetch'), 'Must define probabilistic-early-expiration-xfetch model');
+    assert.ok(cacheDataCode.includes('singleflight-request-coalescing'), 'Must define singleflight-request-coalescing model');
+    assert.ok(cacheDataCode.includes('redis-mutex-leasing-redlock'), 'Must define redis-mutex-leasing-redlock model');
+    assert.ok(cacheDataCode.includes('multi-tier-l1-l2-caching'), 'Must define multi-tier-l1-l2-caching model');
+    assert.ok(cacheDataCode.includes('cdc-wal-cache-invalidation'), 'Must define cdc-wal-cache-invalidation model');
+    assert.ok(!/[\u2013\u2014]/.test(cacheDataCode), 'distributedCache.ts must contain zero em/en-dashes');
+
+    const componentPath = path.join(rootDir, 'src', 'components', 'architecture', 'DistributedCacheSandbox.tsx');
+    assert.ok(fs.existsSync(componentPath), 'DistributedCacheSandbox.tsx must exist');
+    const compCode = fs.readFileSync(componentPath, 'utf8');
+    assert.ok(compCode.includes('copyRfcReport'), 'DistributedCacheSandbox must support 1-click RFC copy');
+    assert.ok(compCode.includes('DISTRIBUTED_CACHE_MODELS'), 'DistributedCacheSandbox must render DISTRIBUTED_CACHE_MODELS');
+    assert.ok(!/[\u2013\u2014]/.test(compCode), 'DistributedCacheSandbox.tsx must contain zero em/en-dashes');
+
+    const labCode = fs.readFileSync(path.join(rootDir, 'src', 'components', 'portfolio', 'ArchitectureLab.tsx'), 'utf8');
+    assert.ok(labCode.includes('DistributedCacheSandbox'), 'ArchitectureLab must mount DistributedCacheSandbox');
+    assert.ok(labCode.includes('id="architecture-distributed-cache"'), 'ArchitectureLab must define anchor #architecture-distributed-cache');
+
+    const cliCode = fs.readFileSync(path.join(rootDir, 'src', 'components', 'portfolio', 'InteractiveCli.tsx'), 'utf8');
+    assert.ok(cliCode.includes("'cache'"), "InteractiveCli must support 'cache' command");
+    assert.ok(cliCode.includes('[ $ cache ]'), "InteractiveCli must include '[ $ cache ]' quick chip");
+    assert.ok(cliCode.includes('DISTRIBUTED_CACHE_MODELS'), 'InteractiveCli must search across DISTRIBUTED_CACHE_MODELS');
+    assert.ok(!/[\u2013\u2014]/.test(cliCode), 'InteractiveCli.tsx must contain zero em/en-dashes');
+
+    const chatIndex = fs.readFileSync(path.join(rootDir, 'public', 'chat', 'index.json'), 'utf8');
+    assert.ok(chatIndex.includes('distributed-cache-stampede'), 'public/chat/index.json must index distributed-cache-stampede');
+    assert.ok(!/[\u2013\u2014]/.test(chatIndex), 'public/chat/index.json must contain zero em/en-dashes');
+
+    const indexHtml = fs.readFileSync(path.join(rootDir, 'index.html'), 'utf8');
+    assert.ok(indexHtml.includes('id="architecture-distributed-cache"'), 'index.html must include #architecture-distributed-cache landmark');
+    assert.ok(!/[\u2013\u2014]/.test(indexHtml), 'index.html must contain zero em/en-dashes');
+  });
 });
 
 

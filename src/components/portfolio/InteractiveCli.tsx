@@ -19,6 +19,7 @@ import { CONSENSUS_MODELS } from '@/data/raftConsensus'
 import { VECTOR_SEARCH_MODELS } from '@/data/vectorSearch'
 import { TRAFFIC_PRIORITY_MODELS } from '@/data/trafficPriority'
 import { DISTRIBUTED_SAGA_MODELS } from '@/data/distributedSagas'
+import { DISTRIBUTED_CACHE_MODELS } from '@/data/distributedCache'
 import { EXECUTIVE_BRIEFING } from '@/data/executiveBriefing'
 
 interface HistoryEntry {
@@ -110,6 +111,11 @@ const AVAILABLE_COMMANDS = [
   'choreography',
   'compensation',
   'outbox',
+  'cache',
+  'stampede',
+  'xfetch',
+  'singleflight',
+  'coalesce',
   'adr',
   'decisions',
   'tradeoffs',
@@ -161,6 +167,7 @@ const QUICK_CHIPS = [
   { label: '[ $ vectorsearch ]', cmd: 'vectorsearch' },
   { label: '[ $ qos ]', cmd: 'qos' },
   { label: '[ $ sagas ]', cmd: 'sagas' },
+  { label: '[ $ cache ]', cmd: 'cache' },
   { label: '[ $ find kafka ]', cmd: 'find kafka' },
   { label: '[ $ tradeoffs ]', cmd: 'tradeoffs' },
   { label: '[ $ adr ]', cmd: 'adr' },
@@ -198,6 +205,7 @@ const COMMAND_HELP = [
   '  concurrency     - Inspect distributed deadlock detection & 2PL vs OCC concurrency (or "concurrency <id>")',
   '  qos             - Inspect distributed QoS schedulers, token bucket & WFQ (or "qos <id>")',
   '  sagas           - Inspect distributed Saga orchestration, choreography & compensation (or "sagas <id>")',
+  '  cache           - Inspect distributed cache stampede protection & mutex leasing (or "cache <id>")',
   '  find <query>    - Search cross-cutting architecture systems, ADRs, AI codex & trade-offs',
   '  tradeoffs       - Evaluate system design decision trade-offs (or "compare <topic>")',
   '  stats           - View production performance & impact metrics (99.99% SLA)',
@@ -1080,6 +1088,32 @@ export default function InteractiveCli() {
           ]
           break
         }
+        if (sub === 'sagas' || sub === 'orchestration' || sub === 'choreography' || sub === 'compensation' || sub === 'outbox' || args.some(a => a.toLowerCase().includes('saga') || a.toLowerCase().includes('compensation'))) {
+          output = [
+            'Routing to Distributed Saga Orchestration & Compensation Sandbox (#architecture-distributed-sagas):',
+            '  1. Orchestrated Saga       : Centralized Temporal workflow coordinator with deterministic activity history',
+            '  2. Choreographed Saga      : Decoupled Kafka domain event bus with Transactional Outbox CDC',
+            '  3. Backward Compensation   : Semantic undo log executing idempotent rollback actions across microservices',
+            '  4. Forward Recovery        : Dead-letter queue isolation with exponential jitter retry for transient faults',
+            '  5. Dual-Write Outbox       : Debezium CDC tailing PostgreSQL WAL eliminating dual-write inconsistencies',
+            '--------------------------------------------------------------------------------',
+            'Interactive Sandbox: Live in #architecture-distributed-sagas with interactive failure injection.'
+          ]
+          break
+        }
+        if (sub === 'cache' || sub === 'stampede' || sub === 'xfetch' || sub === 'singleflight' || sub === 'coalesce' || args.some(a => a.toLowerCase().includes('stampede') || a.toLowerCase().includes('xfetch') || a.toLowerCase().includes('singleflight'))) {
+          output = [
+            'Routing to Distributed Cache Stampede & Multi-Tier Mutex Leasing (#architecture-distributed-cache):',
+            '  1. Probabilistic Refresh   : XFetch algorithm evaluating delta * beta * ln(rand) to pre-warm before TTL expiry',
+            '  2. Singleflight Coalescing : Wait-group mutex map collapsing 10,000 concurrent stampedes into 1 DB flight',
+            '  3. Redis Mutex Leasing     : Quorum distributed locks with monotonic fencing tokens and atomic Lua releases',
+            '  4. L1/L2 Tiered Caching    : L1 Caffeine near-cache (sub-10us) + L2 Redis Cluster (sub-2ms) with 99.99% offload',
+            '  5. CDC WAL Invalidation    : Transactional Debezium streaming from PostgreSQL WAL to Redis Pub/Sub',
+            '--------------------------------------------------------------------------------',
+            'Interactive Sandbox: Live in #architecture-distributed-cache with 5k concurrent stampede simulator.'
+          ]
+          break
+        }
         output = [
           'ByteByteGo Interactive Architecture Lab Navigator:',
           '--------------------------------------------------------------------------------',
@@ -1102,6 +1136,8 @@ export default function InteractiveCli() {
           '  [ 16 ] "architecture raft"    : Distributed Raft Consensus Engine (#architecture-raft-consensus)',
           '  [ 17 ] "architecture vectorsearch": Distributed Vector Search & HNSW (#architecture-vector-search)',
           '  [ 18 ] "architecture qos"     : Distributed QoS & Traffic Priority (#architecture-traffic-priority)',
+          '  [ 19 ] "architecture sagas"   : Distributed Sagas & Compensations (#architecture-distributed-sagas)',
+          '  [ 20 ] "architecture cache"   : Distributed Cache Stampede & Coherence (#architecture-distributed-cache)',
           '--------------------------------------------------------------------------------',
           'Clean Architecture Principles Enforced:',
           '  + Domain Isolation     : Core business domains decouple from libraries and vendor SDKs',
@@ -2183,6 +2219,70 @@ export default function InteractiveCli() {
         ]
         break
       }
+      case 'cache':
+      case 'stampede':
+      case 'xfetch':
+      case 'singleflight':
+      case 'coalesce': {
+        const target = args[0]?.toLowerCase().trim()
+        if (target) {
+          const matched = DISTRIBUTED_CACHE_MODELS.find(m => 
+            m.id === target ||
+            m.id.includes(target) ||
+            m.name.toLowerCase().includes(target) ||
+            m.badge.toLowerCase().includes(target) ||
+            (target === '1' && m.id === 'xfetch-probabilistic-early-expiration') ||
+            (target === '2' && m.id === 'singleflight-request-coalescing') ||
+            (target === '3' && m.id === 'redis-mutex-leasing-redlock') ||
+            (target === '4' && m.id === 'tiered-multi-level-l1-l2-caching') ||
+            (target === '5' && m.id === 'cdc-wal-invalidation-debezium')
+          )
+          if (matched) {
+            output = [
+              '--------------------------------------------------------------------------------',
+              `Cache Coherence Model: ${matched.name} [${matched.badge}]`,
+              '--------------------------------------------------------------------------------',
+              `Core Paradigm       : ${matched.paradigm}`,
+              `Algorithm Formula   : ${matched.algorithmFormula}`,
+              `Origin Protection   : ${matched.originLoadReduction}`,
+              `P99 Latency Target  : ${matched.p99Latency}`,
+              `Memory Footprint    : ${matched.memoryFootprint}`,
+              `Concurrency Defense : ${matched.concurrencyProtection}`,
+              '--------------------------------------------------------------------------------',
+              'WORKFLOW PHASES & INVARIANTS:',
+              ...matched.workflowPhases.map(p =>
+                `  * [${p.name}] :: ${p.description} -> Invariant: ${p.invariants}`
+              ),
+              '--------------------------------------------------------------------------------',
+              'PRODUCTION OUTCOMES & INVARIANTS:',
+              ...Object.entries(matched.productionOutcomes).map(([k, v]) => `  + ${k}: ${v}`),
+              '',
+              `Architectural Invariant: "${matched.architecturalInvariant}"`,
+              '--------------------------------------------------------------------------------',
+              'Full live interactive cache stampede surge generator in #architecture-distributed-cache.'
+            ]
+            break
+          }
+        }
+
+        output = [
+          'Distributed Cache Stampede, Multi-Tier Coherence & Mutex Leasing Sandbox:',
+          '--------------------------------------------------------------------------------',
+          'Explore 5 high-scale cache coherence and stampede mitigation architectures:',
+          '',
+          ...DISTRIBUTED_CACHE_MODELS.flatMap((m, idx) => [
+            `${idx + 1}. [ ${m.id} ] : ${m.name} (${m.badge})`,
+            `   Paradigm      : ${m.paradigm}`,
+            `   Origin Offload: ${m.originLoadReduction.split('(')[0]}`,
+            `   P99 Latency   : ${m.p99Latency.split('(')[0]}`,
+            `   Deep Dive     : "cache ${idx + 1}" or "cache ${m.id.split('-')[0]}" (e.g. "cache xfetch", "cache singleflight", "cache redis", "cache tiered", "cache cdc")`,
+            ''
+          ]),
+          '--------------------------------------------------------------------------------',
+          'Tip: Run "cache <id>" (e.g. "cache 1" or "cache xfetch") to inspect stochastic early expiration and coalescing.'
+        ]
+        break
+      }
       case 'find':
       case 'search': {
         const query = args.join(' ').toLowerCase().trim()
@@ -2192,7 +2292,7 @@ export default function InteractiveCli() {
             '--------------------------------------------------------------------------------',
             'Search cross-cutting distributed systems, ADRs, AI paradigms, and trade-offs.',
             'Usage: find <query> (e.g. "find kafka", "find redis", "find mcp", "find saga")',
-            'Available Domains: Systems, ADR Governance, AI Codex, Trade-Off Matrix, Evolution Diffs, Chaos Drills, API Gateway, Distributed Traces, Kafka Event Streams, Distributed Rate Limiting, Multi-Region Replication, Database Sharding, Edge CDN Caching, Circuit Breakers, Concurrency & Deadlocks, Raft Consensus, Vector Search, Traffic Priority & QoS, Distributed Sagas & Compensations'
+            'Available Domains: Systems, ADR Governance, AI Codex, Trade-Off Matrix, Evolution Diffs, Chaos Drills, API Gateway, Distributed Traces, Kafka Event Streams, Distributed Rate Limiting, Multi-Region Replication, Database Sharding, Edge CDN Caching, Circuit Breakers, Concurrency & Deadlocks, Raft Consensus, Vector Search, Traffic Priority & QoS, Distributed Sagas & Compensations, Distributed Cache Stampede & Coherence'
           ]
           break
         }
@@ -2590,6 +2690,30 @@ export default function InteractiveCli() {
               `  Paradigm   : ${s.paradigm} (${s.badge})`,
               `  Recovery   : ${s.faultRecoveryStyle}`,
               `  Anchor     : #architecture-distributed-sagas`,
+              ''
+            )
+          }
+        })
+
+        // 20. Search Distributed Cache Stampede & Coherence
+        DISTRIBUTED_CACHE_MODELS.forEach(c => {
+          if (
+            c.name.toLowerCase().includes(query) ||
+            c.id.toLowerCase().includes(query) ||
+            c.paradigm.toLowerCase().includes(query) ||
+            c.badge.toLowerCase().includes(query) ||
+            c.algorithmFormula.toLowerCase().includes(query) ||
+            c.p99Latency.toLowerCase().includes(query) ||
+            c.originLoadReduction.toLowerCase().includes(query) ||
+            c.memoryFootprint.toLowerCase().includes(query) ||
+            c.concurrencyProtection.toLowerCase().includes(query) ||
+            c.architecturalInvariant.toLowerCase().includes(query)
+          ) {
+            results.push(
+              `[Distributed Cache] ${c.name}`,
+              `  Paradigm   : ${c.paradigm} (${c.badge})`,
+              `  Latency    : ${c.p99Latency.split('(')[0]}`,
+              `  Anchor     : #architecture-distributed-cache`,
               ''
             )
           }
