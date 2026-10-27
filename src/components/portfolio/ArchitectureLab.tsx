@@ -11,6 +11,7 @@ import {
   Bot,
   FileText,
   GitCompare,
+  Sliders,
   Search,
   X
 } from 'lucide-react'
@@ -18,9 +19,11 @@ import ByteByteGoDiagram from '@/components/architecture/ByteByteGoDiagram'
 import ByteByteGoAiCodex from '@/components/architecture/ByteByteGoAiCodex'
 import AdrExplorer from '@/components/architecture/AdrExplorer'
 import TradeoffMatrix from '@/components/architecture/TradeoffMatrix'
+import ArchitectureEvolutionDiff from '@/components/architecture/ArchitectureEvolutionDiff'
 import { ARCHITECTURE_SYSTEMS } from '@/data/architectureSystems'
 import { ARCHITECTURAL_DECISIONS } from '@/data/architecturalDecisions'
 import { ARCHITECTURAL_TRADEOFFS } from '@/data/architecturalTradeoffs'
+import { ARCHITECTURE_EVOLUTIONS } from '@/data/architectureEvolutions'
 
 const AI_TERMS_SUMMARY = [
   { id: 'agentic-ai', title: 'Agentic AI', text: 'Perception-action loop, DAG memory, tool execution, LangGraph' },
@@ -38,10 +41,11 @@ export default function ArchitectureLab() {
     if (!q) {
       return {
         total: 0,
-        workbench: 4,
+        workbench: 5,
         aiCodex: 5,
         adr: 6,
         tradeoffs: 4,
+        evolutions: 5,
         isActive: false
       }
     }
@@ -77,12 +81,21 @@ export default function ArchitectureLab() {
       t.options.some(o => o.name.toLowerCase().includes(q) || o.paradigm.toLowerCase().includes(q))
     ).length
 
+    const evolutionCount = ARCHITECTURE_EVOLUTIONS.filter(e => 
+      e.systemName.toLowerCase().includes(q) ||
+      e.headline.toLowerCase().includes(q) ||
+      e.category.toLowerCase().includes(q) ||
+      e.legacyArchitecture.title.toLowerCase().includes(q) ||
+      e.modernArchitecture.title.toLowerCase().includes(q)
+    ).length
+
     return {
-      total: workbenchCount + aiCount + adrCount + tradeoffCount,
+      total: workbenchCount + aiCount + adrCount + tradeoffCount + evolutionCount,
       workbench: workbenchCount,
       aiCodex: aiCount,
       adr: adrCount,
       tradeoffs: tradeoffCount,
+      evolutions: evolutionCount,
       isActive: true
     }
   }, [searchQuery])
@@ -239,6 +252,17 @@ export default function ArchitectureLab() {
             <GitCompare className="w-3.5 h-3.5 text-amber-400" />
             <span>Decision Trade-Offs ({matchStats.tradeoffs})</span>
           </a>
+          <a 
+            href="#architecture-evolution-diff"
+            className={`px-3 py-1.5 rounded-lg border transition-all flex items-center gap-1.5 cursor-pointer ${
+              matchStats.isActive && matchStats.evolutions > 0
+                ? 'bg-rose-500/10 border-rose-500/50 text-rose-400 shadow-[0_0_10px_rgba(244,63,94,0.15)] font-bold'
+                : 'bg-slate-900 border-slate-800 hover:border-rose-500/50 hover:text-rose-400 text-slate-300'
+            }`}
+          >
+            <Sliders className="w-3.5 h-3.5 text-rose-400" />
+            <span>Evolution Diff ({matchStats.evolutions})</span>
+          </a>
         </div>
       </div>
 
@@ -292,6 +316,18 @@ export default function ArchitectureLab() {
         className="scroll-mt-24"
       >
         <TradeoffMatrix />
+      </motion.div>
+
+      {/* 2.8. Architecture Evolution & Monolith-to-Mesh Comparison Diff */}
+      <motion.div
+        id="architecture-evolution-diff"
+        initial={{ opacity: 0, y: 25 }}
+        whileInView={{ opacity: 1, y: 0 }}
+        viewport={{ once: true }}
+        transition={{ duration: 0.6, delay: 0.25 }}
+        className="scroll-mt-24"
+      >
+        <ArchitectureEvolutionDiff />
       </motion.div>
 
       {/* 3. Architectural Design Pillars Strip */}

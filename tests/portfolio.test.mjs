@@ -638,6 +638,35 @@ describe('Production Architectural Decision Records (ADR) & CLI Integration', ()
     assert.ok(cliCode.includes('ARCHITECTURE_SYSTEMS'), 'InteractiveCli must search across ARCHITECTURE_SYSTEMS');
     assert.ok(!/[\u2013\u2014]/.test(cliCode), 'InteractiveCli.tsx must contain zero em/en-dashes');
   });
+
+  test('ArchitectureEvolutionDiff and architectureEvolutions.ts define monolith-to-mesh comparison diffs with CLI integration', () => {
+    const diffDataPath = path.join(rootDir, 'src', 'data', 'architectureEvolutions.ts');
+    assert.ok(fs.existsSync(diffDataPath), 'architectureEvolutions.ts must exist');
+    const diffDataCode = fs.readFileSync(diffDataPath, 'utf8');
+    assert.ok(diffDataCode.includes('saas-rls'), 'Must define saas-rls evolution');
+    assert.ok(diffDataCode.includes('saga-outbox'), 'Must define saga-outbox evolution');
+    assert.ok(diffDataCode.includes('virtual-threads'), 'Must define virtual-threads evolution');
+    assert.ok(diffDataCode.includes('double-entry'), 'Must define double-entry evolution');
+    assert.ok(diffDataCode.includes('mcp-mesh'), 'Must define mcp-mesh evolution');
+    assert.ok(!/[\u2013\u2014]/.test(diffDataCode), 'architectureEvolutions.ts must contain zero em/en-dashes');
+
+    const componentPath = path.join(rootDir, 'src', 'components', 'architecture', 'ArchitectureEvolutionDiff.tsx');
+    assert.ok(fs.existsSync(componentPath), 'ArchitectureEvolutionDiff.tsx must exist');
+    const compCode = fs.readFileSync(componentPath, 'utf8');
+    assert.ok(compCode.includes('handleCopyRfc'), 'ArchitectureEvolutionDiff must support 1-click RFC copy');
+    assert.ok(compCode.includes('ARCHITECTURE_EVOLUTIONS'), 'ArchitectureEvolutionDiff must render ARCHITECTURE_EVOLUTIONS');
+    assert.ok(!/[\u2013\u2014]/.test(compCode), 'ArchitectureEvolutionDiff.tsx must contain zero em/en-dashes');
+
+    const labCode = fs.readFileSync(path.join(rootDir, 'src', 'components', 'portfolio', 'ArchitectureLab.tsx'), 'utf8');
+    assert.ok(labCode.includes('ArchitectureEvolutionDiff'), 'ArchitectureLab must mount ArchitectureEvolutionDiff');
+    assert.ok(labCode.includes('id="architecture-evolution-diff"'), 'ArchitectureLab must define anchor #architecture-evolution-diff');
+
+    const cliCode = fs.readFileSync(path.join(rootDir, 'src', 'components', 'portfolio', 'InteractiveCli.tsx'), 'utf8');
+    assert.ok(cliCode.includes("'diff'"), "InteractiveCli must support 'diff' command");
+    assert.ok(cliCode.includes("'evolution'"), "InteractiveCli must support 'evolution' command");
+    assert.ok(cliCode.includes('[ $ diff ]'), "InteractiveCli must include '[ $ diff ]' quick chip");
+    assert.ok(!/[\u2013\u2014]/.test(cliCode), 'InteractiveCli.tsx must contain zero em/en-dashes');
+  });
 });
 
 

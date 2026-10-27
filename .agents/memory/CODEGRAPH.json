@@ -1,6 +1,6 @@
 {
   "version": "1.0.0",
-  "generatedAt": "2026-10-27T12:14:54.352Z",
+  "generatedAt": "2026-10-27T12:36:51.017Z",
   "nodes": {
     "src/components/architecture/AdrExplorer.tsx": {
       "file": "src/components/architecture/AdrExplorer.tsx",
@@ -50,6 +50,17 @@
         "AnimatedConnection"
       ],
       "loc": 171
+    },
+    "src/components/architecture/ArchitectureEvolutionDiff.tsx": {
+      "file": "src/components/architecture/ArchitectureEvolutionDiff.tsx",
+      "imports": [
+        "lucide-react",
+        "@/data/architectureEvolutions"
+      ],
+      "exports": [
+        "ArchitectureEvolutionDiff"
+      ],
+      "loc": 466
     },
     "src/components/architecture/ArchNode.tsx": {
       "file": "src/components/architecture/ArchNode.tsx",
@@ -221,14 +232,16 @@
         "@/components/architecture/ByteByteGoAiCodex",
         "@/components/architecture/AdrExplorer",
         "@/components/architecture/TradeoffMatrix",
+        "@/components/architecture/ArchitectureEvolutionDiff",
         "@/data/architectureSystems",
         "@/data/architecturalDecisions",
-        "@/data/architecturalTradeoffs"
+        "@/data/architecturalTradeoffs",
+        "@/data/architectureEvolutions"
       ],
       "exports": [
         "ArchitectureLab"
       ],
-      "loc": 350
+      "loc": 386
     },
     "src/components/portfolio/ContactTerminal.tsx": {
       "file": "src/components/portfolio/ContactTerminal.tsx",
@@ -264,12 +277,13 @@
         "lucide-react",
         "@/data/architecturalDecisions",
         "@/data/architecturalTradeoffs",
-        "@/data/architectureSystems"
+        "@/data/architectureSystems",
+        "@/data/architectureEvolutions"
       ],
       "exports": [
         "InteractiveCli"
       ],
-      "loc": 1219
+      "loc": 1308
     },
     "src/components/portfolio/ProjectsShowcase.tsx": {
       "file": "src/components/portfolio/ProjectsShowcase.tsx",
@@ -407,6 +421,16 @@
         "ARCHITECTURAL_TRADEOFFS"
       ],
       "loc": 191
+    },
+    "src/data/architectureEvolutions.ts": {
+      "file": "src/data/architectureEvolutions.ts",
+      "imports": [],
+      "exports": [
+        "ArchitectureMetricDelta",
+        "ArchitectureEvolutionItem",
+        "ARCHITECTURE_EVOLUTIONS"
+      ],
+      "loc": 377
     },
     "src/data/architectureSystems.ts": {
       "file": "src/data/architectureSystems.ts",
@@ -556,6 +580,7 @@
     "PacketType": "src/components/architecture/AnimatedConnection.tsx",
     "AnimatedConnectionProps": "src/components/architecture/AnimatedConnection.tsx",
     "AnimatedConnection": "src/components/architecture/AnimatedConnection.tsx",
+    "ArchitectureEvolutionDiff": "src/components/architecture/ArchitectureEvolutionDiff.tsx",
     "ArchNodeData": "src/components/architecture/ArchNode.tsx",
     "ArchNode": "src/components/architecture/ArchNode.tsx",
     "AiTermSpec": "src/components/architecture/ByteByteGoAiCodex.tsx",
@@ -620,6 +645,9 @@
     "TradeoffOption": "src/data/architecturalTradeoffs.ts",
     "ArchitecturalTradeoff": "src/data/architecturalTradeoffs.ts",
     "ARCHITECTURAL_TRADEOFFS": "src/data/architecturalTradeoffs.ts",
+    "ArchitectureMetricDelta": "src/data/architectureEvolutions.ts",
+    "ArchitectureEvolutionItem": "src/data/architectureEvolutions.ts",
+    "ARCHITECTURE_EVOLUTIONS": "src/data/architectureEvolutions.ts",
     "ArchitectureNode": "src/data/architectureSystems.ts",
     "ArchitectureEdge": "src/data/architectureSystems.ts",
     "StepFlow": "src/data/architectureSystems.ts",

@@ -4,6 +4,7 @@ import { Terminal as TerminalIcon, CornerDownLeft, Trash2 } from 'lucide-react'
 import { ARCHITECTURAL_DECISIONS } from '@/data/architecturalDecisions'
 import { ARCHITECTURAL_TRADEOFFS } from '@/data/architecturalTradeoffs'
 import { ARCHITECTURE_SYSTEMS } from '@/data/architectureSystems'
+import { ARCHITECTURE_EVOLUTIONS } from '@/data/architectureEvolutions'
 
 interface HistoryEntry {
   command: string
@@ -23,6 +24,9 @@ const AVAILABLE_COMMANDS = [
   'contact',
   'hire',
   'architecture',
+  'diff',
+  'evolution',
+  'migration',
   'adr',
   'decisions',
   'tradeoffs',
@@ -58,6 +62,7 @@ const AVAILABLE_COMMANDS = [
 const QUICK_CHIPS = [
   { label: '[ $ whoami ]', cmd: 'whoami' },
   { label: '[ $ architecture ]', cmd: 'architecture' },
+  { label: '[ $ diff ]', cmd: 'diff' },
   { label: '[ $ find kafka ]', cmd: 'find kafka' },
   { label: '[ $ tradeoffs ]', cmd: 'tradeoffs' },
   { label: '[ $ adr ]', cmd: 'adr' },
@@ -81,6 +86,7 @@ const COMMAND_HELP = [
   '  skills          - Print summary of core technology stack & competencies',
   '  projects        - List featured systems, or type "project <id>" for deep architecture review',
   '  experience      - Output career journey, or type "experience <id>" for deep milestone review',
+  '  diff            - Compare Legacy Monolith anti-patterns vs Modern Mesh (or "diff <id>")',
   '  find <query>    - Search cross-cutting architecture systems, ADRs, AI codex & trade-offs',
   '  tradeoffs       - Evaluate system design decision trade-offs (or "compare <topic>")',
   '  stats           - View production performance & impact metrics (99.99% SLA)',
@@ -852,6 +858,71 @@ export default function InteractiveCli() {
         ]
         break
       }
+      case 'diff':
+      case 'evolution':
+      case 'migration': {
+        const target = args[0]?.toLowerCase().trim()
+        if (target) {
+          const matched = ARCHITECTURE_EVOLUTIONS.find(e => 
+            e.id === target ||
+            e.id.includes(target) ||
+            e.systemName.toLowerCase().includes(target) ||
+            (target === '1' && e.id === 'saas-rls') ||
+            (target === '2' && e.id === 'saga-outbox') ||
+            (target === '3' && e.id === 'virtual-threads') ||
+            (target === '4' && e.id === 'double-entry') ||
+            (target === '5' && e.id === 'mcp-mesh')
+          )
+          if (matched) {
+            output = [
+              `Architecture Evolution Diff: ${matched.systemName}`,
+              `Headline : ${matched.headline}`,
+              `Category : ${matched.category} | Governance: ${matched.adrReference}`,
+              '--------------------------------------------------------------------------------',
+              `Migration Strategy: ${matched.migrationStrategy}`,
+              '',
+              '[-] V1: LEGACY MONOLITH (ANTI-PATTERN):',
+              `    Architecture : ${matched.legacyArchitecture.title}`,
+              `    Bottleneck   : ${matched.legacyArchitecture.bottleneck}`,
+              '    Anti-Patterns:',
+              ...matched.legacyArchitecture.antiPatterns.map(p => `      * [X] ${p}`),
+              '    Legacy Telemetry Baseline:',
+              ...Object.entries(matched.legacyArchitecture.telemetry).map(([k, v]) => `      * ${k}: ${v}`),
+              '',
+              '[+] V2: MODERN DISTRIBUTED CLOUD (INVARIANT ENFORCED):',
+              `    Architecture : ${matched.modernArchitecture.title}`,
+              `    Solution     : ${matched.modernArchitecture.solution}`,
+              '    Invariants Enforced:',
+              ...matched.modernArchitecture.invariantsEnforced.map(inv => `      * [OK] ${inv}`),
+              '    Modern Telemetry Verified:',
+              ...Object.entries(matched.modernArchitecture.telemetry).map(([k, v]) => `      * ${k}: ${v}`),
+              '',
+              'QUANTIFIED METRIC DELTAS & VERIFIED IMPACT:',
+              ...matched.keyDeltas.map(d => `  - ${d.metric.padEnd(30, ' ')}: ${d.before} -> ${d.after} (${d.improvement})`),
+              '--------------------------------------------------------------------------------',
+              'Full visual diff slider & code available in #architecture-evolution-diff.'
+            ]
+            break
+          }
+        }
+
+        output = [
+          'Architecture Evolution & Monolith-to-Mesh Comparison Diffs:',
+          '--------------------------------------------------------------------------------',
+          'Inspect how legacy monolith anti-patterns were decomposed into modern cloud systems:',
+          '',
+          ...ARCHITECTURE_EVOLUTIONS.flatMap((e, idx) => [
+            `${idx + 1}. [ ${e.id} ] : ${e.systemName} (${e.category})`,
+            `   Focus     : ${e.headline}`,
+            `   ADR Gov   : ${e.adrReference}`,
+            `   Deep Dive : "diff ${idx + 1}" or "diff ${e.id.split('-')[0]}" (e.g. "diff saas", "diff saga", "diff loom", "diff fintech", "diff mcp")`,
+            ''
+          ]),
+          '--------------------------------------------------------------------------------',
+          'Tip: Run "diff <id>" (e.g. "diff 1" or "diff saga") to inspect granular before/after telemetry.'
+        ]
+        break
+      }
       case 'find':
       case 'search': {
         const query = args.join(' ').toLowerCase().trim()
@@ -939,6 +1010,24 @@ export default function InteractiveCli() {
               `[Trade-Off Matrix] ${t.title}`,
               `  Verdict    : ${t.productionVerdict}`,
               `  Anchor     : #architecture-tradeoff-matrix`,
+              ''
+            )
+          }
+        })
+
+        // 5. Search Evolution Diffs
+        ARCHITECTURE_EVOLUTIONS.forEach(e => {
+          if (
+            e.systemName.toLowerCase().includes(query) ||
+            e.headline.toLowerCase().includes(query) ||
+            e.category.toLowerCase().includes(query) ||
+            e.legacyArchitecture.title.toLowerCase().includes(query) ||
+            e.modernArchitecture.title.toLowerCase().includes(query)
+          ) {
+            results.push(
+              `[Evolution Diff] ${e.systemName}: ${e.headline}`,
+              `  Governing  : ${e.adrReference} (${e.category})`,
+              `  Anchor     : #architecture-evolution-diff`,
               ''
             )
           }

@@ -480,12 +480,22 @@
             </div>
 
             <!-- Sub-Section 4: Architectural Trade-off Evaluation Matrix -->
-            <div id="architecture-tradeoff-matrix" style="background: rgba(9, 14, 24, 0.7); border: 1px solid #1e293b; border-radius: 16px; padding: 1.5rem;">
+            <div id="architecture-tradeoff-matrix" style="background: rgba(9, 14, 24, 0.7); border: 1px solid #1e293b; border-radius: 16px; padding: 1.5rem; margin-bottom: 2rem;">
               <h3 style="color: #fbbf24; font-size: 1.25rem; font-weight: bold; margin-bottom: 0.5rem;">
                 System Design Trade-off Evaluation Matrix
               </h3>
               <p style="color: #94a3b8; font-size: 0.85rem; line-height: 1.6;">
                 Multi-dimensional trade-off evaluations comparing Saga variants, Hybrid RAG vs Domain Fine-Tuning, Java 21 Loom vs Reactive WebFlux, and gRPC vs REST vs Model Context Protocol.
+              </p>
+            </div>
+
+            <!-- Sub-Section 5: Architecture Evolution & Monolith-to-Mesh Comparison Diff -->
+            <div id="architecture-evolution-diff" style="background: rgba(9, 14, 24, 0.7); border: 1px solid #1e293b; border-radius: 16px; padding: 1.5rem;">
+              <h3 style="color: #f43f5e; font-size: 1.25rem; font-weight: bold; margin-bottom: 0.5rem;">
+                Architecture Evolution &amp; Monolith-to-Mesh Comparison Diff
+              </h3>
+              <p style="color: #94a3b8; font-size: 0.85rem; line-height: 1.6;">
+                Side-by-side comparison of Legacy Monolith anti-patterns (2PC locks, physical DB fragmentation, OS thread starvation, mutable ledger balances) vs Modern Cloud Architecture invariants (PostgreSQL RLS, Choreographed Saga CDC, Java 21 Virtual Threads, Append-Only Ledgers, and Model Context Protocol).
               </p>
             </div>
           </section>
