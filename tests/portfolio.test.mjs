@@ -1460,6 +1460,43 @@ describe('Production Architectural Decision Records (ADR) & CLI Integration', ()
     assert.ok(indexHtml.includes('id="architecture-feature-flags"'), 'index.html must include #architecture-feature-flags landmark');
     assert.ok(!/[\u2013\u2014]/.test(indexHtml), 'index.html must contain zero em/en-dashes');
   });
+
+  test('TenantIsolationSandbox and tenantIsolationModels.ts define multi-tenant RLS, schema routing and KMS envelope with CLI integration', () => {
+    const tenantDataPath = path.join(rootDir, 'src', 'data', 'tenantIsolationModels.ts');
+    assert.ok(fs.existsSync(tenantDataPath), 'tenantIsolationModels.ts must exist');
+    const tenantDataCode = fs.readFileSync(tenantDataPath, 'utf8');
+    assert.ok(tenantDataCode.includes('postgres-rls-session-context'), 'Must define postgres-rls-session-context model');
+    assert.ok(tenantDataCode.includes('dynamic-schema-per-tenant'), 'Must define dynamic-schema-per-tenant model');
+    assert.ok(tenantDataCode.includes('kms-envelope-encryption'), 'Must define kms-envelope-encryption model');
+    assert.ok(tenantDataCode.includes('cross-tenant-leak-probe'), 'Must define cross-tenant-leak-probe model');
+    assert.ok(tenantDataCode.includes('tenant-noisy-neighbor-qos'), 'Must define tenant-noisy-neighbor-qos model');
+    assert.ok(!/[\u2013\u2014]/.test(tenantDataCode), 'tenantIsolationModels.ts must contain zero em/en-dashes');
+
+    const componentPath = path.join(rootDir, 'src', 'components', 'architecture', 'TenantIsolationSandbox.tsx');
+    assert.ok(fs.existsSync(componentPath), 'TenantIsolationSandbox.tsx must exist');
+    const compCode = fs.readFileSync(componentPath, 'utf8');
+    assert.ok(compCode.includes('handleCopyRfc'), 'TenantIsolationSandbox must support 1-click RFC copy');
+    assert.ok(compCode.includes('TENANT_ISOLATION_MODELS'), 'TenantIsolationSandbox must render TENANT_ISOLATION_MODELS');
+    assert.ok(!/[\u2013\u2014]/.test(compCode), 'TenantIsolationSandbox.tsx must contain zero em/en-dashes');
+
+    const labCode = fs.readFileSync(path.join(rootDir, 'src', 'components', 'portfolio', 'ArchitectureLab.tsx'), 'utf8');
+    assert.ok(labCode.includes('TenantIsolationSandbox'), 'ArchitectureLab must mount TenantIsolationSandbox');
+    assert.ok(labCode.includes('id="architecture-tenant-isolation"'), 'ArchitectureLab must define anchor #architecture-tenant-isolation');
+
+    const cliCode = fs.readFileSync(path.join(rootDir, 'src', 'components', 'portfolio', 'InteractiveCli.tsx'), 'utf8');
+    assert.ok(cliCode.includes("'rls'"), "InteractiveCli must support 'rls' command");
+    assert.ok(cliCode.includes('[ $ rls ]'), "InteractiveCli must include '[ $ rls ]' quick chip");
+    assert.ok(cliCode.includes('TENANT_ISOLATION_MODELS'), 'InteractiveCli must search across TENANT_ISOLATION_MODELS');
+    assert.ok(!/[\u2013\u2014]/.test(cliCode), 'InteractiveCli.tsx must contain zero em/en-dashes');
+
+    const chatIndex = fs.readFileSync(path.join(rootDir, 'public', 'chat', 'index.json'), 'utf8');
+    assert.ok(chatIndex.includes('distributed-tenant-isolation'), 'public/chat/index.json must index distributed-tenant-isolation');
+    assert.ok(!/[\u2013\u2014]/.test(chatIndex), 'public/chat/index.json must contain zero em/en-dashes');
+
+    const indexHtml = fs.readFileSync(path.join(rootDir, 'index.html'), 'utf8');
+    assert.ok(indexHtml.includes('id="architecture-tenant-isolation"'), 'index.html must include #architecture-tenant-isolation landmark');
+    assert.ok(!/[\u2013\u2014]/.test(indexHtml), 'index.html must contain zero em/en-dashes');
+  });
 });
 
 

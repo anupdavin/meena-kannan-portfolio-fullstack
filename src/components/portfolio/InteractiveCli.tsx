@@ -25,6 +25,7 @@ import { DLQ_RETRY_MODELS } from '@/data/dlqRetryModels'
 import { IDEMPOTENCY_MODELS } from '@/data/idempotencyModels'
 import { ATOMIC_COMMIT_PARADIGMS } from '@/data/atomicCommitModels'
 import { FEATURE_FLAG_MODELS } from '@/data/featureFlagModels'
+import { TENANT_ISOLATION_MODELS } from '@/data/tenantIsolationModels'
 import { EXECUTIVE_BRIEFING } from '@/data/executiveBriefing'
 
 interface HistoryEntry {
@@ -149,6 +150,11 @@ const AVAILABLE_COMMANDS = [
   'murmurhash',
   'openfeature',
   'killswitch',
+  'rls',
+  'tenantisolation',
+  'multitenancy',
+  'kmsenvelope',
+  'leakprobe',
   'adr',
   'decisions',
   'tradeoffs',
@@ -206,6 +212,7 @@ const QUICK_CHIPS = [
   { label: '[ $ idempotency ]', cmd: 'idempotency' },
   { label: '[ $ 2pc ]', cmd: '2pc' },
   { label: '[ $ flags ]', cmd: 'featureflag' },
+  { label: '[ $ rls ]', cmd: 'rls' },
   { label: '[ $ find kafka ]', cmd: 'find kafka' },
   { label: '[ $ tradeoffs ]', cmd: 'tradeoffs' },
   { label: '[ $ adr ]', cmd: 'adr' },
@@ -249,6 +256,7 @@ const COMMAND_HELP = [
   '  idempotency     - Inspect distributed idempotency keys, fencing tokens & CAS locks (or "idempotency <id>")',
   '  2pc             - Inspect 2PC vs Saga execution, non-blocking 3PC & TrueTime (or "2pc <id>")',
   '  flags           - Inspect dynamic feature flags, MurmurHash3 bucketing & canary rollback (or "flags <id>")',
+  '  rls             - Inspect multi-tenant Row-Level Security, schema routing & KMS envelope (or "rls <id>")',
   '  find <query>    - Search cross-cutting architecture systems, ADRs, AI codex & trade-offs',
   '  tradeoffs       - Evaluate system design decision trade-offs (or "compare <topic>")',
   '  stats           - View production performance & impact metrics (99.99% SLA)',
@@ -1196,6 +1204,45 @@ export default function InteractiveCli() {
           ]
           break
         }
+        if (sub === '2pc' || sub === 'atomiccommit' || sub === 'twophasecommit' || sub === '3pc' || sub === 'indoubt' || args.some(a => a.toLowerCase().includes('2pc') || a.toLowerCase().includes('commit'))) {
+          output = [
+            'Routing to Distributed Two-Phase Commit (2PC) vs Saga Sandbox (#architecture-atomic-commit):',
+            '  1. Classical 2PC XA        : Prepare-Commit protocol with coordinator in-doubt abort recovery',
+            '  2. Non-Blocking 3PC        : Can-Commit, Pre-Commit, Do-Commit with election timeout quorum',
+            '  3. Choreographed Saga      : Asynchronous PostgreSQL Outbox CDC tailing eliminating 2PC row locks',
+            '  4. Dual-Write Reconciler   : Causal watermarking reconciling storage drift between SQL and Search',
+            '  5. Paxos/Raft TrueTime     : Spanner-style external consistency commit timestamps over Raft groups',
+            '--------------------------------------------------------------------------------',
+            'Interactive Sandbox: Live in #architecture-atomic-commit with coordinator crash injector.'
+          ]
+          break
+        }
+        if (sub === 'flags' || sub === 'featureflag' || sub === 'featureflags' || sub === 'canary' || sub === 'murmurhash' || args.some(a => a.toLowerCase().includes('flag') || a.toLowerCase().includes('canary'))) {
+          output = [
+            'Routing to Dynamic Feature Flagging & Canary Traffic Splitter (#architecture-feature-flags):',
+            '  1. MurmurHash3 Bucketing   : Deterministic user hashing (MurmurHash3 % 100) with sub-0.25us evaluation',
+            '  2. OpenFeature Evaluator   : Multi-attribute contextual rule engine for tenant tiers and geo targeting',
+            '  3. Canary Splitter Circuit : Graduated rollout (1% to 100%) with automated 1.5% error rate kill-switch',
+            '  4. Ephemeral SSE Stream    : Edge configuration distribution pushing deltas to 100k pods in sub-120ms',
+            '  5. Flag Debt Sentinel      : Telemetry tracker identifying stale and deprecated feature flags for cleanup',
+            '--------------------------------------------------------------------------------',
+            'Interactive Sandbox: Live in #architecture-feature-flags with rollout slider & canary simulator.'
+          ]
+          break
+        }
+        if (sub === 'rls' || sub === 'tenantisolation' || sub === 'multitenancy' || sub === 'kmsenvelope' || sub === 'leakprobe' || args.some(a => a.toLowerCase().includes('rls') || a.toLowerCase().includes('tenant'))) {
+          output = [
+            'Routing to Distributed Multi-Tenant RLS & Cryptographic Isolation (#architecture-tenant-isolation):',
+            '  1. PostgreSQL Session RLS  : SET LOCAL app.current_tenant with FORCE ROW LEVEL SECURITY (sub-0.35ms)',
+            '  2. Schema-per-Tenant       : Multi-tenant HikariCP DataSource router with search_path catalogs',
+            '  3. AWS KMS Envelope DEK    : AES-256-GCM with tenant AAD context and sub-second crypto-shredding',
+            '  4. Cross-Tenant Leak Probe : Zero-trust AST parameter inspection intercepting foreign ID tampering (403)',
+            '  5. Noisy-Neighbor QoS      : Weighted Redis token bucket limiting surges while preserving co-tenant 100% SLA',
+            '--------------------------------------------------------------------------------',
+            'Interactive Sandbox: Live in #architecture-tenant-isolation with live penetration probe & KMS rotation.'
+          ]
+          break
+        }
         output = [
           'ByteByteGo Interactive Architecture Lab Navigator:',
           '--------------------------------------------------------------------------------',
@@ -1223,6 +1270,9 @@ export default function InteractiveCli() {
           '  [ 21 ] "architecture eventsourcing": Distributed Event Sourcing & CQRS (#architecture-event-sourcing)',
           '  [ 22 ] "architecture dlq"     : Dead-Letter Queue & Retry Matrix (#architecture-dlq-retry)',
           '  [ 23 ] "architecture idempotency": Distributed Idempotency & CAS Locks (#architecture-idempotency)',
+          '  [ 24 ] "architecture 2pc"     : Distributed 2PC vs Saga & Atomic Commit (#architecture-atomic-commit)',
+          '  [ 25 ] "architecture flags"   : Dynamic Feature Flags & Canary Rollout (#architecture-feature-flags)',
+          '  [ 26 ] "architecture rls"     : Multi-Tenant RLS & Cryptographic Isolation (#architecture-tenant-isolation)',
           '--------------------------------------------------------------------------------',
           'Clean Architecture Principles Enforced:',
           '  + Domain Isolation     : Core business domains decouple from libraries and vendor SDKs',
@@ -2684,6 +2734,69 @@ export default function InteractiveCli() {
         ]
         break
       }
+      case 'rls':
+      case 'tenantisolation':
+      case 'multitenancy':
+      case 'kmsenvelope':
+      case 'leakprobe': {
+        const target = args[0]?.toLowerCase().trim()
+        if (target) {
+          const matched = TENANT_ISOLATION_MODELS.find(m =>
+            m.id === target ||
+            m.id.includes(target) ||
+            m.name.toLowerCase().includes(target) ||
+            m.badge.toLowerCase().includes(target) ||
+            (target === '1' && m.id === 'postgres-rls-session-context') ||
+            (target === '2' && m.id === 'dynamic-schema-per-tenant') ||
+            (target === '3' && m.id === 'kms-envelope-encryption') ||
+            (target === '4' && m.id === 'cross-tenant-leak-probe') ||
+            (target === '5' && m.id === 'tenant-noisy-neighbor-qos')
+          )
+          if (matched) {
+            output = [
+              '--------------------------------------------------------------------------------',
+              `Multi-Tenant Isolation Model: ${matched.name} [${matched.badge}]`,
+              '--------------------------------------------------------------------------------',
+              `Category            : ${matched.category}`,
+              `Isolation Latency   : ${matched.isolationLatency}`,
+              `Leak Prevention SLA : ${matched.leakPreventionGuarantee}`,
+              `Mathematical Formula: ${matched.algorithmFormula}`,
+              `Blast Radius Guard  : ${matched.blastRadiusContainment}`,
+              '--------------------------------------------------------------------------------',
+              'WORKFLOW PHASES & SECURITY INVARIANTS:',
+              ...matched.workflowPhases.map(p =>
+                `  * [${p.name}] :: ${p.description} -> Security Invariant: ${p.invariants}`
+              ),
+              '--------------------------------------------------------------------------------',
+              'PRODUCTION OUTCOMES & INVARIANTS:',
+              ...Object.entries(matched.productionOutcomes).map(([k, v]) => `  + ${k}: ${v}`),
+              '',
+              `Architectural Invariant: "${matched.architecturalInvariant}"`,
+              '--------------------------------------------------------------------------------',
+              'Full live interactive penetration probe & KMS rotation simulator in #architecture-tenant-isolation.'
+            ]
+            break
+          }
+        }
+
+        output = [
+          'Distributed Multi-Tenant Row-Level Security & Cryptographic Isolation Sandbox:',
+          '--------------------------------------------------------------------------------',
+          'Explore 5 enterprise tenant isolation & kernel relational security architectures:',
+          '',
+          ...TENANT_ISOLATION_MODELS.flatMap((m, idx) => [
+            `${idx + 1}. [ ${m.id} ] : ${m.name} (${m.badge})`,
+            `   Category   : ${m.category}`,
+            `   Overhead   : ${m.isolationLatency.split(';')[0]}`,
+            `   Guarantee  : ${m.leakPreventionGuarantee.split(';')[0]}`,
+            `   Deep Dive  : "rls ${idx + 1}" or "rls ${m.id.split('-')[0]}" (e.g. "rls postgres", "rls dynamic", "rls kms", "rls cross", "rls tenant")`,
+            ''
+          ]),
+          '--------------------------------------------------------------------------------',
+          'Tip: Run "rls <id>" (e.g. "rls 1" or "rls kms") to inspect tenant security policies.'
+        ]
+        break
+      }
       case 'find':
       case 'search': {
         const query = args.join(' ').toLowerCase().trim()
@@ -2693,7 +2806,7 @@ export default function InteractiveCli() {
             '--------------------------------------------------------------------------------',
             'Search cross-cutting distributed systems, ADRs, AI paradigms, and trade-offs.',
             'Usage: find <query> (e.g. "find kafka", "find redis", "find mcp", "find saga")',
-            'Available Domains: Systems, ADR Governance, AI Codex, Trade-Off Matrix, Evolution Diffs, Chaos Drills, API Gateway, Distributed Traces, Kafka Event Streams, Distributed Rate Limiting, Multi-Region Replication, Database Sharding, Edge CDN Caching, Circuit Breakers, Concurrency & Deadlocks, Raft Consensus, Vector Search, Traffic Priority & QoS, Distributed Sagas & Compensations, Distributed Cache Stampede & Coherence, Distributed Event Sourcing & CQRS, Distributed DLQ & Retries, Distributed Idempotency & CAS Locks, Distributed 2PC vs Saga Commit & Drift Reconciler, Dynamic Feature Flagging & Canary Splitter'
+            'Available Domains: Systems, ADR Governance, AI Codex, Trade-Off Matrix, Evolution Diffs, Chaos Drills, API Gateway, Distributed Traces, Kafka Event Streams, Distributed Rate Limiting, Multi-Region Replication, Database Sharding, Edge CDN Caching, Circuit Breakers, Concurrency & Deadlocks, Raft Consensus, Vector Search, Traffic Priority & QoS, Distributed Sagas & Compensations, Distributed Cache Stampede & Coherence, Distributed Event Sourcing & CQRS, Distributed DLQ & Retries, Distributed Idempotency & CAS Locks, Distributed 2PC vs Saga Commit & Drift Reconciler, Dynamic Feature Flagging & Canary Splitter, Multi-Tenant RLS & Cryptographic Isolation'
           ]
           break
         }
@@ -3229,6 +3342,52 @@ export default function InteractiveCli() {
               `  Category   : ${f.category} (${f.badge})`,
               `  Rollback   : ${f.rollbackGuarantee.split(';')[0]}`,
               `  Anchor     : #architecture-feature-flags`,
+              ''
+            )
+          }
+        })
+
+        // 26. Search Multi-Tenant Isolation & RLS
+        TENANT_ISOLATION_MODELS.forEach(t => {
+          if (
+            t.name.toLowerCase().includes(query) ||
+            t.id.toLowerCase().includes(query) ||
+            t.category.toLowerCase().includes(query) ||
+            t.badge.toLowerCase().includes(query) ||
+            t.algorithmFormula.toLowerCase().includes(query) ||
+            t.isolationLatency.toLowerCase().includes(query) ||
+            t.leakPreventionGuarantee.toLowerCase().includes(query) ||
+            t.architecturalInvariant.toLowerCase().includes(query) ||
+            t.description.toLowerCase().includes(query)
+          ) {
+            results.push(
+              `[Multi-Tenant RLS] ${t.name}`,
+              `  Category   : ${t.category} (${t.badge})`,
+              `  Overhead   : ${t.isolationLatency.split(';')[0]}`,
+              `  Anchor     : #architecture-tenant-isolation`,
+              ''
+            )
+          }
+        })
+
+        // 26. Search Multi-Tenant Row-Level Security & Cryptographic Isolation
+        TENANT_ISOLATION_MODELS.forEach(t => {
+          if (
+            t.name.toLowerCase().includes(query) ||
+            t.id.toLowerCase().includes(query) ||
+            t.category.toLowerCase().includes(query) ||
+            t.badge.toLowerCase().includes(query) ||
+            t.algorithmFormula.toLowerCase().includes(query) ||
+            t.isolationLatency.toLowerCase().includes(query) ||
+            t.leakPreventionGuarantee.toLowerCase().includes(query) ||
+            t.architecturalInvariant.toLowerCase().includes(query) ||
+            t.description.toLowerCase().includes(query)
+          ) {
+            results.push(
+              `[Tenant RLS & Isolation] ${t.name}`,
+              `  Category   : ${t.category} (${t.badge})`,
+              `  Guarantee  : ${t.leakPreventionGuarantee.split(';')[0]}`,
+              `  Anchor     : #architecture-tenant-isolation`,
               ''
             )
           }

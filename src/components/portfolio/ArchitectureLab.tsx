@@ -28,6 +28,7 @@ import {
   Lock,
   Scale,
   ToggleLeft,
+  Fingerprint,
   X
 } from 'lucide-react'
 import ByteByteGoDiagram from '@/components/architecture/ByteByteGoDiagram'
@@ -55,6 +56,7 @@ import DlqRetrySandbox from '@/components/architecture/DlqRetrySandbox'
 import IdempotencySandbox from '@/components/architecture/IdempotencySandbox'
 import { AtomicCommitSandbox } from '@/components/architecture/AtomicCommitSandbox'
 import { FeatureFlagSandbox } from '@/components/architecture/FeatureFlagSandbox'
+import { TenantIsolationSandbox } from '@/components/architecture/TenantIsolationSandbox'
 import { ARCHITECTURE_SYSTEMS } from '@/data/architectureSystems'
 import { ARCHITECTURAL_DECISIONS } from '@/data/architecturalDecisions'
 import { ARCHITECTURAL_TRADEOFFS } from '@/data/architecturalTradeoffs'
@@ -79,6 +81,7 @@ import { DLQ_RETRY_MODELS } from '@/data/dlqRetryModels'
 import { IDEMPOTENCY_MODELS } from '@/data/idempotencyModels'
 import { ATOMIC_COMMIT_PARADIGMS } from '@/data/atomicCommitModels'
 import { FEATURE_FLAG_MODELS } from '@/data/featureFlagModels'
+import { TENANT_ISOLATION_MODELS } from '@/data/tenantIsolationModels'
 
 const AI_TERMS_SUMMARY = [
   { id: 'agentic-ai', title: 'Agentic AI', text: 'Perception-action loop, DAG memory, tool execution, LangGraph' },
@@ -121,6 +124,7 @@ export default function ArchitectureLab() {
         idempotency: 5,
         atomiccommit: 5,
         featureflags: 5,
+        tenantisolation: 5,
         isActive: false
       }
     }
@@ -382,8 +386,20 @@ export default function ArchitectureLab() {
       f.description.toLowerCase().includes(q)
     ).length
 
+    const tenantIsolationCount = TENANT_ISOLATION_MODELS.filter(t =>
+      t.name.toLowerCase().includes(q) ||
+      t.id.toLowerCase().includes(q) ||
+      t.category.toLowerCase().includes(q) ||
+      t.badge.toLowerCase().includes(q) ||
+      t.algorithmFormula.toLowerCase().includes(q) ||
+      t.isolationLatency.toLowerCase().includes(q) ||
+      t.leakPreventionGuarantee.toLowerCase().includes(q) ||
+      t.architecturalInvariant.toLowerCase().includes(q) ||
+      t.description.toLowerCase().includes(q)
+    ).length
+
     return {
-      total: workbenchCount + aiCount + adrCount + tradeoffCount + evolutionCount + chaosCount + gatewayCount + traceCount + kafkaCount + ratelimitCount + multiregionCount + shardingCount + cdnCount + circuitBreakerCount + concurrencyCount + raftCount + vectorCount + priorityCount + sagasCount + cacheCount + eventSourcingCount + dlqCount + idempotencyCount + atomicCommitCount + featureFlagCount,
+      total: workbenchCount + aiCount + adrCount + tradeoffCount + evolutionCount + chaosCount + gatewayCount + traceCount + kafkaCount + ratelimitCount + multiregionCount + shardingCount + cdnCount + circuitBreakerCount + concurrencyCount + raftCount + vectorCount + priorityCount + sagasCount + cacheCount + eventSourcingCount + dlqCount + idempotencyCount + atomicCommitCount + featureFlagCount + tenantIsolationCount,
       workbench: workbenchCount,
       aiCodex: aiCount,
       adr: adrCount,
@@ -409,6 +425,7 @@ export default function ArchitectureLab() {
       idempotency: idempotencyCount,
       atomiccommit: atomicCommitCount,
       featureflags: featureFlagCount,
+      tenantisolation: tenantIsolationCount,
       isActive: true
     }
   }, [searchQuery])
@@ -796,6 +813,17 @@ export default function ArchitectureLab() {
             <ToggleLeft className="w-3.5 h-3.5 text-cyan-400" />
             <span>Feature Flags ({matchStats.featureflags})</span>
           </a>
+          <a 
+            href="#architecture-tenant-isolation"
+            className={`px-3 py-1.5 rounded-lg border transition-all flex items-center gap-1.5 cursor-pointer ${
+              matchStats.isActive && matchStats.tenantisolation > 0
+                ? 'bg-emerald-500/10 border-emerald-500/50 text-emerald-400 shadow-[0_0_10px_rgba(16,185,129,0.15)] font-bold'
+                : 'bg-slate-900 border-slate-800 hover:border-emerald-500/50 hover:text-emerald-400 text-slate-300'
+            }`}
+          >
+            <Fingerprint className="w-3.5 h-3.5 text-emerald-400" />
+            <span>Multi-Tenant RLS ({matchStats.tenantisolation})</span>
+          </a>
         </div>
       </div>
 
@@ -1101,6 +1129,18 @@ export default function ArchitectureLab() {
         className="scroll-mt-24"
       >
         <FeatureFlagSandbox />
+      </motion.div>
+
+      {/* 2.29. Distributed Multi-Tenant Row-Level Security (RLS) & Cryptographic Tenant Isolation Sandbox */}
+      <motion.div
+        id="architecture-tenant-isolation"
+        initial={{ opacity: 0, y: 25 }}
+        whileInView={{ opacity: 1, y: 0 }}
+        viewport={{ once: true }}
+        transition={{ duration: 0.6, delay: 1.30 }}
+        className="scroll-mt-24"
+      >
+        <TenantIsolationSandbox />
       </motion.div>
 
       {/* 3. Architectural Design Pillars Strip */}

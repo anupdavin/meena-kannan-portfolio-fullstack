@@ -1,6 +1,6 @@
 {
   "version": "1.0.0",
-  "generatedAt": "2026-10-27T19:58:12.412Z",
+  "generatedAt": "2026-10-27T20:10:58.643Z",
   "nodes": {
     "src/components/architecture/AdrExplorer.tsx": {
       "file": "src/components/architecture/AdrExplorer.tsx",
@@ -387,6 +387,16 @@
       ],
       "loc": 1414
     },
+    "src/components/architecture/TenantIsolationSandbox.tsx": {
+      "file": "src/components/architecture/TenantIsolationSandbox.tsx",
+      "imports": [
+        "../../data/tenantIsolationModels"
+      ],
+      "exports": [
+        "TenantIsolationSandbox"
+      ],
+      "loc": 660
+    },
     "src/components/architecture/TradeoffMatrix.tsx": {
       "file": "src/components/architecture/TradeoffMatrix.tsx",
       "imports": [
@@ -502,6 +512,7 @@
         "@/components/architecture/IdempotencySandbox",
         "@/components/architecture/AtomicCommitSandbox",
         "@/components/architecture/FeatureFlagSandbox",
+        "@/components/architecture/TenantIsolationSandbox",
         "@/data/architectureSystems",
         "@/data/architecturalDecisions",
         "@/data/architecturalTradeoffs",
@@ -525,12 +536,13 @@
         "@/data/dlqRetryModels",
         "@/data/idempotencyModels",
         "@/data/atomicCommitModels",
-        "@/data/featureFlagModels"
+        "@/data/featureFlagModels",
+        "@/data/tenantIsolationModels"
       ],
       "exports": [
         "ArchitectureLab"
       ],
-      "loc": 1159
+      "loc": 1199
     },
     "src/components/portfolio/ContactTerminal.tsx": {
       "file": "src/components/portfolio/ContactTerminal.tsx",
@@ -600,12 +612,13 @@
         "@/data/idempotencyModels",
         "@/data/atomicCommitModels",
         "@/data/featureFlagModels",
+        "@/data/tenantIsolationModels",
         "@/data/executiveBriefing"
       ],
       "exports": [
         "InteractiveCli"
       ],
-      "loc": 3509
+      "loc": 3668
     },
     "src/components/portfolio/ProjectsShowcase.tsx": {
       "file": "src/components/portfolio/ProjectsShowcase.tsx",
@@ -658,7 +671,7 @@
       "exports": [
         "TerminalHero"
       ],
-      "loc": 620
+      "loc": 622
     },
     "src/components/ui/badge.tsx": {
       "file": "src/components/ui/badge.tsx",
@@ -981,6 +994,18 @@
       ],
       "loc": 467
     },
+    "src/data/tenantIsolationModels.ts": {
+      "file": "src/data/tenantIsolationModels.ts",
+      "imports": [],
+      "exports": [
+        "TenantProfile",
+        "TenantIsolationParadigm",
+        "SecurityProbeResult",
+        "MOCK_TENANTS",
+        "TENANT_ISOLATION_MODELS"
+      ],
+      "loc": 414
+    },
     "src/data/trafficPriority.ts": {
       "file": "src/data/trafficPriority.ts",
       "imports": [],
@@ -1112,6 +1137,11 @@
       "type": "import"
     },
     {
+      "source": "src/components/architecture/TenantIsolationSandbox.tsx",
+      "target": "src/data/tenantIsolationModels.ts",
+      "type": "import"
+    },
+    {
       "source": "src/main.tsx",
       "target": "src/pages/Portfolio.tsx",
       "type": "import"
@@ -1186,6 +1216,7 @@
     "ChaosScenarioDef": "src/components/architecture/SystemDesignCanvas.tsx",
     "SystemDesignCanvasProps": "src/components/architecture/SystemDesignCanvas.tsx",
     "SystemDesignCanvas": "src/components/architecture/SystemDesignCanvas.tsx",
+    "TenantIsolationSandbox": "src/components/architecture/TenantIsolationSandbox.tsx",
     "TradeoffMatrix": "src/components/architecture/TradeoffMatrix.tsx",
     "TrafficPrioritySandbox": "src/components/architecture/TrafficPrioritySandbox.tsx",
     "VectorSearchSandbox": "src/components/architecture/VectorSearchSandbox.tsx",
@@ -1305,6 +1336,11 @@
     "checkJointQuorum": "src/data/raftConsensus.ts",
     "RateLimitingAlgorithm": "src/data/rateLimitingAlgorithms.ts",
     "RATE_LIMITING_ALGORITHMS": "src/data/rateLimitingAlgorithms.ts",
+    "TenantProfile": "src/data/tenantIsolationModels.ts",
+    "TenantIsolationParadigm": "src/data/tenantIsolationModels.ts",
+    "SecurityProbeResult": "src/data/tenantIsolationModels.ts",
+    "MOCK_TENANTS": "src/data/tenantIsolationModels.ts",
+    "TENANT_ISOLATION_MODELS": "src/data/tenantIsolationModels.ts",
     "TrafficPriorityModel": "src/data/trafficPriority.ts",
     "TRAFFIC_PRIORITY_MODELS": "src/data/trafficPriority.ts",
     "VectorSearchModel": "src/data/vectorSearch.ts",
