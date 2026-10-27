@@ -7,7 +7,7 @@ import ArchitectureLab from '@/components/portfolio/ArchitectureLab'
 import ProjectsShowcase from '@/components/portfolio/ProjectsShowcase'
 import ExperienceTimeline from '@/components/portfolio/ExperienceTimeline'
 import ContactTerminal from '@/components/portfolio/ContactTerminal'
-import { Github, Linkedin, Mail, ArrowUp, FileText } from 'lucide-react'
+import { ArrowUp } from 'lucide-react'
 
 const SECTIONS = [
   { id: 'hero', label: 'Hero' },
@@ -76,6 +76,37 @@ export default function Portfolio() {
     })
 
     return () => observer.disconnect()
+  }, [])
+
+  // Keyboard navigation shortcuts (1-7 for sections) when not focused on form inputs
+  useEffect(() => {
+    const handleKeyDown = (e: KeyboardEvent) => {
+      const target = e.target as HTMLElement | null
+      if (
+        target?.tagName === 'INPUT' || 
+        target?.tagName === 'TEXTAREA' || 
+        target?.isContentEditable
+      ) {
+        return
+      }
+
+      const keyToSection: Record<string, string> = {
+        '1': 'hero',
+        '2': 'about',
+        '3': 'skills',
+        '4': 'architecture',
+        '5': 'projects',
+        '6': 'experience',
+        '7': 'contact'
+      }
+
+      if (keyToSection[e.key]) {
+        scrollToSection(keyToSection[e.key])
+      }
+    }
+
+    window.addEventListener('keydown', handleKeyDown)
+    return () => window.removeEventListener('keydown', handleKeyDown)
   }, [])
 
   const scrollToSection = (id: string) => {
@@ -251,60 +282,6 @@ export default function Portfolio() {
           </motion.button>
         )}
       </AnimatePresence>
-
-      {/* Fixed Social Quick Dock (Right Side - Desktop/Tablet) */}
-      <div className="fixed bottom-24 right-6 z-40 hidden sm:flex flex-col gap-3">
-        <motion.a
-          whileHover={{ scale: 1.15, x: -3 }}
-          whileTap={{ scale: 0.9 }}
-          href="https://github.com/meenak95"
-          target="_blank"
-          rel="noreferrer"
-          aria-label="GitHub Profile"
-          className="w-10 h-10 rounded-full bg-slate-950/90 border border-emerald-500/40 hover:border-emerald-400 text-slate-300 hover:text-emerald-400 flex items-center justify-center shadow-lg transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-emerald-400"
-          title="GitHub Profile"
-        >
-          <Github className="w-4 h-4" />
-        </motion.a>
-
-        <motion.a
-          whileHover={{ scale: 1.15, x: -3 }}
-          whileTap={{ scale: 0.9 }}
-          href="https://www.linkedin.com/in/meena-kannan"
-          target="_blank"
-          rel="noreferrer"
-          aria-label="LinkedIn Profile"
-          className="w-10 h-10 rounded-full bg-slate-950/90 border border-cyan-500/40 hover:border-cyan-400 text-slate-300 hover:text-cyan-400 flex items-center justify-center shadow-lg transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-cyan-400"
-          title="LinkedIn Profile"
-        >
-          <Linkedin className="w-4 h-4" />
-        </motion.a>
-
-        <motion.a
-          whileHover={{ scale: 1.15, x: -3 }}
-          whileTap={{ scale: 0.9 }}
-          href="/Meena_Kannan_Senior_Architect_Resume.pdf"
-          download="Meena_Kannan_Senior_Architect_Resume.pdf"
-          target="_blank"
-          rel="noreferrer"
-          aria-label="Download Executive CV PDF"
-          className="w-10 h-10 rounded-full bg-slate-950/90 border border-slate-700 hover:border-white text-slate-300 hover:text-white flex items-center justify-center shadow-lg transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-slate-400 cursor-pointer"
-          title="Download Resume (PDF)"
-        >
-          <FileText className="w-4 h-4" />
-        </motion.a>
-
-        <motion.a
-          whileHover={{ scale: 1.15, x: -3 }}
-          whileTap={{ scale: 0.9 }}
-          href="mailto:meenakannan.dev@gmail.com"
-          aria-label="Direct Email Meena Kannan"
-          className="w-10 h-10 rounded-full bg-slate-950/90 border border-purple-500/40 hover:border-purple-400 text-slate-300 hover:text-purple-400 flex items-center justify-center shadow-lg transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-purple-400 cursor-pointer"
-          title="Direct Email"
-        >
-          <Mail className="w-4 h-4" />
-        </motion.a>
-      </div>
     </div>
   )
 }

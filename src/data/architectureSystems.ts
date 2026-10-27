@@ -614,6 +614,15 @@ export const ARCHITECTURE_SYSTEMS: Record<string, ArchitectureSystem> = {
         affectedNodeId: 'ecom-consumers',
         resilientOutcome: 'Kafka persists events in partitioned log. Kubernetes restarts the Payment Service pod; consumer resumes reading from committed offset with zero lost orders.',
         recoveryBadge: 'Kafka Offset Recovery Active'
+      },
+      {
+        id: 'chaos-saga-compensation',
+        name: 'Simulate Payment Failure & Choreographed Saga Rollback',
+        scenarioDescription: 'Simulates payment provider failure after order placement and inventory reservation, triggering compensating transactions.',
+        triggerStep: 5,
+        affectedNodeId: 'ecom-consumers',
+        resilientOutcome: 'Order Saga detects payment decline, broadcasts CompensationEvent to Kafka. Inventory worker consumes event, decrements reserved hold, and restores stock in warehouse with zero orphan locks.',
+        recoveryBadge: 'Choreographed Saga Compensated'
       }
     ]
   },
@@ -855,6 +864,15 @@ export const ARCHITECTURE_SYSTEMS: Record<string, ArchitectureSystem> = {
         affectedNodeId: 'rt-gateway',
         resilientOutcome: 'React 19 client detects socket severance, executes exponential backoff reconnect to healthy pod within 1.2s, sends its last vector clock, and receives delta synchronization with zero data loss.',
         recoveryBadge: 'Auto-Reconnect & Delta Sync'
+      },
+      {
+        id: 'chaos-redis-split',
+        name: 'Simulate Redis Pub/Sub Node Failover',
+        scenarioDescription: 'Simulates network partition on Redis Pub/Sub backplane node during peak collaboration.',
+        triggerStep: 4,
+        affectedNodeId: 'rt-redis',
+        resilientOutcome: 'Redis Sentinel triggers automated replica promotion in <800ms. WebSocket nodes reconnect to new primary, falling back to local memory ring buffer during election with zero dropped collaborative moves.',
+        recoveryBadge: 'Sentinel Failover in 800ms'
       }
     ]
   },
@@ -1121,6 +1139,15 @@ export const ARCHITECTURE_SYSTEMS: Record<string, ArchitectureSystem> = {
         affectedNodeId: 'fin-idem',
         resilientOutcome: 'The second request hits the Redis Idempotency Lease, detects status "COMPLETED", and immediately returns the cached $5,000 receipt without charging the cardholder a second time.',
         recoveryBadge: 'Double-Charge Blocked (100% Safe)'
+      },
+      {
+        id: 'chaos-kms-latency',
+        name: 'Simulate AWS CloudHSM / KMS Throttling',
+        scenarioDescription: 'Simulates AWS KMS envelope encryption latency spike exceeding 3,000ms under sudden banking clearing volume.',
+        triggerStep: 3,
+        affectedNodeId: 'fin-kms',
+        resilientOutcome: 'Resilience4j Circuit Breaker trips to Local AES-256-GCM Session Key Cache with automated asynchronous re-keying once KMS recovery is verified. Zero payment requests timeout.',
+        recoveryBadge: 'Key Cache Circuit Breaker'
       }
     ]
   }

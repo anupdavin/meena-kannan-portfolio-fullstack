@@ -18,7 +18,13 @@ const AVAILABLE_COMMANDS = [
   'hire',
   'architecture',
   'stats',
+  'metrics',
+  'benchmark',
+  'ai-codex',
+  'codex',
   'resume',
+  'curl-resume',
+  'download',
   'clear',
   'echo',
   'date',
@@ -29,7 +35,9 @@ const AVAILABLE_COMMANDS = [
 const QUICK_CHIPS = [
   { label: '[ $ whoami ]', cmd: 'whoami' },
   { label: '[ $ architecture ]', cmd: 'architecture' },
+  { label: '[ $ ai-codex ]', cmd: 'ai-codex' },
   { label: '[ $ skills ]', cmd: 'skills' },
+  { label: '[ $ metrics ]', cmd: 'metrics' },
   { label: '[ $ contact ]', cmd: 'contact' },
   { label: '[ $ projects ]', cmd: 'projects' },
   { label: '[ $ hire ]', cmd: 'hire' },
@@ -45,10 +53,15 @@ const COMMAND_HELP = [
   '  projects        - List featured enterprise systems, SAGAs & metrics',
   '  experience      - Output career journey summary & 8+ years leadership milestones',
   '  stats           - View production performance & impact metrics (99.99% SLA)',
+  '  metrics         - Print live architecture cluster telemetry, throughput & cache stats',
+  '  benchmark       - Run simulated synthetic latency benchmark across distributed services',
+  '  ai-codex        - Display ByteByteGo 5-pillar AI systems architecture codex',
   '  architecture    - Display Clean Architecture, DDD & Saga design principles',
   '  hire            - Check current availability & consulting engagement models',
   '  contact         - Display direct contact channels & copy-email action',
   '  resume          - Open / download senior solutions architect technical CV (PDF)',
+  '  curl-resume     - Fetch resume metadata via curl-style output',
+  '  download        - Download official PDF resume',
   '  date            - Show current system timestamp (UTC)',
   '  echo [text]     - Print arbitrary text to screen',
   '  clear           - Clear terminal history',
@@ -146,6 +159,50 @@ export default function InteractiveCli() {
           '  * CI/CD Deployment Time : 2 Days -> Under 15 Minutes'
         ]
         break
+      case 'metrics':
+        output = [
+          'Enterprise Mesh Gateway Telemetry (Live Production Stats):',
+          '  [Uptime SLA]            99.99% Availability across 3 AWS Availability Zones',
+          '  [P99 Latency]           42.8ms (Sub-50ms target met)',
+          '  [Peak Throughput]       15,450 Requests / Second (RPS)',
+          '  [Active Pod Replicas]   12 Autonomous K8s Pods (Horizontal Pod Autoscaler)',
+          '  [Cache Hit Ratio]       94.6% Multi-Tier L2 Redis Cluster',
+          '  [Kafka Consumer Lag]    0 partitions lag (Real-Time CDC Streams)',
+          '  [Cloud Cost Reduction]  -40% via AWS Graviton & Karpenter Dynamic Sizing'
+        ]
+        break
+      case 'benchmark':
+        output = [
+          'Executing Synthetic Cluster Latency Benchmark (10,000 Concurrent Synthetic Probes)...',
+          '  =============================================================',
+          '  Connection: HTTP/2.0 TLSv1.3 | Target: api.mesh.production',
+          '  [p50 Latency] :  12.4 ms',
+          '  [p90 Latency] :  28.1 ms',
+          '  [p95 Latency] :  36.5 ms',
+          '  [p99 Latency] :  42.8 ms',
+          '  [Error Rate]  :   0.00% (0 dropped frames, circuit breakers nominal)',
+          '  =============================================================',
+          'Result: All SLA benchmarks PASSED. Architecture ready for high-concurrency enterprise load.'
+        ]
+        break
+      case 'ai-codex':
+      case 'codex':
+        output = [
+          'ByteByteGo AI & Distributed Systems Architecture Codex:',
+          '  1. Agentic AI           : Goal-driven perception/action loop (Memory, Tools, Invariants)',
+          '                            Stack: Python LangGraph, Java 21 Spring AI, Docker Sandboxes',
+          '  2. Large Reasoning (LRM): Multi-step Chain-of-Thought (CoT) internal verification traces',
+          '                            Stack: Test-Time Compute (RLVR), Self-Correction backtracking',
+          '  3. Vector Database      : High-dimensional similarity search over dense embeddings',
+          '                            Stack: PostgreSQL 16 + pgvector (HNSW Index), Qdrant',
+          '  4. RAG Pipeline         : Hybrid BM25 keyword + semantic dense vector context augmentation',
+          '                            Stack: LangChain, Cohere Rerank-3, AWS Bedrock Knowledge Bases',
+          '  5. MCP Interface        : Model Context Protocol (Host -> Client -> MCP Server Tool bus)',
+          '                            Stack: JSON-RPC 2.0 over Stdio/SSE, Claude Desktop & Cursor tools',
+          '--------------------------------------------------------------------------------',
+          'Interactive Visualizer: Live in the #architecture section ("AI Terms You Need to Know").'
+        ]
+        break
       case 'experience':
         output = [
           '2022 - Present : Lead Full-Stack & Cloud Solutions Architect (Enterprise SaaS & Cloud Migration)',
@@ -174,6 +231,19 @@ export default function InteractiveCli() {
         ]
         break
       case 'architecture':
+        if (args.some(a => a.toLowerCase().includes('ai') || a.toLowerCase().includes('codex'))) {
+          output = [
+            'Routing to ByteByteGo AI & Distributed Systems Architecture Codex:',
+            '  1. Agentic AI           : Goal-driven perception/action loop (Memory, Tools, Invariants)',
+            '  2. Large Reasoning (LRM): Multi-step Chain-of-Thought (CoT) internal verification traces',
+            '  3. Vector Database      : High-dimensional similarity search over dense embeddings',
+            '  4. RAG Pipeline         : Hybrid BM25 keyword + semantic dense vector context augmentation',
+            '  5. MCP Interface        : Model Context Protocol (Host -> Client -> MCP Server Tool bus)',
+            '--------------------------------------------------------------------------------',
+            'Interactive Visualizer: Live in the #architecture section ("AI Terms You Need to Know").'
+          ]
+          break
+        }
         output = [
           'Clean Architecture & Distributed Systems Principles:',
           '  1. Independent of Frameworks: Core business domains decouple from libraries and vendor SDKs',
@@ -183,12 +253,16 @@ export default function InteractiveCli() {
         ]
         break
       case 'resume':
+      case 'download':
+      case 'curl-resume':
         window.open('/Meena_Kannan_Senior_Architect_Resume.pdf', '_blank')
         output = [
-          'Resume Document: Meena_Kannan_Senior_Architect_Resume.pdf',
-          'Status: Initiated PDF view / opened in new tab.',
+          'HTTP/2 200 OK [Document: Meena_Kannan_Senior_Architect_Resume.pdf]',
+          'Content-Type: application/pdf',
+          'Content-Disposition: attachment; filename="Meena_Kannan_Senior_Architect_Resume.pdf"',
+          'Status: Initiated PDF view & download in new tab.',
           'Direct Link: /Meena_Kannan_Senior_Architect_Resume.pdf',
-          'Summary: 8+ Years Enterprise Architecture, Java 21, Spring Boot 3, React 19, AWS Cloud Native'
+          'Summary: 8+ Years Enterprise Architecture, Java 21 LTS, Spring Boot 3, React 19, AWS Cloud Native'
         ]
         break
       case 'date':
@@ -260,9 +334,13 @@ export default function InteractiveCli() {
       e.preventDefault()
       const query = input.trim().toLowerCase()
       if (!query) return
-      const match = AVAILABLE_COMMANDS.find(c => c.startsWith(query))
-      if (match) {
-        setInput(match)
+      const matches = AVAILABLE_COMMANDS.filter(c => c.startsWith(query) || (input.length > 0 && c === input))
+      if (matches.length === 1) {
+        setInput(matches[0])
+      } else if (matches.length > 1) {
+        const currentIdx = matches.indexOf(input)
+        const nextMatch = matches[(currentIdx + 1) % matches.length]
+        setInput(nextMatch)
       }
     }
   }

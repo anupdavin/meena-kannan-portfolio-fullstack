@@ -1203,20 +1203,47 @@ export const ByteByteGoWorkbench: React.FC<ByteByteGoWorkbenchProps> = ({
             </div>
 
             <div className="p-3 rounded-xl bg-slate-950 border border-slate-800/80">
-              <div className="text-[10px] font-mono text-slate-500 uppercase tracking-wider">
-                P99 Latency
+              <div className="flex items-center justify-between">
+                <div className="text-[10px] font-mono text-slate-500 uppercase tracking-wider">
+                  P99 Latency
+                </div>
+                <span className="text-[9px] font-mono px-1.5 py-0.5 rounded bg-emerald-500/10 text-emerald-400 border border-emerald-500/20">
+                  SLO Nominal
+                </span>
               </div>
               <div className="text-xs font-mono text-emerald-400 font-bold mt-1 tabular-nums">
                 {selectedNodeSpec.p99Latency}
               </div>
+              <div className="mt-2 space-y-1">
+                <div className="w-full bg-slate-900 h-1.5 rounded-full overflow-hidden flex">
+                  <div className="bg-emerald-500 h-full w-[45%]" title="p50 percentile" />
+                  <div className="bg-teal-400 h-full w-[35%]" title="p95 percentile" />
+                  <div className="bg-cyan-400 h-full w-[20%]" title="p99 percentile" />
+                </div>
+                <div className="flex justify-between text-[9px] font-mono text-slate-500">
+                  <span>p50</span>
+                  <span>p95</span>
+                  <span>p99</span>
+                </div>
+              </div>
             </div>
 
             <div className="p-3 rounded-xl bg-slate-950 border border-slate-800/80">
-              <div className="text-[10px] font-mono text-slate-500 uppercase tracking-wider">
-                Throughput
+              <div className="flex items-center justify-between">
+                <div className="text-[10px] font-mono text-slate-500 uppercase tracking-wider">
+                  Throughput
+                </div>
+                <span className="flex items-center gap-1 text-[9px] font-mono text-amber-400">
+                  <span className="w-1.5 h-1.5 rounded-full bg-amber-400 animate-pulse" />
+                  Active
+                </span>
               </div>
               <div className="text-xs font-mono text-amber-400 font-bold mt-1 tabular-nums">
                 {selectedNodeSpec.throughput}
+              </div>
+              <div className="mt-2 flex items-center justify-between text-[9px] font-mono text-slate-500 pt-1 border-t border-slate-900">
+                <span>Availability SLA</span>
+                <span className="text-slate-300 font-semibold">99.99%</span>
               </div>
             </div>
           </div>

@@ -127,7 +127,7 @@ const VALUE_PROPS = [
 
 export default function TerminalHero() {
   const [activeTab, setActiveTab] = useState<FileTab>('java')
-  const [currentLine, setCurrentLine] = useState(0)
+  const [currentLine, setCurrentLine] = useState(() => TABS[0].lines.length)
   const [currentChar, setCurrentChar] = useState(0)
   const [copied, setCopied] = useState(false)
 
@@ -135,13 +135,7 @@ export default function TerminalHero() {
     return TABS.find(t => t.id === activeTab) || TABS[0]
   }, [activeTab])
 
-  // Reset typewriter when tab changes
-  useEffect(() => {
-    setCurrentLine(0)
-    setCurrentChar(0)
-  }, [activeTab])
-
-  // Typewriter effect - safely progress character and line pointers
+  // Typewriter effect - runs smoothly when replaying code
   useEffect(() => {
     const lines = activeContent.lines || []
     if (currentLine >= lines.length) {
@@ -156,7 +150,7 @@ export default function TerminalHero() {
         setCurrentChar(0)
         setCurrentLine(l => l + 1)
       }
-    }, Math.random() * 14 + 8)
+    }, Math.random() * 12 + 6)
 
     return () => clearTimeout(timer)
   }, [currentChar, currentLine, activeContent])
@@ -191,7 +185,8 @@ export default function TerminalHero() {
 
   const handleTabChange = (tabId: FileTab) => {
     setActiveTab(tabId)
-    setCurrentLine(0)
+    const targetTab = TABS.find(t => t.id === tabId)
+    setCurrentLine(targetTab ? targetTab.lines.length : 0)
     setCurrentChar(0)
   }
 

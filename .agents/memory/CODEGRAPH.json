@@ -1,0 +1,573 @@
+{
+  "version": "1.0.0",
+  "generatedAt": "2026-10-27T06:48:41.305Z",
+  "nodes": {
+    "src/components/architecture/AgenticWorkflowDiagram.tsx": {
+      "file": "src/components/architecture/AgenticWorkflowDiagram.tsx",
+      "imports": [
+        "react",
+        "lucide-react",
+        "./ArchNode",
+        "./AnimatedConnection",
+        "./SvgPrimitives",
+        "zod",
+        "@/lib/agent-bus",
+        "@modelcontextprotocol/sdk/client/index.js",
+        "@modelcontextprotocol/sdk/client/stdio.js",
+        "fastmcp",
+        "zod"
+      ],
+      "exports": [
+        "AgentStepDef",
+        "AgentNodeExtended",
+        "AgentGoalPayloadSchema",
+        "ToolExecutionWorker",
+        "AgenticWorkflowDiagram"
+      ],
+      "loc": 1296
+    },
+    "src/components/architecture/AnimatedConnection.tsx": {
+      "file": "src/components/architecture/AnimatedConnection.tsx",
+      "imports": [
+        "react"
+      ],
+      "exports": [
+        "PacketType",
+        "AnimatedConnectionProps",
+        "AnimatedConnection"
+      ],
+      "loc": 171
+    },
+    "src/components/architecture/ArchNode.tsx": {
+      "file": "src/components/architecture/ArchNode.tsx",
+      "imports": [
+        "react"
+      ],
+      "exports": [
+        "ArchNodeData",
+        "ArchNode"
+      ],
+      "loc": 394
+    },
+    "src/components/architecture/ByteByteGoAiCodex.tsx": {
+      "file": "src/components/architecture/ByteByteGoAiCodex.tsx",
+      "imports": [
+        "react",
+        "framer-motion",
+        "lucide-react"
+      ],
+      "exports": [
+        "AiTermSpec",
+        "AI_TERMS",
+        "ByteByteGoAiCodex"
+      ],
+      "loc": 718
+    },
+    "src/components/architecture/ByteByteGoDiagram.tsx": {
+      "file": "src/components/architecture/ByteByteGoDiagram.tsx",
+      "imports": [
+        "react",
+        "./ByteByteGoWorkbench"
+      ],
+      "exports": [
+        "ByteByteGoDiagramProps",
+        "ByteByteGoDiagram"
+      ],
+      "loc": 26
+    },
+    "src/components/architecture/ByteByteGoWorkbench.tsx": {
+      "file": "src/components/architecture/ByteByteGoWorkbench.tsx",
+      "imports": [
+        "react",
+        "lucide-react",
+        "./SvgPrimitives",
+        "./workbenchConfigs"
+      ],
+      "exports": [
+        "ByteByteGoWorkbenchProps",
+        "ByteByteGoWorkbench"
+      ],
+      "loc": 1280
+    },
+    "src/components/architecture/CleanArchitectureRadar.tsx": {
+      "file": "src/components/architecture/CleanArchitectureRadar.tsx",
+      "imports": [
+        "./AgenticWorkflowDiagram"
+      ],
+      "exports": [],
+      "loc": 5
+    },
+    "src/components/architecture/SvgPrimitives.tsx": {
+      "file": "src/components/architecture/SvgPrimitives.tsx",
+      "imports": [
+        "react"
+      ],
+      "exports": [
+        "BoundaryContainerProps",
+        "BoundaryContainer",
+        "DatabaseCylinderProps",
+        "DatabaseCylinder",
+        "KafkaPartitionPipeProps",
+        "KafkaPartitionPipe",
+        "HexShieldGatewayProps",
+        "HexShieldGateway",
+        "RedisMemoryGridProps",
+        "RedisMemoryGrid",
+        "SequenceBadgeProps",
+        "SequenceBadge",
+        "FlowingConnectionProps",
+        "FlowingConnection",
+        "SvgGlowFilters"
+      ],
+      "loc": 898
+    },
+    "src/components/architecture/SystemDesignCanvas.tsx": {
+      "file": "src/components/architecture/SystemDesignCanvas.tsx",
+      "imports": [
+        "framer-motion",
+        "lucide-react",
+        "./ArchNode",
+        "./AnimatedConnection"
+      ],
+      "exports": [
+        "SubsystemBox",
+        "ConnectionDef",
+        "StepDefinition",
+        "ChaosScenarioDef",
+        "SystemDesignCanvasProps",
+        "SystemDesignCanvas"
+      ],
+      "loc": 1413
+    },
+    "src/components/architecture/workbenchConfigs.ts": {
+      "file": "src/components/architecture/workbenchConfigs.ts",
+      "imports": [],
+      "exports": [
+        "SystemStepDef",
+        "NodeRuntimeSpec",
+        "WorkbenchSystemConfig",
+        "WORKBENCH_SYSTEMS"
+      ],
+      "loc": 867
+    },
+    "src/components/ChatWidget.tsx": {
+      "file": "src/components/ChatWidget.tsx",
+      "imports": [
+        "react",
+        "framer-motion",
+        "lucide-react"
+      ],
+      "exports": [
+        "ChatWidget"
+      ],
+      "loc": 366
+    },
+    "src/components/MatrixBackground.tsx": {
+      "file": "src/components/MatrixBackground.tsx",
+      "imports": [
+        "react"
+      ],
+      "exports": [
+        "MatrixBackground"
+      ],
+      "loc": 121
+    },
+    "src/components/portfolio/AboutTerminal.tsx": {
+      "file": "src/components/portfolio/AboutTerminal.tsx",
+      "imports": [
+        "react",
+        "framer-motion",
+        "lucide-react",
+        "@/components/architecture/AgenticWorkflowDiagram"
+      ],
+      "exports": [
+        "AboutTerminal"
+      ],
+      "loc": 225
+    },
+    "src/components/portfolio/ArchitectureLab.tsx": {
+      "file": "src/components/portfolio/ArchitectureLab.tsx",
+      "imports": [
+        "framer-motion",
+        "lucide-react",
+        "@/components/architecture/ByteByteGoDiagram",
+        "@/components/architecture/ByteByteGoAiCodex"
+      ],
+      "exports": [
+        "ArchitectureLab"
+      ],
+      "loc": 136
+    },
+    "src/components/portfolio/ContactTerminal.tsx": {
+      "file": "src/components/portfolio/ContactTerminal.tsx",
+      "imports": [
+        "framer-motion",
+        "lucide-react",
+        "@/components/ui/button",
+        "@/components/ui/input",
+        "@/components/ui/textarea"
+      ],
+      "exports": [
+        "ContactTerminal"
+      ],
+      "loc": 546
+    },
+    "src/components/portfolio/ExperienceTimeline.tsx": {
+      "file": "src/components/portfolio/ExperienceTimeline.tsx",
+      "imports": [
+        "framer-motion",
+        "lucide-react",
+        "@/components/ui/badge"
+      ],
+      "exports": [
+        "ExperienceTimeline"
+      ],
+      "loc": 342
+    },
+    "src/components/portfolio/InteractiveCli.tsx": {
+      "file": "src/components/portfolio/InteractiveCli.tsx",
+      "imports": [
+        "react",
+        "framer-motion",
+        "lucide-react"
+      ],
+      "exports": [
+        "InteractiveCli"
+      ],
+      "loc": 487
+    },
+    "src/components/portfolio/ProjectsShowcase.tsx": {
+      "file": "src/components/portfolio/ProjectsShowcase.tsx",
+      "imports": [
+        "react",
+        "framer-motion",
+        "lucide-react",
+        "@/components/ui/button",
+        "@/components/architecture/ByteByteGoDiagram"
+      ],
+      "exports": [
+        "ArchitecturalDecisionRecord",
+        "Project",
+        "useFinancialTickSubscription",
+        "ProjectsShowcase"
+      ],
+      "loc": 941
+    },
+    "src/components/portfolio/RouteErrorBoundary.tsx": {
+      "file": "src/components/portfolio/RouteErrorBoundary.tsx",
+      "imports": [
+        "react-router-dom",
+        "lucide-react"
+      ],
+      "exports": [
+        "RouteErrorBoundary"
+      ],
+      "loc": 105
+    },
+    "src/components/portfolio/TechStack.tsx": {
+      "file": "src/components/portfolio/TechStack.tsx",
+      "imports": [
+        "react",
+        "framer-motion",
+        "lucide-react"
+      ],
+      "exports": [
+        "TechStack"
+      ],
+      "loc": 496
+    },
+    "src/components/portfolio/TerminalHero.tsx": {
+      "file": "src/components/portfolio/TerminalHero.tsx",
+      "imports": [
+        "react",
+        "framer-motion",
+        "lucide-react"
+      ],
+      "exports": [
+        "TerminalHero"
+      ],
+      "loc": 460
+    },
+    "src/components/ui/badge.tsx": {
+      "file": "src/components/ui/badge.tsx",
+      "imports": [
+        "react"
+      ],
+      "exports": [
+        "Badge"
+      ],
+      "loc": 23
+    },
+    "src/components/ui/button.tsx": {
+      "file": "src/components/ui/button.tsx",
+      "imports": [
+        "react"
+      ],
+      "exports": [
+        "Button"
+      ],
+      "loc": 34
+    },
+    "src/components/ui/card.tsx": {
+      "file": "src/components/ui/card.tsx",
+      "imports": [
+        "react"
+      ],
+      "exports": [
+        "Card",
+        "CardHeader",
+        "CardTitle",
+        "CardDescription",
+        "CardContent",
+        "CardFooter"
+      ],
+      "loc": 31
+    },
+    "src/components/ui/input.tsx": {
+      "file": "src/components/ui/input.tsx",
+      "imports": [
+        "react"
+      ],
+      "exports": [
+        "Input"
+      ],
+      "loc": 11
+    },
+    "src/components/ui/progress.tsx": {
+      "file": "src/components/ui/progress.tsx",
+      "imports": [
+        "react"
+      ],
+      "exports": [
+        "Progress"
+      ],
+      "loc": 22
+    },
+    "src/components/ui/textarea.tsx": {
+      "file": "src/components/ui/textarea.tsx",
+      "imports": [
+        "react"
+      ],
+      "exports": [
+        "Textarea"
+      ],
+      "loc": 11
+    },
+    "src/data/architectureSystems.ts": {
+      "file": "src/data/architectureSystems.ts",
+      "imports": [],
+      "exports": [
+        "ArchitectureNode",
+        "ArchitectureEdge",
+        "StepFlow",
+        "ChaosScenario",
+        "ArchitectureSystem",
+        "ARCHITECTURE_SYSTEMS"
+      ],
+      "loc": 1155
+    },
+    "src/data/byteByteGoConfigs.ts": {
+      "file": "src/data/byteByteGoConfigs.ts",
+      "imports": [],
+      "exports": [
+        "ByteByteGoSystemConfig",
+        "BYTEBYTEGO_SYSTEMS"
+      ],
+      "loc": 2016
+    },
+    "src/main.tsx": {
+      "file": "src/main.tsx",
+      "imports": [
+        "react",
+        "react-dom/client",
+        "react-router-dom",
+        "./pages/Portfolio",
+        "./pages/Layout",
+        "./components/portfolio/RouteErrorBoundary"
+      ],
+      "exports": [],
+      "loc": 25
+    },
+    "src/pages/Layout.tsx": {
+      "file": "src/pages/Layout.tsx",
+      "imports": [
+        "react",
+        "react-router-dom",
+        "@/components/MatrixBackground",
+        "@/components/ChatWidget",
+        "framer-motion",
+        "lucide-react"
+      ],
+      "exports": [
+        "Layout"
+      ],
+      "loc": 312
+    },
+    "src/pages/Portfolio.tsx": {
+      "file": "src/pages/Portfolio.tsx",
+      "imports": [
+        "react",
+        "framer-motion",
+        "@/components/portfolio/TerminalHero",
+        "@/components/portfolio/AboutTerminal",
+        "@/components/portfolio/TechStack",
+        "@/components/portfolio/ArchitectureLab",
+        "@/components/portfolio/ProjectsShowcase",
+        "@/components/portfolio/ExperienceTimeline",
+        "@/components/portfolio/ContactTerminal",
+        "lucide-react"
+      ],
+      "exports": [
+        "Portfolio"
+      ],
+      "loc": 288
+    },
+    "src/vite-env.d.ts": {
+      "file": "src/vite-env.d.ts",
+      "imports": [],
+      "exports": [],
+      "loc": 2
+    }
+  },
+  "edges": [
+    {
+      "source": "src/components/architecture/AgenticWorkflowDiagram.tsx",
+      "target": "src/components/architecture/ArchNode.tsx",
+      "type": "import"
+    },
+    {
+      "source": "src/components/architecture/AgenticWorkflowDiagram.tsx",
+      "target": "src/components/architecture/AnimatedConnection.tsx",
+      "type": "import"
+    },
+    {
+      "source": "src/components/architecture/AgenticWorkflowDiagram.tsx",
+      "target": "src/components/architecture/SvgPrimitives.tsx",
+      "type": "import"
+    },
+    {
+      "source": "src/components/architecture/ByteByteGoDiagram.tsx",
+      "target": "src/components/architecture/ByteByteGoWorkbench.tsx",
+      "type": "import"
+    },
+    {
+      "source": "src/components/architecture/ByteByteGoWorkbench.tsx",
+      "target": "src/components/architecture/SvgPrimitives.tsx",
+      "type": "import"
+    },
+    {
+      "source": "src/components/architecture/ByteByteGoWorkbench.tsx",
+      "target": "src/components/architecture/workbenchConfigs.ts",
+      "type": "import"
+    },
+    {
+      "source": "src/components/architecture/CleanArchitectureRadar.tsx",
+      "target": "src/components/architecture/AgenticWorkflowDiagram.tsx",
+      "type": "import"
+    },
+    {
+      "source": "src/components/architecture/SystemDesignCanvas.tsx",
+      "target": "src/components/architecture/ArchNode.tsx",
+      "type": "import"
+    },
+    {
+      "source": "src/components/architecture/SystemDesignCanvas.tsx",
+      "target": "src/components/architecture/AnimatedConnection.tsx",
+      "type": "import"
+    },
+    {
+      "source": "src/main.tsx",
+      "target": "src/pages/Portfolio.tsx",
+      "type": "import"
+    },
+    {
+      "source": "src/main.tsx",
+      "target": "src/pages/Layout.tsx",
+      "type": "import"
+    },
+    {
+      "source": "src/main.tsx",
+      "target": "src/components/portfolio/RouteErrorBoundary.tsx",
+      "type": "import"
+    }
+  ],
+  "symbolMap": {
+    "AgentStepDef": "src/components/architecture/AgenticWorkflowDiagram.tsx",
+    "AgentNodeExtended": "src/components/architecture/AgenticWorkflowDiagram.tsx",
+    "AgentGoalPayloadSchema": "src/components/architecture/AgenticWorkflowDiagram.tsx",
+    "ToolExecutionWorker": "src/components/architecture/AgenticWorkflowDiagram.tsx",
+    "AgenticWorkflowDiagram": "src/components/architecture/AgenticWorkflowDiagram.tsx",
+    "PacketType": "src/components/architecture/AnimatedConnection.tsx",
+    "AnimatedConnectionProps": "src/components/architecture/AnimatedConnection.tsx",
+    "AnimatedConnection": "src/components/architecture/AnimatedConnection.tsx",
+    "ArchNodeData": "src/components/architecture/ArchNode.tsx",
+    "ArchNode": "src/components/architecture/ArchNode.tsx",
+    "AiTermSpec": "src/components/architecture/ByteByteGoAiCodex.tsx",
+    "AI_TERMS": "src/components/architecture/ByteByteGoAiCodex.tsx",
+    "ByteByteGoAiCodex": "src/components/architecture/ByteByteGoAiCodex.tsx",
+    "ByteByteGoDiagramProps": "src/components/architecture/ByteByteGoDiagram.tsx",
+    "ByteByteGoDiagram": "src/components/architecture/ByteByteGoDiagram.tsx",
+    "ByteByteGoWorkbenchProps": "src/components/architecture/ByteByteGoWorkbench.tsx",
+    "ByteByteGoWorkbench": "src/components/architecture/ByteByteGoWorkbench.tsx",
+    "BoundaryContainerProps": "src/components/architecture/SvgPrimitives.tsx",
+    "BoundaryContainer": "src/components/architecture/SvgPrimitives.tsx",
+    "DatabaseCylinderProps": "src/components/architecture/SvgPrimitives.tsx",
+    "DatabaseCylinder": "src/components/architecture/SvgPrimitives.tsx",
+    "KafkaPartitionPipeProps": "src/components/architecture/SvgPrimitives.tsx",
+    "KafkaPartitionPipe": "src/components/architecture/SvgPrimitives.tsx",
+    "HexShieldGatewayProps": "src/components/architecture/SvgPrimitives.tsx",
+    "HexShieldGateway": "src/components/architecture/SvgPrimitives.tsx",
+    "RedisMemoryGridProps": "src/components/architecture/SvgPrimitives.tsx",
+    "RedisMemoryGrid": "src/components/architecture/SvgPrimitives.tsx",
+    "SequenceBadgeProps": "src/components/architecture/SvgPrimitives.tsx",
+    "SequenceBadge": "src/components/architecture/SvgPrimitives.tsx",
+    "FlowingConnectionProps": "src/components/architecture/SvgPrimitives.tsx",
+    "FlowingConnection": "src/components/architecture/SvgPrimitives.tsx",
+    "SvgGlowFilters": "src/components/architecture/SvgPrimitives.tsx",
+    "SubsystemBox": "src/components/architecture/SystemDesignCanvas.tsx",
+    "ConnectionDef": "src/components/architecture/SystemDesignCanvas.tsx",
+    "StepDefinition": "src/components/architecture/SystemDesignCanvas.tsx",
+    "ChaosScenarioDef": "src/components/architecture/SystemDesignCanvas.tsx",
+    "SystemDesignCanvasProps": "src/components/architecture/SystemDesignCanvas.tsx",
+    "SystemDesignCanvas": "src/components/architecture/SystemDesignCanvas.tsx",
+    "SystemStepDef": "src/components/architecture/workbenchConfigs.ts",
+    "NodeRuntimeSpec": "src/components/architecture/workbenchConfigs.ts",
+    "WorkbenchSystemConfig": "src/components/architecture/workbenchConfigs.ts",
+    "WORKBENCH_SYSTEMS": "src/components/architecture/workbenchConfigs.ts",
+    "ChatWidget": "src/components/ChatWidget.tsx",
+    "MatrixBackground": "src/components/MatrixBackground.tsx",
+    "AboutTerminal": "src/components/portfolio/AboutTerminal.tsx",
+    "ArchitectureLab": "src/components/portfolio/ArchitectureLab.tsx",
+    "ContactTerminal": "src/components/portfolio/ContactTerminal.tsx",
+    "ExperienceTimeline": "src/components/portfolio/ExperienceTimeline.tsx",
+    "InteractiveCli": "src/components/portfolio/InteractiveCli.tsx",
+    "ArchitecturalDecisionRecord": "src/components/portfolio/ProjectsShowcase.tsx",
+    "Project": "src/components/portfolio/ProjectsShowcase.tsx",
+    "useFinancialTickSubscription": "src/components/portfolio/ProjectsShowcase.tsx",
+    "ProjectsShowcase": "src/components/portfolio/ProjectsShowcase.tsx",
+    "RouteErrorBoundary": "src/components/portfolio/RouteErrorBoundary.tsx",
+    "TechStack": "src/components/portfolio/TechStack.tsx",
+    "TerminalHero": "src/components/portfolio/TerminalHero.tsx",
+    "Badge": "src/components/ui/badge.tsx",
+    "Button": "src/components/ui/button.tsx",
+    "Card": "src/components/ui/card.tsx",
+    "CardHeader": "src/components/ui/card.tsx",
+    "CardTitle": "src/components/ui/card.tsx",
+    "CardDescription": "src/components/ui/card.tsx",
+    "CardContent": "src/components/ui/card.tsx",
+    "CardFooter": "src/components/ui/card.tsx",
+    "Input": "src/components/ui/input.tsx",
+    "Progress": "src/components/ui/progress.tsx",
+    "Textarea": "src/components/ui/textarea.tsx",
+    "ArchitectureNode": "src/data/architectureSystems.ts",
+    "ArchitectureEdge": "src/data/architectureSystems.ts",
+    "StepFlow": "src/data/architectureSystems.ts",
+    "ChaosScenario": "src/data/architectureSystems.ts",
+    "ArchitectureSystem": "src/data/architectureSystems.ts",
+    "ARCHITECTURE_SYSTEMS": "src/data/architectureSystems.ts",
+    "ByteByteGoSystemConfig": "src/data/byteByteGoConfigs.ts",
+    "BYTEBYTEGO_SYSTEMS": "src/data/byteByteGoConfigs.ts",
+    "Layout": "src/pages/Layout.tsx",
+    "Portfolio": "src/pages/Portfolio.tsx"
+  }
+}

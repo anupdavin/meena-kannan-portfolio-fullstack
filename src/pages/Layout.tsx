@@ -81,11 +81,8 @@ export default function Layout() {
         Skip to main content
       </a>
 
-      {/* Dynamic Matrix Rain Canvas Background */}
+      {/* Dynamic Ambient Background Canvas */}
       <MatrixBackground speed={35} />
-
-      {/* Subtle Scanlines CRT Effect */}
-      <div className="fixed inset-0 scanlines pointer-events-none z-30 opacity-20" />
 
       {/* Top Navigation Bar */}
       <nav aria-label="Main Navigation" className="fixed top-0 left-0 right-0 z-50 backdrop-blur-xl bg-[#060a12]/90 border-b border-slate-800 transition-all">
@@ -137,16 +134,33 @@ export default function Layout() {
             </div>
 
             {/* Right Status Badge & Contact CTA (Desktop/Tablet) */}
-            <div className="hidden sm:flex items-center gap-2.5 lg:gap-3">
-              <div className="flex items-center gap-1.5 px-2.5 py-1 rounded-full bg-emerald-500/10 border border-emerald-500/30 text-[10px] lg:text-[11px] text-emerald-400 font-mono">
-                <span className="w-1.5 h-1.5 rounded-full bg-emerald-400" />
-                <span>Available for Architecture Roles</span>
-              </div>
+            <div className="hidden sm:flex items-center gap-2 lg:gap-2.5">
+              <a
+                href="https://github.com/meenak95"
+                target="_blank"
+                rel="noreferrer"
+                aria-label="GitHub Profile"
+                className="w-8 h-8 rounded-lg bg-slate-900 border border-slate-800 text-slate-400 hover:text-white hover:border-slate-700 flex items-center justify-center transition-colors"
+                title="GitHub Profile"
+              >
+                <Github className="w-3.5 h-3.5" />
+              </a>
+
+              <a
+                href="https://linkedin.com/in/meena-kannan"
+                target="_blank"
+                rel="noreferrer"
+                aria-label="LinkedIn Profile"
+                className="w-8 h-8 rounded-lg bg-slate-900 border border-slate-800 text-slate-400 hover:text-cyan-400 hover:border-slate-700 flex items-center justify-center transition-colors"
+                title="LinkedIn Profile"
+              >
+                <Linkedin className="w-3.5 h-3.5" />
+              </a>
 
               <a
                 href="#contact"
                 onClick={(e) => handleNavClick(e, '#contact')}
-                className="px-3.5 py-1.5 rounded-xl bg-emerald-500 text-slate-950 font-bold font-mono text-xs hover:bg-emerald-400 transition-colors cursor-pointer flex items-center gap-1.5 shadow-sm"
+                className="px-3.5 py-1.5 rounded-xl bg-emerald-500 text-slate-950 font-bold font-mono text-xs hover:bg-emerald-400 transition-colors cursor-pointer flex items-center gap-1.5 shadow-sm active:scale-[0.98]"
               >
                 <Send className="w-3 h-3" />
                 <span>Hire / Inquire</span>

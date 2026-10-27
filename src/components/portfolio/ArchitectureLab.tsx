@@ -9,6 +9,7 @@ import {
   GitBranch
 } from 'lucide-react'
 import ByteByteGoDiagram from '@/components/architecture/ByteByteGoDiagram'
+import ByteByteGoAiCodex from '@/components/architecture/ByteByteGoAiCodex'
 
 export default function ArchitectureLab() {
   return (
@@ -67,6 +68,16 @@ export default function ArchitectureLab() {
           variant="workbench" 
           allowSystemSwitch={true}
         />
+      </motion.div>
+
+      {/* 2.5. ByteByteGo AI Architecture Codex (Interactive Infographic) */}
+      <motion.div
+        initial={{ opacity: 0, y: 25 }}
+        whileInView={{ opacity: 1, y: 0 }}
+        viewport={{ once: true }}
+        transition={{ duration: 0.6, delay: 0.1 }}
+      >
+        <ByteByteGoAiCodex />
       </motion.div>
 
       {/* 3. Architectural Design Pillars Strip */}

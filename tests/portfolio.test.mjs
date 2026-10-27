@@ -39,6 +39,29 @@ describe('Portfolio Verification & Asset Integrity', () => {
     assert.ok(fs.existsSync(path.join(rootDir, 'public', 'robots.txt')), 'robots.txt must exist');
     assert.ok(fs.existsSync(path.join(rootDir, 'public', 'sitemap.xml')), 'sitemap.xml must exist');
     assert.ok(fs.existsSync(path.join(rootDir, 'public', 'favicon.svg')), 'favicon.svg must exist');
+    
+    // Detailed SVG baseline assertion (Task D3)
+    const ogSvg = fs.readFileSync(path.join(rootDir, 'public', 'og-image.svg'), 'utf8');
+    assert.ok(ogSvg.includes('width="1200"') && ogSvg.includes('height="630"'), 'OG image must have 1200x630 dimensions');
+    assert.ok(ogSvg.includes('viewBox="0 0 1200 630"'), 'OG image must have standard 1200x630 viewBox');
+    assert.ok(ogSvg.includes('MEENA KANNAN'), 'OG image must feature Meena Kannan brand');
+    assert.ok(ogSvg.includes('Senior Full-Stack &amp; Cloud Solutions Architect'), 'OG image must feature executive role title');
+    assert.ok(ogSvg.includes('99.99% SLA UPTIME'), 'OG image must feature SLA metric');
+  });
+
+  test('ByteByteGoAiCodex defines all 5 AI paradigms and is embedded in ArchitectureLab', () => {
+    const codexPath = path.join(rootDir, 'src', 'components', 'architecture', 'ByteByteGoAiCodex.tsx');
+    assert.ok(fs.existsSync(codexPath), 'ByteByteGoAiCodex.tsx must exist');
+    const codexCode = fs.readFileSync(codexPath, 'utf8');
+    assert.ok(codexCode.includes('agentic-ai'), 'Must specify Agentic AI paradigm');
+    assert.ok(codexCode.includes('lrm'), 'Must specify Large Reasoning Model paradigm');
+    assert.ok(codexCode.includes('vectordb'), 'Must specify Vector Database paradigm');
+    assert.ok(codexCode.includes('rag'), 'Must specify RAG paradigm');
+    assert.ok(codexCode.includes('mcp'), 'Must specify MCP paradigm');
+    assert.ok(codexCode.includes('AI Terms You Need to Know'), 'Must feature ByteByteGo headline');
+
+    const labCode = fs.readFileSync(path.join(rootDir, 'src', 'components', 'portfolio', 'ArchitectureLab.tsx'), 'utf8');
+    assert.ok(labCode.includes('ByteByteGoAiCodex'), 'ArchitectureLab must render ByteByteGoAiCodex');
   });
 
   test('index.html contains valid favicon.svg link, OpenGraph tags, and pre-rendered semantic landmarks', () => {
@@ -302,6 +325,8 @@ describe('Enterprise Architectural Upgrades & B2B Production Readiness', () => {
     assert.ok(indexHtml.includes('"@type": "Person"'), 'JSON-LD must define Person');
     assert.ok(indexHtml.includes('"@type": "WebSite"'), 'JSON-LD must define WebSite');
     assert.ok(indexHtml.includes('https://meenakannan.dev'), 'JSON-LD must define canonical URL');
+    assert.ok(indexHtml.includes('ByteByteGo System Design & Architecture'), 'JSON-LD must define ByteByteGo competency');
+    assert.ok(indexHtml.includes('Model Context Protocol (MCP)'), 'JSON-LD must define MCP competency');
     assert.ok(indexHtml.includes('twitter:card'), 'Must define twitter:card');
     assert.ok(indexHtml.includes('og:title'), 'Must define og:title');
   });

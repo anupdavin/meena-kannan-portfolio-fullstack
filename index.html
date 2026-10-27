@@ -67,7 +67,11 @@
             "Clean Architecture",
             "Domain-Driven Design (DDD)",
             "Choreographed Saga Pattern",
-            "Transactional Outbox Pattern (Debezium CDC)"
+            "Transactional Outbox Pattern (Debezium CDC)",
+            "ByteByteGo System Design & Architecture",
+            "Agentic AI Workflows & LangGraph",
+            "Model Context Protocol (MCP)",
+            "Retrieval-Augmented Generation (RAG) & Vector Search"
           ],
           "description": "Senior Full-Stack Software Engineer & Solutions Architect with 8+ years of enterprise experience designing scalable, high-throughput microservices and cloud architectures."
         },
@@ -89,84 +93,294 @@
     <!-- Fonts Preconnect -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Fira+Code:wght@400;500;600;700&family=Inter:wght@300;400;500;600;700;800&family=JetBrains+Mono:ital,wght@0,300;0,400;0,500;0,600;0,700;0,800;1,400&family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500;600;700&family=Plus+Jakarta+Sans:wght@500;600;700;800&display=swap" rel="stylesheet">
     
     <style>
       html {
         scroll-behavior: smooth;
         background-color: #06090e;
+        color-scheme: dark;
       }
-      /* Fallback styling for pre-rendered semantic landmarks */
-      .prerender-shell {
-        font-family: 'JetBrains Mono', 'Inter', monospace, sans-serif;
-        color: #94a3b8;
+      body {
+        margin: 0;
+        padding: 0;
         background-color: #06090e;
+        color: #f8fafc;
+        font-family: 'Plus Jakarta Sans', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+        -webkit-font-smoothing: antialiased;
+        -moz-osx-font-smoothing: grayscale;
+        overflow-x: hidden;
+      }
+      /* Seamless Swiss Technical Pre-render Shell (Eliminates FOUC and Layout Jumps) */
+      .prerender-shell {
         min-height: 100vh;
+        background-color: #06090e;
+        color: #cbd5e1;
         line-height: 1.6;
       }
       .prerender-nav {
+        position: sticky;
+        top: 0;
+        z-index: 50;
         display: flex;
         justify-content: space-between;
         align-items: center;
-        padding: 1rem 1.5rem;
-        background: rgba(6, 10, 18, 0.95);
-        border-bottom: 1px solid #1e293b;
+        padding: 0.85rem 1.5rem;
+        background: rgba(6, 10, 18, 0.92);
+        backdrop-filter: blur(16px);
+        -webkit-backdrop-filter: blur(16px);
+        border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+      }
+      .prerender-brand {
+        display: flex;
+        align-items: center;
+        gap: 0.75rem;
+        text-decoration: none;
+      }
+      .prerender-brand-icon {
+        width: 2rem;
+        height: 2rem;
+        border-radius: 0.5rem;
+        background: rgba(16, 185, 129, 0.1);
+        border: 1px solid rgba(16, 185, 129, 0.3);
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        color: #34d399;
       }
       .prerender-hero {
-        padding: 4rem 1.5rem 3rem;
-        max-width: 1200px;
+        max-width: 1280px;
         margin: 0 auto;
+        padding: 2.5rem 1.5rem 3.5rem;
       }
-      .prerender-heading {
-        color: #f8fafc;
-        font-size: 2.25rem;
-        font-weight: 800;
-        margin-bottom: 0.5rem;
-      }
-      .prerender-badge {
-        display: inline-block;
-        padding: 0.25rem 0.75rem;
+      .prerender-status-pill {
+        display: inline-flex;
+        align-items: center;
+        gap: 0.5rem;
+        padding: 0.35rem 0.85rem;
         border-radius: 9999px;
         background: rgba(16, 185, 129, 0.1);
         border: 1px solid rgba(16, 185, 129, 0.3);
-        color: #10b981;
+        color: #34d399;
+        font-family: 'JetBrains Mono', monospace;
         font-size: 0.75rem;
+        font-weight: 500;
+        margin-bottom: 1.5rem;
+      }
+      .prerender-heading {
+        color: #ffffff;
+        font-size: 2.75rem;
+        font-weight: 800;
+        letter-spacing: -0.025em;
+        line-height: 1.15;
+        margin: 0 0 0.75rem 0;
+      }
+      .prerender-heading span {
+        background: linear-gradient(to right, #34d399, #2dd4bf, #38bdf8);
+        -webkit-background-clip: text;
+        -webkit-text-fill-color: transparent;
+      }
+      .prerender-subtitle {
+        font-size: 1.25rem;
         font-weight: 600;
+        color: #f1f5f9;
         margin-bottom: 1rem;
+        display: flex;
+        align-items: center;
+        gap: 0.5rem;
+      }
+      .prerender-lead {
+        color: #94a3b8;
+        font-size: 1rem;
+        line-height: 1.65;
+        max-width: 620px;
+        margin-bottom: 1.75rem;
+      }
+      .prerender-lead strong {
+        color: #ffffff;
+      }
+      .prerender-actions {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 0.85rem;
+        margin-bottom: 2.5rem;
+      }
+      .prerender-btn-primary {
+        display: inline-flex;
+        align-items: center;
+        gap: 0.5rem;
+        padding: 0.75rem 1.5rem;
+        border-radius: 0.75rem;
+        background: #10b981;
+        color: #022c22;
+        font-weight: 700;
+        font-size: 0.875rem;
+        text-decoration: none;
+        box-shadow: 0 10px 15px -3px rgba(16, 185, 129, 0.25);
+      }
+      .prerender-btn-secondary {
+        display: inline-flex;
+        align-items: center;
+        gap: 0.5rem;
+        padding: 0.75rem 1.25rem;
+        border-radius: 0.75rem;
+        background: #0f172a;
+        color: #e2e8f0;
+        border: 1px solid #334155;
+        font-family: 'JetBrains Mono', monospace;
+        font-size: 0.825rem;
+        font-weight: 500;
+        text-decoration: none;
+      }
+      .prerender-grid {
+        display: grid;
+        grid-template-columns: 1fr;
+        gap: 2rem;
+        align-items: start;
+      }
+      @media (min-width: 1024px) {
+        .prerender-grid {
+          grid-template-columns: 1fr 1fr;
+        }
+      }
+      .prerender-terminal {
+        background: #070b14;
+        border: 1px solid #1e293b;
+        border-radius: 1rem;
+        overflow: hidden;
+        box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.7);
+      }
+      .prerender-terminal-bar {
+        background: #0b1220;
+        border-bottom: 1px solid #1e293b;
+        padding: 0.65rem 1rem;
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        font-family: 'JetBrains Mono', monospace;
+        font-size: 0.75rem;
+        color: #94a3b8;
+      }
+      .prerender-dots {
+        display: flex;
+        gap: 0.4rem;
+        align-items: center;
+      }
+      .prerender-dot {
+        width: 0.65rem;
+        height: 0.65rem;
+        border-radius: 9999px;
+      }
+      .prerender-code-body {
+        padding: 1.25rem;
+        font-family: 'JetBrains Mono', monospace;
+        font-size: 0.8rem;
+        line-height: 1.7;
+        color: #6ee7b7;
+        background: #060a12;
+        overflow-x: auto;
+      }
+      .prerender-section {
+        max-width: 1280px;
+        margin: 0 auto;
+        padding: 3.5rem 1.5rem;
+        border-top: 1px solid rgba(255, 255, 255, 0.08);
+      }
+      .prerender-section-title {
+        color: #ffffff;
+        font-size: 1.75rem;
+        font-weight: 700;
+        margin-bottom: 0.75rem;
       }
     </style>
   </head>
-  <body class="bg-[#030704] text-green-400 antialiased selection:bg-green-500 selection:text-black">
+  <body class="bg-[#06090e] text-slate-200 antialiased selection:bg-emerald-500 selection:text-black font-sans">
     <div id="root">
-      <!-- Semantic HTML Landmarks & Pre-rendered Content Shell for Crawlers & Link Previews -->
+      <!-- Semantic HTML Landmarks & High-Fidelity Pre-rendered Content Shell -->
       <div class="prerender-shell">
         <header class="prerender-nav">
-          <div>
-            <strong style="color: #ffffff; font-size: 1.1rem;">Meena Kannan</strong>
-            <span style="display: block; font-size: 0.75rem; color: #64748b;">Principal Systems &amp; Cloud Architect</span>
-          </div>
-          <nav aria-label="Primary Navigation">
-            <a href="#hero" style="color: #94a3b8; text-decoration: none; margin-right: 1rem;">Home</a>
-            <a href="#about" style="color: #94a3b8; text-decoration: none; margin-right: 1rem;">About</a>
-            <a href="#skills" style="color: #94a3b8; text-decoration: none; margin-right: 1rem;">Skills</a>
-            <a href="#projects" style="color: #94a3b8; text-decoration: none; margin-right: 1rem;">Projects</a>
-            <a href="#experience" style="color: #94a3b8; text-decoration: none; margin-right: 1rem;">Experience</a>
-            <a href="#contact" style="color: #10b981; text-decoration: none; font-weight: bold;">Contact</a>
+          <a href="#hero" class="prerender-brand">
+            <div class="prerender-brand-icon">
+              <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="16 18 22 12 16 6"></polyline><polyline points="8 6 2 12 8 18"></polyline></svg>
+            </div>
+            <div>
+              <strong style="color: #ffffff; font-size: 0.95rem; display: block; line-height: 1.2;">Meena Kannan</strong>
+              <span style="font-size: 0.7rem; color: #94a3b8; font-family: 'JetBrains Mono', monospace;">Principal Systems &amp; Cloud Architect</span>
+            </div>
+          </a>
+          <nav aria-label="Primary Navigation" style="display: flex; gap: 1.25rem; font-size: 0.825rem; font-family: 'JetBrains Mono', monospace;">
+            <a href="#hero" style="color: #f1f5f9; text-decoration: none;">Home</a>
+            <a href="#about" style="color: #94a3b8; text-decoration: none;">About</a>
+            <a href="#skills" style="color: #94a3b8; text-decoration: none;">Skills</a>
+            <a href="#architecture" style="color: #94a3b8; text-decoration: none;">Architecture</a>
+            <a href="#projects" style="color: #94a3b8; text-decoration: none;">Projects</a>
+            <a href="#experience" style="color: #94a3b8; text-decoration: none;">Experience</a>
+            <a href="#contact" style="color: #34d399; text-decoration: none; font-weight: 600;">Contact</a>
           </nav>
         </header>
 
         <main id="main-content">
           <!-- Hero Section Landmark -->
           <section id="hero" class="prerender-hero">
-            <div class="prerender-badge">Enterprise Distributed Systems</div>
-            <h1 class="prerender-heading">Meena Kannan</h1>
-            <h2 style="font-size: 1.25rem; color: #38bdf8; margin-bottom: 1rem;">Senior Full-Stack Software Engineer & Solutions Architect</h2>
-            <p style="max-width: 800px; color: #cbd5e1; font-size: 1rem; margin-bottom: 1.5rem;">
-              Architecting high-throughput, fault-tolerant enterprise systems with Java 21 (Virtual Threads), Spring Boot 3, React 19, Kafka, and Cloud-Native AWS infrastructure. Specializing in Clean Architecture, sub-100ms P99 latency, and resilient distributed microservices.
-            </p>
-            <div style="display: flex; gap: 1rem; margin-top: 1.5rem;">
-              <a href="#projects" style="padding: 0.6rem 1.2rem; background: #10b981; color: #022c22; text-decoration: none; font-weight: bold; border-radius: 8px;">Explore Systems Architecture</a>
-              <a href="/Meena_Kannan_Senior_Architect_Resume.pdf" target="_blank" style="padding: 0.6rem 1.2rem; background: #1e293b; color: #f8fafc; text-decoration: none; border: 1px solid #334155; border-radius: 8px;">Download Resume (PDF)</a>
+            <div class="prerender-grid">
+              <div>
+                <div class="prerender-status-pill">
+                  <span style="width: 7px; height: 7px; border-radius: 9999px; background: #34d399; display: inline-block;"></span>
+                  <span>Available for Enterprise Roles &amp; Strategic Consulting</span>
+                </div>
+                <h1 class="prerender-heading">
+                  Hi, I'm <span>Meena Kannan</span>
+                </h1>
+                <div class="prerender-subtitle">
+                  <span style="color: #34d399;">&gt;</span>
+                  <span>Senior Full-Stack &amp; Cloud Solutions Architect</span>
+                </div>
+                <p class="prerender-lead">
+                  Architecting mission-critical distributed microservices, multi-tenant enterprise SaaS, and resilient cloud infrastructure with <strong>Java 21</strong>, <strong>Spring Boot 3</strong>, <strong>React 19</strong>, and <strong>AWS</strong>. Specializing in Clean Architecture, sub-100ms P99 latency, and resilient distributed microservices.
+                </p>
+                <div class="prerender-actions">
+                  <a href="#projects" class="prerender-btn-primary">
+                    <span>Explore Systems Architecture</span>
+                    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><line x1="5" y1="12" x2="19" y2="12"></line><polyline points="12 5 19 12 12 19"></polyline></svg>
+                  </a>
+                  <a href="/Meena_Kannan_Senior_Architect_Resume.pdf" target="_blank" rel="noreferrer" class="prerender-btn-secondary">
+                    <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="#34d399" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path><polyline points="7 10 12 15 17 10"></polyline><line x1="12" y1="15" x2="12" y2="3"></line></svg>
+                    <span>Download Resume (PDF)</span>
+                  </a>
+                </div>
+              </div>
+
+              <!-- Terminal Cockpit High-Fidelity Shell -->
+              <div class="prerender-terminal">
+                <div class="prerender-terminal-bar">
+                  <div class="prerender-dots">
+                    <span class="prerender-dot" style="background: rgba(239, 68, 68, 0.8);"></span>
+                    <span class="prerender-dot" style="background: rgba(234, 179, 8, 0.8);"></span>
+                    <span class="prerender-dot" style="background: rgba(16, 185, 129, 0.8);"></span>
+                    <span style="margin-left: 0.5rem; color: #94a3b8;">architecture-spec.manifest</span>
+                  </div>
+                  <span style="color: #34d399;">Java 21 LTS</span>
+                </div>
+                <div class="prerender-code-body">
+                  <div style="color: #64748b; font-style: italic;">/**</div>
+                  <div style="color: #64748b; font-style: italic;">&nbsp;* @author Meena Kannan</div>
+                  <div style="color: #64748b; font-style: italic;">&nbsp;* @role Senior Full-Stack Cloud &amp; Software Architect</div>
+                  <div style="color: #64748b; font-style: italic;">&nbsp;* @spec Clean Architecture &amp; Domain-Driven Design (DDD)</div>
+                  <div style="color: #64748b; font-style: italic;">&nbsp;*/</div>
+                  <div style="color: #facc15;">@EnterpriseSystem(resilience = High, scale = Enterprise)</div>
+                  <div style="color: #c084fc;">public class MeenaKannanArchitect implements CloudArchitect {</div>
+                  <div style="color: #38bdf8;">&nbsp;&nbsp;&nbsp;&nbsp;private final String role = "Senior Full-Stack &amp; Solutions Architect";</div>
+                  <div style="color: #38bdf8;">&nbsp;&nbsp;&nbsp;&nbsp;private final int enterpriseExperienceYears = 8;</div>
+                  <div>&nbsp;&nbsp;&nbsp;&nbsp;public ArchitectureMetrics deliverBusinessOutcomes() {</div>
+                  <div style="color: #f472b6;">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;return ArchitectureMetrics.builder()</div>
+                  <div style="color: #99f6e4;">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;.productionUptime("99.99% SLA")</div>
+                  <div style="color: #99f6e4;">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;.latencyReduction("65% faster response")</div>
+                  <div style="color: #99f6e4;">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;.cloudCostReduction("40% monthly savings")</div>
+                  <div style="color: #99f6e4;">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;.build();</div>
+                  <div>&nbsp;&nbsp;&nbsp;&nbsp;}</div>
+                  <div style="color: #c084fc;">}</div>
+                </div>
+              </div>
             </div>
           </section>
 

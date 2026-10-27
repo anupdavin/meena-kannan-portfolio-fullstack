@@ -23,8 +23,11 @@ dist-ssr
 *.crt
 
 # Local agent caches and tools
-.agents/
 .antigravity/
+.agents/*
+!.agents/AGENT_MEMORY.md
+!.agents/memory/
+!.agents/skills/
 
 # Editor directories and files
 .vscode/*

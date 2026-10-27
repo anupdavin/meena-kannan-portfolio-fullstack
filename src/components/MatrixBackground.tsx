@@ -58,7 +58,7 @@ export default function MatrixBackground({ speed = 35 }: MatrixBackgroundProps) 
     }
 
     let lastDraw = Date.now()
-    const frameSpeed = isMobile ? Math.max(speed, 45) : speed
+    const frameSpeed = isMobile ? Math.max(speed, 65) : Math.max(speed, 50)
 
     const draw = () => {
       const now = Date.now()
@@ -66,7 +66,7 @@ export default function MatrixBackground({ speed = 35 }: MatrixBackgroundProps) 
         lastDraw = now
 
         // Translucent background fade trails
-        ctx.fillStyle = 'rgba(6, 9, 14, 0.1)'
+        ctx.fillStyle = 'rgba(6, 9, 14, 0.12)'
         ctx.fillRect(0, 0, window.innerWidth, window.innerHeight)
 
         ctx.font = `${fontSize}px 'JetBrains Mono', monospace`
@@ -75,17 +75,10 @@ export default function MatrixBackground({ speed = 35 }: MatrixBackgroundProps) 
           const char = characters.charAt(Math.floor(Math.random() * characters.length))
           const y = drops[i] * fontSize
           
-          if (Math.random() > 0.92) {
+          if (Math.random() > 0.94) {
             ctx.fillStyle = '#34d399' // Bright teal/emerald head
-            if (!isMobile) {
-              ctx.shadowBlur = 4
-              ctx.shadowColor = '#10b981'
-            }
           } else {
-            ctx.fillStyle = 'rgba(16, 185, 129, 0.25)' // Subtle dim stream
-            if (!isMobile) {
-              ctx.shadowBlur = 0
-            }
+            ctx.fillStyle = 'rgba(16, 185, 129, 0.15)' // Faint ambient stream
           }
 
           ctx.fillText(char, i * fontSize, y)

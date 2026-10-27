@@ -11,7 +11,7 @@ export function Button({
   size = 'md',
   ...props 
 }: ButtonProps){
-  const base = 'inline-flex items-center justify-center font-mono font-medium rounded-lg transition-all duration-200 disabled:opacity-50 disabled:cursor-not-allowed cursor-pointer focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-emerald-400 focus-visible:ring-offset-2 focus-visible:ring-offset-[#06090e]'
+  const base = 'inline-flex items-center justify-center font-mono font-medium rounded-lg transition-all duration-150 active:scale-[0.98] disabled:opacity-50 disabled:cursor-not-allowed cursor-pointer focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-emerald-400 focus-visible:ring-offset-2 focus-visible:ring-offset-[#06090e]'
   
   const sizeStyles = {
     sm: 'text-xs px-3 py-1.5 gap-1.5',

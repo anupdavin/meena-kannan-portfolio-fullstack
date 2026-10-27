@@ -44,32 +44,36 @@ export default function AboutTerminal() {
   const [copied, setCopied] = useState(false)
 
   const copyCode = () => {
-    const codeSnippet = `/**
- * Senior Full-Stack Cloud & Software Architect
- * Specialized in Clean Architecture, Event-Driven Systems & Cloud Platforms
- */
-@Component
-public class MeenaKannanArchitect {
-    private final String name = "Meena Kannan";
-    private final String focus = "Distributed Systems & Cloud Architecture";
-    private final String location = "Singapore / Remote";
-    
-    private final List<String> architecturalProficiencies = List.of(
-        "Clean Architecture (Ports & Adapters) & Domain-Driven Design",
-        "Java 21 (Virtual Threads) & Spring Boot 3 Microservices",
-        "Event-Driven Sagas, Transactional Outbox & Debezium CDC",
-        "High-Throughput Apache Kafka Partitioning & Ingestion",
-        "PostgreSQL (Row-Level Security) & Redis Clustered Caching",
-        "React 19, TypeScript & Real-Time WebSocket Streaming",
-        "Kubernetes (EKS), Terraform & Automated CI/CD Governance"
-    );
+    const codeSnippet = `package dev.meenakannan.core.architecture;
 
-    public SystemHealth verifyProductionReadiness() {
-        return SystemHealth.builder()
-            .experienceYears(8)
-            .zeroDowntimeDeployments(true)
-            .compliancePassingRate(1.0)
-            .build();
+/**
+ * Domain Core Architecture Specification: Ports & Adapters (Hexagonal)
+ * Zero framework coupling in core domain layer. Deterministic & testable.
+ */
+@DomainAggregate(boundedContext = "EnterpriseCore", version = "3.2.0")
+public final class CleanArchitectureSpec {
+
+    // Primary Port: Ingress transaction execution boundary
+    public record TransactionCommand(TenantId tenantId, OrderId orderId, Money amount) {}
+
+    // Secondary Port: Distributed Event Outbox publication
+    public interface OutboxPublisherPort {
+        void emitWithGuaranteedDelivery(DomainEvent event, IdempotencyKey key);
+    }
+
+    // Secondary Port: Sharded ACID Storage with Row-Level Security
+    public interface TenantPersistencePort {
+        Optional<TenantContext> loadWithIsolation(TenantId tenantId);
+        void commitTransactionWithOutbox(TenantContext ctx, OutboxRecord record);
+    }
+
+    // Ingress use-case orchestrator executed on Java 21 Virtual Threads
+    public TransactionReceipt orchestrate(TransactionCommand cmd, OutboxPublisherPort outbox) {
+        return VirtualThreadDispatcher.execute(() -> {
+            var validatedContext = validateDomainInvariants(cmd);
+            outbox.emitWithGuaranteedDelivery(new OrderInitiatedEvent(cmd), IdempotencyKey.generate());
+            return TransactionReceipt.approved(cmd.orderId(), LatencyBudget.sub80ms());
+        });
     }
 }`
     navigator.clipboard.writeText(codeSnippet)
@@ -112,7 +116,7 @@ public class MeenaKannanArchitect {
           <div className="flex items-center justify-between px-3.5 py-2.5 sm:px-4 sm:py-3 bg-[#0d1424] border-b border-slate-800">
             <span className="text-xs font-mono text-emerald-400 flex items-center gap-2">
               <Code className="w-4 h-4" />
-              DeveloperProfile.java
+              CleanArchitectureSpec.java
             </span>
             <button 
               onClick={copyCode}
@@ -125,32 +129,36 @@ public class MeenaKannanArchitect {
           </div>
 
           <pre className="p-3.5 sm:p-5 text-[11px] sm:text-xs font-mono text-emerald-300/90 leading-relaxed overflow-x-auto touch-scroll max-w-full">
-{`/**
- * Senior Full-Stack Cloud & Software Architect
- * Specialized in Clean Architecture, Event-Driven Systems & Cloud Platforms
- */
-@Component
-public class MeenaKannanArchitect {
-    private final String name = "Meena Kannan";
-    private final String focus = "Distributed Systems & Cloud Architecture";
-    private final String location = "Singapore / Remote";
-    
-    private final List<String> architecturalProficiencies = List.of(
-        "Clean Architecture (Ports & Adapters) & Domain-Driven Design",
-        "Java 21 (Virtual Threads) & Spring Boot 3 Microservices",
-        "Event-Driven Sagas, Transactional Outbox & Debezium CDC",
-        "High-Throughput Apache Kafka Partitioning & Ingestion",
-        "PostgreSQL (Row-Level Security) & Redis Clustered Caching",
-        "React 19, TypeScript & Real-Time WebSocket Streaming",
-        "Kubernetes (EKS), Terraform & Automated CI/CD Governance"
-    );
+{`package dev.meenakannan.core.architecture;
 
-    public SystemHealth verifyProductionReadiness() {
-        return SystemHealth.builder()
-            .experienceYears(8)
-            .zeroDowntimeDeployments(true)
-            .compliancePassingRate(1.0)
-            .build();
+/**
+ * Domain Core Architecture Specification: Ports & Adapters (Hexagonal)
+ * Zero framework coupling in core domain layer. Deterministic & testable.
+ */
+@DomainAggregate(boundedContext = "EnterpriseCore", version = "3.2.0")
+public final class CleanArchitectureSpec {
+
+    // Primary Port: Ingress transaction execution boundary
+    public record TransactionCommand(TenantId tenantId, OrderId orderId, Money amount) {}
+
+    // Secondary Port: Distributed Event Outbox publication
+    public interface OutboxPublisherPort {
+        void emitWithGuaranteedDelivery(DomainEvent event, IdempotencyKey key);
+    }
+
+    // Secondary Port: Sharded ACID Storage with Row-Level Security
+    public interface TenantPersistencePort {
+        Optional<TenantContext> loadWithIsolation(TenantId tenantId);
+        void commitTransactionWithOutbox(TenantContext ctx, OutboxRecord record);
+    }
+
+    // Ingress use-case orchestrator executed on Java 21 Virtual Threads
+    public TransactionReceipt orchestrate(TransactionCommand cmd, OutboxPublisherPort outbox) {
+        return VirtualThreadDispatcher.execute(() -> {
+            var validatedContext = validateDomainInvariants(cmd);
+            outbox.emitWithGuaranteedDelivery(new OrderInitiatedEvent(cmd), IdempotencyKey.generate());
+            return TransactionReceipt.approved(cmd.orderId(), LatencyBudget.sub80ms());
+        });
     }
 }`}
           </pre>
