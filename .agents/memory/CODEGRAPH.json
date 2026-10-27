@@ -1,6 +1,6 @@
 {
   "version": "1.0.0",
-  "generatedAt": "2026-10-27T15:23:18.660Z",
+  "generatedAt": "2026-10-27T15:35:31.387Z",
   "nodes": {
     "src/components/architecture/AdrExplorer.tsx": {
       "file": "src/components/architecture/AdrExplorer.tsx",
@@ -180,6 +180,18 @@
         "EdgeCdnSandbox"
       ],
       "loc": 459
+    },
+    "src/components/architecture/HeroArchitectureTopology.tsx": {
+      "file": "src/components/architecture/HeroArchitectureTopology.tsx",
+      "imports": [
+        "react",
+        "framer-motion",
+        "lucide-react"
+      ],
+      "exports": [
+        "HeroArchitectureTopology"
+      ],
+      "loc": 424
     },
     "src/components/architecture/KafkaStreamMonitor.tsx": {
       "file": "src/components/architecture/KafkaStreamMonitor.tsx",
@@ -464,12 +476,13 @@
       "imports": [
         "react",
         "framer-motion",
-        "lucide-react"
+        "lucide-react",
+        "@/components/architecture/HeroArchitectureTopology"
       ],
       "exports": [
         "TerminalHero"
       ],
-      "loc": 560
+      "loc": 599
     },
     "src/components/ui/badge.tsx": {
       "file": "src/components/ui/badge.tsx",
@@ -822,6 +835,7 @@
     "DatabaseShardingSandbox": "src/components/architecture/DatabaseShardingSandbox.tsx",
     "DistributedTraceInspector": "src/components/architecture/DistributedTraceInspector.tsx",
     "EdgeCdnSandbox": "src/components/architecture/EdgeCdnSandbox.tsx",
+    "HeroArchitectureTopology": "src/components/architecture/HeroArchitectureTopology.tsx",
     "KafkaStreamMonitor": "src/components/architecture/KafkaStreamMonitor.tsx",
     "MultiRegionReplicationSandbox": "src/components/architecture/MultiRegionReplicationSandbox.tsx",
     "RateLimiterSandbox": "src/components/architecture/RateLimiterSandbox.tsx",

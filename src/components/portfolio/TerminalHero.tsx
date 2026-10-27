@@ -27,6 +27,7 @@ import {
   Database,
   CloudLightning
 } from 'lucide-react'
+import HeroArchitectureTopology from '@/components/architecture/HeroArchitectureTopology'
 
 type FileTab = 'java' | 'k8s' | 'metrics' | 'mcp'
 
@@ -181,6 +182,7 @@ const ARCHITECTURE_ENGINES = [
 ]
 
 export default function TerminalHero() {
+  const [cockpitMode, setCockpitMode] = useState<'topology' | 'manifest'>('topology')
   const [activeTab, setActiveTab] = useState<FileTab>('java')
   const [currentLine, setCurrentLine] = useState(() => TABS[0].lines.length)
   const [currentChar, setCurrentChar] = useState(0)
@@ -454,101 +456,138 @@ export default function TerminalHero() {
                 <div className="w-2.5 h-2.5 sm:w-3 sm:h-3 rounded-full bg-yellow-500/80" />
                 <div className="w-2.5 h-2.5 sm:w-3 sm:h-3 rounded-full bg-emerald-500/80" />
                 <span className="ml-1.5 sm:ml-2 text-[10px] sm:text-xs font-mono text-slate-400">
-                  architecture-spec.manifest
+                  {cockpitMode === 'topology' ? 'system-topology.svg' : 'architecture-spec.manifest'}
                 </span>
               </div>
 
-              {/* Controls: Replay & Copy */}
-              <div className="flex items-center gap-1 sm:gap-2 text-xs font-mono">
+              {/* View Switcher: Interactive Topology vs Code Spec */}
+              <div className="flex items-center gap-1 bg-slate-900/90 p-0.5 rounded-lg border border-slate-800 text-[10px] sm:text-[11px] font-mono">
                 <button
-                  onClick={restartTyping}
-                  title="Replay Code Animation"
-                  aria-label="Replay Code Animation"
-                  className="p-1.5 rounded text-slate-400 hover:text-emerald-400 hover:bg-slate-800 transition-colors cursor-pointer"
+                  onClick={() => setCockpitMode('topology')}
+                  className={`px-2 sm:px-2.5 py-1 rounded transition-all cursor-pointer flex items-center gap-1.5 ${
+                    cockpitMode === 'topology'
+                      ? 'bg-emerald-500/20 text-emerald-300 border border-emerald-500/40 font-bold shadow-sm'
+                      : 'text-slate-400 hover:text-white border border-transparent'
+                  }`}
+                  aria-label="View Live Interactive Architecture Topology"
                 >
-                  <RotateCcw className="w-3.5 h-3.5" />
+                  <Activity className="w-3 h-3 text-emerald-400" />
+                  <span>Architecture Canvas</span>
                 </button>
+
                 <button
-                  onClick={copyCurrentSnippet}
-                  title="Copy Code"
-                  aria-label="Copy Code Snippet"
-                  className="flex items-center gap-1 px-2 py-1 rounded text-slate-400 hover:text-white hover:bg-slate-800 transition-colors cursor-pointer text-[10px] sm:text-[11px]"
+                  onClick={() => setCockpitMode('manifest')}
+                  className={`px-2 sm:px-2.5 py-1 rounded transition-all cursor-pointer flex items-center gap-1.5 ${
+                    cockpitMode === 'manifest'
+                      ? 'bg-emerald-500/20 text-emerald-300 border border-emerald-500/40 font-bold shadow-sm'
+                      : 'text-slate-400 hover:text-white border border-transparent'
+                  }`}
+                  aria-label="View Code and Architecture Manifest"
                 >
-                  {copied ? <Check className="w-3 h-3 text-emerald-400" /> : <Copy className="w-3 h-3" />}
-                  <span>{copied ? 'Copied' : 'Copy'}</span>
+                  <Code2 className="w-3 h-3 text-cyan-400" />
+                  <span>Code Manifest</span>
                 </button>
               </div>
             </div>
 
-            {/* File Switcher Tabs */}
-            <div className="flex items-center bg-[#080d19] border-b border-slate-800 px-2 pt-1 gap-1 overflow-x-auto scrollbar-none touch-scroll">
-              {TABS.map((tab) => {
-                const Icon = tab.icon
-                const isActive = activeTab === tab.id
-                return (
-                  <button
-                    key={tab.id}
-                    onClick={() => handleTabChange(tab.id)}
-                    className={`flex items-center gap-1.5 px-2.5 py-1.5 sm:px-3 sm:py-2 rounded-t-lg font-mono text-[11px] sm:text-xs transition-all cursor-pointer shrink-0 border-t border-l border-r ${
-                      isActive
-                        ? 'bg-[#070b14] text-emerald-400 border-slate-700 shadow-sm'
-                        : 'bg-transparent text-slate-500 border-transparent hover:text-slate-300'
-                    }`}
-                  >
-                    <Icon className={`w-3 h-3 sm:w-3.5 sm:h-3.5 ${isActive ? 'text-emerald-400' : 'text-slate-500'}`} />
-                    <span className="truncate max-w-[140px] sm:max-w-none">{tab.filename}</span>
-                    {isActive && (
-                      <span className="hidden sm:inline px-1.5 py-0.2 rounded bg-emerald-500/20 text-[9px] text-emerald-300 border border-emerald-500/30">
-                        {tab.badge}
-                      </span>
-                    )}
-                  </button>
-                )
-              })}
-            </div>
-
-            {/* Code Output Body */}
-            <div className="p-3 sm:p-5 font-mono text-[11px] sm:text-xs md:text-sm overflow-x-auto min-h-[240px] sm:min-h-[380px] max-h-[320px] sm:max-h-[460px] leading-relaxed selection:bg-emerald-700 selection:text-white bg-[#060a12] touch-scroll">
-              {displayedCode.map((rawLine, idx) => {
-                const line = typeof rawLine === 'string' ? rawLine : ''
-                let colorClass = 'text-emerald-300'
-                if (line.startsWith('/**') || line.startsWith(' *') || line.startsWith('#')) colorClass = 'text-slate-500 italic'
-                else if (line.startsWith('//')) colorClass = 'text-slate-500 italic'
-                else if (line.startsWith('@')) colorClass = 'text-yellow-300 font-semibold'
-                else if (line.includes('public class') || line.includes('public ArchitectureMetrics') || line.includes('implements')) colorClass = 'text-purple-400 font-semibold'
-                else if (line.includes('private final') || line.includes('apiVersion:') || line.includes('kind:')) colorClass = 'text-cyan-300'
-                else if (line.includes('return') || line.includes('new') || line.includes('spec:') || line.includes('metadata:')) colorClass = 'text-pink-400'
-                else if (line.includes('"')) colorClass = 'text-teal-200'
-
-                return (
-                  <div key={idx} className="flex gap-2 sm:gap-3 hover:bg-slate-800/40 px-1 rounded transition-colors">
-                    <span className="w-4 sm:w-6 text-right text-slate-600 select-none text-[10px] sm:text-[11px] pt-[2px] shrink-0">
-                      {idx + 1}
-                    </span>
-                    <span className={`${colorClass} break-all sm:break-normal`}>
-                      {line}
-                      {idx === currentLine && currentLine < activeContent.lines.length && (
-                        <span className="inline-block w-1.5 sm:w-2 h-3.5 sm:h-4 bg-emerald-400 ml-1 cursor-blink align-middle" />
-                      )}
-                    </span>
+            {cockpitMode === 'topology' ? (
+              <HeroArchitectureTopology />
+            ) : (
+              <div>
+                {/* File Switcher Tabs and Sub-Header Controls */}
+                <div className="flex items-center justify-between bg-[#080d19] border-b border-slate-800 px-2 pt-1 gap-1">
+                  <div className="flex items-center gap-1 overflow-x-auto scrollbar-none touch-scroll">
+                    {TABS.map((tab) => {
+                      const Icon = tab.icon
+                      const isActive = activeTab === tab.id
+                      return (
+                        <button
+                          key={tab.id}
+                          onClick={() => handleTabChange(tab.id)}
+                          className={`flex items-center gap-1.5 px-2.5 py-1.5 sm:px-3 sm:py-2 rounded-t-lg font-mono text-[11px] sm:text-xs transition-all cursor-pointer shrink-0 border-t border-l border-r ${
+                            isActive
+                              ? 'bg-[#070b14] text-emerald-400 border-slate-700 shadow-sm'
+                              : 'bg-transparent text-slate-500 border-transparent hover:text-slate-300'
+                          }`}
+                        >
+                          <Icon className={`w-3 h-3 sm:w-3.5 sm:h-3.5 ${isActive ? 'text-emerald-400' : 'text-slate-500'}`} />
+                          <span className="truncate max-w-[140px] sm:max-w-none">{tab.filename}</span>
+                          {isActive && (
+                            <span className="hidden sm:inline px-1.5 py-0.2 rounded bg-emerald-500/20 text-[9px] text-emerald-300 border border-emerald-500/30">
+                              {tab.badge}
+                            </span>
+                          )}
+                        </button>
+                      )
+                    })}
                   </div>
-                )
-              })}
-            </div>
 
-            {/* Terminal Window Footer */}
-            <div className="px-3 sm:px-4 py-2 sm:py-2.5 bg-[#0a101d] border-t border-slate-800 flex items-center justify-between text-[10px] sm:text-[11px] text-slate-400 font-mono">
-              <div className="flex items-center gap-1.5 sm:gap-2">
-                <CheckCircle2 className="w-3 sm:w-3.5 h-3 sm:w-3.5 text-emerald-400" />
-                <span className="text-emerald-300">{activeContent.language}</span>
-                <span className="text-slate-600 hidden sm:inline">•</span>
-                <span className="text-slate-500 hidden sm:inline">{activeContent.lines.length} lines</span>
+                  {/* Controls: Replay & Copy */}
+                  <div className="flex items-center gap-1 sm:gap-2 text-xs font-mono pb-1 shrink-0">
+                    <button
+                      onClick={restartTyping}
+                      title="Replay Code Animation"
+                      aria-label="Replay Code Animation"
+                      className="p-1.5 rounded text-slate-400 hover:text-emerald-400 hover:bg-slate-800 transition-colors cursor-pointer"
+                    >
+                      <RotateCcw className="w-3.5 h-3.5" />
+                    </button>
+                    <button
+                      onClick={copyCurrentSnippet}
+                      title="Copy Code"
+                      aria-label="Copy Code Snippet"
+                      className="flex items-center gap-1 px-2 py-1 rounded text-slate-400 hover:text-white hover:bg-slate-800 transition-colors cursor-pointer text-[10px] sm:text-[11px]"
+                    >
+                      {copied ? <Check className="w-3 h-3 text-emerald-400" /> : <Copy className="w-3 h-3" />}
+                      <span>{copied ? 'Copied' : 'Copy'}</span>
+                    </button>
+                  </div>
+                </div>
+
+                {/* Code Output Body */}
+                <div className="p-3 sm:p-5 font-mono text-[11px] sm:text-xs md:text-sm overflow-x-auto min-h-[240px] sm:min-h-[380px] max-h-[320px] sm:max-h-[460px] leading-relaxed selection:bg-emerald-700 selection:text-white bg-[#060a12] touch-scroll">
+                  {displayedCode.map((rawLine, idx) => {
+                    const line = typeof rawLine === 'string' ? rawLine : ''
+                    let colorClass = 'text-emerald-300'
+                    if (line.startsWith('/**') || line.startsWith(' *') || line.startsWith('#')) colorClass = 'text-slate-500 italic'
+                    else if (line.startsWith('//')) colorClass = 'text-slate-500 italic'
+                    else if (line.startsWith('@')) colorClass = 'text-yellow-300 font-semibold'
+                    else if (line.includes('public class') || line.includes('public ArchitectureMetrics') || line.includes('implements')) colorClass = 'text-purple-400 font-semibold'
+                    else if (line.includes('private final') || line.includes('apiVersion:') || line.includes('kind:')) colorClass = 'text-cyan-300'
+                    else if (line.includes('return') || line.includes('new') || line.includes('spec:') || line.includes('metadata:')) colorClass = 'text-pink-400'
+                    else if (line.includes('"')) colorClass = 'text-teal-200'
+
+                    return (
+                      <div key={idx} className="flex gap-2 sm:gap-3 hover:bg-slate-800/40 px-1 rounded transition-colors">
+                        <span className="w-4 sm:w-6 text-right text-slate-600 select-none text-[10px] sm:text-[11px] pt-[2px] shrink-0">
+                          {idx + 1}
+                        </span>
+                        <span className={`${colorClass} break-all sm:break-normal`}>
+                          {line}
+                          {idx === currentLine && currentLine < activeContent.lines.length && (
+                            <span className="inline-block w-1.5 sm:w-2 h-3.5 sm:h-4 bg-emerald-400 ml-1 cursor-blink align-middle" />
+                          )}
+                        </span>
+                      </div>
+                    )
+                  })}
+                </div>
+
+                {/* Terminal Window Footer */}
+                <div className="px-3 sm:px-4 py-2 sm:py-2.5 bg-[#0a101d] border-t border-slate-800 flex items-center justify-between text-[10px] sm:text-[11px] text-slate-400 font-mono">
+                  <div className="flex items-center gap-1.5 sm:gap-2">
+                    <CheckCircle2 className="w-3 sm:w-3.5 h-3 sm:w-3.5 text-emerald-400" />
+                    <span className="text-emerald-300">{activeContent.language}</span>
+                    <span className="text-slate-600 hidden sm:inline">•</span>
+                    <span className="text-slate-500 hidden sm:inline">{activeContent.lines.length} lines</span>
+                  </div>
+                  <div className="flex items-center gap-1.5 sm:gap-2">
+                    <span className="w-1.5 h-1.5 sm:w-2 sm:h-2 rounded-full bg-emerald-400" />
+                    <span className="text-slate-400">Validated Architecture Spec</span>
+                  </div>
+                </div>
               </div>
-              <div className="flex items-center gap-1.5 sm:gap-2">
-                <span className="w-1.5 h-1.5 sm:w-2 sm:h-2 rounded-full bg-emerald-400" />
-                <span className="text-slate-400">Validated Architecture Spec</span>
-              </div>
-            </div>
+            )}
 
           </div>
         </motion.div>

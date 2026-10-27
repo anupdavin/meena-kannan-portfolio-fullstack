@@ -355,6 +355,26 @@ describe('Terminal Hero & Route Fault-Tolerance Verification', () => {
     assert.ok(!/[\u2013\u2014]/.test(heroCode), 'TerminalHero must contain zero em/en-dashes');
   });
 
+  test('HeroArchitectureTopology renders interactive multi-node distributed topology in TerminalHero', () => {
+    const topologyPath = path.join(rootDir, 'src', 'components', 'architecture', 'HeroArchitectureTopology.tsx');
+    assert.ok(fs.existsSync(topologyPath), 'HeroArchitectureTopology.tsx must exist');
+
+    const topoCode = fs.readFileSync(topologyPath, 'utf8');
+    assert.ok(topoCode.includes('Cloudflare / Edge CDN'), 'Must define edge ingress node');
+    assert.ok(topoCode.includes('Envoy API Gateway'), 'Must define envoy gateway node');
+    assert.ok(topoCode.includes('Spring Boot 3 Core'), 'Must define spring boot compute node');
+    assert.ok(topoCode.includes('Apache Kafka Event Mesh'), 'Must define kafka event node');
+    assert.ok(topoCode.includes('Aurora Global & Redis'), 'Must define multi-region database storage node');
+    assert.ok(topoCode.includes('triggerTrafficBurst'), 'Must support interactive 10K RPS burst injection');
+    assert.ok(topoCode.includes('triggerFailoverSimulation'), 'Must support interactive AZ failover simulation');
+    assert.ok(!/[\u2013\u2014]/.test(topoCode), 'HeroArchitectureTopology must contain zero em/en-dashes');
+
+    const heroCode = fs.readFileSync(path.join(rootDir, 'src', 'components', 'portfolio', 'TerminalHero.tsx'), 'utf8');
+    assert.ok(heroCode.includes('HeroArchitectureTopology'), 'TerminalHero must import and render HeroArchitectureTopology');
+    assert.ok(heroCode.includes("cockpitMode === 'topology'"), 'TerminalHero must support topology cockpit mode');
+    assert.ok(heroCode.includes("cockpitMode === 'manifest'"), 'TerminalHero must support manifest cockpit mode');
+  });
+
   test('ContactTerminal guards against undefined line strings', () => {
     const contactCode = fs.readFileSync(path.join(rootDir, 'src', 'components', 'portfolio', 'ContactTerminal.tsx'), 'utf8');
     assert.ok(contactCode.includes("const line = typeof rawLine === 'string' ? rawLine : ''"), 'ContactTerminal must sanitize rawLine');
