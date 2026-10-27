@@ -24,6 +24,8 @@ interface ChatDoc {
 
 const QUICK_QUESTIONS = [
   "What is Meena's primary tech stack?",
+  "Explain Meena's AI architecture & MCP codex",
+  "What are Meena's Architectural Decision Records (ADR)?",
   "Tell me about the Enterprise SaaS project",
   "Is Meena open to remote engineering roles?",
   "What are Meena's cloud & DevOps skills?",
@@ -38,6 +40,22 @@ const FAQ_MAP: Record<string, { answer: string; url?: string }> = {
   'skills': {
     answer: "Meena's core stack includes Java 21, Spring Boot 3, Spring Security, React 19, TypeScript, PostgreSQL, Redis, Apache Kafka, AWS, Docker, Kubernetes, and Clean Architecture / DDD.",
     url: "#skills"
+  },
+  'ai': {
+    answer: "Meena specializes in modern AI architectures: Agentic AI workflows with autonomous goal decomposition, Large Reasoning Models (LRMs) utilizing deliberate test-time compute, pgvector similarity indexing, production RAG with hybrid BM25 lexical ranking, and Model Context Protocol (MCP) server design. Explore the interactive ByteByteGo AI Architecture Codex in the Architecture section.",
+    url: "#architecture"
+  },
+  'mcp': {
+    answer: "Model Context Protocol (MCP) is an open standard that decouples AI models from system tools and data sources. Meena implements enterprise MCP servers in Java 21 LTS with JSON-RPC over stdio and SSE transports, exposing secure database topology queries, Kafka consumer lag telemetry, and chaos simulation tools.",
+    url: "#architecture"
+  },
+  'adr': {
+    answer: "Meena documents engineering trade-offs using formal Architectural Decision Records (ADRs). Her ledger includes ADR-001 (Choreographed Saga), ADR-002 (Transactional Outbox CDC), ADR-003 (Java 21 Virtual Threads), ADR-004 (L1 Caffeine + L2 Redis Caching), ADR-005 (Zero-Trust Envoy mTLS), and ADR-006 (Model Context Protocol). Inspect them in the interactive ADR Explorer in the Architecture Lab.",
+    url: "#architecture"
+  },
+  'saga': {
+    answer: "Meena implements Choreographed Saga transactions using Kafka event streaming and compensating transactions. When payment or inventory steps fail, automated rollback events restore ledger consistency without blocking distributed 2PC locks.",
+    url: "#architecture"
   },
   'saas': {
     answer: "Meena built the Meena Kannan Enterprise SaaS Platform: a multi-tenant portfolio & project management SaaS with Clean Architecture, Spring Boot 3, PostgreSQL, Redis caching, and Docker (99.99% SLA).",
@@ -125,6 +143,18 @@ export default function ChatWidget() {
     const q = query.toLowerCase()
 
     // 1. Keyword check in FAQ
+    if (q.includes('mcp') || q.includes('model context protocol')) {
+      return { text: FAQ_MAP.mcp.answer, url: FAQ_MAP.mcp.url }
+    }
+    if (q.includes('agent') || q.includes('rag') || q.includes('vector') || q.includes('lrm') || q.includes('bytebytego') || q.includes('codex') || q.includes('ai systems') || q.includes('artificial intelligence') || /\bai\b/.test(q)) {
+      return { text: FAQ_MAP.ai.answer, url: FAQ_MAP.ai.url }
+    }
+    if (q.includes('adr') || q.includes('decision') || q.includes('tradeoff')) {
+      return { text: FAQ_MAP.adr.answer, url: FAQ_MAP.adr.url }
+    }
+    if (q.includes('saga') || q.includes('outbox') || q.includes('cdc') || q.includes('compensat')) {
+      return { text: FAQ_MAP.saga.answer, url: FAQ_MAP.saga.url }
+    }
     if (q.includes('skill') || q.includes('stack') || q.includes('technolog')) {
       return { text: FAQ_MAP.skills.answer, url: FAQ_MAP.skills.url }
     }

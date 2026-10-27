@@ -20,6 +20,8 @@
 
 | Run Timestamp | Focus Area | Action Completed | Lessons Learned / Gotchas |
 | :--- | :--- | :--- | :--- |
+| `2026-10-27 08:48:56` | Autonomous Verification | All 35 tests passed, 0 lint warnings, CodeGraph synchronized. | Verified zero regressions under Superpowers TDD protocol. |
+| `2026-10-27 08:45:12` | Autonomous Verification | All 35 tests passed, 0 lint warnings, CodeGraph synchronized. | Verified zero regressions under Superpowers TDD protocol. |
 | `2026-10-27 08:17:43` | Autonomous Verification | All 35 tests passed, 0 lint warnings, CodeGraph synchronized. | Verified zero regressions under Superpowers TDD protocol. |
 | `2026-10-27 08:17:00` | Career Milestone Telemetry (Track I) | Added deep inspection for `experience <id>` (aliases `exp`, `timeline`) in `InteractiveCli.tsx` (`exp 1`/`lead`, `exp 2`/`fintech`, `exp 3`/`saas`, `exp 4`/`web`) with squad leadership scale, cloud spend cut, and SLA metrics; expanded test suite to 42/42 passing tests. | Providing interactive CLI inspection of leadership scope and concrete architectural outcomes reinforces high-craft developer UX for senior technical interviewers. |
 | `2026-10-27 08:16:51` | Autonomous Verification | All 35 tests passed, 0 lint warnings, CodeGraph synchronized. | Verified zero regressions under Superpowers TDD protocol. |
@@ -27,6 +29,7 @@
 | `2026-10-27 08:02:00` | Deep Project Telemetry (Track H) | Implemented `project <id>` deep-dive command in `InteractiveCli.tsx` (`project 1`/`saas`, `project 2`/`saga`, `project 3`/`realtime`, `project 4`/`fintech`) with bottleneck drivers, metrics, and ADR rationale; expanded test suite to 41/41 passing tests. | Providing instant terminal access to deep enterprise project telemetry allows technical recruiters and leads to inspect architectural impact metrics without clicking through modals. |
 | `2026-10-27 08:02:09` | Autonomous Verification | All 35 tests passed, 0 lint warnings, CodeGraph synchronized. | Verified zero regressions under Superpowers TDD protocol. |
 | `2026-10-27 07:47:53` | Autonomous Verification | All 35 tests passed, 0 lint warnings, CodeGraph synchronized. | Verified zero regressions under Superpowers TDD protocol. |
+| `2026-10-27 08:48:00` | Conversational AI Grounding (Track K) | Enriched `public/chat/index.json` with 4 structured knowledge docs (AI systems codex, ADR ledger, MCP enterprise architecture, Saga CDC); upgraded `ChatWidget.tsx` with dedicated MCP/AI/ADR/Saga FAQs and quick questions; expanded test suite to 43/43 passing tests. | Grounding the chat assistant with deep architectural knowledge ensures recruiters and technical leaders querying MCP or ADRs receive authoritative, deep-linked technical answers. |
 | `2026-10-27 08:34:00` | Terminal Hero Protocol Tab (Track J) | Added 4th tab `mcp` (`mcp-server-config.json`) to `TerminalHero.tsx` showcasing Model Context Protocol configuration, eliminated unused imports across architecture components, re-indexed CodeGraph (35 files, 78 symbols), verified with 42/42 tests passing. | Showcasing live MCP server configuration in the Hero terminal immediately communicates hands-on expertise in Agentic AI standards to visiting engineering leaders. |
 | `2026-10-27 08:18:00` | Career & Leadership Telemetry (Track I) | Added `experience <id>` (aliases `exp`, `timeline`) command to `InteractiveCli.tsx` displaying squad scale (12+ engineers across 3 squads), AWS spend cuts, and SLA telemetry; expanded test suite to 42/42 passing tests. | Equips hiring managers and CTOs with immediate CLI access to verifiable milestone achievements. |
 | `2026-10-27 07:47:00` | AI Systems & Tech Stack (Track G) | Added dedicated 'AI Systems & Protocols' category to `TechStack.tsx` (MCP, RAG, pgvector, Agentic AI, LRMs), updated CLI `skills` command in `InteractiveCli.tsx`, expanded test suite to 40/40 passing tests. | Anchoring modern agentic and vector capabilities into the tech stack directly reinforces the ByteByteGo AI systems codex and JSON-LD structured schemas. |
@@ -126,6 +129,11 @@
 - [x] **Task J1:** Add 4th tab `mcp` (`mcp-server-config.json`) to `TerminalHero.tsx` showcasing Model Context Protocol configuration.
 - [x] **Task J2:** Eliminate unused imports in `AdrExplorer.tsx` and `ByteByteGoAiCodex.tsx` for 0 ESLint warnings.
 - [x] **Task J3:** Expand TDD test assertions in `tests/portfolio.test.mjs` verifying MCP tab, config parameters, and zero em/en-dashes (42/42 passing tests).
+
+### Track K: Conversational AI Grounding & Knowledge Retrieval
+- [x] **Task K1:** Enrich `public/chat/index.json` with 4 structured documents: ByteByteGo AI systems codex, ADR ledger, MCP enterprise architecture, and Saga CDC.
+- [x] **Task K2:** Upgrade `ChatWidget.tsx` with dedicated MCP/AI/ADR/Saga FAQs and quick questions.
+- [x] **Task K3:** Expand test assertions in `tests/portfolio.test.mjs` verifying AI/MCP chat resolution and zero em/en-dashes (43/43 passing tests).
 
 ---
 

@@ -1,6 +1,6 @@
 {
   "version": "1.0.0",
-  "generatedAt": "2026-10-27T08:34:14.753Z",
+  "generatedAt": "2026-10-27T08:49:02.047Z",
   "nodes": {
     "src/components/architecture/AdrExplorer.tsx": {
       "file": "src/components/architecture/AdrExplorer.tsx",
@@ -172,7 +172,7 @@
       "exports": [
         "ChatWidget"
       ],
-      "loc": 366
+      "loc": 396
     },
     "src/components/MatrixBackground.tsx": {
       "file": "src/components/MatrixBackground.tsx",

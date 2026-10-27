@@ -22,10 +22,18 @@ describe('Portfolio Verification & Asset Integrity', () => {
     const chatIndexPath = path.join(rootDir, 'public', 'chat', 'index.json');
     assert.ok(fs.existsSync(chatIndexPath), 'Chat index file should exist');
     
-    const content = JSON.parse(fs.readFileSync(chatIndexPath, 'utf8'));
+    const rawContent = fs.readFileSync(chatIndexPath, 'utf8');
+    assert.ok(!/[\u2013\u2014]/.test(rawContent), 'Chat index must contain zero em/en-dashes');
+    const content = JSON.parse(rawContent);
     assert.ok(Array.isArray(content), 'Chat knowledge base should be an array');
-    assert.ok(content.length >= 5, 'Knowledge base should have multiple entries');
+    assert.ok(content.length >= 10, 'Knowledge base should have at least 10 structured entries');
     
+    const ids = content.map(c => c.id);
+    assert.ok(ids.includes('ai-codex'), 'Knowledge base must index ByteByteGo AI Architecture Codex');
+    assert.ok(ids.includes('architectural-decisions'), 'Knowledge base must index Architectural Decision Records');
+    assert.ok(ids.includes('model-context-protocol'), 'Knowledge base must index Model Context Protocol');
+    assert.ok(ids.includes('saga-distributed-transactions'), 'Knowledge base must index Saga transactions');
+
     for (const item of content) {
       assert.ok(item.id, 'Entry must have an ID');
       assert.ok(item.title, 'Entry must have a title');
@@ -384,6 +392,17 @@ describe('Quality, Antislop, Accessibility & Performance Hygiene Verification', 
     assert.ok(chatCode.includes("e.key === 'Escape'"), 'ChatWidget must dismiss on Escape key press');
     assert.ok(chatCode.includes('role="dialog"'), 'ChatWidget modal must specify role="dialog"');
     assert.ok(chatCode.includes('aria-modal="true"'), 'ChatWidget modal must specify aria-modal="true"');
+  });
+
+  test('ChatWidget.tsx provides conversational AI retrieval for MCP, AI codex, and ADRs', () => {
+    const chatCode = fs.readFileSync(path.join(rootDir, 'src', 'components', 'ChatWidget.tsx'), 'utf8');
+    assert.ok(chatCode.includes("'mcp': {"), 'ChatWidget must define FAQ for MCP');
+    assert.ok(chatCode.includes("'ai': {"), 'ChatWidget must define FAQ for AI architectures');
+    assert.ok(chatCode.includes("'adr': {"), 'ChatWidget must define FAQ for ADRs');
+    assert.ok(chatCode.includes("'saga': {"), 'ChatWidget must define FAQ for Saga transactions');
+    assert.ok(chatCode.includes('Explain Meena\'s AI architecture & MCP codex'), 'ChatWidget must include MCP codex quick question');
+    assert.ok(chatCode.includes('What are Meena\'s Architectural Decision Records (ADR)?'), 'ChatWidget must include ADR quick question');
+    assert.ok(!/[\u2013\u2014]/.test(chatCode), 'ChatWidget must contain zero em/en-dashes');
   });
 
   test('vite.config.ts configures architecture-data chunk splitting', () => {
