@@ -57,3 +57,13 @@ This document serves as the persistent semantic memory layer for AI coding agent
 * **Context:** Modern Lead/Principal Architects must demonstrate deep mastery over Agentic AI, Large Reasoning Models (LRMs), Vector Search, RAG, and the Model Context Protocol (MCP).
 * **Decision:** Implemented a dedicated 3-column visual codex matching ByteByteGo's editorial infographic standards. Features dual-mode rendering (Terminal Dark / Studio Canvas) and vector SVG schematics.
 * **Blast Radius:** Integrated inside `ArchitectureLab.tsx`. Tested with zero regression to existing layout.
+
+---
+
+## ADR-021: Distributed Event Sourcing & CQRS Snapshotting Sandbox
+* **Status:** Accepted & Enforced
+* **Target Components:** [`EventSourcingSandbox.tsx`](file:///src/components/architecture/EventSourcingSandbox.tsx), [`eventSourcing.ts`](file:///src/data/eventSourcing.ts), [`ArchitectureLab.tsx`](file:///src/components/portfolio/ArchitectureLab.tsx)
+* **Context:** High-throughput transactional architectures require complete audit provenance, deterministic point-in-time replay, and independent scaling of write aggregates and read projections without distributed locking or data migration downtime.
+* **Decision:** Implemented an interactive 5-paradigm sandbox demonstrating Append-Only Event Stores with UUIDv7 monotonic version checks and optimistic concurrency control, deterministic functional event folding ($State_t = foldl(applyEvent, InitialState, Events[0..t])$), periodic checkpoint snapshots every 100 events cutting hydration latency by 99% from 180ms to 1.8ms, CQRS read projections via Debezium CDC, and in-flight schema upcasting without destructive database migrations.
+* **Blast Radius:** Mounted in `ArchitectureLab.tsx` under `#architecture-event-sourcing`; integrated into `InteractiveCli.tsx` with `eventsourcing` command and `[ $ eventsourcing ]` quick chip; indexed in `index.html` Sub-Section 21 and `public/chat/index.json`. Verified in test 25 of `tests/portfolio.test.mjs`.
+

@@ -20,6 +20,7 @@ import { VECTOR_SEARCH_MODELS } from '@/data/vectorSearch'
 import { TRAFFIC_PRIORITY_MODELS } from '@/data/trafficPriority'
 import { DISTRIBUTED_SAGA_MODELS } from '@/data/distributedSagas'
 import { DISTRIBUTED_CACHE_MODELS } from '@/data/distributedCache'
+import { EVENT_SOURCING_MODELS } from '@/data/eventSourcing'
 import { EXECUTIVE_BRIEFING } from '@/data/executiveBriefing'
 
 interface HistoryEntry {
@@ -116,6 +117,11 @@ const AVAILABLE_COMMANDS = [
   'xfetch',
   'singleflight',
   'coalesce',
+  'eventsourcing',
+  'cqrs',
+  'snapshot',
+  'replay',
+  'upcaster',
   'adr',
   'decisions',
   'tradeoffs',
@@ -168,6 +174,7 @@ const QUICK_CHIPS = [
   { label: '[ $ qos ]', cmd: 'qos' },
   { label: '[ $ sagas ]', cmd: 'sagas' },
   { label: '[ $ cache ]', cmd: 'cache' },
+  { label: '[ $ eventsourcing ]', cmd: 'eventsourcing' },
   { label: '[ $ find kafka ]', cmd: 'find kafka' },
   { label: '[ $ tradeoffs ]', cmd: 'tradeoffs' },
   { label: '[ $ adr ]', cmd: 'adr' },
@@ -206,6 +213,7 @@ const COMMAND_HELP = [
   '  qos             - Inspect distributed QoS schedulers, token bucket & WFQ (or "qos <id>")',
   '  sagas           - Inspect distributed Saga orchestration, choreography & compensation (or "sagas <id>")',
   '  cache           - Inspect distributed cache stampede protection & mutex leasing (or "cache <id>")',
+  '  eventsourcing   - Inspect distributed event sourcing, CQRS & snapshotting (or "eventsourcing <id>")',
   '  find <query>    - Search cross-cutting architecture systems, ADRs, AI codex & trade-offs',
   '  tradeoffs       - Evaluate system design decision trade-offs (or "compare <topic>")',
   '  stats           - View production performance & impact metrics (99.99% SLA)',
@@ -1114,6 +1122,19 @@ export default function InteractiveCli() {
           ]
           break
         }
+        if (sub === 'eventsourcing' || sub === 'cqrs' || sub === 'snapshot' || sub === 'replay' || sub === 'upcaster' || args.some(a => a.toLowerCase().includes('eventsourcing') || a.toLowerCase().includes('cqrs') || a.toLowerCase().includes('snapshot'))) {
+          output = [
+            'Routing to Distributed Event Sourcing & CQRS Snapshotting Sandbox (#architecture-event-sourcing):',
+            '  1. Append-Only Event Store : UUIDv7 monotonic streams with OCC version collision protection',
+            '  2. Point-In-Time Replay    : Deterministic O(N) event folding for temporal state reconstruction',
+            '  3. Snapshot Checkpoints    : Periodic snapshots every 100 events cutting replay from 180ms to 1.8ms',
+            '  4. CQRS Read Projections   : Debezium CDC streaming to Elasticsearch & Postgres denormalized views',
+            '  5. Schema Upcasting        : In-flight V1 to V2 event transformation without database schema mutations',
+            '--------------------------------------------------------------------------------',
+            'Interactive Sandbox: Live in #architecture-event-sourcing with scrubbing time-travel slider.'
+          ]
+          break
+        }
         output = [
           'ByteByteGo Interactive Architecture Lab Navigator:',
           '--------------------------------------------------------------------------------',
@@ -1138,6 +1159,7 @@ export default function InteractiveCli() {
           '  [ 18 ] "architecture qos"     : Distributed QoS & Traffic Priority (#architecture-traffic-priority)',
           '  [ 19 ] "architecture sagas"   : Distributed Sagas & Compensations (#architecture-distributed-sagas)',
           '  [ 20 ] "architecture cache"   : Distributed Cache Stampede & Coherence (#architecture-distributed-cache)',
+          '  [ 21 ] "architecture eventsourcing": Distributed Event Sourcing & CQRS (#architecture-event-sourcing)',
           '--------------------------------------------------------------------------------',
           'Clean Architecture Principles Enforced:',
           '  + Domain Isolation     : Core business domains decouple from libraries and vendor SDKs',
@@ -2283,6 +2305,69 @@ export default function InteractiveCli() {
         ]
         break
       }
+      case 'eventsourcing':
+      case 'cqrs':
+      case 'snapshot':
+      case 'replay':
+      case 'upcaster': {
+        const target = args[0]?.toLowerCase().trim()
+        if (target) {
+          const matched = EVENT_SOURCING_MODELS.find(m =>
+            m.id === target ||
+            m.id.includes(target) ||
+            m.name.toLowerCase().includes(target) ||
+            m.badge.toLowerCase().includes(target) ||
+            (target === '1' && m.id === 'append-only-event-store') ||
+            (target === '2' && m.id === 'point-in-time-replay') ||
+            (target === '3' && m.id === 'snapshot-materialization') ||
+            (target === '4' && m.id === 'cqrs-read-projections') ||
+            (target === '5' && m.id === 'event-schema-upcasting')
+          )
+          if (matched) {
+            output = [
+              '--------------------------------------------------------------------------------',
+              `Event Sourcing Model: ${matched.name} [${matched.badge}]`,
+              '--------------------------------------------------------------------------------',
+              `Core Paradigm       : ${matched.paradigm}`,
+              `Algorithm Formula   : ${matched.algorithmFormula}`,
+              `Replay Efficiency   : ${matched.replayEfficiency}`,
+              `Storage Efficiency  : ${matched.storageEfficiency}`,
+              `Concurrency Defense : ${matched.concurrencyProtection}`,
+              '--------------------------------------------------------------------------------',
+              'WORKFLOW PHASES & INVARIANTS:',
+              ...matched.workflowPhases.map(p =>
+                `  * [${p.name}] :: ${p.description} -> Invariant: ${p.invariants}`
+              ),
+              '--------------------------------------------------------------------------------',
+              'PRODUCTION OUTCOMES & INVARIANTS:',
+              ...Object.entries(matched.productionOutcomes).map(([k, v]) => `  + ${k}: ${v}`),
+              '',
+              `Architectural Invariant: "${matched.architecturalInvariant}"`,
+              '--------------------------------------------------------------------------------',
+              'Full live interactive time-travel scrubber in #architecture-event-sourcing.'
+            ]
+            break
+          }
+        }
+
+        output = [
+          'Distributed Event Sourcing, CQRS & Snapshot Materialization Sandbox:',
+          '--------------------------------------------------------------------------------',
+          'Explore 5 enterprise event-driven architectures & temporal state models:',
+          '',
+          ...EVENT_SOURCING_MODELS.flatMap((m, idx) => [
+            `${idx + 1}. [ ${m.id} ] : ${m.name} (${m.badge})`,
+            `   Paradigm   : ${m.paradigm}`,
+            `   Replay SLA : ${m.replayEfficiency.split(';')[0]}`,
+            `   Storage    : ${m.storageEfficiency.split(';')[0]}`,
+            `   Deep Dive  : "eventsourcing ${idx + 1}" or "eventsourcing ${m.id.split('-')[0]}" (e.g. "eventsourcing append", "eventsourcing replay", "eventsourcing snapshot", "eventsourcing cqrs", "eventsourcing upcast")`,
+            ''
+          ]),
+          '--------------------------------------------------------------------------------',
+          'Tip: Run "eventsourcing <id>" (e.g. "eventsourcing 1" or "eventsourcing snapshot") to inspect replay invariants.'
+        ]
+        break
+      }
       case 'find':
       case 'search': {
         const query = args.join(' ').toLowerCase().trim()
@@ -2292,7 +2377,7 @@ export default function InteractiveCli() {
             '--------------------------------------------------------------------------------',
             'Search cross-cutting distributed systems, ADRs, AI paradigms, and trade-offs.',
             'Usage: find <query> (e.g. "find kafka", "find redis", "find mcp", "find saga")',
-            'Available Domains: Systems, ADR Governance, AI Codex, Trade-Off Matrix, Evolution Diffs, Chaos Drills, API Gateway, Distributed Traces, Kafka Event Streams, Distributed Rate Limiting, Multi-Region Replication, Database Sharding, Edge CDN Caching, Circuit Breakers, Concurrency & Deadlocks, Raft Consensus, Vector Search, Traffic Priority & QoS, Distributed Sagas & Compensations, Distributed Cache Stampede & Coherence'
+            'Available Domains: Systems, ADR Governance, AI Codex, Trade-Off Matrix, Evolution Diffs, Chaos Drills, API Gateway, Distributed Traces, Kafka Event Streams, Distributed Rate Limiting, Multi-Region Replication, Database Sharding, Edge CDN Caching, Circuit Breakers, Concurrency & Deadlocks, Raft Consensus, Vector Search, Traffic Priority & QoS, Distributed Sagas & Compensations, Distributed Cache Stampede & Coherence, Distributed Event Sourcing & CQRS'
           ]
           break
         }
@@ -2714,6 +2799,29 @@ export default function InteractiveCli() {
               `  Paradigm   : ${c.paradigm} (${c.badge})`,
               `  Latency    : ${c.p99Latency.split('(')[0]}`,
               `  Anchor     : #architecture-distributed-cache`,
+              ''
+            )
+          }
+        })
+
+        // 21. Search Distributed Event Sourcing & CQRS
+        EVENT_SOURCING_MODELS.forEach(e => {
+          if (
+            e.name.toLowerCase().includes(query) ||
+            e.id.toLowerCase().includes(query) ||
+            e.paradigm.toLowerCase().includes(query) ||
+            e.badge.toLowerCase().includes(query) ||
+            e.algorithmFormula.toLowerCase().includes(query) ||
+            e.replayEfficiency.toLowerCase().includes(query) ||
+            e.storageEfficiency.toLowerCase().includes(query) ||
+            e.concurrencyProtection.toLowerCase().includes(query) ||
+            e.architecturalInvariant.toLowerCase().includes(query)
+          ) {
+            results.push(
+              `[Event Sourcing & CQRS] ${e.name}`,
+              `  Paradigm   : ${e.paradigm} (${e.badge})`,
+              `  Replay SLA : ${e.replayEfficiency.split(';')[0]}`,
+              `  Anchor     : #architecture-event-sourcing`,
               ''
             )
           }

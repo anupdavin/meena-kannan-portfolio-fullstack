@@ -1,6 +1,6 @@
 {
   "version": "1.0.0",
-  "generatedAt": "2026-10-27T17:10:21.824Z",
+  "generatedAt": "2026-10-27T17:22:22.867Z",
   "nodes": {
     "src/components/architecture/AdrExplorer.tsx": {
       "file": "src/components/architecture/AdrExplorer.tsx",
@@ -229,6 +229,18 @@
       ],
       "loc": 459
     },
+    "src/components/architecture/EventSourcingSandbox.tsx": {
+      "file": "src/components/architecture/EventSourcingSandbox.tsx",
+      "imports": [
+        "react",
+        "lucide-react",
+        "@/data/eventSourcing"
+      ],
+      "exports": [
+        "EventSourcingSandbox"
+      ],
+      "loc": 583
+    },
     "src/components/architecture/HeroArchitectureTopology.tsx": {
       "file": "src/components/architecture/HeroArchitectureTopology.tsx",
       "imports": [
@@ -441,6 +453,7 @@
         "@/components/architecture/TrafficPrioritySandbox",
         "@/components/architecture/DistributedSagasSandbox",
         "@/components/architecture/DistributedCacheSandbox",
+        "@/components/architecture/EventSourcingSandbox",
         "@/data/architectureSystems",
         "@/data/architecturalDecisions",
         "@/data/architecturalTradeoffs",
@@ -459,12 +472,13 @@
         "@/data/vectorSearch",
         "@/data/trafficPriority",
         "@/data/distributedSagas",
-        "@/data/distributedCache"
+        "@/data/distributedCache",
+        "@/data/eventSourcing"
       ],
       "exports": [
         "ArchitectureLab"
       ],
-      "loc": 960
+      "loc": 1000
     },
     "src/components/portfolio/ContactTerminal.tsx": {
       "file": "src/components/portfolio/ContactTerminal.tsx",
@@ -529,12 +543,13 @@
         "@/data/trafficPriority",
         "@/data/distributedSagas",
         "@/data/distributedCache",
+        "@/data/eventSourcing",
         "@/data/executiveBriefing"
       ],
       "exports": [
         "InteractiveCli"
       ],
-      "loc": 2994
+      "loc": 3102
     },
     "src/components/portfolio/ProjectsShowcase.tsx": {
       "file": "src/components/portfolio/ProjectsShowcase.tsx",
@@ -587,7 +602,7 @@
       "exports": [
         "TerminalHero"
       ],
-      "loc": 610
+      "loc": 612
     },
     "src/components/ui/badge.tsx": {
       "file": "src/components/ui/badge.tsx",
@@ -789,6 +804,17 @@
         "EDGE_CDN_STRATEGIES"
       ],
       "loc": 382
+    },
+    "src/data/eventSourcing.ts": {
+      "file": "src/data/eventSourcing.ts",
+      "imports": [],
+      "exports": [
+        "EventStreamRecord",
+        "EventSourcingModel",
+        "EVENT_SOURCING_MODELS",
+        "SEED_EVENT_STREAM"
+      ],
+      "loc": 504
     },
     "src/data/executiveBriefing.ts": {
       "file": "src/data/executiveBriefing.ts",
@@ -1014,6 +1040,7 @@
     "DistributedSagasSandbox": "src/components/architecture/DistributedSagasSandbox.tsx",
     "DistributedTraceInspector": "src/components/architecture/DistributedTraceInspector.tsx",
     "EdgeCdnSandbox": "src/components/architecture/EdgeCdnSandbox.tsx",
+    "EventSourcingSandbox": "src/components/architecture/EventSourcingSandbox.tsx",
     "HeroArchitectureTopology": "src/components/architecture/HeroArchitectureTopology.tsx",
     "KafkaStreamMonitor": "src/components/architecture/KafkaStreamMonitor.tsx",
     "MultiRegionReplicationSandbox": "src/components/architecture/MultiRegionReplicationSandbox.tsx",
@@ -1116,6 +1143,10 @@
     "SurrogateTagRecord": "src/data/edgeCdnCaching.ts",
     "EdgeCdnStrategy": "src/data/edgeCdnCaching.ts",
     "EDGE_CDN_STRATEGIES": "src/data/edgeCdnCaching.ts",
+    "EventStreamRecord": "src/data/eventSourcing.ts",
+    "EventSourcingModel": "src/data/eventSourcing.ts",
+    "EVENT_SOURCING_MODELS": "src/data/eventSourcing.ts",
+    "SEED_EVENT_STREAM": "src/data/eventSourcing.ts",
     "ExecutiveBriefingData": "src/data/executiveBriefing.ts",
     "EXECUTIVE_BRIEFING": "src/data/executiveBriefing.ts",
     "GatewayFilter": "src/data/gatewayRoutes.ts",

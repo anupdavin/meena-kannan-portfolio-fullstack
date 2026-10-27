@@ -23,6 +23,7 @@ import {
   CloudLightning,
   GitFork,
   GitMerge,
+  History,
   X
 } from 'lucide-react'
 import ByteByteGoDiagram from '@/components/architecture/ByteByteGoDiagram'
@@ -45,6 +46,7 @@ import VectorSearchSandbox from '@/components/architecture/VectorSearchSandbox'
 import TrafficPrioritySandbox from '@/components/architecture/TrafficPrioritySandbox'
 import DistributedSagasSandbox from '@/components/architecture/DistributedSagasSandbox'
 import DistributedCacheSandbox from '@/components/architecture/DistributedCacheSandbox'
+import EventSourcingSandbox from '@/components/architecture/EventSourcingSandbox'
 import { ARCHITECTURE_SYSTEMS } from '@/data/architectureSystems'
 import { ARCHITECTURAL_DECISIONS } from '@/data/architecturalDecisions'
 import { ARCHITECTURAL_TRADEOFFS } from '@/data/architecturalTradeoffs'
@@ -64,6 +66,7 @@ import { VECTOR_SEARCH_MODELS } from '@/data/vectorSearch'
 import { TRAFFIC_PRIORITY_MODELS } from '@/data/trafficPriority'
 import { DISTRIBUTED_SAGA_MODELS } from '@/data/distributedSagas'
 import { DISTRIBUTED_CACHE_MODELS } from '@/data/distributedCache'
+import { EVENT_SOURCING_MODELS } from '@/data/eventSourcing'
 
 const AI_TERMS_SUMMARY = [
   { id: 'agentic-ai', title: 'Agentic AI', text: 'Perception-action loop, DAG memory, tool execution, LangGraph' },
@@ -101,6 +104,7 @@ export default function ArchitectureLab() {
         priority: 5,
         sagas: 5,
         cache: 5,
+        eventsourcing: 5,
         isActive: false
       }
     }
@@ -303,8 +307,20 @@ export default function ArchitectureLab() {
       c.architecturalInvariant.toLowerCase().includes(q)
     ).length
 
+    const eventSourcingCount = EVENT_SOURCING_MODELS.filter(e =>
+      e.name.toLowerCase().includes(q) ||
+      e.id.toLowerCase().includes(q) ||
+      e.paradigm.toLowerCase().includes(q) ||
+      e.badge.toLowerCase().includes(q) ||
+      e.algorithmFormula.toLowerCase().includes(q) ||
+      e.replayEfficiency.toLowerCase().includes(q) ||
+      e.storageEfficiency.toLowerCase().includes(q) ||
+      e.concurrencyProtection.toLowerCase().includes(q) ||
+      e.architecturalInvariant.toLowerCase().includes(q)
+    ).length
+
     return {
-      total: workbenchCount + aiCount + adrCount + tradeoffCount + evolutionCount + chaosCount + gatewayCount + traceCount + kafkaCount + ratelimitCount + multiregionCount + shardingCount + cdnCount + circuitBreakerCount + concurrencyCount + raftCount + vectorCount + priorityCount + sagasCount + cacheCount,
+      total: workbenchCount + aiCount + adrCount + tradeoffCount + evolutionCount + chaosCount + gatewayCount + traceCount + kafkaCount + ratelimitCount + multiregionCount + shardingCount + cdnCount + circuitBreakerCount + concurrencyCount + raftCount + vectorCount + priorityCount + sagasCount + cacheCount + eventSourcingCount,
       workbench: workbenchCount,
       aiCodex: aiCount,
       adr: adrCount,
@@ -325,6 +341,7 @@ export default function ArchitectureLab() {
       priority: priorityCount,
       sagas: sagasCount,
       cache: cacheCount,
+      eventsourcing: eventSourcingCount,
       isActive: true
     }
   }, [searchQuery])
@@ -657,6 +674,17 @@ export default function ArchitectureLab() {
             <Database className="w-3.5 h-3.5 text-cyan-400" />
             <span>Cache Stampede ({matchStats.cache})</span>
           </a>
+          <a 
+            href="#architecture-event-sourcing"
+            className={`px-3 py-1.5 rounded-lg border transition-all flex items-center gap-1.5 cursor-pointer ${
+              matchStats.isActive && matchStats.eventsourcing > 0
+                ? 'bg-amber-500/10 border-amber-500/50 text-amber-400 shadow-[0_0_10px_rgba(245,158,11,0.15)] font-bold'
+                : 'bg-slate-900 border-slate-800 hover:border-amber-500/50 hover:text-amber-400 text-slate-300'
+            }`}
+          >
+            <History className="w-3.5 h-3.5 text-amber-400" />
+            <span>Event Sourcing &amp; CQRS ({matchStats.eventsourcing})</span>
+          </a>
         </div>
       </div>
 
@@ -902,6 +930,18 @@ export default function ArchitectureLab() {
         className="scroll-mt-24"
       >
         <DistributedCacheSandbox />
+      </motion.div>
+
+      {/* 2.24. Distributed Event Sourcing & CQRS Snapshotting Sandbox */}
+      <motion.div
+        id="architecture-event-sourcing"
+        initial={{ opacity: 0, y: 25 }}
+        whileInView={{ opacity: 1, y: 0 }}
+        viewport={{ once: true }}
+        transition={{ duration: 0.6, delay: 1.05 }}
+        className="scroll-mt-24"
+      >
+        <EventSourcingSandbox />
       </motion.div>
 
       {/* 3. Architectural Design Pillars Strip */}

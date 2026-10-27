@@ -649,6 +649,16 @@
                 High-scale cache coherence, thundering herd mitigation, and distributed locking across 5 enterprise architectures: Probabilistic Early Expiration via the optimal XFetch algorithm (stochastic background origin recomputation delta * beta * ln(rand()) &gt; expiry - now delivering 99.4% origin offload and sub-1.4ms P99 latency), Singleflight Request Coalescing (collapsing 10,000 parallel cache misses into exactly 1 in-flight database query), Redis Mutex Leasing with Redlock and monotonic fencing tokens (5-second auto-releasing hardware leases preventing zombie overwrites), Tiered Multi-Level Caching (L1 Caffeine in-memory near-cache serving 95% of reads at sub-8 microseconds plus L2 Redis cluster over TCP with pub/sub invalidation), and Dual-Write Elimination via Debezium CDC (PostgreSQL WAL mutation events streaming directly to Redis DEL key purges with sub-8.5ms latency).
               </p>
             </div>
+
+            <!-- Sub-Section 21: Distributed Event Sourcing, CQRS & Snapshot Materialization Sandbox -->
+            <div id="architecture-event-sourcing" style="background: rgba(9, 14, 24, 0.7); border: 1px solid #1e293b; border-radius: 16px; padding: 1.5rem; margin-top: 1rem;">
+              <h3 style="color: #f59e0b; font-size: 1.25rem; font-weight: bold; margin-bottom: 0.5rem;">
+                Distributed Event Sourcing, CQRS &amp; Snapshot Materialization Sandbox
+              </h3>
+              <p style="color: #94a3b8; font-size: 0.85rem; line-height: 1.6;">
+                High-throughput immutable event streaming, deterministic temporal state reconstruction, and asynchronous query view materialization across 5 enterprise architectures: Append-Only Event Store (UUIDv7 chronological aggregate streams guarded by optimistic concurrency control monotonic version checks), Point-in-Time State Reconstruction (deterministic pure functional event folding for temporal audit replays and time-travel debugging), Snapshot Materialization (periodic checkpoints every 100 events cutting aggregate hydration latency by 99% from 180ms to 1.8ms), CQRS Read Projections via Debezium CDC (asynchronous PostgreSQL WAL tailing streamed into Kafka to maintain polyglot read models in Elasticsearch and PostgreSQL with sub-1.2ms GET queries), and Event Schema Evolution with In-Flight Upcasters (zero-downtime on-the-fly JSON transformations from V1 to V2 without destructive database DDL migrations).
+              </p>
+            </div>
           </section>
 
           <!-- Projects & Interactive Architecture Section Landmark -->
