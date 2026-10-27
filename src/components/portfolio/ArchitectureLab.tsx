@@ -59,6 +59,7 @@ import { FeatureFlagSandbox } from '@/components/architecture/FeatureFlagSandbox
 import { TenantIsolationSandbox } from '@/components/architecture/TenantIsolationSandbox'
 import { ZeroTrustMeshSandbox } from '@/components/architecture/ZeroTrustMeshSandbox'
 import { SplitBrainResolverSandbox } from '@/components/architecture/SplitBrainResolverSandbox'
+import GslbAnycastSandbox from '@/components/architecture/GslbAnycastSandbox'
 import { ARCHITECTURE_SYSTEMS } from '@/data/architectureSystems'
 import { ARCHITECTURAL_DECISIONS } from '@/data/architecturalDecisions'
 import { ARCHITECTURAL_TRADEOFFS } from '@/data/architecturalTradeoffs'
@@ -86,6 +87,7 @@ import { FEATURE_FLAG_MODELS } from '@/data/featureFlagModels'
 import { TENANT_ISOLATION_MODELS } from '@/data/tenantIsolationModels'
 import { ZERO_TRUST_MESH_MODELS } from '@/data/zeroTrustMeshModels'
 import { SPLIT_BRAIN_PARADIGMS } from '@/data/splitBrainResolverModels'
+import { GSLB_ANYCAST_MODELS } from '@/data/gslbAnycastModels'
 
 const AI_TERMS_SUMMARY = [
   { id: 'agentic-ai', title: 'Agentic AI', text: 'Perception-action loop, DAG memory, tool execution, LangGraph' },
@@ -131,6 +133,7 @@ export default function ArchitectureLab() {
         tenantisolation: 5,
         zerotrustmesh: 5,
         splitbrain: 5,
+        gslbanycast: 5,
         isActive: false
       }
     }
@@ -428,8 +431,20 @@ export default function ArchitectureLab() {
       s.description.toLowerCase().includes(q)
     ).length
 
+    const gslbAnycastCount = GSLB_ANYCAST_MODELS.filter(g =>
+      g.name.toLowerCase().includes(q) ||
+      g.id.toLowerCase().includes(q) ||
+      g.category.toLowerCase().includes(q) ||
+      g.badge.toLowerCase().includes(q) ||
+      g.algorithmFormula.toLowerCase().includes(q) ||
+      g.routingConvergenceLatency.toLowerCase().includes(q) ||
+      g.failoverConvergenceSla.toLowerCase().includes(q) ||
+      g.architecturalInvariant.toLowerCase().includes(q) ||
+      g.description.toLowerCase().includes(q)
+    ).length
+
     return {
-      total: workbenchCount + aiCount + adrCount + tradeoffCount + evolutionCount + chaosCount + gatewayCount + traceCount + kafkaCount + ratelimitCount + multiregionCount + shardingCount + cdnCount + circuitBreakerCount + concurrencyCount + raftCount + vectorCount + priorityCount + sagasCount + cacheCount + eventSourcingCount + dlqCount + idempotencyCount + atomicCommitCount + featureFlagCount + tenantIsolationCount + zeroTrustMeshCount + splitBrainCount,
+      total: workbenchCount + aiCount + adrCount + tradeoffCount + evolutionCount + chaosCount + gatewayCount + traceCount + kafkaCount + ratelimitCount + multiregionCount + shardingCount + cdnCount + circuitBreakerCount + concurrencyCount + raftCount + vectorCount + priorityCount + sagasCount + cacheCount + eventSourcingCount + dlqCount + idempotencyCount + atomicCommitCount + featureFlagCount + tenantIsolationCount + zeroTrustMeshCount + splitBrainCount + gslbAnycastCount,
       workbench: workbenchCount,
       aiCodex: aiCount,
       adr: adrCount,
@@ -458,6 +473,7 @@ export default function ArchitectureLab() {
       tenantisolation: tenantIsolationCount,
       zerotrustmesh: zeroTrustMeshCount,
       splitbrain: splitBrainCount,
+      gslbanycast: gslbAnycastCount,
       isActive: true
     }
   }, [searchQuery])
@@ -878,6 +894,17 @@ export default function ArchitectureLab() {
             <Zap className="w-3.5 h-3.5 text-amber-400" />
             <span>Split-Brain Resolver ({matchStats.splitbrain})</span>
           </a>
+          <a 
+            href="#architecture-gslb-anycast"
+            className={`px-3 py-1.5 rounded-lg border transition-all flex items-center gap-1.5 cursor-pointer ${
+              matchStats.isActive && matchStats.gslbanycast > 0
+                ? 'bg-sky-500/10 border-sky-500/50 text-sky-400 shadow-[0_0_10px_rgba(56,189,248,0.15)] font-bold'
+                : 'bg-slate-900 border-slate-800 hover:border-sky-500/50 hover:text-sky-400 text-slate-300'
+            }`}
+          >
+            <Globe className="w-3.5 h-3.5 text-sky-400" />
+            <span>GSLB & Anycast ({matchStats.gslbanycast})</span>
+          </a>
         </div>
       </div>
 
@@ -1219,6 +1246,18 @@ export default function ArchitectureLab() {
         className="scroll-mt-24"
       >
         <SplitBrainResolverSandbox />
+      </motion.div>
+
+      {/* 2.32. Distributed Global Server Load Balancing (GSLB) & BGP Anycast Routing Sandbox */}
+      <motion.div
+        id="architecture-gslb-anycast"
+        initial={{ opacity: 0, y: 25 }}
+        whileInView={{ opacity: 1, y: 0 }}
+        viewport={{ once: true }}
+        transition={{ duration: 0.6, delay: 1.45 }}
+        className="scroll-mt-24"
+      >
+        <GslbAnycastSandbox />
       </motion.div>
 
       {/* 3. Architectural Design Pillars Strip */}

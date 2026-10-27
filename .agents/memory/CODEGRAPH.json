@@ -1,6 +1,6 @@
 {
   "version": "1.0.0",
-  "generatedAt": "2026-10-27T20:40:54.001Z",
+  "generatedAt": "2026-10-27T20:50:54.237Z",
   "nodes": {
     "src/components/architecture/AdrExplorer.tsx": {
       "file": "src/components/architecture/AdrExplorer.tsx",
@@ -273,6 +273,18 @@
       ],
       "loc": 511
     },
+    "src/components/architecture/GslbAnycastSandbox.tsx": {
+      "file": "src/components/architecture/GslbAnycastSandbox.tsx",
+      "imports": [
+        "react",
+        "lucide-react",
+        "@/data/gslbAnycastModels"
+      ],
+      "exports": [
+        "GslbAnycastSandbox"
+      ],
+      "loc": 645
+    },
     "src/components/architecture/HeroArchitectureTopology.tsx": {
       "file": "src/components/architecture/HeroArchitectureTopology.tsx",
       "imports": [
@@ -536,6 +548,7 @@
         "@/components/architecture/TenantIsolationSandbox",
         "@/components/architecture/ZeroTrustMeshSandbox",
         "@/components/architecture/SplitBrainResolverSandbox",
+        "@/components/architecture/GslbAnycastSandbox",
         "@/data/architectureSystems",
         "@/data/architecturalDecisions",
         "@/data/architecturalTradeoffs",
@@ -562,12 +575,13 @@
         "@/data/featureFlagModels",
         "@/data/tenantIsolationModels",
         "@/data/zeroTrustMeshModels",
-        "@/data/splitBrainResolverModels"
+        "@/data/splitBrainResolverModels",
+        "@/data/gslbAnycastModels"
       ],
       "exports": [
         "ArchitectureLab"
       ],
-      "loc": 1277
+      "loc": 1316
     },
     "src/components/portfolio/ContactTerminal.tsx": {
       "file": "src/components/portfolio/ContactTerminal.tsx",
@@ -640,12 +654,13 @@
         "@/data/tenantIsolationModels",
         "@/data/zeroTrustMeshModels",
         "@/data/splitBrainResolverModels",
+        "@/data/gslbAnycastModels",
         "@/data/executiveBriefing"
       ],
       "exports": [
         "InteractiveCli"
       ],
-      "loc": 3857
+      "loc": 3967
     },
     "src/components/portfolio/ProjectsShowcase.tsx": {
       "file": "src/components/portfolio/ProjectsShowcase.tsx",
@@ -698,7 +713,7 @@
       "exports": [
         "TerminalHero"
       ],
-      "loc": 626
+      "loc": 627
     },
     "src/components/ui/badge.tsx": {
       "file": "src/components/ui/badge.tsx",
@@ -968,6 +983,20 @@
         "GATEWAY_ROUTES"
       ],
       "loc": 413
+    },
+    "src/data/gslbAnycastModels.ts": {
+      "file": "src/data/gslbAnycastModels.ts",
+      "imports": [],
+      "exports": [
+        "EdgePoP",
+        "GslbAnycastModel",
+        "SyntheticProbeResult",
+        "INITIAL_EDGE_POPS",
+        "GSLB_ANYCAST_MODELS",
+        "SYNTHETIC_PROBES",
+        "GSLB_ANYCAST_PARADIGMS"
+      ],
+      "loc": 508
     },
     "src/data/idempotencyModels.ts": {
       "file": "src/data/idempotencyModels.ts",
@@ -1249,6 +1278,7 @@
     "EdgeCdnSandbox": "src/components/architecture/EdgeCdnSandbox.tsx",
     "EventSourcingSandbox": "src/components/architecture/EventSourcingSandbox.tsx",
     "FeatureFlagSandbox": "src/components/architecture/FeatureFlagSandbox.tsx",
+    "GslbAnycastSandbox": "src/components/architecture/GslbAnycastSandbox.tsx",
     "HeroArchitectureTopology": "src/components/architecture/HeroArchitectureTopology.tsx",
     "IdempotencySandbox": "src/components/architecture/IdempotencySandbox.tsx",
     "KafkaStreamMonitor": "src/components/architecture/KafkaStreamMonitor.tsx",
@@ -1381,6 +1411,13 @@
     "GatewayFilter": "src/data/gatewayRoutes.ts",
     "GatewayRoute": "src/data/gatewayRoutes.ts",
     "GATEWAY_ROUTES": "src/data/gatewayRoutes.ts",
+    "EdgePoP": "src/data/gslbAnycastModels.ts",
+    "GslbAnycastModel": "src/data/gslbAnycastModels.ts",
+    "SyntheticProbeResult": "src/data/gslbAnycastModels.ts",
+    "INITIAL_EDGE_POPS": "src/data/gslbAnycastModels.ts",
+    "GSLB_ANYCAST_MODELS": "src/data/gslbAnycastModels.ts",
+    "SYNTHETIC_PROBES": "src/data/gslbAnycastModels.ts",
+    "GSLB_ANYCAST_PARADIGMS": "src/data/gslbAnycastModels.ts",
     "IdempotencyRecord": "src/data/idempotencyModels.ts",
     "IdempotencyModel": "src/data/idempotencyModels.ts",
     "IDEMPOTENCY_MODELS": "src/data/idempotencyModels.ts",

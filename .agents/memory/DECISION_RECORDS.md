@@ -129,6 +129,15 @@ This document serves as the persistent semantic memory layer for AI coding agent
 * **Decision:** Implemented an interactive 5-paradigm sandbox demonstrating Quorum Fencing with Monotonic Generation Epoch Tokens (Kleppmann fencing theorem rejecting zombie partitioned writes with HTTP 409 Conflict whenever write epoch is below current quorum floor), Automated Split-Brain Healing via Semi-Lattice Vector Clocks ($A \sqcup B$ join-semilattice CRDT deterministic conflict convergence with zero data loss), Asymmetric WAN Network Blackhole Failover with Automated Route53 ARC DNS Promotion delivering sub-second active regional cutover with RPO < 1s, Split-Brain Dual-Master Reconciliation with Compensating Invariant Rollback dispatching reversible saga compensations for conflicting ledger entries, and Chaos Mesh GameDay Automated Blast Radius Containment utilizing eBPF network partition injection with sub-350ms failure domain containment.
 * **Blast Radius:** Mounted in `ArchitectureLab.tsx` under `#architecture-split-brain-resolver`; integrated into `InteractiveCli.tsx` with `splitbrain`, `fencing`, `epochtoken`, `partitionhealing` commands and `[ $ splitbrain ]` quick chip; indexed in `index.html` Sub-Section 28 and `public/chat/index.json`. Verified in test 32 of `tests/portfolio.test.mjs`.
 
+---
+
+## ADR-029: Distributed Global Server Load Balancing (GSLB) & BGP Anycast Routing Sandbox
+* **Status:** Accepted & Enforced
+* **Target Components:** [`GslbAnycastSandbox.tsx`](file:///src/components/architecture/GslbAnycastSandbox.tsx), [`gslbAnycastModels.ts`](file:///src/data/gslbAnycastModels.ts), [`ArchitectureLab.tsx`](file:///src/components/portfolio/ArchitectureLab.tsx)
+* **Context:** High-throughput global SaaS platforms and latency-sensitive API meshes require distributed edge ingress that routes international clients to topologically nearest edge points of presence while absorbing volumetric DDoS floods and gracefully surviving upstream transit route flaps without dropping active TCP connections.
+* **Decision:** Implemented an interactive 5-paradigm sandbox demonstrating Border Gateway Protocol (BGP) Anycast with Equal-Cost Multi-Path (ECMP) routing and sub-12ms edge convergence across 200+ PoPs worldwide via AS 13335, Geolocation and Latency-Based Dynamic DNS Proximity Routing with RFC 7871 EDNS0 Client Subnet inspection and sub-2.4ms lookup, Cross-Continent TCP Anycast with Google Maglev Consistent Hashing ($M=65537$) eliminating TCP resets during route flaps and supporting seamless QUIC connection migration, Multi-Cloud GSLB Traffic Steering with Weighted Canaries delivering sub-8s automated regional evacuation across AWS and GCP, and Distributed PoP DDoS Scrubbing with RFC 5575 BGP Flowspec drop rules absorbing 1.2 Tbps volumetric floods in sub-350ms.
+* **Blast Radius:** Mounted in `ArchitectureLab.tsx` under `#architecture-gslb-anycast`; integrated into `InteractiveCli.tsx` with `gslb`, `anycast`, `bgp`, `routing`, `flowspec`, `geodns` commands and `[ $ gslb ]` quick chip; indexed in `index.html` Sub-Section 29 and `public/chat/index.json`. Verified in test 33 of `tests/portfolio.test.mjs`.
+
 
 
 

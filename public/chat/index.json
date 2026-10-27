@@ -256,5 +256,11 @@
     "title": "Distributed Chaos Engineering & Automated Network Partition Split-Brain Resolver Sandbox",
     "text": "Meena architects enterprise chaos engineering and automated network partition split-brain resolvers across 5 paradigms: (1) Quorum Fencing with Monotonic Generation Epoch Tokens: Kleppmann fencing theorem rejecting zombie writes with HTTP 409 Conflict whenever write epoch is below current quorum floor, (2) Automated Split-Brain Healing via Semi-Lattice Vector Clocks: LWW-Element-Set and join-semilattice A join B deterministic conflict convergence with zero data loss, (3) Asymmetric WAN Network Blackhole Failover with Automated DNS Promotion: Route53 ARC deep health checks executing sub-second failover with RPO < 1s, (4) Split-Brain Dual-Master Reconciliation with Compensating Invariant Rollback: Automated divergence reconciliation identifying conflicting records and dispatching reversible saga compensations, and (5) Chaos GameDay Automated Blast Radius Containment: eBPF network partition injection with automated sub-350ms failure domain containment.",
     "url": "#architecture-split-brain-resolver"
+  },
+  {
+    "id": "distributed-gslb-anycast",
+    "title": "Distributed Global Server Load Balancing (GSLB) & BGP Anycast Routing Sandbox",
+    "text": "Meena architects enterprise global ingress routing and perimeter DDoS mitigation systems across 5 paradigms: (1) BGP Anycast with ECMP Equal-Cost Multi-Path: Tier-1 AS-PATH shortest route with hardware flow hashing and sub-12ms edge convergence across 200+ PoPs, (2) GeoDNS & Latency-Based Dynamic Proximity Routing: RFC 7871 EDNS0 Client Subnet inspection with RUM latency matrix and sub-2.4ms DNS resolution, (3) Cross-Continent TCP Anycast with Maglev Consistent Hashing: M=65537 lookup table eliminating TCP resets during route flaps and supporting QUIC connection migration, (4) Multi-Cloud GSLB Traffic Steering with Weighted Canaries: Automated regional evacuation across AWS/GCP with weighted canaries in sub-8 seconds, and (5) Distributed PoP DDoS Scrubbing & BGP Flowspec Rate Limiting: RFC 5575 volumetric attack drop rules absorbing 1.2 Tbps floods in sub-350ms.",
+    "url": "#architecture-gslb-anycast"
   }
 ]

@@ -1571,6 +1571,43 @@ describe('Production Architectural Decision Records (ADR) & CLI Integration', ()
     assert.ok(indexHtml.includes('id="architecture-split-brain-resolver"'), 'index.html must include #architecture-split-brain-resolver landmark');
     assert.ok(!/[\u2013\u2014]/.test(indexHtml), 'index.html must contain zero em/en-dashes');
   });
+
+  test('GslbAnycastSandbox and gslbAnycastModels.ts define BGP anycast, GeoDNS and DDoS scrubbing with CLI integration', () => {
+    const gslbDataPath = path.join(rootDir, 'src', 'data', 'gslbAnycastModels.ts');
+    assert.ok(fs.existsSync(gslbDataPath), 'gslbAnycastModels.ts must exist');
+    const gslbDataCode = fs.readFileSync(gslbDataPath, 'utf8');
+    assert.ok(gslbDataCode.includes('bgp-anycast-ecmp-routing'), 'Must define bgp-anycast-ecmp-routing model');
+    assert.ok(gslbDataCode.includes('geodns-latency-proximity-routing'), 'Must define geodns-latency-proximity-routing model');
+    assert.ok(gslbDataCode.includes('tcp-anycast-connection-migration'), 'Must define tcp-anycast-connection-migration model');
+    assert.ok(gslbDataCode.includes('automated-gslb-traffic-steering'), 'Must define automated-gslb-traffic-steering model');
+    assert.ok(gslbDataCode.includes('ddos-scrubbing-bgp-flowspec'), 'Must define ddos-scrubbing-bgp-flowspec model');
+    assert.ok(!/[\u2013\u2014]/.test(gslbDataCode), 'gslbAnycastModels.ts must contain zero em/en-dashes');
+
+    const componentPath = path.join(rootDir, 'src', 'components', 'architecture', 'GslbAnycastSandbox.tsx');
+    assert.ok(fs.existsSync(componentPath), 'GslbAnycastSandbox.tsx must exist');
+    const compCode = fs.readFileSync(componentPath, 'utf8');
+    assert.ok(compCode.includes('copyRfcReport'), 'GslbAnycastSandbox must support 1-click RFC copy');
+    assert.ok(compCode.includes('GSLB_ANYCAST_MODELS'), 'GslbAnycastSandbox must render GSLB_ANYCAST_MODELS');
+    assert.ok(!/[\u2013\u2014]/.test(compCode), 'GslbAnycastSandbox.tsx must contain zero em/en-dashes');
+
+    const labCode = fs.readFileSync(path.join(rootDir, 'src', 'components', 'portfolio', 'ArchitectureLab.tsx'), 'utf8');
+    assert.ok(labCode.includes('GslbAnycastSandbox'), 'ArchitectureLab must mount GslbAnycastSandbox');
+    assert.ok(labCode.includes('id="architecture-gslb-anycast"'), 'ArchitectureLab must define anchor #architecture-gslb-anycast');
+
+    const cliCode = fs.readFileSync(path.join(rootDir, 'src', 'components', 'portfolio', 'InteractiveCli.tsx'), 'utf8');
+    assert.ok(cliCode.includes("'gslb'"), "InteractiveCli must support 'gslb' command");
+    assert.ok(cliCode.includes('[ $ gslb ]'), "InteractiveCli must include '[ $ gslb ]' quick chip");
+    assert.ok(cliCode.includes('GSLB_ANYCAST_MODELS'), 'InteractiveCli must search across GSLB_ANYCAST_MODELS');
+    assert.ok(!/[\u2013\u2014]/.test(cliCode), 'InteractiveCli.tsx must contain zero em/en-dashes');
+
+    const chatIndex = fs.readFileSync(path.join(rootDir, 'public', 'chat', 'index.json'), 'utf8');
+    assert.ok(chatIndex.includes('distributed-gslb-anycast'), 'public/chat/index.json must index distributed-gslb-anycast');
+    assert.ok(!/[\u2013\u2014]/.test(chatIndex), 'public/chat/index.json must contain zero em/en-dashes');
+
+    const indexHtml = fs.readFileSync(path.join(rootDir, 'index.html'), 'utf8');
+    assert.ok(indexHtml.includes('id="architecture-gslb-anycast"'), 'index.html must include #architecture-gslb-anycast landmark');
+    assert.ok(!/[\u2013\u2014]/.test(indexHtml), 'index.html must contain zero em/en-dashes');
+  });
 });
 
 
