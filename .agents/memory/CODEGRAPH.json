@@ -1,6 +1,6 @@
 {
   "version": "1.0.0",
-  "generatedAt": "2026-10-27T16:11:12.165Z",
+  "generatedAt": "2026-10-27T16:19:59.421Z",
   "nodes": {
     "src/components/architecture/AdrExplorer.tsx": {
       "file": "src/components/architecture/AdrExplorer.tsx",
@@ -241,6 +241,18 @@
       ],
       "loc": 455
     },
+    "src/components/architecture/RaftConsensusSandbox.tsx": {
+      "file": "src/components/architecture/RaftConsensusSandbox.tsx",
+      "imports": [
+        "react",
+        "lucide-react",
+        "@/data/raftConsensus"
+      ],
+      "exports": [
+        "RaftConsensusSandbox"
+      ],
+      "loc": 506
+    },
     "src/components/architecture/RateLimiterSandbox.tsx": {
       "file": "src/components/architecture/RateLimiterSandbox.tsx",
       "imports": [
@@ -376,6 +388,7 @@
         "@/components/architecture/EdgeCdnSandbox",
         "@/components/architecture/CircuitBreakerSandbox",
         "@/components/architecture/DistributedConcurrencySandbox",
+        "@/components/architecture/RaftConsensusSandbox",
         "@/data/architectureSystems",
         "@/data/architecturalDecisions",
         "@/data/architecturalTradeoffs",
@@ -389,12 +402,13 @@
         "@/data/databaseSharding",
         "@/data/edgeCdnCaching",
         "@/data/circuitBreakers",
-        "@/data/distributedConcurrency"
+        "@/data/distributedConcurrency",
+        "@/data/raftConsensus"
       ],
       "exports": [
         "ArchitectureLab"
       ],
-      "loc": 765
+      "loc": 803
     },
     "src/components/portfolio/ContactTerminal.tsx": {
       "file": "src/components/portfolio/ContactTerminal.tsx",
@@ -454,12 +468,13 @@
         "@/data/edgeCdnCaching",
         "@/data/circuitBreakers",
         "@/data/distributedConcurrency",
+        "@/data/raftConsensus",
         "@/data/executiveBriefing"
       ],
       "exports": [
         "InteractiveCli"
       ],
-      "loc": 2452
+      "loc": 2556
     },
     "src/components/portfolio/ProjectsShowcase.tsx": {
       "file": "src/components/portfolio/ProjectsShowcase.tsx",
@@ -512,7 +527,7 @@
       "exports": [
         "TerminalHero"
       ],
-      "loc": 603
+      "loc": 604
     },
     "src/components/ui/badge.tsx": {
       "file": "src/components/ui/badge.tsx",
@@ -736,6 +751,17 @@
       ],
       "loc": 305
     },
+    "src/data/raftConsensus.ts": {
+      "file": "src/data/raftConsensus.ts",
+      "imports": [],
+      "exports": [
+        "ConsensusModel",
+        "CONSENSUS_MODELS",
+        "evaluateQuorumCommit",
+        "checkJointQuorum"
+      ],
+      "loc": 337
+    },
     "src/data/rateLimitingAlgorithms.ts": {
       "file": "src/data/rateLimitingAlgorithms.ts",
       "imports": [],
@@ -891,6 +917,7 @@
     "HeroArchitectureTopology": "src/components/architecture/HeroArchitectureTopology.tsx",
     "KafkaStreamMonitor": "src/components/architecture/KafkaStreamMonitor.tsx",
     "MultiRegionReplicationSandbox": "src/components/architecture/MultiRegionReplicationSandbox.tsx",
+    "RaftConsensusSandbox": "src/components/architecture/RaftConsensusSandbox.tsx",
     "RateLimiterSandbox": "src/components/architecture/RateLimiterSandbox.tsx",
     "BoundaryContainerProps": "src/components/architecture/SvgPrimitives.tsx",
     "BoundaryContainer": "src/components/architecture/SvgPrimitives.tsx",
@@ -994,6 +1021,10 @@
     "RegionNode": "src/data/multiRegionReplication.ts",
     "MultiRegionReplicationStrategy": "src/data/multiRegionReplication.ts",
     "MULTI_REGION_STRATEGIES": "src/data/multiRegionReplication.ts",
+    "ConsensusModel": "src/data/raftConsensus.ts",
+    "CONSENSUS_MODELS": "src/data/raftConsensus.ts",
+    "evaluateQuorumCommit": "src/data/raftConsensus.ts",
+    "checkJointQuorum": "src/data/raftConsensus.ts",
     "RateLimitingAlgorithm": "src/data/rateLimitingAlgorithms.ts",
     "RATE_LIMITING_ALGORITHMS": "src/data/rateLimitingAlgorithms.ts",
     "Layout": "src/pages/Layout.tsx",

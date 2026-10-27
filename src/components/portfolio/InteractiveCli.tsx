@@ -15,6 +15,7 @@ import { DATABASE_SHARDING_STRATEGIES } from '@/data/databaseSharding'
 import { EDGE_CDN_STRATEGIES } from '@/data/edgeCdnCaching'
 import { CIRCUIT_BREAKER_PATTERNS } from '@/data/circuitBreakers'
 import { CONCURRENCY_MODELS } from '@/data/distributedConcurrency'
+import { CONSENSUS_MODELS } from '@/data/raftConsensus'
 import { EXECUTIVE_BRIEFING } from '@/data/executiveBriefing'
 
 interface HistoryEntry {
@@ -87,6 +88,10 @@ const AVAILABLE_COMMANDS = [
   'twophase',
   'occ',
   'mvcc',
+  'raft',
+  'consensus',
+  'paxos',
+  'election',
   'adr',
   'decisions',
   'tradeoffs',
@@ -134,6 +139,7 @@ const QUICK_CHIPS = [
   { label: '[ $ cdn ]', cmd: 'cdn' },
   { label: '[ $ circuitbreaker ]', cmd: 'circuitbreaker' },
   { label: '[ $ concurrency ]', cmd: 'concurrency' },
+  { label: '[ $ raft ]', cmd: 'raft' },
   { label: '[ $ find kafka ]', cmd: 'find kafka' },
   { label: '[ $ tradeoffs ]', cmd: 'tradeoffs' },
   { label: '[ $ adr ]', cmd: 'adr' },
@@ -1012,6 +1018,19 @@ export default function InteractiveCli() {
           ]
           break
         }
+        if (sub === 'raft' || sub === 'consensus' || sub === 'paxos' || sub === 'election' || args.some(a => a.toLowerCase().includes('raft') || a.toLowerCase().includes('consensus') || a.toLowerCase().includes('paxos'))) {
+          output = [
+            'Routing to Distributed Consensus & Raft Leader Election State Machine (#architecture-raft-consensus):',
+            '  1. Raft Leader Election   : Randomized election timers (150-300ms) with majority vote quorum',
+            '  2. Raft Log Replication   : Replicated State Machine (RSM) with AppendEntries & commitIndex',
+            '  3. Multi-Raft Quorums     : WAN network partition tolerance (majority commits, minority freezes)',
+            '  4. Joint Consensus        : Dynamic two-phase cluster membership migration (Cold,new safety)',
+            '  5. Multi-Paxos vs Raft    : Synod Phase 1/2 ballot evaluation vs strong leader streaming',
+            '--------------------------------------------------------------------------------',
+            'Interactive Sandbox: Live in #architecture-raft-consensus with 5-node cluster simulation.'
+          ]
+          break
+        }
         output = [
           'ByteByteGo Interactive Architecture Lab Navigator:',
           '--------------------------------------------------------------------------------',
@@ -1031,6 +1050,7 @@ export default function InteractiveCli() {
           '  [ 13 ] "architecture cdn"     : Edge CDN Caching & Invalidation (#architecture-edge-cdn)',
           '  [ 14 ] "architecture circuitbreaker": Distributed Circuit Breaker Mesh (#architecture-circuit-breaker)',
           '  [ 15 ] "architecture concurrency": Concurrency & Deadlock Detection (#architecture-distributed-concurrency)',
+          '  [ 16 ] "architecture raft"    : Distributed Raft Consensus Engine (#architecture-raft-consensus)',
           '--------------------------------------------------------------------------------',
           'Clean Architecture Principles Enforced:',
           '  + Domain Isolation     : Core business domains decouple from libraries and vendor SDKs',
@@ -1856,6 +1876,68 @@ export default function InteractiveCli() {
         ]
         break
       }
+      case 'raft':
+      case 'consensus':
+      case 'paxos':
+      case 'election': {
+        const target = args[0]?.toLowerCase().trim()
+        if (target) {
+          const matched = CONSENSUS_MODELS.find(m => 
+            m.id === target ||
+            m.id.includes(target) ||
+            m.name.toLowerCase().includes(target) ||
+            m.badge.toLowerCase().includes(target) ||
+            (target === '1' && m.id === 'raft-leader-election') ||
+            (target === '2' && m.id === 'raft-log-replication') ||
+            (target === '3' && m.id === 'multi-raft-split-brain') ||
+            (target === '4' && m.id === 'joint-consensus-reconfiguration') ||
+            (target === '5' && m.id === 'paxos-synod-comparison')
+          )
+          if (matched) {
+            output = [
+              '--------------------------------------------------------------------------------',
+              `Distributed Consensus Model: ${matched.name} [${matched.badge}]`,
+              '--------------------------------------------------------------------------------',
+              `Core Paradigm       : ${matched.paradigm}`,
+              `Quorum Requirement  : ${matched.quorumRequirement}`,
+              `Election Timeout    : ${matched.electionTimeoutRange}`,
+              `Split-Brain Defense : ${matched.splitBrainDefense}`,
+              `Log Invariant       : ${matched.logConsistencyInvariant}`,
+              '--------------------------------------------------------------------------------',
+              'PROTOCOL PHASES & INVARIANTS:',
+              ...matched.workflowPhases.map(p =>
+                `  * [${p.name}] :: ${p.description} -> Invariant: ${p.invariants}`
+              ),
+              '--------------------------------------------------------------------------------',
+              'PRODUCTION OUTCOMES & INVARIANTS:',
+              ...Object.entries(matched.productionOutcomes).map(([k, v]) => `  + ${k}: ${v}`),
+              '',
+              `Architectural Invariant: "${matched.architecturalInvariant}"`,
+              '--------------------------------------------------------------------------------',
+              'Full live 5-node Raft cluster simulation in #architecture-raft-consensus.'
+            ]
+            break
+          }
+        }
+
+        output = [
+          'Distributed Consensus & Raft Leader Election State Machine Sandbox:',
+          '--------------------------------------------------------------------------------',
+          'Explore 5 consensus, log replication, and quorum management paradigms:',
+          '',
+          ...CONSENSUS_MODELS.flatMap((m, idx) => [
+            `${idx + 1}. [ ${m.id} ] : ${m.name} (${m.badge})`,
+            `   Paradigm      : ${m.paradigm}`,
+            `   Quorum Rule   : ${m.quorumRequirement}`,
+            `   Split-Brain   : ${m.splitBrainDefense}`,
+            `   Deep Dive     : "raft ${idx + 1}" or "raft ${m.id.split('-')[0]}" (e.g. "raft election", "raft log", "raft partition", "raft joint", "raft paxos")`,
+            ''
+          ]),
+          '--------------------------------------------------------------------------------',
+          'Tip: Run "raft <id>" (e.g. "raft 1" or "raft election") to inspect consensus state transitions.'
+        ]
+        break
+      }
       case 'find':
       case 'search': {
         const query = args.join(' ').toLowerCase().trim()
@@ -1865,7 +1947,7 @@ export default function InteractiveCli() {
             '--------------------------------------------------------------------------------',
             'Search cross-cutting distributed systems, ADRs, AI paradigms, and trade-offs.',
             'Usage: find <query> (e.g. "find kafka", "find redis", "find mcp", "find saga")',
-            'Available Domains: Systems, ADR Governance, AI Codex, Trade-Off Matrix, Evolution Diffs, Chaos Drills, API Gateway, Distributed Traces, Kafka Event Streams, Distributed Rate Limiting, Multi-Region Replication, Database Sharding, Edge CDN Caching, Circuit Breakers, Concurrency & Deadlocks'
+            'Available Domains: Systems, ADR Governance, AI Codex, Trade-Off Matrix, Evolution Diffs, Chaos Drills, API Gateway, Distributed Traces, Kafka Event Streams, Distributed Rate Limiting, Multi-Region Replication, Database Sharding, Edge CDN Caching, Circuit Breakers, Concurrency & Deadlocks, Raft Consensus'
           ]
           break
         }
@@ -2172,6 +2254,28 @@ export default function InteractiveCli() {
               `  Paradigm   : ${c.paradigm} (${c.badge})`,
               `  Deadlock   : ${c.deadlockStrategy}`,
               `  Anchor     : #architecture-distributed-concurrency`,
+              ''
+            )
+          }
+        })
+
+        // 16. Search Distributed Consensus & Raft
+        CONSENSUS_MODELS.forEach(c => {
+          if (
+            c.name.toLowerCase().includes(query) ||
+            c.id.toLowerCase().includes(query) ||
+            c.paradigm.toLowerCase().includes(query) ||
+            c.badge.toLowerCase().includes(query) ||
+            c.quorumRequirement.toLowerCase().includes(query) ||
+            c.logConsistencyInvariant.toLowerCase().includes(query) ||
+            c.splitBrainDefense.toLowerCase().includes(query) ||
+            c.architecturalInvariant.toLowerCase().includes(query)
+          ) {
+            results.push(
+              `[Distributed Consensus] ${c.name}`,
+              `  Paradigm   : ${c.paradigm} (${c.badge})`,
+              `  Quorum     : ${c.quorumRequirement}`,
+              `  Anchor     : #architecture-raft-consensus`,
               ''
             )
           }

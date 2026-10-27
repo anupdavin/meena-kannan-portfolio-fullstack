@@ -183,6 +183,7 @@ const ARCHITECTURE_ENGINES = [
   { id: 'architecture-edge-cdn', label: 'Edge CDN', badge: 'SWR Shield', icon: CloudLightning, border: 'border-cyan-500/40 text-cyan-300 hover:bg-cyan-500/10' },
   { id: 'architecture-circuit-breaker', label: 'Circuit Breaker', badge: 'Resilience4j', icon: ShieldAlert, border: 'border-rose-500/40 text-rose-300 hover:bg-rose-500/10' },
   { id: 'architecture-distributed-concurrency', label: 'Concurrency', badge: 'Tarjan WFG', icon: GitFork, border: 'border-indigo-500/40 text-indigo-300 hover:bg-indigo-500/10' },
+  { id: 'architecture-raft-consensus', label: 'Raft Consensus', badge: 'Quorum RSM', icon: Radio, border: 'border-emerald-500/40 text-emerald-300 hover:bg-emerald-500/10' },
 ]
 
 export default function TerminalHero() {
@@ -423,7 +424,7 @@ export default function TerminalHero() {
             <div className="flex items-center justify-between text-[11px] font-mono">
               <span className="text-slate-300 font-bold uppercase tracking-wider flex items-center gap-1.5">
                 <span className="w-2 h-2 rounded-full bg-cyan-400 animate-pulse" />
-                15 Interactive Architecture Engines
+                16 Interactive Architecture Engines
               </span>
               <span className="text-slate-500 text-[10px]">Direct Fast Jump &darr;</span>
             </div>

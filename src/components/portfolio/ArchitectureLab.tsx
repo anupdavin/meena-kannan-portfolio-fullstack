@@ -39,6 +39,7 @@ import DatabaseShardingSandbox from '@/components/architecture/DatabaseShardingS
 import EdgeCdnSandbox from '@/components/architecture/EdgeCdnSandbox'
 import CircuitBreakerSandbox from '@/components/architecture/CircuitBreakerSandbox'
 import DistributedConcurrencySandbox from '@/components/architecture/DistributedConcurrencySandbox'
+import RaftConsensusSandbox from '@/components/architecture/RaftConsensusSandbox'
 import { ARCHITECTURE_SYSTEMS } from '@/data/architectureSystems'
 import { ARCHITECTURAL_DECISIONS } from '@/data/architecturalDecisions'
 import { ARCHITECTURAL_TRADEOFFS } from '@/data/architecturalTradeoffs'
@@ -53,6 +54,7 @@ import { DATABASE_SHARDING_STRATEGIES } from '@/data/databaseSharding'
 import { EDGE_CDN_STRATEGIES } from '@/data/edgeCdnCaching'
 import { CIRCUIT_BREAKER_PATTERNS } from '@/data/circuitBreakers'
 import { CONCURRENCY_MODELS } from '@/data/distributedConcurrency'
+import { CONSENSUS_MODELS } from '@/data/raftConsensus'
 
 const AI_TERMS_SUMMARY = [
   { id: 'agentic-ai', title: 'Agentic AI', text: 'Perception-action loop, DAG memory, tool execution, LangGraph' },
@@ -85,6 +87,7 @@ export default function ArchitectureLab() {
         cdn: 5,
         circuitbreaker: 5,
         concurrency: 5,
+        raft: 5,
         isActive: false
       }
     }
@@ -228,8 +231,19 @@ export default function ArchitectureLab() {
       c.architecturalInvariant.toLowerCase().includes(q)
     ).length
 
+    const raftCount = CONSENSUS_MODELS.filter(r =>
+      r.name.toLowerCase().includes(q) ||
+      r.id.toLowerCase().includes(q) ||
+      r.paradigm.toLowerCase().includes(q) ||
+      r.badge.toLowerCase().includes(q) ||
+      r.quorumRequirement.toLowerCase().includes(q) ||
+      r.logConsistencyInvariant.toLowerCase().includes(q) ||
+      r.splitBrainDefense.toLowerCase().includes(q) ||
+      r.architecturalInvariant.toLowerCase().includes(q)
+    ).length
+
     return {
-      total: workbenchCount + aiCount + adrCount + tradeoffCount + evolutionCount + chaosCount + gatewayCount + traceCount + kafkaCount + ratelimitCount + multiregionCount + shardingCount + cdnCount + circuitBreakerCount + concurrencyCount,
+      total: workbenchCount + aiCount + adrCount + tradeoffCount + evolutionCount + chaosCount + gatewayCount + traceCount + kafkaCount + ratelimitCount + multiregionCount + shardingCount + cdnCount + circuitBreakerCount + concurrencyCount + raftCount,
       workbench: workbenchCount,
       aiCodex: aiCount,
       adr: adrCount,
@@ -245,6 +259,7 @@ export default function ArchitectureLab() {
       cdn: cdnCount,
       circuitbreaker: circuitBreakerCount,
       concurrency: concurrencyCount,
+      raft: raftCount,
       isActive: true
     }
   }, [searchQuery])
@@ -520,7 +535,18 @@ export default function ArchitectureLab() {
             }`}
           >
             <GitFork className="w-3.5 h-3.5 text-indigo-400" />
-            <span>Concurrency & Deadlocks ({matchStats.concurrency})</span>
+            <span>Concurrency &amp; Deadlocks ({matchStats.concurrency})</span>
+          </a>
+          <a 
+            href="#architecture-raft-consensus"
+            className={`px-3 py-1.5 rounded-lg border transition-all flex items-center gap-1.5 cursor-pointer ${
+              matchStats.isActive && matchStats.raft > 0
+                ? 'bg-emerald-500/10 border-emerald-500/50 text-emerald-400 shadow-[0_0_10px_rgba(16,185,129,0.15)] font-bold'
+                : 'bg-slate-900 border-slate-800 hover:border-emerald-500/50 hover:text-emerald-400 text-slate-300'
+            }`}
+          >
+            <Radio className="w-3.5 h-3.5 text-emerald-400" />
+            <span>Raft Consensus ({matchStats.raft})</span>
           </a>
         </div>
       </div>
@@ -707,6 +733,18 @@ export default function ArchitectureLab() {
         className="scroll-mt-24"
       >
         <DistributedConcurrencySandbox />
+      </motion.div>
+
+      {/* 2.19. Distributed Consensus & Raft Leader Election State Machine */}
+      <motion.div
+        id="architecture-raft-consensus"
+        initial={{ opacity: 0, y: 25 }}
+        whileInView={{ opacity: 1, y: 0 }}
+        viewport={{ once: true }}
+        transition={{ duration: 0.6, delay: 0.8 }}
+        className="scroll-mt-24"
+      >
+        <RaftConsensusSandbox />
       </motion.div>
 
       {/* 3. Architectural Design Pillars Strip */}

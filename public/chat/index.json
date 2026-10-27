@@ -178,5 +178,11 @@
     "title": "Distributed Deadlock Detection & 2PL vs OCC Concurrency Control Simulator",
     "text": "Meena architects distributed concurrency and transactional isolation control engines across 5 paradigms: (1) Strict Two-Phase Locking (S2PL) with Wait-Die: Timestamp-based non-preemptive deadlock prevention guaranteeing directed acyclic Wait-For Graphs and zero cascading rollbacks in FinTech ledger updates, (2) Optimistic Concurrency Control (OCC): Three-phase read, validate, and write engine with monotonic commit sequence numbers achieving zero lock overhead for read-heavy SaaS workloads, (3) Multi-Version Concurrency Control (MVCC): PostgreSQL Snapshot Isolation with immutable xmin/xmax transaction visibility tuples where readers never block writers and writers never block readers, (4) Distributed Wait-For Graph (WFG) with Tarjan SCC Cycle Detection: Identifies circular dependencies in sub-1ms and aborts lowest-cost victim transactions with automatic backoff retry, and (5) Distributed Lock Manager (DLM) with Redis Redlock & Raft Leases: Quorum-based mutual exclusion (3 of 5 nodes) with TTL auto-release and monotonic fencing tokens to prevent zombie split-brain writes.",
     "url": "#architecture-distributed-concurrency"
+  },
+  {
+    "id": "distributed-consensus-raft",
+    "title": "Distributed Consensus & Raft Leader Election State Machine Sandbox",
+    "text": "Meena designs production replicated state machine consensus and leader election engines across 5 paradigms: (1) Raft Randomized Timer Leader Election: Randomized election timeouts (150ms-300ms) and majority votes (floor(N/2)+1) achieving sub-250ms failover without central coordinators, (2) Raft Log Replication: AppendEntries RPC pipeline advancing commitIndex upon majority replication and applying commands deterministically to local state machines, (3) Multi-Raft Network Partition & Quorum Isolation: Mathematical quorum intersection ensures minority partitions (<=2 of 5 nodes) freeze writes to eliminate split-brain dual-leader commits, (4) Joint Consensus Dynamic Cluster Reconfiguration: Two-phase Cold to Cold,new to Cnew migration allowing zero-downtime cluster resizing, and (5) Multi-Paxos vs Raft Comparative Evaluation: Contrasts classic Synod 2-phase rounds with amortized stable leader leases.",
+    "url": "#architecture-raft-consensus"
   }
 ]

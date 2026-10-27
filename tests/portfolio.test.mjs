@@ -1090,6 +1090,43 @@ describe('Production Architectural Decision Records (ADR) & CLI Integration', ()
     assert.ok(indexHtml.includes('id="architecture-distributed-concurrency"'), 'index.html must include #architecture-distributed-concurrency landmark');
     assert.ok(!/[\u2013\u2014]/.test(indexHtml), 'index.html must contain zero em/en-dashes');
   });
+
+  test('RaftConsensusSandbox and raftConsensus.ts define distributed consensus and leader election with CLI integration', () => {
+    const raftDataPath = path.join(rootDir, 'src', 'data', 'raftConsensus.ts');
+    assert.ok(fs.existsSync(raftDataPath), 'raftConsensus.ts must exist');
+    const raftDataCode = fs.readFileSync(raftDataPath, 'utf8');
+    assert.ok(raftDataCode.includes('raft-leader-election'), 'Must define raft-leader-election model');
+    assert.ok(raftDataCode.includes('raft-log-replication'), 'Must define raft-log-replication model');
+    assert.ok(raftDataCode.includes('multi-raft-split-brain'), 'Must define multi-raft-split-brain model');
+    assert.ok(raftDataCode.includes('joint-consensus-reconfiguration'), 'Must define joint-consensus-reconfiguration model');
+    assert.ok(raftDataCode.includes('paxos-synod-comparison'), 'Must define paxos-synod-comparison model');
+    assert.ok(!/[\u2013\u2014]/.test(raftDataCode), 'raftConsensus.ts must contain zero em/en-dashes');
+
+    const componentPath = path.join(rootDir, 'src', 'components', 'architecture', 'RaftConsensusSandbox.tsx');
+    assert.ok(fs.existsSync(componentPath), 'RaftConsensusSandbox.tsx must exist');
+    const compCode = fs.readFileSync(componentPath, 'utf8');
+    assert.ok(compCode.includes('copyRfcReport'), 'RaftConsensusSandbox must support 1-click RFC copy');
+    assert.ok(compCode.includes('CONSENSUS_MODELS'), 'RaftConsensusSandbox must render CONSENSUS_MODELS');
+    assert.ok(!/[\u2013\u2014]/.test(compCode), 'RaftConsensusSandbox.tsx must contain zero em/en-dashes');
+
+    const labCode = fs.readFileSync(path.join(rootDir, 'src', 'components', 'portfolio', 'ArchitectureLab.tsx'), 'utf8');
+    assert.ok(labCode.includes('RaftConsensusSandbox'), 'ArchitectureLab must mount RaftConsensusSandbox');
+    assert.ok(labCode.includes('id="architecture-raft-consensus"'), 'ArchitectureLab must define anchor #architecture-raft-consensus');
+
+    const cliCode = fs.readFileSync(path.join(rootDir, 'src', 'components', 'portfolio', 'InteractiveCli.tsx'), 'utf8');
+    assert.ok(cliCode.includes("'raft'"), "InteractiveCli must support 'raft' command");
+    assert.ok(cliCode.includes('[ $ raft ]'), "InteractiveCli must include '[ $ raft ]' quick chip");
+    assert.ok(cliCode.includes('CONSENSUS_MODELS'), 'InteractiveCli must search across CONSENSUS_MODELS');
+    assert.ok(!/[\u2013\u2014]/.test(cliCode), 'InteractiveCli.tsx must contain zero em/en-dashes');
+
+    const chatIndex = fs.readFileSync(path.join(rootDir, 'public', 'chat', 'index.json'), 'utf8');
+    assert.ok(chatIndex.includes('distributed-consensus-raft'), 'public/chat/index.json must index distributed-consensus-raft');
+    assert.ok(!/[\u2013\u2014]/.test(chatIndex), 'public/chat/index.json must contain zero em/en-dashes');
+
+    const indexHtml = fs.readFileSync(path.join(rootDir, 'index.html'), 'utf8');
+    assert.ok(indexHtml.includes('id="architecture-raft-consensus"'), 'index.html must include #architecture-raft-consensus landmark');
+    assert.ok(!/[\u2013\u2014]/.test(indexHtml), 'index.html must contain zero em/en-dashes');
+  });
 });
 
 
