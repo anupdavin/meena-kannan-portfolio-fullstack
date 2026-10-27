@@ -36,6 +36,7 @@ import RateLimiterSandbox from '@/components/architecture/RateLimiterSandbox'
 import MultiRegionReplicationSandbox from '@/components/architecture/MultiRegionReplicationSandbox'
 import DatabaseShardingSandbox from '@/components/architecture/DatabaseShardingSandbox'
 import EdgeCdnSandbox from '@/components/architecture/EdgeCdnSandbox'
+import CircuitBreakerSandbox from '@/components/architecture/CircuitBreakerSandbox'
 import { ARCHITECTURE_SYSTEMS } from '@/data/architectureSystems'
 import { ARCHITECTURAL_DECISIONS } from '@/data/architecturalDecisions'
 import { ARCHITECTURAL_TRADEOFFS } from '@/data/architecturalTradeoffs'
@@ -48,6 +49,7 @@ import { RATE_LIMITING_ALGORITHMS } from '@/data/rateLimitingAlgorithms'
 import { MULTI_REGION_STRATEGIES } from '@/data/multiRegionReplication'
 import { DATABASE_SHARDING_STRATEGIES } from '@/data/databaseSharding'
 import { EDGE_CDN_STRATEGIES } from '@/data/edgeCdnCaching'
+import { CIRCUIT_BREAKER_PATTERNS } from '@/data/circuitBreakers'
 
 const AI_TERMS_SUMMARY = [
   { id: 'agentic-ai', title: 'Agentic AI', text: 'Perception-action loop, DAG memory, tool execution, LangGraph' },
@@ -78,6 +80,7 @@ export default function ArchitectureLab() {
         multiregion: 5,
         sharding: 5,
         cdn: 5,
+        circuitbreaker: 5,
         isActive: false
       }
     }
@@ -203,8 +206,17 @@ export default function ArchitectureLab() {
       c.productionUseCase.system.toLowerCase().includes(q)
     ).length
 
+    const circuitBreakerCount = CIRCUIT_BREAKER_PATTERNS.filter(b => 
+      b.name.toLowerCase().includes(q) ||
+      b.id.toLowerCase().includes(q) ||
+      b.paradigm.toLowerCase().includes(q) ||
+      b.badge.toLowerCase().includes(q) ||
+      b.failureThreshold.toLowerCase().includes(q) ||
+      b.architecturalInvariant.toLowerCase().includes(q)
+    ).length
+
     return {
-      total: workbenchCount + aiCount + adrCount + tradeoffCount + evolutionCount + chaosCount + gatewayCount + traceCount + kafkaCount + ratelimitCount + multiregionCount + shardingCount + cdnCount,
+      total: workbenchCount + aiCount + adrCount + tradeoffCount + evolutionCount + chaosCount + gatewayCount + traceCount + kafkaCount + ratelimitCount + multiregionCount + shardingCount + cdnCount + circuitBreakerCount,
       workbench: workbenchCount,
       aiCodex: aiCount,
       adr: adrCount,
@@ -218,6 +230,7 @@ export default function ArchitectureLab() {
       multiregion: multiregionCount,
       sharding: shardingCount,
       cdn: cdnCount,
+      circuitbreaker: circuitBreakerCount,
       isActive: true
     }
   }, [searchQuery])
@@ -473,6 +486,17 @@ export default function ArchitectureLab() {
             <CloudLightning className="w-3.5 h-3.5 text-cyan-400" />
             <span>Edge CDN ({matchStats.cdn})</span>
           </a>
+          <a 
+            href="#architecture-circuit-breaker"
+            className={`px-3 py-1.5 rounded-lg border transition-all flex items-center gap-1.5 cursor-pointer ${
+              matchStats.isActive && matchStats.circuitbreaker > 0
+                ? 'bg-rose-500/10 border-rose-500/50 text-rose-400 shadow-[0_0_10px_rgba(244,63,94,0.15)] font-bold'
+                : 'bg-slate-900 border-slate-800 hover:border-rose-500/50 hover:text-rose-400 text-slate-300'
+            }`}
+          >
+            <ShieldAlert className="w-3.5 h-3.5 text-rose-400" />
+            <span>Circuit Breakers ({matchStats.circuitbreaker})</span>
+          </a>
         </div>
       </div>
 
@@ -634,6 +658,18 @@ export default function ArchitectureLab() {
         className="scroll-mt-24"
       >
         <EdgeCdnSandbox />
+      </motion.div>
+
+      {/* 2.17. Distributed Circuit Breaker & Cascading Fault Mesh Sandbox */}
+      <motion.div
+        id="architecture-circuit-breaker"
+        initial={{ opacity: 0, y: 25 }}
+        whileInView={{ opacity: 1, y: 0 }}
+        viewport={{ once: true }}
+        transition={{ duration: 0.6, delay: 0.7 }}
+        className="scroll-mt-24"
+      >
+        <CircuitBreakerSandbox />
       </motion.div>
 
       {/* 3. Architectural Design Pillars Strip */}

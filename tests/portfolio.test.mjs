@@ -1016,6 +1016,43 @@ describe('Production Architectural Decision Records (ADR) & CLI Integration', ()
     assert.ok(indexHtml.includes('id="architecture-edge-cdn"'), 'index.html must include #architecture-edge-cdn landmark');
     assert.ok(!/[\u2013\u2014]/.test(indexHtml), 'index.html must contain zero em/en-dashes');
   });
+
+  test('CircuitBreakerSandbox and circuitBreakers.ts define distributed circuit breakers with CLI integration', () => {
+    const cbDataPath = path.join(rootDir, 'src', 'data', 'circuitBreakers.ts');
+    assert.ok(fs.existsSync(cbDataPath), 'circuitBreakers.ts must exist');
+    const cbDataCode = fs.readFileSync(cbDataPath, 'utf8');
+    assert.ok(cbDataCode.includes('resilience4j-sliding-window'), 'Must define resilience4j-sliding-window pattern');
+    assert.ok(cbDataCode.includes('semaphore-thread-bulkhead'), 'Must define semaphore-thread-bulkhead pattern');
+    assert.ok(cbDataCode.includes('exponential-backoff-full-jitter'), 'Must define exponential-backoff-full-jitter pattern');
+    assert.ok(cbDataCode.includes('adaptive-concurrency-vegas'), 'Must define adaptive-concurrency-vegas pattern');
+    assert.ok(cbDataCode.includes('envoy-outlier-ejection'), 'Must define envoy-outlier-ejection pattern');
+    assert.ok(!/[\u2013\u2014]/.test(cbDataCode), 'circuitBreakers.ts must contain zero em/en-dashes');
+
+    const componentPath = path.join(rootDir, 'src', 'components', 'architecture', 'CircuitBreakerSandbox.tsx');
+    assert.ok(fs.existsSync(componentPath), 'CircuitBreakerSandbox.tsx must exist');
+    const compCode = fs.readFileSync(componentPath, 'utf8');
+    assert.ok(compCode.includes('copyRfcReport'), 'CircuitBreakerSandbox must support 1-click RFC copy');
+    assert.ok(compCode.includes('CIRCUIT_BREAKER_PATTERNS'), 'CircuitBreakerSandbox must render CIRCUIT_BREAKER_PATTERNS');
+    assert.ok(!/[\u2013\u2014]/.test(compCode), 'CircuitBreakerSandbox.tsx must contain zero em/en-dashes');
+
+    const labCode = fs.readFileSync(path.join(rootDir, 'src', 'components', 'portfolio', 'ArchitectureLab.tsx'), 'utf8');
+    assert.ok(labCode.includes('CircuitBreakerSandbox'), 'ArchitectureLab must mount CircuitBreakerSandbox');
+    assert.ok(labCode.includes('id="architecture-circuit-breaker"'), 'ArchitectureLab must define anchor #architecture-circuit-breaker');
+
+    const cliCode = fs.readFileSync(path.join(rootDir, 'src', 'components', 'portfolio', 'InteractiveCli.tsx'), 'utf8');
+    assert.ok(cliCode.includes("'circuitbreaker'"), "InteractiveCli must support 'circuitbreaker' command");
+    assert.ok(cliCode.includes('[ $ circuitbreaker ]'), "InteractiveCli must include '[ $ circuitbreaker ]' quick chip");
+    assert.ok(cliCode.includes('CIRCUIT_BREAKER_PATTERNS'), 'InteractiveCli must search across CIRCUIT_BREAKER_PATTERNS');
+    assert.ok(!/[\u2013\u2014]/.test(cliCode), 'InteractiveCli.tsx must contain zero em/en-dashes');
+
+    const chatIndex = fs.readFileSync(path.join(rootDir, 'public', 'chat', 'index.json'), 'utf8');
+    assert.ok(chatIndex.includes('circuit-breaker-fault-mesh'), 'public/chat/index.json must index circuit-breaker-fault-mesh');
+    assert.ok(!/[\u2013\u2014]/.test(chatIndex), 'public/chat/index.json must contain zero em/en-dashes');
+
+    const indexHtml = fs.readFileSync(path.join(rootDir, 'index.html'), 'utf8');
+    assert.ok(indexHtml.includes('id="architecture-circuit-breaker"'), 'index.html must include #architecture-circuit-breaker landmark');
+    assert.ok(!/[\u2013\u2014]/.test(indexHtml), 'index.html must contain zero em/en-dashes');
+  });
 });
 
 

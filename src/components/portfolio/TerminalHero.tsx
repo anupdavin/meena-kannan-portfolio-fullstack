@@ -25,7 +25,8 @@ import {
   Radio,
   Globe2,
   Database,
-  CloudLightning
+  CloudLightning,
+  ShieldAlert
 } from 'lucide-react'
 import HeroArchitectureTopology from '@/components/architecture/HeroArchitectureTopology'
 
@@ -179,6 +180,7 @@ const ARCHITECTURE_ENGINES = [
   { id: 'architecture-multi-region', label: 'Multi-Region', badge: 'CRDT & Raft', icon: Globe2, border: 'border-sky-500/40 text-sky-300 hover:bg-sky-500/10' },
   { id: 'architecture-database-sharding', label: 'DB Sharding', badge: 'Ring Topology', icon: Database, border: 'border-emerald-500/40 text-emerald-300 hover:bg-emerald-500/10' },
   { id: 'architecture-edge-cdn', label: 'Edge CDN', badge: 'SWR Shield', icon: CloudLightning, border: 'border-cyan-500/40 text-cyan-300 hover:bg-cyan-500/10' },
+  { id: 'architecture-circuit-breaker', label: 'Circuit Breaker', badge: 'Resilience4j', icon: ShieldAlert, border: 'border-rose-500/40 text-rose-300 hover:bg-rose-500/10' },
 ]
 
 export default function TerminalHero() {
@@ -419,7 +421,7 @@ export default function TerminalHero() {
             <div className="flex items-center justify-between text-[11px] font-mono">
               <span className="text-slate-300 font-bold uppercase tracking-wider flex items-center gap-1.5">
                 <span className="w-2 h-2 rounded-full bg-cyan-400 animate-pulse" />
-                13 Interactive Architecture Engines
+                14 Interactive Architecture Engines
               </span>
               <span className="text-slate-500 text-[10px]">Direct Fast Jump &darr;</span>
             </div>

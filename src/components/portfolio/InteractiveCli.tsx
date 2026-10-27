@@ -13,6 +13,7 @@ import { RATE_LIMITING_ALGORITHMS } from '@/data/rateLimitingAlgorithms'
 import { MULTI_REGION_STRATEGIES } from '@/data/multiRegionReplication'
 import { DATABASE_SHARDING_STRATEGIES } from '@/data/databaseSharding'
 import { EDGE_CDN_STRATEGIES } from '@/data/edgeCdnCaching'
+import { CIRCUIT_BREAKER_PATTERNS } from '@/data/circuitBreakers'
 import { EXECUTIVE_BRIEFING } from '@/data/executiveBriefing'
 
 interface HistoryEntry {
@@ -76,6 +77,10 @@ const AVAILABLE_COMMANDS = [
   'cachepurge',
   'surrogate',
   'stale',
+  'circuitbreaker',
+  'bulkhead',
+  'resilience4j',
+  'backoff',
   'adr',
   'decisions',
   'tradeoffs',
@@ -121,6 +126,7 @@ const QUICK_CHIPS = [
   { label: '[ $ multiregion ]', cmd: 'multiregion' },
   { label: '[ $ sharding ]', cmd: 'sharding' },
   { label: '[ $ cdn ]', cmd: 'cdn' },
+  { label: '[ $ circuitbreaker ]', cmd: 'circuitbreaker' },
   { label: '[ $ find kafka ]', cmd: 'find kafka' },
   { label: '[ $ tradeoffs ]', cmd: 'tradeoffs' },
   { label: '[ $ adr ]', cmd: 'adr' },
@@ -154,6 +160,7 @@ const COMMAND_HELP = [
   '  multiregion     - Inspect multi-region replication topologies & conflict resolution (or "replication <id>")',
   '  sharding        - Inspect database sharding topologies & consistent hash ring (or "sharding <id>")',
   '  cdn             - Inspect Edge CDN caching, surrogate-key purges & SWR flows (or "cdn <id>")',
+  '  circuitbreaker  - Evaluate distributed circuit breakers, bulkheads & backoff jitter (or "circuitbreaker <id>")',
   '  find <query>    - Search cross-cutting architecture systems, ADRs, AI codex & trade-offs',
   '  tradeoffs       - Evaluate system design decision trade-offs (or "compare <topic>")',
   '  stats           - View production performance & impact metrics (99.99% SLA)',
@@ -1683,6 +1690,73 @@ export default function InteractiveCli() {
         ]
         break
       }
+      case 'circuitbreaker':
+      case 'bulkhead':
+      case 'resilience4j':
+      case 'backoff': {
+        const target = args[0]?.toLowerCase().trim()
+        if (target) {
+          const matched = CIRCUIT_BREAKER_PATTERNS.find(b => 
+            b.id === target ||
+            b.id.includes(target) ||
+            b.name.toLowerCase().includes(target) ||
+            b.badge.toLowerCase().includes(target) ||
+            (target === '1' && b.id === 'resilience4j-sliding-window') ||
+            (target === '2' && b.id === 'semaphore-thread-bulkhead') ||
+            (target === '3' && b.id === 'exponential-backoff-full-jitter') ||
+            (target === '4' && b.id === 'adaptive-concurrency-vegas') ||
+            (target === '5' && b.id === 'envoy-outlier-ejection')
+          )
+          if (matched) {
+            output = [
+              '--------------------------------------------------------------------------------',
+              `Circuit Breaker Pattern: ${matched.name} [${matched.badge}]`,
+              '--------------------------------------------------------------------------------',
+              `Core Paradigm       : ${matched.paradigm}`,
+              `Failure Threshold   : ${matched.failureThreshold}`,
+              `Target Latency      : ${matched.targetLatency}`,
+              `Blast Containment   : ${matched.blastRadiusContainment}`,
+              `Recovery Mechanism  : ${matched.recoveryMechanism}`,
+              '--------------------------------------------------------------------------------',
+              'FINITE STATE MACHINE BEHAVIOR:',
+              ...matched.stateMachine.states.map(s =>
+                `  * State [${s.name}] :: ${s.description} -> ${s.behavior}`
+              ),
+              '--------------------------------------------------------------------------------',
+              'STATE TRANSITION TRIGGERS:',
+              ...matched.stateMachine.transitions.map(t =>
+                `  - ${t.from} -> ${t.to} : ${t.trigger}`
+              ),
+              '--------------------------------------------------------------------------------',
+              'PRODUCTION OUTCOMES & INVARIANTS:',
+              ...Object.entries(matched.productionOutcomes).map(([k, v]) => `  + ${k}: ${v}`),
+              '',
+              `Invariant: "${matched.architecturalInvariant}"`,
+              '--------------------------------------------------------------------------------',
+              'Full live circuit state machine simulator in #architecture-circuit-breaker.'
+            ]
+            break
+          }
+        }
+
+        output = [
+          'Distributed Circuit Breaker & Cascading Fault Mesh Sandbox:',
+          '--------------------------------------------------------------------------------',
+          'Explore 5 fault-tolerance and cascading failure prevention patterns:',
+          '',
+          ...CIRCUIT_BREAKER_PATTERNS.flatMap((b, idx) => [
+            `${idx + 1}. [ ${b.id} ] : ${b.name} (${b.badge})`,
+            `   Paradigm      : ${b.paradigm}`,
+            `   Threshold     : ${b.failureThreshold}`,
+            `   Blast Radius  : ${b.blastRadiusContainment}`,
+            `   Deep Dive     : "circuitbreaker ${idx + 1}" or "circuitbreaker ${b.id.split('-')[0]}" (e.g. "circuitbreaker resilience4j", "circuitbreaker bulkhead", "circuitbreaker backoff", "circuitbreaker vegas", "circuitbreaker outlier")`,
+            ''
+          ]),
+          '--------------------------------------------------------------------------------',
+          'Tip: Run "circuitbreaker <id>" (e.g. "circuitbreaker 1" or "circuitbreaker resilience4j") to inspect state machine rules.'
+        ]
+        break
+      }
       case 'find':
       case 'search': {
         const query = args.join(' ').toLowerCase().trim()
@@ -1958,6 +2032,26 @@ export default function InteractiveCli() {
               `[Edge CDN Caching] ${c.name}`,
               `  Strategy   : ${c.strategyName} (${c.originOffloadPct}% offload)`,
               `  Anchor     : #architecture-edge-cdn`,
+              ''
+            )
+          }
+        })
+
+        // 14. Search Distributed Circuit Breakers & Fault Tolerance
+        CIRCUIT_BREAKER_PATTERNS.forEach(b => {
+          if (
+            b.name.toLowerCase().includes(query) ||
+            b.id.toLowerCase().includes(query) ||
+            b.paradigm.toLowerCase().includes(query) ||
+            b.badge.toLowerCase().includes(query) ||
+            b.failureThreshold.toLowerCase().includes(query) ||
+            b.architecturalInvariant.toLowerCase().includes(query) ||
+            b.stateMachine.states.some(s => s.name.toLowerCase().includes(query) || s.description.toLowerCase().includes(query))
+          ) {
+            results.push(
+              `[Circuit Breaker] ${b.name}`,
+              `  Paradigm   : ${b.paradigm} (${b.badge})`,
+              `  Anchor     : #architecture-circuit-breaker`,
               ''
             )
           }

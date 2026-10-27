@@ -166,5 +166,11 @@
     "title": "Edge CDN Caching & Stale-While-Revalidate Invalidation Sandbox",
     "text": "Meena designs high-scale global CDN edge caching architectures across 5 enterprise tiers: (1) Surrogate-Key / Cache-Tag Purge: Instant targeted invalidation across 300+ global edge PoPs in under 150ms for thousands of localized e-commerce catalog variants, (2) RFC 5861 Stale-While-Revalidate Edge Shield: Delivers sub-4ms instant edge cache hits from memory while asynchronously revalidating expired content against the origin in the background, (3) AWS CloudFront Origin Shield Tiered Caching: Concentrates cross-continental regional cache misses into a primary origin shield zone achieving 99.1% offload, (4) Collapsed Forwarding Mutex Locks: Merges parallel incoming cache misses into exactly 1 backend query to eliminate thundering herd stampedes, and (5) Programmable Edge Compute Workers: Validates RS256 JWT tokens and executes geo-routing in 1.8ms inside V8 isolates at the edge.",
     "url": "#architecture-edge-cdn"
+  },
+  {
+    "id": "circuit-breaker-fault-mesh",
+    "title": "Distributed Circuit Breaker & Cascading Fault Mesh Sandbox",
+    "text": "Meena architects production-hardened circuit breakers, bulkheads, and cascading failure protection across 5 resilience patterns: (1) Resilience4j Sliding Window Circuit Breakers: Finite state machine (Closed, Open, Half-Open) with circular ring buffer error and slow call rate evaluation, tripping in sub-15ms to serve cached fallbacks and shield carrier thread pools from starvation, (2) Semaphore & Thread-Pool Bulkhead Isolation: Hard caps of 25 concurrent permits preventing peripheral 3rd-party tax/address validation outages from depleting core transaction connection pools, (3) Exponential Backoff with Full Jitter: Uniform randomized delays spreading 50k edge client retries to cut recovery peak spikes by 74%, (4) Adaptive Concurrency Limits (TCP Vegas / BBR): Gradient-based queue delay feedback automatically throttling in-flight concurrency from 10 to 500 without manual thread pool tuning, and (5) Envoy Passive Health Checking with Outlier Ejection: Evicts degraded upstream hosts in sub-100ms after 5 consecutive 5xx errors for a 30s escalating backoff window.",
+    "url": "#architecture-circuit-breaker"
   }
 ]
