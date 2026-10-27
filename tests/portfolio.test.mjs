@@ -267,6 +267,11 @@ describe('ByteByteGo Architecture & Stock Image Elimination Verification', () =>
     const portfolioCode = fs.readFileSync(path.join(rootDir, 'src', 'pages', 'Portfolio.tsx'), 'utf8');
     assert.ok(portfolioCode.includes('id="architecture"'), 'Portfolio must mount architecture section');
     assert.ok(portfolioCode.includes('ArchitectureLab'), 'Portfolio must render ArchitectureLab');
+    assert.ok(portfolioCode.includes('[1-7]'), 'Portfolio must render footer keyboard shortcut pill [1-7]');
+    assert.ok(portfolioCode.includes('[{idx + 1}]'), 'Portfolio must render indexed vertical tracker dot tooltips');
+
+    const codexCode = fs.readFileSync(path.join(rootDir, 'src', 'components', 'architecture', 'ByteByteGoAiCodex.tsx'), 'utf8');
+    assert.ok(codexCode.includes('isStudioMode ?'), 'ByteByteGoAiCodex must implement Studio Canvas dual theme styling');
   });
 });
 

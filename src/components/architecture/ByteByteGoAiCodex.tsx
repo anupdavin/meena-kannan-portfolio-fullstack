@@ -350,7 +350,13 @@ export default function ByteByteGoAiCodex() {
             </div>
 
             {/* Column 2: The Core Workflow Diagram (Interactive SVG) */}
-            <div className="lg:col-span-6 rounded-xl border p-4 bg-slate-950/60 overflow-hidden" style={{ borderColor: isStudioMode ? '#e2e8f0' : '#1e293b' }}>
+            <div 
+              className="lg:col-span-6 rounded-xl border p-4 overflow-hidden" 
+              style={{ 
+                backgroundColor: isStudioMode ? '#f8fafc' : 'rgba(2, 6, 23, 0.6)',
+                borderColor: isStudioMode ? '#e2e8f0' : '#1e293b' 
+              }}
+            >
               <div className="text-[10px] font-mono uppercase text-slate-500 mb-2 flex items-center justify-between">
                 <span>System Topology & Data Flow</span>
                 <span className="text-emerald-400">Step Sequence Active</span>
@@ -687,18 +693,24 @@ export default function ByteByteGoAiCodex() {
               </div>
 
               {/* Architectural Technical Spec */}
-              <div className="p-3 rounded-xl bg-slate-900/60 border border-slate-800 text-[11px] font-mono space-y-1.5">
-                <div className="flex justify-between text-slate-400">
+              <div 
+                className="p-3 rounded-xl border text-[11px] font-mono space-y-1.5"
+                style={{
+                  backgroundColor: isStudioMode ? '#f8fafc' : 'rgba(15, 23, 42, 0.6)',
+                  borderColor: isStudioMode ? '#e2e8f0' : '#1e293b'
+                }}
+              >
+                <div className="flex justify-between" style={{ color: isStudioMode ? '#64748b' : '#94a3b8' }}>
                   <span>Protocol:</span>
-                  <span className="text-slate-200 truncate max-w-[140px]">{activeTerm.technicalSpecs.protocol}</span>
+                  <span className="truncate max-w-[140px]" style={{ color: isStudioMode ? '#0f172a' : '#e2e8f0' }}>{activeTerm.technicalSpecs.protocol}</span>
                 </div>
-                <div className="flex justify-between text-slate-400">
+                <div className="flex justify-between" style={{ color: isStudioMode ? '#64748b' : '#94a3b8' }}>
                   <span>Latency:</span>
-                  <span className="text-emerald-400 font-bold">{activeTerm.technicalSpecs.latencyTarget}</span>
+                  <span className="font-bold text-emerald-500">{activeTerm.technicalSpecs.latencyTarget}</span>
                 </div>
-                <div className="pt-1 border-t border-slate-800 text-[10px] text-slate-400">
-                  <span className="text-slate-500">Stack: </span>
-                  <span className="text-slate-300">{activeTerm.technicalSpecs.productionStack}</span>
+                <div className="pt-1 border-t text-[10px]" style={{ borderColor: isStudioMode ? '#e2e8f0' : '#1e293b', color: isStudioMode ? '#64748b' : '#94a3b8' }}>
+                  <span style={{ color: isStudioMode ? '#94a3b8' : '#64748b' }}>Stack: </span>
+                  <span style={{ color: isStudioMode ? '#0f172a' : '#cbd5e1' }}>{activeTerm.technicalSpecs.productionStack}</span>
                 </div>
               </div>
 

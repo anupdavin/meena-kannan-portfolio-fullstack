@@ -218,6 +218,10 @@ export default function Portfolio() {
             <a href="mailto:meenakannan.dev@gmail.com" className="hover:text-emerald-400 transition-colors py-1 px-1" aria-label="Direct Email to Meena Kannan">
               Email
             </a>
+            <div className="hidden md:flex items-center gap-1.5 text-[10px] text-slate-500 font-mono py-1 px-2 rounded-lg bg-slate-900/60 border border-slate-800">
+              <span className="text-slate-400 font-bold">[1-7]</span>
+              <span>Fast Jump</span>
+            </div>
             <button onClick={scrollToTop} className="hover:text-emerald-400 transition-colors flex items-center gap-1 cursor-pointer py-1 px-1" aria-label="Scroll to top of page">
               <span>Top</span>
               <ArrowUp className="w-3.5 h-3.5" />
@@ -231,11 +235,11 @@ export default function Portfolio() {
 
       {/* Left Vertical Section Tracker Dots (Desktop only) */}
       <div className="fixed left-6 top-1/2 -translate-y-1/2 z-40 hidden xl:flex flex-col gap-3">
-        {SECTIONS.map((sec) => (
+        {SECTIONS.map((sec, idx) => (
           <button
             key={sec.id}
             onClick={() => scrollToSection(sec.id)}
-            title={sec.label}
+            title={`[${idx + 1}] ${sec.label}`}
             aria-label={`Scroll to ${sec.label} section`}
             className="group flex items-center gap-3 cursor-pointer text-left bg-transparent border-none p-0 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-emerald-400 focus-visible:ring-offset-2 focus-visible:ring-offset-black rounded"
           >
@@ -246,7 +250,8 @@ export default function Portfolio() {
                   : 'w-2 h-2 bg-slate-700 hover:bg-slate-500'
               }`}
             />
-            <span className="text-[10px] font-mono text-slate-400 opacity-0 group-hover:opacity-100 transition-opacity bg-slate-900 px-2 py-0.5 rounded border border-slate-800 pointer-events-none">
+            <span className="text-[10px] font-mono text-slate-400 opacity-0 group-hover:opacity-100 transition-opacity bg-slate-900 px-2 py-0.5 rounded border border-slate-800 pointer-events-none whitespace-nowrap">
+              <span className="text-emerald-400 font-bold mr-1">[{idx + 1}]</span>
               {sec.label}
             </span>
           </button>
