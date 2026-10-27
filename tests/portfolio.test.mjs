@@ -1497,6 +1497,43 @@ describe('Production Architectural Decision Records (ADR) & CLI Integration', ()
     assert.ok(indexHtml.includes('id="architecture-tenant-isolation"'), 'index.html must include #architecture-tenant-isolation landmark');
     assert.ok(!/[\u2013\u2014]/.test(indexHtml), 'index.html must contain zero em/en-dashes');
   });
+
+  test('ZeroTrustMeshSandbox and zeroTrustMeshModels.ts define SPIFFE/SPIRE, Envoy mTLS and RBAC with CLI integration', () => {
+    const meshDataPath = path.join(rootDir, 'src', 'data', 'zeroTrustMeshModels.ts');
+    assert.ok(fs.existsSync(meshDataPath), 'zeroTrustMeshModels.ts must exist');
+    const meshDataCode = fs.readFileSync(meshDataPath, 'utf8');
+    assert.ok(meshDataCode.includes('spiffe-spire-workload-attestation'), 'Must define spiffe-spire-workload-attestation model');
+    assert.ok(meshDataCode.includes('envoy-mtls-san-validation'), 'Must define envoy-mtls-san-validation model');
+    assert.ok(meshDataCode.includes('dynamic-rbac-authorization-policy'), 'Must define dynamic-rbac-authorization-policy model');
+    assert.ok(meshDataCode.includes('zero-trust-egress-sni-filtering'), 'Must define zero-trust-egress-sni-filtering model');
+    assert.ok(meshDataCode.includes('ebpf-kernel-socket-enforcement'), 'Must define ebpf-kernel-socket-enforcement model');
+    assert.ok(!/[\u2013\u2014]/.test(meshDataCode), 'zeroTrustMeshModels.ts must contain zero em/en-dashes');
+
+    const componentPath = path.join(rootDir, 'src', 'components', 'architecture', 'ZeroTrustMeshSandbox.tsx');
+    assert.ok(fs.existsSync(componentPath), 'ZeroTrustMeshSandbox.tsx must exist');
+    const compCode = fs.readFileSync(componentPath, 'utf8');
+    assert.ok(compCode.includes('handleCopyRfc'), 'ZeroTrustMeshSandbox must support 1-click RFC copy');
+    assert.ok(compCode.includes('ZERO_TRUST_MESH_MODELS'), 'ZeroTrustMeshSandbox must render ZERO_TRUST_MESH_MODELS');
+    assert.ok(!/[\u2013\u2014]/.test(compCode), 'ZeroTrustMeshSandbox.tsx must contain zero em/en-dashes');
+
+    const labCode = fs.readFileSync(path.join(rootDir, 'src', 'components', 'portfolio', 'ArchitectureLab.tsx'), 'utf8');
+    assert.ok(labCode.includes('ZeroTrustMeshSandbox'), 'ArchitectureLab must mount ZeroTrustMeshSandbox');
+    assert.ok(labCode.includes('id="architecture-zero-trust-mesh"'), 'ArchitectureLab must define anchor #architecture-zero-trust-mesh');
+
+    const cliCode = fs.readFileSync(path.join(rootDir, 'src', 'components', 'portfolio', 'InteractiveCli.tsx'), 'utf8');
+    assert.ok(cliCode.includes("'mtls'"), "InteractiveCli must support 'mtls' command");
+    assert.ok(cliCode.includes('[ $ mtls ]'), "InteractiveCli must include '[ $ mtls ]' quick chip");
+    assert.ok(cliCode.includes('ZERO_TRUST_MESH_MODELS'), 'InteractiveCli must search across ZERO_TRUST_MESH_MODELS');
+    assert.ok(!/[\u2013\u2014]/.test(cliCode), 'InteractiveCli.tsx must contain zero em/en-dashes');
+
+    const chatIndex = fs.readFileSync(path.join(rootDir, 'public', 'chat', 'index.json'), 'utf8');
+    assert.ok(chatIndex.includes('distributed-zero-trust-mesh'), 'public/chat/index.json must index distributed-zero-trust-mesh');
+    assert.ok(!/[\u2013\u2014]/.test(chatIndex), 'public/chat/index.json must contain zero em/en-dashes');
+
+    const indexHtml = fs.readFileSync(path.join(rootDir, 'index.html'), 'utf8');
+    assert.ok(indexHtml.includes('id="architecture-zero-trust-mesh"'), 'index.html must include #architecture-zero-trust-mesh landmark');
+    assert.ok(!/[\u2013\u2014]/.test(indexHtml), 'index.html must contain zero em/en-dashes');
+  });
 });
 
 

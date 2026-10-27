@@ -26,6 +26,7 @@ import { IDEMPOTENCY_MODELS } from '@/data/idempotencyModels'
 import { ATOMIC_COMMIT_PARADIGMS } from '@/data/atomicCommitModels'
 import { FEATURE_FLAG_MODELS } from '@/data/featureFlagModels'
 import { TENANT_ISOLATION_MODELS } from '@/data/tenantIsolationModels'
+import { ZERO_TRUST_MESH_MODELS } from '@/data/zeroTrustMeshModels'
 import { EXECUTIVE_BRIEFING } from '@/data/executiveBriefing'
 
 interface HistoryEntry {
@@ -155,6 +156,11 @@ const AVAILABLE_COMMANDS = [
   'multitenancy',
   'kmsenvelope',
   'leakprobe',
+  'zerotrust',
+  'spiffe',
+  'mtls',
+  'svid',
+  'meshpolicy',
   'adr',
   'decisions',
   'tradeoffs',
@@ -213,6 +219,7 @@ const QUICK_CHIPS = [
   { label: '[ $ 2pc ]', cmd: '2pc' },
   { label: '[ $ flags ]', cmd: 'featureflag' },
   { label: '[ $ rls ]', cmd: 'rls' },
+  { label: '[ $ mtls ]', cmd: 'mtls' },
   { label: '[ $ find kafka ]', cmd: 'find kafka' },
   { label: '[ $ tradeoffs ]', cmd: 'tradeoffs' },
   { label: '[ $ adr ]', cmd: 'adr' },
@@ -257,6 +264,7 @@ const COMMAND_HELP = [
   '  2pc             - Inspect 2PC vs Saga execution, non-blocking 3PC & TrueTime (or "2pc <id>")',
   '  flags           - Inspect dynamic feature flags, MurmurHash3 bucketing & canary rollback (or "flags <id>")',
   '  rls             - Inspect multi-tenant Row-Level Security, schema routing & KMS envelope (or "rls <id>")',
+  '  mtls            - Inspect Zero-Trust SPIFFE/SPIRE workload identity & Envoy mTLS (or "mtls <id>")',
   '  find <query>    - Search cross-cutting architecture systems, ADRs, AI codex & trade-offs',
   '  tradeoffs       - Evaluate system design decision trade-offs (or "compare <topic>")',
   '  stats           - View production performance & impact metrics (99.99% SLA)',
@@ -2797,6 +2805,69 @@ export default function InteractiveCli() {
         ]
         break
       }
+      case 'zerotrust':
+      case 'spiffe':
+      case 'mtls':
+      case 'svid':
+      case 'meshpolicy': {
+        const target = args[0]?.toLowerCase().trim()
+        if (target) {
+          const matched = ZERO_TRUST_MESH_MODELS.find(m =>
+            m.id === target ||
+            m.id.includes(target) ||
+            m.name.toLowerCase().includes(target) ||
+            m.badge.toLowerCase().includes(target) ||
+            (target === '1' && m.id === 'spiffe-spire-workload-attestation') ||
+            (target === '2' && m.id === 'envoy-mtls-san-validation') ||
+            (target === '3' && m.id === 'dynamic-rbac-authorization-policy') ||
+            (target === '4' && m.id === 'zero-trust-egress-sni-filtering') ||
+            (target === '5' && m.id === 'ebpf-kernel-socket-enforcement')
+          )
+          if (matched) {
+            output = [
+              '--------------------------------------------------------------------------------',
+              `Zero-Trust Service Mesh Model: ${matched.name} [${matched.badge}]`,
+              '--------------------------------------------------------------------------------',
+              `Category            : ${matched.category}`,
+              `Handshake Overhead  : ${matched.handshakeLatency}`,
+              `Verification SLA    : ${matched.identityVerificationSla}`,
+              `Mathematical Formula: ${matched.algorithmFormula}`,
+              `Blast Radius Guard  : ${matched.blastRadiusContainment}`,
+              '--------------------------------------------------------------------------------',
+              'WORKFLOW PHASES & CRYPTOGRAPHIC INVARIANTS:',
+              ...matched.workflowPhases.map(p =>
+                `  * [${p.name}] :: ${p.description} -> Invariant: ${p.invariants}`
+              ),
+              '--------------------------------------------------------------------------------',
+              'PRODUCTION OUTCOMES & INVARIANTS:',
+              ...Object.entries(matched.productionOutcomes).map(([k, v]) => `  + ${k}: ${v}`),
+              '',
+              `Architectural Invariant: "${matched.architecturalInvariant}"`,
+              '--------------------------------------------------------------------------------',
+              'Full live interactive mTLS handshake & SVID rotation simulator in #architecture-zero-trust-mesh.'
+            ]
+            break
+          }
+        }
+
+        output = [
+          'Distributed Zero-Trust Service Mesh & Envoy SPIFFE/SPIRE Mutual TLS Sandbox:',
+          '--------------------------------------------------------------------------------',
+          'Explore 5 enterprise cryptographic workload identity & mTLS mesh architectures:',
+          '',
+          ...ZERO_TRUST_MESH_MODELS.flatMap((m, idx) => [
+            `${idx + 1}. [ ${m.id} ] : ${m.name} (${m.badge})`,
+            `   Category   : ${m.category}`,
+            `   Latency    : ${m.handshakeLatency.split(';')[0]}`,
+            `   SLA        : ${m.identityVerificationSla.split(';')[0]}`,
+            `   Deep Dive  : "mtls ${idx + 1}" or "mtls ${m.id.split('-')[0]}" (e.g. "mtls spiffe", "mtls envoy", "mtls dynamic", "mtls zero", "mtls ebpf")`,
+            ''
+          ]),
+          '--------------------------------------------------------------------------------',
+          'Tip: Run "mtls <id>" (e.g. "mtls 1" or "mtls spiffe") to inspect cryptographic SVID invariants.'
+        ]
+        break
+      }
       case 'find':
       case 'search': {
         const query = args.join(' ').toLowerCase().trim()
@@ -2806,7 +2877,7 @@ export default function InteractiveCli() {
             '--------------------------------------------------------------------------------',
             'Search cross-cutting distributed systems, ADRs, AI paradigms, and trade-offs.',
             'Usage: find <query> (e.g. "find kafka", "find redis", "find mcp", "find saga")',
-            'Available Domains: Systems, ADR Governance, AI Codex, Trade-Off Matrix, Evolution Diffs, Chaos Drills, API Gateway, Distributed Traces, Kafka Event Streams, Distributed Rate Limiting, Multi-Region Replication, Database Sharding, Edge CDN Caching, Circuit Breakers, Concurrency & Deadlocks, Raft Consensus, Vector Search, Traffic Priority & QoS, Distributed Sagas & Compensations, Distributed Cache Stampede & Coherence, Distributed Event Sourcing & CQRS, Distributed DLQ & Retries, Distributed Idempotency & CAS Locks, Distributed 2PC vs Saga Commit & Drift Reconciler, Dynamic Feature Flagging & Canary Splitter, Multi-Tenant RLS & Cryptographic Isolation'
+            'Available Domains: Systems, ADR Governance, AI Codex, Trade-Off Matrix, Evolution Diffs, Chaos Drills, API Gateway, Distributed Traces, Kafka Event Streams, Distributed Rate Limiting, Multi-Region Replication, Database Sharding, Edge CDN Caching, Circuit Breakers, Concurrency & Deadlocks, Raft Consensus, Vector Search, Traffic Priority & QoS, Distributed Sagas & Compensations, Distributed Cache Stampede & Coherence, Distributed Event Sourcing & CQRS, Distributed DLQ & Retries, Distributed Idempotency & CAS Locks, Distributed 2PC vs Saga Commit & Drift Reconciler, Dynamic Feature Flagging & Canary Splitter, Multi-Tenant RLS & Cryptographic Isolation, Zero-Trust Service Mesh & SPIFFE mTLS'
           ]
           break
         }
@@ -3370,24 +3441,24 @@ export default function InteractiveCli() {
           }
         })
 
-        // 26. Search Multi-Tenant Row-Level Security & Cryptographic Isolation
-        TENANT_ISOLATION_MODELS.forEach(t => {
+        // 27. Search Zero-Trust Service Mesh & Envoy SPIFFE mTLS
+        ZERO_TRUST_MESH_MODELS.forEach(z => {
           if (
-            t.name.toLowerCase().includes(query) ||
-            t.id.toLowerCase().includes(query) ||
-            t.category.toLowerCase().includes(query) ||
-            t.badge.toLowerCase().includes(query) ||
-            t.algorithmFormula.toLowerCase().includes(query) ||
-            t.isolationLatency.toLowerCase().includes(query) ||
-            t.leakPreventionGuarantee.toLowerCase().includes(query) ||
-            t.architecturalInvariant.toLowerCase().includes(query) ||
-            t.description.toLowerCase().includes(query)
+            z.name.toLowerCase().includes(query) ||
+            z.id.toLowerCase().includes(query) ||
+            z.category.toLowerCase().includes(query) ||
+            z.badge.toLowerCase().includes(query) ||
+            z.algorithmFormula.toLowerCase().includes(query) ||
+            z.handshakeLatency.toLowerCase().includes(query) ||
+            z.identityVerificationSla.toLowerCase().includes(query) ||
+            z.architecturalInvariant.toLowerCase().includes(query) ||
+            z.description.toLowerCase().includes(query)
           ) {
             results.push(
-              `[Tenant RLS & Isolation] ${t.name}`,
-              `  Category   : ${t.category} (${t.badge})`,
-              `  Guarantee  : ${t.leakPreventionGuarantee.split(';')[0]}`,
-              `  Anchor     : #architecture-tenant-isolation`,
+              `[Zero-Trust Service Mesh] ${z.name}`,
+              `  Category   : ${z.category} (${z.badge})`,
+              `  Handshake  : ${z.handshakeLatency.split(';')[0]}`,
+              `  Anchor     : #architecture-zero-trust-mesh`,
               ''
             )
           }

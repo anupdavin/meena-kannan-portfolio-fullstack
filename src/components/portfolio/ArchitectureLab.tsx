@@ -57,6 +57,7 @@ import IdempotencySandbox from '@/components/architecture/IdempotencySandbox'
 import { AtomicCommitSandbox } from '@/components/architecture/AtomicCommitSandbox'
 import { FeatureFlagSandbox } from '@/components/architecture/FeatureFlagSandbox'
 import { TenantIsolationSandbox } from '@/components/architecture/TenantIsolationSandbox'
+import { ZeroTrustMeshSandbox } from '@/components/architecture/ZeroTrustMeshSandbox'
 import { ARCHITECTURE_SYSTEMS } from '@/data/architectureSystems'
 import { ARCHITECTURAL_DECISIONS } from '@/data/architecturalDecisions'
 import { ARCHITECTURAL_TRADEOFFS } from '@/data/architecturalTradeoffs'
@@ -82,6 +83,7 @@ import { IDEMPOTENCY_MODELS } from '@/data/idempotencyModels'
 import { ATOMIC_COMMIT_PARADIGMS } from '@/data/atomicCommitModels'
 import { FEATURE_FLAG_MODELS } from '@/data/featureFlagModels'
 import { TENANT_ISOLATION_MODELS } from '@/data/tenantIsolationModels'
+import { ZERO_TRUST_MESH_MODELS } from '@/data/zeroTrustMeshModels'
 
 const AI_TERMS_SUMMARY = [
   { id: 'agentic-ai', title: 'Agentic AI', text: 'Perception-action loop, DAG memory, tool execution, LangGraph' },
@@ -125,6 +127,7 @@ export default function ArchitectureLab() {
         atomiccommit: 5,
         featureflags: 5,
         tenantisolation: 5,
+        zerotrustmesh: 5,
         isActive: false
       }
     }
@@ -398,8 +401,20 @@ export default function ArchitectureLab() {
       t.description.toLowerCase().includes(q)
     ).length
 
+    const zeroTrustMeshCount = ZERO_TRUST_MESH_MODELS.filter(z =>
+      z.name.toLowerCase().includes(q) ||
+      z.id.toLowerCase().includes(q) ||
+      z.category.toLowerCase().includes(q) ||
+      z.badge.toLowerCase().includes(q) ||
+      z.algorithmFormula.toLowerCase().includes(q) ||
+      z.handshakeLatency.toLowerCase().includes(q) ||
+      z.identityVerificationSla.toLowerCase().includes(q) ||
+      z.architecturalInvariant.toLowerCase().includes(q) ||
+      z.description.toLowerCase().includes(q)
+    ).length
+
     return {
-      total: workbenchCount + aiCount + adrCount + tradeoffCount + evolutionCount + chaosCount + gatewayCount + traceCount + kafkaCount + ratelimitCount + multiregionCount + shardingCount + cdnCount + circuitBreakerCount + concurrencyCount + raftCount + vectorCount + priorityCount + sagasCount + cacheCount + eventSourcingCount + dlqCount + idempotencyCount + atomicCommitCount + featureFlagCount + tenantIsolationCount,
+      total: workbenchCount + aiCount + adrCount + tradeoffCount + evolutionCount + chaosCount + gatewayCount + traceCount + kafkaCount + ratelimitCount + multiregionCount + shardingCount + cdnCount + circuitBreakerCount + concurrencyCount + raftCount + vectorCount + priorityCount + sagasCount + cacheCount + eventSourcingCount + dlqCount + idempotencyCount + atomicCommitCount + featureFlagCount + tenantIsolationCount + zeroTrustMeshCount,
       workbench: workbenchCount,
       aiCodex: aiCount,
       adr: adrCount,
@@ -426,6 +441,7 @@ export default function ArchitectureLab() {
       atomiccommit: atomicCommitCount,
       featureflags: featureFlagCount,
       tenantisolation: tenantIsolationCount,
+      zerotrustmesh: zeroTrustMeshCount,
       isActive: true
     }
   }, [searchQuery])
@@ -824,6 +840,17 @@ export default function ArchitectureLab() {
             <Fingerprint className="w-3.5 h-3.5 text-emerald-400" />
             <span>Multi-Tenant RLS ({matchStats.tenantisolation})</span>
           </a>
+          <a 
+            href="#architecture-zero-trust-mesh"
+            className={`px-3 py-1.5 rounded-lg border transition-all flex items-center gap-1.5 cursor-pointer ${
+              matchStats.isActive && matchStats.zerotrustmesh > 0
+                ? 'bg-cyan-500/10 border-cyan-500/50 text-cyan-400 shadow-[0_0_10px_rgba(6,182,212,0.15)] font-bold'
+                : 'bg-slate-900 border-slate-800 hover:border-cyan-500/50 hover:text-cyan-400 text-slate-300'
+            }`}
+          >
+            <ShieldCheck className="w-3.5 h-3.5 text-cyan-400" />
+            <span>Zero-Trust Mesh ({matchStats.zerotrustmesh})</span>
+          </a>
         </div>
       </div>
 
@@ -1141,6 +1168,18 @@ export default function ArchitectureLab() {
         className="scroll-mt-24"
       >
         <TenantIsolationSandbox />
+      </motion.div>
+
+      {/* 2.30. Distributed Zero-Trust Service Mesh & Envoy SPIFFE/SPIRE Mutual TLS Sandbox */}
+      <motion.div
+        id="architecture-zero-trust-mesh"
+        initial={{ opacity: 0, y: 25 }}
+        whileInView={{ opacity: 1, y: 0 }}
+        viewport={{ once: true }}
+        transition={{ duration: 0.6, delay: 1.35 }}
+        className="scroll-mt-24"
+      >
+        <ZeroTrustMeshSandbox />
       </motion.div>
 
       {/* 3. Architectural Design Pillars Strip */}

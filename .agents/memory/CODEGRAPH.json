@@ -1,6 +1,6 @@
 {
   "version": "1.0.0",
-  "generatedAt": "2026-10-27T20:11:57.690Z",
+  "generatedAt": "2026-10-27T20:20:55.445Z",
   "nodes": {
     "src/components/architecture/AdrExplorer.tsx": {
       "file": "src/components/architecture/AdrExplorer.tsx",
@@ -445,6 +445,17 @@
       ],
       "loc": 1062
     },
+    "src/components/architecture/ZeroTrustMeshSandbox.tsx": {
+      "file": "src/components/architecture/ZeroTrustMeshSandbox.tsx",
+      "imports": [
+        "react",
+        "@/data/zeroTrustMeshModels"
+      ],
+      "exports": [
+        "ZeroTrustMeshSandbox"
+      ],
+      "loc": 494
+    },
     "src/components/ChatWidget.tsx": {
       "file": "src/components/ChatWidget.tsx",
       "imports": [
@@ -513,6 +524,7 @@
         "@/components/architecture/AtomicCommitSandbox",
         "@/components/architecture/FeatureFlagSandbox",
         "@/components/architecture/TenantIsolationSandbox",
+        "@/components/architecture/ZeroTrustMeshSandbox",
         "@/data/architectureSystems",
         "@/data/architecturalDecisions",
         "@/data/architecturalTradeoffs",
@@ -537,12 +549,13 @@
         "@/data/idempotencyModels",
         "@/data/atomicCommitModels",
         "@/data/featureFlagModels",
-        "@/data/tenantIsolationModels"
+        "@/data/tenantIsolationModels",
+        "@/data/zeroTrustMeshModels"
       ],
       "exports": [
         "ArchitectureLab"
       ],
-      "loc": 1199
+      "loc": 1238
     },
     "src/components/portfolio/ContactTerminal.tsx": {
       "file": "src/components/portfolio/ContactTerminal.tsx",
@@ -613,12 +626,13 @@
         "@/data/atomicCommitModels",
         "@/data/featureFlagModels",
         "@/data/tenantIsolationModels",
+        "@/data/zeroTrustMeshModels",
         "@/data/executiveBriefing"
       ],
       "exports": [
         "InteractiveCli"
       ],
-      "loc": 3668
+      "loc": 3739
     },
     "src/components/portfolio/ProjectsShowcase.tsx": {
       "file": "src/components/portfolio/ProjectsShowcase.tsx",
@@ -671,7 +685,7 @@
       "exports": [
         "TerminalHero"
       ],
-      "loc": 622
+      "loc": 624
     },
     "src/components/ui/badge.tsx": {
       "file": "src/components/ui/badge.tsx",
@@ -1025,6 +1039,18 @@
       ],
       "loc": 325
     },
+    "src/data/zeroTrustMeshModels.ts": {
+      "file": "src/data/zeroTrustMeshModels.ts",
+      "imports": [],
+      "exports": [
+        "WorkloadIdentityProfile",
+        "ServiceMeshModel",
+        "HandshakeStep",
+        "MOCK_WORKLOADS",
+        "ZERO_TRUST_MESH_MODELS"
+      ],
+      "loc": 402
+    },
     "src/main.tsx": {
       "file": "src/main.tsx",
       "imports": [
@@ -1224,6 +1250,7 @@
     "NodeRuntimeSpec": "src/components/architecture/workbenchConfigs.ts",
     "WorkbenchSystemConfig": "src/components/architecture/workbenchConfigs.ts",
     "WORKBENCH_SYSTEMS": "src/components/architecture/workbenchConfigs.ts",
+    "ZeroTrustMeshSandbox": "src/components/architecture/ZeroTrustMeshSandbox.tsx",
     "ChatWidget": "src/components/ChatWidget.tsx",
     "MatrixBackground": "src/components/MatrixBackground.tsx",
     "AboutTerminal": "src/components/portfolio/AboutTerminal.tsx",
@@ -1346,6 +1373,11 @@
     "VectorSearchModel": "src/data/vectorSearch.ts",
     "VECTOR_SEARCH_MODELS": "src/data/vectorSearch.ts",
     "reciprocalRankFusion": "src/data/vectorSearch.ts",
+    "WorkloadIdentityProfile": "src/data/zeroTrustMeshModels.ts",
+    "ServiceMeshModel": "src/data/zeroTrustMeshModels.ts",
+    "HandshakeStep": "src/data/zeroTrustMeshModels.ts",
+    "MOCK_WORKLOADS": "src/data/zeroTrustMeshModels.ts",
+    "ZERO_TRUST_MESH_MODELS": "src/data/zeroTrustMeshModels.ts",
     "Layout": "src/pages/Layout.tsx",
     "Portfolio": "src/pages/Portfolio.tsx"
   }

@@ -111,6 +111,16 @@ This document serves as the persistent semantic memory layer for AI coding agent
 * **Decision:** Implemented an interactive 5-paradigm sandbox demonstrating PostgreSQL Row-Level Security with Session Context (`SET LOCAL app.current_tenant = :id` and `FORCE ROW LEVEL SECURITY`) transparently rewriting AST query plans at the database engine kernel level, Dynamic Schema-per-Tenant with HikariCP Connection Routing for namespace isolation and independent DDL migrations, Cryptographic Envelope Encryption per Tenant Key using dedicated AWS KMS Customer Managed Keys (CMK) wrapping ephemeral AES-256-GCM data encryption keys with sub-50ms GDPR crypto-shredding, Cross-Tenant Data Leak Intrusion Probe & Sentinel intercepting URL parameter tampering and SQL AST manipulation with instant HTTP 403 Forbidden, and Tenant Noisy-Neighbor Throttling with Weighted Token Buckets absorbing 10x traffic surges while preserving 100% baseline SLA and sub-42ms P99 latency for neighboring tenants.
 * **Blast Radius:** Mounted in `ArchitectureLab.tsx` under `#architecture-tenant-isolation`; integrated into `InteractiveCli.tsx` with `rls`, `tenantisolation`, `multitenancy`, `kmsenvelope`, `leakprobe` commands and `[ $ rls ]` quick chip; indexed in `index.html` Sub-Section 26 and `public/chat/index.json`. Verified in test 30 of `tests/portfolio.test.mjs`.
 
+---
+
+## ADR-027: Distributed Zero-Trust Service Mesh & Envoy SPIFFE/SPIRE Mutual TLS Sandbox
+* **Status:** Accepted & Enforced
+* **Target Components:** [`ZeroTrustMeshSandbox.tsx`](file:///src/components/architecture/ZeroTrustMeshSandbox.tsx), [`zeroTrustMeshModels.ts`](file:///src/data/zeroTrustMeshModels.ts), [`ArchitectureLab.tsx`](file:///src/components/portfolio/ArchitectureLab.tsx)
+* **Context:** High-concurrency enterprise microservices meshes require cryptographic identity attestation without relying on fragile static tokens, long-lived API keys, or perimeter IP-based trust assumptions. Lateral traversal by compromised front-end or worker containers must be mathematically prohibited.
+* **Decision:** Implemented an interactive 5-paradigm sandbox demonstrating SPIFFE/SPIRE Ephemeral Workload Attestation issuing short-lived (60-minute) X.509 SVID credentials via kernel unix domain sockets with zero ambient secrets, Envoy Sidecar Mutual TLS (mTLS) with strict SPIFFE Subject Alternative Name (SAN) verification enforcing TLS 1.3 bidirectional wire encryption in sub-1.15ms, Dynamic Least-Privilege AuthorizationPolicy evaluating source SPIFFE identity, HTTP method, and path scoping with default-deny semantics in sub-0.08ms, Zero-Trust Egress Filtering & TLS SNI Pinning routing external calls through dedicated Envoy egress gateways to block SSRF and data exfiltration, and eBPF Kernel-Level Socket Enforcement (Cilium sockmap) bypassing TCP/IP protocol overhead to achieve sub-15 microsecond co-located container transfers.
+* **Blast Radius:** Mounted in `ArchitectureLab.tsx` under `#architecture-zero-trust-mesh`; integrated into `InteractiveCli.tsx` with `zerotrust`, `spiffe`, `mtls`, `svid`, `meshpolicy` commands and `[ $ mtls ]` quick chip; indexed in `index.html` Sub-Section 27 and `public/chat/index.json`. Verified in test 31 of `tests/portfolio.test.mjs`.
+
+
 
 
 
