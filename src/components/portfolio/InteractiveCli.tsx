@@ -33,6 +33,7 @@ import { DISTRIBUTED_LOCK_MODELS } from '@/data/distributedLockModels'
 import { WEBHOOK_INGRESS_MODELS } from '@/data/webhookIngressModels'
 import { TOPOLOGY_MESH_MODELS } from '@/data/topologyMeshModels'
 import { MVCC_SNAPSHOT_MODELS } from '@/data/mvccSnapshotModels'
+import { QUORUM_CONSISTENCY_MODELS } from '@/data/quorumConsistencyModels'
 import { EXECUTIVE_BRIEFING } from '@/data/executiveBriefing'
 
 interface HistoryEntry {
@@ -197,6 +198,12 @@ const AVAILABLE_COMMANDS = [
   'truetime',
   'timetravel',
   'vacuum',
+  'quorum',
+  'consistency',
+  'sloppyquorum',
+  'hintedhandoff',
+  'merkle',
+  'antientropy',
   'adr',
   'decisions',
   'tradeoffs',
@@ -262,6 +269,7 @@ const QUICK_CHIPS = [
   { label: '[ $ webhook ]', cmd: 'webhook' },
   { label: '[ $ discovery ]', cmd: 'discovery' },
   { label: '[ $ mvcc ]', cmd: 'mvcc' },
+  { label: '[ $ quorum ]', cmd: 'quorum' },
   { label: '[ $ find kafka ]', cmd: 'find kafka' },
   { label: '[ $ tradeoffs ]', cmd: 'tradeoffs' },
   { label: '[ $ adr ]', cmd: 'adr' },
@@ -3395,6 +3403,71 @@ export default function InteractiveCli() {
         ]
         break
       }
+      case 'quorum':
+      case 'consistency':
+      case 'sloppyquorum':
+      case 'hintedhandoff':
+      case 'merkle':
+      case 'antientropy': {
+        const target = args[0]?.toLowerCase().trim()
+        if (target) {
+          const matched = QUORUM_CONSISTENCY_MODELS.find(m =>
+            m.id === target ||
+            m.id.includes(target) ||
+            m.name.toLowerCase().includes(target) ||
+            m.badge.toLowerCase().includes(target) ||
+            (target === '1' && m.id === 'strict-quorum-consensus') ||
+            (target === '2' && m.id === 'sloppy-quorum-hinted-handoff') ||
+            (target === '3' && m.id === 'anti-entropy-merkle-sync') ||
+            (target === '4' && m.id === 'tunable-consistency-matrix') ||
+            (target === '5' && m.id === 'vector-clock-reconciler')
+          )
+          if (matched) {
+            output = [
+              '--------------------------------------------------------------------------------',
+              `Read-Write Quorum & Consistency Model: ${matched.name} [${matched.badge}]`,
+              '--------------------------------------------------------------------------------',
+              `Category            : ${matched.category}`,
+              `Consistency Level   : ${matched.consistencyGuarantee}`,
+              `Read Latency SLA    : ${matched.readLatencySla}`,
+              `Throughput SLA      : ${matched.writeThroughputSla}`,
+              `Mathematical Formula: ${matched.algorithmFormula}`,
+              `Blast Radius Guard  : ${matched.blastRadiusContainment}`,
+              '--------------------------------------------------------------------------------',
+              'WORKFLOW PHASES & QUORUM INVARIANTS:',
+              ...matched.workflowPhases.map(p =>
+                `  * [${p.name}] :: ${p.description} -> Invariant: ${p.invariants}`
+              ),
+              '--------------------------------------------------------------------------------',
+              'PRODUCTION OUTCOMES & INVARIANTS:',
+              ...Object.entries(matched.productionOutcomes).map(([k, v]) => `  + ${k}: ${v}`),
+              '',
+              `Architectural Invariant: "${matched.architecturalInvariant}"`,
+              '--------------------------------------------------------------------------------',
+              'Full live interactive 5-node replica ring & hinted handoff HUD in #architecture-quorum-consistency.'
+            ]
+            break
+          }
+        }
+
+        output = [
+          'Distributed Read-Write Quorum & Tunable Consistency Sandbox:',
+          '--------------------------------------------------------------------------------',
+          'Explore 5 enterprise Dynamo-style quorums, hinted handoffs & Merkle tree sync architectures:',
+          '',
+          ...QUORUM_CONSISTENCY_MODELS.flatMap((m, idx) => [
+            `${idx + 1}. [ ${m.id} ] : ${m.name} (${m.badge})`,
+            `   Category   : ${m.category}`,
+            `   Guarantee  : ${(m.consistencyGuarantee || '').split(' ')[0]}`,
+            `   Read SLA   : ${(m.readLatencySla || '').split(';')[0]}`,
+            `   Deep Dive  : "quorum ${idx + 1}" or "quorum ${m.id.split('-')[0]}" (e.g. "quorum strict", "quorum sloppy", "quorum anti", "quorum tunable", "quorum vector")`,
+            ''
+          ]),
+          '--------------------------------------------------------------------------------',
+          'Tip: Run "quorum <id>" (e.g. "quorum 1" or "quorum strict") to inspect Dynamo quorum intersection invariants.'
+        ]
+        break
+      }
       case 'find':
       case 'search': {
         const query = args.join(' ').toLowerCase().trim()
@@ -4127,6 +4200,30 @@ export default function InteractiveCli() {
               `  Category   : ${mv.category} (${mv.badge})`,
               `  Read SLA   : ${(mv.readLatencySla || '').split(';')[0]}`,
               `  Anchor     : #architecture-mvcc-snapshot`,
+              ''
+            )
+          }
+        })
+
+        // 34. Search Distributed Read-Write Quorum & Tunable Consistency
+        QUORUM_CONSISTENCY_MODELS.forEach(qm => {
+          if (
+            qm.name.toLowerCase().includes(query) ||
+            qm.id.toLowerCase().includes(query) ||
+            qm.category.toLowerCase().includes(query) ||
+            qm.badge.toLowerCase().includes(query) ||
+            qm.algorithmFormula.toLowerCase().includes(query) ||
+            (qm.consistencyGuarantee || '').toLowerCase().includes(query) ||
+            (qm.readLatencySla || '').toLowerCase().includes(query) ||
+            (qm.writeThroughputSla || '').toLowerCase().includes(query) ||
+            qm.architecturalInvariant.toLowerCase().includes(query) ||
+            qm.description.toLowerCase().includes(query)
+          ) {
+            results.push(
+              `[Read-Write Quorum & Consistency] ${qm.name}`,
+              `  Category   : ${qm.category} (${qm.badge})`,
+              `  Read SLA   : ${(qm.readLatencySla || '').split(';')[0]}`,
+              `  Anchor     : #architecture-quorum-consistency`,
               ''
             )
           }

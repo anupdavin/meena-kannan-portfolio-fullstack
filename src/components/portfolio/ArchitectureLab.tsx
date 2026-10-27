@@ -30,6 +30,7 @@ import {
   ToggleLeft,
   Fingerprint,
   Clock,
+  Share2,
   X
 } from 'lucide-react'
 import ByteByteGoDiagram from '@/components/architecture/ByteByteGoDiagram'
@@ -65,6 +66,7 @@ import DistributedLockSandbox from '@/components/architecture/DistributedLockSan
 import { WebhookIngressSandbox } from '@/components/architecture/WebhookIngressSandbox'
 import TopologyMeshSandbox from '@/components/architecture/TopologyMeshSandbox'
 import { MvccSnapshotSandbox } from '@/components/architecture/MvccSnapshotSandbox'
+import { QuorumConsistencySandbox } from '@/components/architecture/QuorumConsistencySandbox'
 import { ARCHITECTURE_SYSTEMS } from '@/data/architectureSystems'
 import { ARCHITECTURAL_DECISIONS } from '@/data/architecturalDecisions'
 import { ARCHITECTURAL_TRADEOFFS } from '@/data/architecturalTradeoffs'
@@ -97,6 +99,7 @@ import { DISTRIBUTED_LOCK_MODELS } from '@/data/distributedLockModels'
 import { WEBHOOK_INGRESS_MODELS } from '@/data/webhookIngressModels'
 import { TOPOLOGY_MESH_MODELS } from '@/data/topologyMeshModels'
 import { MVCC_SNAPSHOT_MODELS } from '@/data/mvccSnapshotModels'
+import { QUORUM_CONSISTENCY_MODELS } from '@/data/quorumConsistencyModels'
 
 const AI_TERMS_SUMMARY = [
   { id: 'agentic-ai', title: 'Agentic AI', text: 'Perception-action loop, DAG memory, tool execution, LangGraph' },
@@ -147,6 +150,7 @@ export default function ArchitectureLab() {
         webhookingress: 5,
         topologymesh: 5,
         mvcc: 5,
+        quorum: 5,
         isActive: false
       }
     }
@@ -507,8 +511,21 @@ export default function ArchitectureLab() {
       m.description.toLowerCase().includes(q)
     ).length
 
+    const quorumCount = QUORUM_CONSISTENCY_MODELS.filter(qm =>
+      qm.name.toLowerCase().includes(q) ||
+      qm.id.toLowerCase().includes(q) ||
+      qm.category.toLowerCase().includes(q) ||
+      qm.badge.toLowerCase().includes(q) ||
+      qm.algorithmFormula.toLowerCase().includes(q) ||
+      (qm.consistencyGuarantee || '').toLowerCase().includes(q) ||
+      (qm.readLatencySla || '').toLowerCase().includes(q) ||
+      (qm.writeThroughputSla || '').toLowerCase().includes(q) ||
+      qm.architecturalInvariant.toLowerCase().includes(q) ||
+      qm.description.toLowerCase().includes(q)
+    ).length
+
     return {
-      total: workbenchCount + aiCount + adrCount + tradeoffCount + evolutionCount + chaosCount + gatewayCount + traceCount + kafkaCount + ratelimitCount + multiregionCount + shardingCount + cdnCount + circuitBreakerCount + concurrencyCount + raftCount + vectorCount + priorityCount + sagasCount + cacheCount + eventSourcingCount + dlqCount + idempotencyCount + atomicCommitCount + featureFlagCount + tenantIsolationCount + zeroTrustMeshCount + splitBrainCount + gslbAnycastCount + distributedLockCount + webhookIngressCount + topologyMeshCount + mvccCount,
+      total: workbenchCount + aiCount + adrCount + tradeoffCount + evolutionCount + chaosCount + gatewayCount + traceCount + kafkaCount + ratelimitCount + multiregionCount + shardingCount + cdnCount + circuitBreakerCount + concurrencyCount + raftCount + vectorCount + priorityCount + sagasCount + cacheCount + eventSourcingCount + dlqCount + idempotencyCount + atomicCommitCount + featureFlagCount + tenantIsolationCount + zeroTrustMeshCount + splitBrainCount + gslbAnycastCount + distributedLockCount + webhookIngressCount + topologyMeshCount + mvccCount + quorumCount,
       workbench: workbenchCount,
       aiCodex: aiCount,
       adr: adrCount,
@@ -542,6 +559,7 @@ export default function ArchitectureLab() {
       webhookingress: webhookIngressCount,
       topologymesh: topologyMeshCount,
       mvcc: mvccCount,
+      quorum: quorumCount,
       isActive: true
     }
   }, [searchQuery])
@@ -1017,6 +1035,17 @@ export default function ArchitectureLab() {
             <Clock className="w-3.5 h-3.5 text-violet-400" />
             <span>MVCC Time-Travel ({matchStats.mvcc})</span>
           </a>
+          <a 
+            href="#architecture-quorum-consistency"
+            className={`px-3 py-1.5 rounded-lg border transition-all flex items-center gap-1.5 cursor-pointer ${
+              matchStats.isActive && matchStats.quorum > 0
+                ? 'bg-emerald-500/10 border-emerald-500/50 text-emerald-400 shadow-[0_0_10px_rgba(16,185,129,0.15)] font-bold'
+                : 'bg-slate-900 border-slate-800 hover:border-emerald-500/50 hover:text-emerald-400 text-slate-300'
+            }`}
+          >
+            <Share2 className="w-3.5 h-3.5 text-emerald-400" />
+            <span>Quorum &amp; Consistency ({matchStats.quorum})</span>
+          </a>
         </div>
       </div>
 
@@ -1418,6 +1447,18 @@ export default function ArchitectureLab() {
         className="scroll-mt-24"
       >
         <MvccSnapshotSandbox />
+      </motion.div>
+
+      {/* 2.37. Distributed Read-Write Quorum & Tunable Consistency Sandbox */}
+      <motion.div
+        id="architecture-quorum-consistency"
+        initial={{ opacity: 0, y: 25 }}
+        whileInView={{ opacity: 1, y: 0 }}
+        viewport={{ once: true }}
+        transition={{ duration: 0.6, delay: 1.70 }}
+        className="scroll-mt-24"
+      >
+        <QuorumConsistencySandbox />
       </motion.div>
 
       {/* 3. Architectural Design Pillars Strip */}

@@ -286,5 +286,11 @@
     "title": "Distributed Snapshot Isolation & MVCC Time-Travel Engine Sandbox",
     "text": "Meena architects enterprise non-blocking multi-version concurrency control, distributed causal orderings, and temporal time-travel engines across 5 paradigms: (1) PostgreSQL Heap Tuple Visibility: Header t_xmin and t_xmax transaction bitmaps resolving non-blocking snapshot isolation in sub-0.35ms without shared read locks, (2) CockroachDB Hybrid Logical Clock with Read Restarts: HLC tracking physical NTP time alongside monotonic logical counters to enforce serializable isolation across multi-region Raft ranges, (3) Google Cloud Spanner TrueTime External Consistency: Atomic clocks with commit-wait 2 * epsilon for external linearizability, (4) Git-Like Temporal Time-Travel Tables: Immutable copy-on-write manifest trees enabling instant point-in-time queries AS OF SYSTEM TIME, and (5) Lock-Free Epoch-Horizon VACUUM Freezing: Monotonic epoch horizon reclaiming dead tuple versions without holding table-level write locks.",
     "url": "#architecture-mvcc-snapshot"
+  },
+  {
+    "id": "distributed-quorum-consistency",
+    "title": "Distributed Read-Write Quorum & Tunable Consistency Sandbox",
+    "text": "Meena architects enterprise leaderless replication, quorum consensus, and anti-entropy synchronization engines across 5 paradigms: (1) Strict Quorum Consensus (R + W > N): Monotonic linearizable overlap with background read repair repairing stale replicas in sub-2.4ms, (2) Sloppy Quorum with Hinted Handoff: High-availability partition fallback routing writes to surrogate neighbors and flushing hints upon primary recovery, (3) Anti-Entropy Merkle Tree Range Synchronization: O(1) root hash validation saving 99.8% network bandwidth during replica drift healing, (4) Tunable Consistency Levels Matrix: Per-query SLA tuning across ONE, LOCAL_QUORUM, QUORUM, and ALL from 0.38ms to 8.5ms, and (5) Vector Clocks Causal Reconciler: Invariant causal branch tracking eliminating silent data loss caused by NTP clock drift.",
+    "url": "#architecture-quorum-consistency"
   }
 ]

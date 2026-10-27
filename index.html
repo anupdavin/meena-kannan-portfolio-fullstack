@@ -779,6 +779,16 @@
                 Non-blocking multi-version concurrency control, distributed causal orderings, and temporal time-travel across 5 enterprise architectures: PostgreSQL Heap Tuple Visibility (t_xmin and t_xmax headers resolving non-blocking snapshot isolation in sub-0.35ms without shared read locks), CockroachDB Hybrid Logical Clock with Read Restarts (HLC combining physical wall clocks and logical counters to enforce serializable isolation across multi-region Raft groups), Google Cloud Spanner TrueTime External Consistency (atomic clocks with commit-wait 2 * epsilon for external linearizability), Git-Like Temporal Time-Travel Tables (immutable copy-on-write manifest trees enabling instant point-in-time queries AS OF SYSTEM TIME), and Lock-Free Epoch-Horizon VACUUM Freezing (reclaiming dead tuple versions without blocking concurrent readers or writers).
               </p>
             </div>
+
+            <!-- Sub-Section 34: Distributed Read-Write Quorum & Tunable Consistency Sandbox -->
+            <div id="architecture-quorum-consistency" style="background: rgba(9, 14, 24, 0.7); border: 1px solid #1e293b; border-radius: 16px; padding: 1.5rem; margin-top: 1rem;">
+              <h3 style="color: #34d399; font-size: 1.25rem; font-weight: bold; margin-bottom: 0.5rem;">
+                Distributed Read-Write Quorum &amp; Tunable Consistency Sandbox
+              </h3>
+              <p style="color: #94a3b8; font-size: 0.85rem; line-height: 1.6;">
+                Dynamo-style leaderless replication, quorum math, and anti-entropy synchronization across 5 enterprise architectures: Strict Quorum Consensus (R + W &gt; N monotonic linearizability with background read repair converging stale replicas in sub-2.4ms), Sloppy Quorum with Hinted Handoff (guaranteeing 99.999% write availability during network partitions by buffering mutations on surrogate neighbors), Anti-Entropy Merkle Tree Range Synchronization (O(1) root hash validation saving 99.8% network bandwidth during replica drift healing), Tunable Consistency Levels Matrix (balancing ONE, LOCAL_QUORUM, QUORUM, and ALL SLAs between 0.38ms and 8.5ms), and Vector Clocks Causal Reconciler (eliminating silent data overwrites caused by NTP clock drift).
+              </p>
+            </div>
           </section>
 
           <!-- Projects & Interactive Architecture Section Landmark -->

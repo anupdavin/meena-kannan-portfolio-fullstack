@@ -39,7 +39,8 @@ import {
   Shield,
   Split,
   Network,
-  Clock
+  Clock,
+  Share2
 } from 'lucide-react'
 import HeroArchitectureTopology from '@/components/architecture/HeroArchitectureTopology'
 
@@ -213,6 +214,7 @@ const ARCHITECTURE_ENGINES = [
   { id: 'architecture-webhook-ingress', label: 'Webhook Ingress', badge: 'HMAC & Kafka', icon: Radio, border: 'border-emerald-500/40 text-emerald-300 hover:bg-emerald-500/10' },
   { id: 'architecture-topology-mesh', label: 'Topology Mesh', badge: 'SWIM Gossip', icon: Network, border: 'border-teal-500/40 text-teal-300 hover:bg-teal-500/10' },
   { id: 'architecture-mvcc-snapshot', label: 'MVCC Time-Travel', badge: 'Snapshot Isolation', icon: Clock, border: 'border-violet-500/40 text-violet-300 hover:bg-violet-500/10' },
+  { id: 'architecture-quorum-consistency', label: 'Quorum & Consistency', badge: 'R+W > N', icon: Share2, border: 'border-emerald-500/40 text-emerald-300 hover:bg-emerald-500/10' },
 ]
 
 export default function TerminalHero() {
@@ -448,12 +450,12 @@ export default function TerminalHero() {
             </div>
           </div>
 
-          {/* 33 Live Architecture Engines Fast-Jump Dock */}
+          {/* 34 Live Architecture Engines Fast-Jump Dock */}
           <div className="pt-3 border-t border-slate-800/80 space-y-2">
             <div className="flex items-center justify-between text-[11px] font-mono">
               <span className="text-slate-300 font-bold uppercase tracking-wider flex items-center gap-1.5">
                 <span className="w-2 h-2 rounded-full bg-cyan-400 animate-pulse" />
-                33 Interactive Architecture Engines
+                34 Interactive Architecture Engines
               </span>
               <span className="text-slate-500 text-[10px]">Direct Fast Jump &darr;</span>
             </div>

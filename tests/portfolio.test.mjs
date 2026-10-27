@@ -1756,6 +1756,43 @@ describe('Production Architectural Decision Records (ADR) & CLI Integration', ()
     assert.ok(indexHtml.includes('id="architecture-mvcc-snapshot"'), 'index.html must include #architecture-mvcc-snapshot landmark');
     assert.ok(!/[\u2013\u2014]/.test(indexHtml), 'index.html must contain zero em/en-dashes');
   });
+
+  test('QuorumConsistencySandbox and quorumConsistencyModels.ts define R+W>N quorum, hinted handoff, and Merkle sync with CLI integration', () => {
+    const quorumDataPath = path.join(rootDir, 'src', 'data', 'quorumConsistencyModels.ts');
+    assert.ok(fs.existsSync(quorumDataPath), 'quorumConsistencyModels.ts must exist');
+    const quorumDataCode = fs.readFileSync(quorumDataPath, 'utf8');
+    assert.ok(quorumDataCode.includes('strict-quorum-consensus'), 'Must define strict-quorum-consensus model');
+    assert.ok(quorumDataCode.includes('sloppy-quorum-hinted-handoff'), 'Must define sloppy-quorum-hinted-handoff model');
+    assert.ok(quorumDataCode.includes('anti-entropy-merkle-sync'), 'Must define anti-entropy-merkle-sync model');
+    assert.ok(quorumDataCode.includes('tunable-consistency-matrix'), 'Must define tunable-consistency-matrix model');
+    assert.ok(quorumDataCode.includes('vector-clock-reconciler'), 'Must define vector-clock-reconciler model');
+    assert.ok(!/[\u2013\u2014]/.test(quorumDataCode), 'quorumConsistencyModels.ts must contain zero em/en-dashes');
+
+    const componentPath = path.join(rootDir, 'src', 'components', 'architecture', 'QuorumConsistencySandbox.tsx');
+    assert.ok(fs.existsSync(componentPath), 'QuorumConsistencySandbox.tsx must exist');
+    const compCode = fs.readFileSync(componentPath, 'utf8');
+    assert.ok(compCode.includes('copyRfcReport'), 'QuorumConsistencySandbox must support 1-click RFC copy');
+    assert.ok(compCode.includes('QUORUM_CONSISTENCY_MODELS'), 'QuorumConsistencySandbox must render QUORUM_CONSISTENCY_MODELS');
+    assert.ok(!/[\u2013\u2014]/.test(compCode), 'QuorumConsistencySandbox.tsx must contain zero em/en-dashes');
+
+    const labCode = fs.readFileSync(path.join(rootDir, 'src', 'components', 'portfolio', 'ArchitectureLab.tsx'), 'utf8');
+    assert.ok(labCode.includes('QuorumConsistencySandbox'), 'ArchitectureLab must mount QuorumConsistencySandbox');
+    assert.ok(labCode.includes('id="architecture-quorum-consistency"'), 'ArchitectureLab must define anchor #architecture-quorum-consistency');
+
+    const cliCode = fs.readFileSync(path.join(rootDir, 'src', 'components', 'portfolio', 'InteractiveCli.tsx'), 'utf8');
+    assert.ok(cliCode.includes("'quorum'"), "InteractiveCli must support 'quorum' command");
+    assert.ok(cliCode.includes('[ $ quorum ]'), "InteractiveCli must include '[ $ quorum ]' quick chip");
+    assert.ok(cliCode.includes('QUORUM_CONSISTENCY_MODELS'), 'InteractiveCli must search across QUORUM_CONSISTENCY_MODELS');
+    assert.ok(!/[\u2013\u2014]/.test(cliCode), 'InteractiveCli.tsx must contain zero em/en-dashes');
+
+    const chatIndex = fs.readFileSync(path.join(rootDir, 'public', 'chat', 'index.json'), 'utf8');
+    assert.ok(chatIndex.includes('distributed-quorum-consistency'), 'public/chat/index.json must index distributed-quorum-consistency');
+    assert.ok(!/[\u2013\u2014]/.test(chatIndex), 'public/chat/index.json must contain zero em/en-dashes');
+
+    const indexHtml = fs.readFileSync(path.join(rootDir, 'index.html'), 'utf8');
+    assert.ok(indexHtml.includes('id="architecture-quorum-consistency"'), 'index.html must include #architecture-quorum-consistency landmark');
+    assert.ok(!/[\u2013\u2014]/.test(indexHtml), 'index.html must contain zero em/en-dashes');
+  });
 });
 
 

@@ -1,6 +1,6 @@
 {
   "version": "1.0.0",
-  "generatedAt": "2026-10-27T21:49:01.658Z",
+  "generatedAt": "2026-10-27T22:00:05.268Z",
   "nodes": {
     "src/components/architecture/AdrExplorer.tsx": {
       "file": "src/components/architecture/AdrExplorer.tsx",
@@ -355,6 +355,17 @@
       ],
       "loc": 552
     },
+    "src/components/architecture/QuorumConsistencySandbox.tsx": {
+      "file": "src/components/architecture/QuorumConsistencySandbox.tsx",
+      "imports": [
+        "lucide-react",
+        "../../data/quorumConsistencyModels"
+      ],
+      "exports": [
+        "QuorumConsistencySandbox"
+      ],
+      "loc": 737
+    },
     "src/components/architecture/RaftConsensusSandbox.tsx": {
       "file": "src/components/architecture/RaftConsensusSandbox.tsx",
       "imports": [
@@ -597,6 +608,7 @@
         "@/components/architecture/WebhookIngressSandbox",
         "@/components/architecture/TopologyMeshSandbox",
         "@/components/architecture/MvccSnapshotSandbox",
+        "@/components/architecture/QuorumConsistencySandbox",
         "@/data/architectureSystems",
         "@/data/architecturalDecisions",
         "@/data/architecturalTradeoffs",
@@ -628,12 +640,13 @@
         "@/data/distributedLockModels",
         "@/data/webhookIngressModels",
         "@/data/topologyMeshModels",
-        "@/data/mvccSnapshotModels"
+        "@/data/mvccSnapshotModels",
+        "@/data/quorumConsistencyModels"
       ],
       "exports": [
         "ArchitectureLab"
       ],
-      "loc": 1476
+      "loc": 1517
     },
     "src/components/portfolio/ContactTerminal.tsx": {
       "file": "src/components/portfolio/ContactTerminal.tsx",
@@ -711,12 +724,13 @@
         "@/data/webhookIngressModels",
         "@/data/topologyMeshModels",
         "@/data/mvccSnapshotModels",
+        "@/data/quorumConsistencyModels",
         "@/data/executiveBriefing"
       ],
       "exports": [
         "InteractiveCli"
       ],
-      "loc": 4407
+      "loc": 4504
     },
     "src/components/portfolio/ProjectsShowcase.tsx": {
       "file": "src/components/portfolio/ProjectsShowcase.tsx",
@@ -769,7 +783,7 @@
       "exports": [
         "TerminalHero"
       ],
-      "loc": 633
+      "loc": 635
     },
     "src/components/ui/badge.tsx": {
       "file": "src/components/ui/badge.tsx",
@@ -1112,6 +1126,17 @@
       ],
       "loc": 646
     },
+    "src/data/quorumConsistencyModels.ts": {
+      "file": "src/data/quorumConsistencyModels.ts",
+      "imports": [],
+      "exports": [
+        "ReplicaNode",
+        "QuorumConsistencyModel",
+        "INITIAL_REPLICAS",
+        "QUORUM_CONSISTENCY_MODELS"
+      ],
+      "loc": 518
+    },
     "src/data/raftConsensus.ts": {
       "file": "src/data/raftConsensus.ts",
       "imports": [],
@@ -1329,6 +1354,11 @@
       "type": "import"
     },
     {
+      "source": "src/components/architecture/QuorumConsistencySandbox.tsx",
+      "target": "src/data/quorumConsistencyModels.ts",
+      "type": "import"
+    },
+    {
       "source": "src/components/architecture/SplitBrainResolverSandbox.tsx",
       "target": "src/data/splitBrainResolverModels.ts",
       "type": "import"
@@ -1413,6 +1443,7 @@
     "KafkaStreamMonitor": "src/components/architecture/KafkaStreamMonitor.tsx",
     "MultiRegionReplicationSandbox": "src/components/architecture/MultiRegionReplicationSandbox.tsx",
     "MvccSnapshotSandbox": "src/components/architecture/MvccSnapshotSandbox.tsx",
+    "QuorumConsistencySandbox": "src/components/architecture/QuorumConsistencySandbox.tsx",
     "RaftConsensusSandbox": "src/components/architecture/RaftConsensusSandbox.tsx",
     "RateLimiterSandbox": "src/components/architecture/RateLimiterSandbox.tsx",
     "SplitBrainResolverSandbox": "src/components/architecture/SplitBrainResolverSandbox.tsx",
@@ -1573,6 +1604,10 @@
     "INITIAL_TUPLE_VERSIONS": "src/data/mvccSnapshotModels.ts",
     "INITIAL_TRANSACTIONS": "src/data/mvccSnapshotModels.ts",
     "MVCC_SNAPSHOT_MODELS": "src/data/mvccSnapshotModels.ts",
+    "ReplicaNode": "src/data/quorumConsistencyModels.ts",
+    "QuorumConsistencyModel": "src/data/quorumConsistencyModels.ts",
+    "INITIAL_REPLICAS": "src/data/quorumConsistencyModels.ts",
+    "QUORUM_CONSISTENCY_MODELS": "src/data/quorumConsistencyModels.ts",
     "ConsensusModel": "src/data/raftConsensus.ts",
     "CONSENSUS_MODELS": "src/data/raftConsensus.ts",
     "evaluateQuorumCommit": "src/data/raftConsensus.ts",
