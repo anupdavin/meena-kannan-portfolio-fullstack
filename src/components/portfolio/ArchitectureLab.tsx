@@ -10,6 +10,7 @@ import {
 } from 'lucide-react'
 import ByteByteGoDiagram from '@/components/architecture/ByteByteGoDiagram'
 import ByteByteGoAiCodex from '@/components/architecture/ByteByteGoAiCodex'
+import AdrExplorer from '@/components/architecture/AdrExplorer'
 
 export default function ArchitectureLab() {
   return (
@@ -78,6 +79,16 @@ export default function ArchitectureLab() {
         transition={{ duration: 0.6, delay: 0.1 }}
       >
         <ByteByteGoAiCodex />
+      </motion.div>
+
+      {/* 2.6. Production Architectural Decision Records (ADR) Explorer */}
+      <motion.div
+        initial={{ opacity: 0, y: 25 }}
+        whileInView={{ opacity: 1, y: 0 }}
+        viewport={{ once: true }}
+        transition={{ duration: 0.6, delay: 0.15 }}
+      >
+        <AdrExplorer />
       </motion.div>
 
       {/* 3. Architectural Design Pillars Strip */}

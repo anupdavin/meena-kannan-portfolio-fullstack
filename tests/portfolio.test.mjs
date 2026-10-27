@@ -399,3 +399,39 @@ describe('Quality, Antislop, Accessibility & Performance Hygiene Verification', 
   });
 });
 
+describe('Production Architectural Decision Records (ADR) & CLI Integration', () => {
+  test('src/data/architecturalDecisions.ts defines ADR-001 through ADR-006 with complete sections', () => {
+    const adrFile = path.join(rootDir, 'src', 'data', 'architecturalDecisions.ts');
+    assert.ok(fs.existsSync(adrFile), 'architecturalDecisions.ts must exist');
+    const content = fs.readFileSync(adrFile, 'utf8');
+
+    const expectedIds = ['ADR-001', 'ADR-002', 'ADR-003', 'ADR-004', 'ADR-005', 'ADR-006'];
+    for (const id of expectedIds) {
+      assert.ok(content.includes(id), `architecturalDecisions.ts must contain ${id}`);
+    }
+
+    assert.ok(content.includes('Choreographed Saga Pattern'), 'Must include Choreographed Saga ADR');
+    assert.ok(content.includes('Transactional Outbox with Debezium CDC'), 'Must include Transactional Outbox ADR');
+    assert.ok(content.includes('Java 21 Virtual Threads'), 'Must include Java 21 Virtual Threads ADR');
+    assert.ok(content.includes('Dual-Tier Caching'), 'Must include Dual-Tier Caching ADR');
+    assert.ok(content.includes('Zero-Trust Envoy Edge Ingress'), 'Must include Zero-Trust Envoy ADR');
+    assert.ok(content.includes('Model Context Protocol (MCP)'), 'Must include Model Context Protocol ADR');
+    assert.ok(!/[\u2013\u2014]/.test(content), 'architecturalDecisions.ts must contain zero em/en-dashes');
+  });
+
+  test('ArchitectureLab.tsx integrates AdrExplorer below AI Codex', () => {
+    const labCode = fs.readFileSync(path.join(rootDir, 'src', 'components', 'portfolio', 'ArchitectureLab.tsx'), 'utf8');
+    assert.ok(labCode.includes('import AdrExplorer'), 'ArchitectureLab must import AdrExplorer');
+    assert.ok(labCode.includes('<AdrExplorer />') || labCode.includes('<AdrExplorer'), 'ArchitectureLab must render AdrExplorer');
+  });
+
+  test('InteractiveCli.tsx supports adr command and includes quick chip', () => {
+    const cliCode = fs.readFileSync(path.join(rootDir, 'src', 'components', 'portfolio', 'InteractiveCli.tsx'), 'utf8');
+    assert.ok(cliCode.includes("'adr'"), "InteractiveCli must include 'adr' command in available commands");
+    assert.ok(cliCode.includes('[ $ adr ]'), "InteractiveCli must include '[ $ adr ]' quick chip");
+    assert.ok(cliCode.includes("case 'adr':"), "InteractiveCli switch must handle 'adr' command");
+    assert.ok(cliCode.includes('ARCHITECTURAL_DECISIONS'), 'InteractiveCli must reference ARCHITECTURAL_DECISIONS');
+  });
+});
+
+

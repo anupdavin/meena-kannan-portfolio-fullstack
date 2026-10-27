@@ -1,6 +1,7 @@
 import { useState, useRef, useEffect, useCallback } from 'react'
 import { motion } from 'framer-motion'
 import { Terminal as TerminalIcon, CornerDownLeft, Trash2 } from 'lucide-react'
+import { ARCHITECTURAL_DECISIONS } from '@/data/architecturalDecisions'
 
 interface HistoryEntry {
   command: string
@@ -17,6 +18,8 @@ const AVAILABLE_COMMANDS = [
   'contact',
   'hire',
   'architecture',
+  'adr',
+  'decisions',
   'stats',
   'metrics',
   'benchmark',
@@ -35,6 +38,7 @@ const AVAILABLE_COMMANDS = [
 const QUICK_CHIPS = [
   { label: '[ $ whoami ]', cmd: 'whoami' },
   { label: '[ $ architecture ]', cmd: 'architecture' },
+  { label: '[ $ adr ]', cmd: 'adr' },
   { label: '[ $ ai-codex ]', cmd: 'ai-codex' },
   { label: '[ $ skills ]', cmd: 'skills' },
   { label: '[ $ metrics ]', cmd: 'metrics' },
@@ -57,6 +61,7 @@ const COMMAND_HELP = [
   '  benchmark       - Run simulated synthetic latency benchmark across distributed services',
   '  ai-codex        - Display ByteByteGo 5-pillar AI systems architecture codex',
   '  architecture    - Display Clean Architecture, DDD & Saga design principles',
+  '  adr             - Inspect enterprise Architectural Decision Records (ADR-001..ADR-006)',
   '  hire            - Check current availability & consulting engagement models',
   '  contact         - Display direct contact channels & copy-email action',
   '  resume          - Open / download senior solutions architect technical CV (PDF)',
@@ -252,6 +257,47 @@ export default function InteractiveCli() {
           '  4. Transactional Outbox: Guaranteed atomic dual-writes to Postgres and Kafka via Debezium CDC'
         ]
         break
+      case 'adr':
+      case 'decisions': {
+        const targetId = args[0]?.toUpperCase()
+        if (targetId) {
+          const match = ARCHITECTURAL_DECISIONS.find(
+            a => a.id.toUpperCase() === targetId || a.id.toUpperCase().endsWith(targetId.replace('ADR-', ''))
+          )
+          if (match) {
+            output = [
+              '--------------------------------------------------------------------------------',
+              `[${match.id}] ${match.title}`,
+              `Status: ${match.status} | Date: ${match.date} | Pattern: ${match.pattern}`,
+              '--------------------------------------------------------------------------------',
+              'Context:',
+              `  ${match.context}`,
+              '',
+              'Decision:',
+              `  ${match.decision}`,
+              '',
+              'Verified Outcomes:',
+              ...match.consequences.positive.map(p => `  + ${p}`),
+              '',
+              'Tradeoffs & Constraints:',
+              ...match.consequences.negative.map(n => `  - ${n}`),
+              '',
+              `Affected Services: ${match.affectedSystems.join(', ')}`,
+              '--------------------------------------------------------------------------------'
+            ]
+            break
+          }
+        }
+        output = [
+          'Architectural Decision Records (ADR) Ledger:',
+          '--------------------------------------------------------------------------------',
+          ...ARCHITECTURAL_DECISIONS.map(a => `  [${a.id}] (${a.status}) ${a.title}`),
+          '--------------------------------------------------------------------------------',
+          'Tip: Type "adr <id>" (e.g. "adr ADR-001" or "adr 1") to view full context and tradeoffs.',
+          'Full interactive viewer available above in #architecture.'
+        ]
+        break
+      }
       case 'resume':
       case 'download':
       case 'curl-resume':

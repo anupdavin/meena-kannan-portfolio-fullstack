@@ -1,7 +1,20 @@
 {
   "version": "1.0.0",
-  "generatedAt": "2026-10-27T06:48:41.305Z",
+  "generatedAt": "2026-10-27T07:21:03.784Z",
   "nodes": {
+    "src/components/architecture/AdrExplorer.tsx": {
+      "file": "src/components/architecture/AdrExplorer.tsx",
+      "imports": [
+        "react",
+        "framer-motion",
+        "lucide-react",
+        "@/data/architecturalDecisions"
+      ],
+      "exports": [
+        "AdrExplorer"
+      ],
+      "loc": 255
+    },
     "src/components/architecture/AgenticWorkflowDiagram.tsx": {
       "file": "src/components/architecture/AgenticWorkflowDiagram.tsx",
       "imports": [
@@ -191,12 +204,13 @@
         "framer-motion",
         "lucide-react",
         "@/components/architecture/ByteByteGoDiagram",
-        "@/components/architecture/ByteByteGoAiCodex"
+        "@/components/architecture/ByteByteGoAiCodex",
+        "@/components/architecture/AdrExplorer"
       ],
       "exports": [
         "ArchitectureLab"
       ],
-      "loc": 136
+      "loc": 147
     },
     "src/components/portfolio/ContactTerminal.tsx": {
       "file": "src/components/portfolio/ContactTerminal.tsx",
@@ -229,12 +243,13 @@
       "imports": [
         "react",
         "framer-motion",
-        "lucide-react"
+        "lucide-react",
+        "@/data/architecturalDecisions"
       ],
       "exports": [
         "InteractiveCli"
       ],
-      "loc": 487
+      "loc": 533
     },
     "src/components/portfolio/ProjectsShowcase.tsx": {
       "file": "src/components/portfolio/ProjectsShowcase.tsx",
@@ -352,6 +367,15 @@
         "Textarea"
       ],
       "loc": 11
+    },
+    "src/data/architecturalDecisions.ts": {
+      "file": "src/data/architecturalDecisions.ts",
+      "imports": [],
+      "exports": [
+        "ArchitecturalDecisionRecord",
+        "ARCHITECTURAL_DECISIONS"
+      ],
+      "loc": 144
     },
     "src/data/architectureSystems.ts": {
       "file": "src/data/architectureSystems.ts",
@@ -492,6 +516,7 @@
     }
   ],
   "symbolMap": {
+    "AdrExplorer": "src/components/architecture/AdrExplorer.tsx",
     "AgentStepDef": "src/components/architecture/AgenticWorkflowDiagram.tsx",
     "AgentNodeExtended": "src/components/architecture/AgenticWorkflowDiagram.tsx",
     "AgentGoalPayloadSchema": "src/components/architecture/AgenticWorkflowDiagram.tsx",
@@ -541,7 +566,7 @@
     "ContactTerminal": "src/components/portfolio/ContactTerminal.tsx",
     "ExperienceTimeline": "src/components/portfolio/ExperienceTimeline.tsx",
     "InteractiveCli": "src/components/portfolio/InteractiveCli.tsx",
-    "ArchitecturalDecisionRecord": "src/components/portfolio/ProjectsShowcase.tsx",
+    "ArchitecturalDecisionRecord": "src/data/architecturalDecisions.ts",
     "Project": "src/components/portfolio/ProjectsShowcase.tsx",
     "useFinancialTickSubscription": "src/components/portfolio/ProjectsShowcase.tsx",
     "ProjectsShowcase": "src/components/portfolio/ProjectsShowcase.tsx",
@@ -559,6 +584,7 @@
     "Input": "src/components/ui/input.tsx",
     "Progress": "src/components/ui/progress.tsx",
     "Textarea": "src/components/ui/textarea.tsx",
+    "ARCHITECTURAL_DECISIONS": "src/data/architecturalDecisions.ts",
     "ArchitectureNode": "src/data/architectureSystems.ts",
     "ArchitectureEdge": "src/data/architectureSystems.ts",
     "StepFlow": "src/data/architectureSystems.ts",

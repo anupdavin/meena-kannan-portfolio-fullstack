@@ -20,6 +20,9 @@
 
 | Run Timestamp | Focus Area | Action Completed | Lessons Learned / Gotchas |
 | :--- | :--- | :--- | :--- |
+| `2026-10-27 07:20:58` | Autonomous Verification | All 35 tests passed, 0 lint warnings, CodeGraph synchronized. | Verified zero regressions under Superpowers TDD protocol. |
+| `2026-10-27 07:20:00` | Architectural Decisions Ledger (Track E) | Implemented interactive ADR Explorer (`AdrExplorer.tsx`, `architecturalDecisions.ts`), integrated into `ArchitectureLab.tsx`, added `adr` CLI command and quick-chip in `InteractiveCli.tsx`, expanded test suite to 39/39 passing tests. | Surfacing real engineering ADRs with context, decisions, positive outcomes, and blast radius constraints elevates technical credibility for Principal Architect reviews. |
+| `2026-10-27 07:19:48` | Autonomous Verification | All 35 tests passed, 0 lint warnings, CodeGraph synchronized. | Verified zero regressions under Superpowers TDD protocol. |
 | `2026-10-27 06:48:35` | Autonomous Verification | All 35 tests passed, 0 lint warnings, CodeGraph synchronized. | Verified zero regressions under Superpowers TDD protocol. |
 | `2026-10-27 06:46:11` | Autonomous Verification | All 35 tests passed, 0 lint warnings, CodeGraph synchronized. | Verified zero regressions under Superpowers TDD protocol. |
 | `2026-10-27 06:45:11` | Autonomous Verification | All 35 tests passed, 0 lint warnings, CodeGraph synchronized. | Verified zero regressions under Superpowers TDD protocol. |
@@ -78,6 +81,12 @@
 - [x] **Task D1:** Add interactive step-through animation controls to `ByteByteGoAiCodex.tsx` to step through the 5 architectures sequentially.
 - [x] **Task D2:** Add a dedicated terminal command `ai-codex` in `InteractiveCli.tsx` that outputs the ByteByteGo AI terms directly into the CLI.
 - [x] **Task D3:** Add automated screenshot regression baseline check for social preview og-image.
+
+### Track E: Architectural Decision Records (ADR) & System Governance
+- [x] **Task E1:** Implement structured Architectural Decision Records ledger (`src/data/architecturalDecisions.ts`) covering Saga, Outbox, Virtual Threads, L1/L2 Caching, Envoy mTLS, and MCP.
+- [x] **Task E2:** Build interactive Swiss Technical Editorial ADR explorer (`src/components/architecture/AdrExplorer.tsx`) with 1-click Markdown clipboard exports.
+- [x] **Task E3:** Hook `adr` and `decisions` commands into `InteractiveCli.tsx` with single-record deep-dive inspection.
+- [x] **Task E4:** Add comprehensive TDD test suite in `tests/portfolio.test.mjs` (39/39 passing tests).
 
 ---
 

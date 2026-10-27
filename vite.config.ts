@@ -26,6 +26,7 @@ export default defineConfig({
           if (
             normalizedId.includes('src/data/byteByteGoConfigs') || 
             normalizedId.includes('src/data/architectureSystems') ||
+            normalizedId.includes('src/data/architecturalDecisions') ||
             normalizedId.includes('src/components/architecture/workbenchConfigs')
           ) {
             return 'architecture-data'
