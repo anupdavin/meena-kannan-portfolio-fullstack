@@ -48,13 +48,20 @@ describe('Portfolio Verification & Asset Integrity', () => {
     assert.ok(fs.existsSync(path.join(rootDir, 'public', 'sitemap.xml')), 'sitemap.xml must exist');
     assert.ok(fs.existsSync(path.join(rootDir, 'public', 'favicon.svg')), 'favicon.svg must exist');
     
-    // Detailed SVG baseline assertion (Task D3)
+    // Sitemap architecture indexing assertion (Task O1)
+    const sitemapXml = fs.readFileSync(path.join(rootDir, 'public', 'sitemap.xml'), 'utf8');
+    assert.ok(sitemapXml.includes('#architecture'), 'sitemap.xml must index #architecture section');
+
+    // Detailed SVG baseline assertion (Task D3 & O2)
     const ogSvg = fs.readFileSync(path.join(rootDir, 'public', 'og-image.svg'), 'utf8');
     assert.ok(ogSvg.includes('width="1200"') && ogSvg.includes('height="630"'), 'OG image must have 1200x630 dimensions');
     assert.ok(ogSvg.includes('viewBox="0 0 1200 630"'), 'OG image must have standard 1200x630 viewBox');
     assert.ok(ogSvg.includes('MEENA KANNAN'), 'OG image must feature Meena Kannan brand');
     assert.ok(ogSvg.includes('Senior Full-Stack &amp; Cloud Solutions Architect'), 'OG image must feature executive role title');
     assert.ok(ogSvg.includes('99.99% SLA UPTIME'), 'OG image must feature SLA metric');
+    assert.ok(ogSvg.includes('MCP &amp; AGENTIC AI'), 'OG image must feature MCP & AGENTIC AI badge');
+    assert.ok(ogSvg.includes('MCP / Agentic AI'), 'OG image subtitle must list MCP / Agentic AI');
+    assert.ok(!/[\u2013\u2014]/.test(ogSvg), 'og-image.svg must contain zero em/en-dashes');
   });
 
   test('ByteByteGoAiCodex defines all 5 AI paradigms and is embedded in ArchitectureLab', () => {

@@ -22,7 +22,7 @@
   <text x="100" y="220" font-family="'JetBrains Mono', monospace" font-size="24" fill="#06b6d4" font-weight="600">$ ./initialize --architect --lead-engineer</text>
   <text x="100" y="310" font-family="'JetBrains Mono', monospace" font-size="64" fill="#ffffff" font-weight="800">MEENA KANNAN</text>
   <text x="100" y="370" font-family="'JetBrains Mono', monospace" font-size="30" fill="#4ade80" font-weight="700">&gt; Senior Full-Stack &amp; Cloud Solutions Architect</text>
-  <text x="100" y="440" font-family="'JetBrains Mono', monospace" font-size="20" fill="#9ca3af" font-weight="400">Java 21 LTS • Spring Boot 3 • React 19 • Apache Kafka • Kubernetes • AWS Cloud</text>
+  <text x="100" y="440" font-family="'JetBrains Mono', monospace" font-size="20" fill="#9ca3af" font-weight="400">Java 21 LTS • Spring Boot 3 • React 19 • Apache Kafka • Kubernetes • MCP / Agentic AI • AWS</text>
   
   <rect x="100" y="480" width="220" height="40" rx="8" fill="#22c55e" />
   <text x="125" y="506" font-family="'JetBrains Mono', monospace" font-size="16" fill="#000000" font-weight="700">99.99% SLA UPTIME</text>
@@ -32,4 +32,7 @@
   
   <rect x="580" y="480" width="240" height="40" rx="8" fill="#a855f7" fill-opacity="0.2" stroke="#a855f7" stroke-width="1.5" />
   <text x="605" y="506" font-family="'JetBrains Mono', monospace" font-size="16" fill="#c084fc" font-weight="700">CLEAN ARCH / DDD</text>
+
+  <rect x="840" y="480" width="240" height="40" rx="8" fill="#f59e0b" fill-opacity="0.2" stroke="#f59e0b" stroke-width="1.5" />
+  <text x="865" y="506" font-family="'JetBrains Mono', monospace" font-size="16" fill="#fbbf24" font-weight="700">MCP &amp; AGENTIC AI</text>
 </svg>
