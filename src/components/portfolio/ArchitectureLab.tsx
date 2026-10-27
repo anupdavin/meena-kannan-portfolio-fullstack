@@ -11,6 +11,7 @@ import {
 import ByteByteGoDiagram from '@/components/architecture/ByteByteGoDiagram'
 import ByteByteGoAiCodex from '@/components/architecture/ByteByteGoAiCodex'
 import AdrExplorer from '@/components/architecture/AdrExplorer'
+import TradeoffMatrix from '@/components/architecture/TradeoffMatrix'
 
 export default function ArchitectureLab() {
   return (
@@ -89,6 +90,16 @@ export default function ArchitectureLab() {
         transition={{ duration: 0.6, delay: 0.15 }}
       >
         <AdrExplorer />
+      </motion.div>
+
+      {/* 2.7. Architectural Trade-Off & Evaluation Matrix */}
+      <motion.div
+        initial={{ opacity: 0, y: 25 }}
+        whileInView={{ opacity: 1, y: 0 }}
+        viewport={{ once: true }}
+        transition={{ duration: 0.6, delay: 0.2 }}
+      >
+        <TradeoffMatrix />
       </motion.div>
 
       {/* 3. Architectural Design Pillars Strip */}

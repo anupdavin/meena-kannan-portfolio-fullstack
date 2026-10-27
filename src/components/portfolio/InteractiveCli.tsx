@@ -2,6 +2,7 @@ import { useState, useRef, useEffect, useCallback } from 'react'
 import { motion } from 'framer-motion'
 import { Terminal as TerminalIcon, CornerDownLeft, Trash2 } from 'lucide-react'
 import { ARCHITECTURAL_DECISIONS } from '@/data/architecturalDecisions'
+import { ARCHITECTURAL_TRADEOFFS } from '@/data/architecturalTradeoffs'
 
 interface HistoryEntry {
   command: string
@@ -23,6 +24,8 @@ const AVAILABLE_COMMANDS = [
   'architecture',
   'adr',
   'decisions',
+  'tradeoffs',
+  'compare',
   'stats',
   'metrics',
   'benchmark',
@@ -46,6 +49,7 @@ const AVAILABLE_COMMANDS = [
 const QUICK_CHIPS = [
   { label: '[ $ whoami ]', cmd: 'whoami' },
   { label: '[ $ architecture ]', cmd: 'architecture' },
+  { label: '[ $ tradeoffs ]', cmd: 'tradeoffs' },
   { label: '[ $ adr ]', cmd: 'adr' },
   { label: '[ $ ai-codex ]', cmd: 'ai-codex' },
   { label: '[ $ mcp ]', cmd: 'mcp' },
@@ -65,6 +69,7 @@ const COMMAND_HELP = [
   '  skills          - Print summary of core technology stack & competencies',
   '  projects        - List featured systems, or type "project <id>" for deep architecture review',
   '  experience      - Output career journey, or type "experience <id>" for deep milestone review',
+  '  tradeoffs       - Evaluate system design decision trade-offs (or "compare <topic>")',
   '  stats           - View production performance & impact metrics (99.99% SLA)',
   '  metrics         - Print live architecture cluster telemetry, throughput & cache stats',
   '  benchmark       - Run simulated synthetic latency benchmark across distributed services',
@@ -635,6 +640,62 @@ export default function InteractiveCli() {
           '--------------------------------------------------------------------------------',
           'Tip: Type "adr <id>" (e.g. "adr ADR-001" or "adr 1") to view full context and tradeoffs.',
           'Full interactive viewer available above in #architecture.'
+        ]
+        break
+      }
+      case 'tradeoffs':
+      case 'compare': {
+        const subArg = args[0]?.toLowerCase()
+        if (subArg) {
+          const matched = ARCHITECTURAL_TRADEOFFS.find(t => 
+            t.id === subArg ||
+            t.id.includes(subArg) ||
+            t.category.toLowerCase().includes(subArg) ||
+            t.title.toLowerCase().includes(subArg)
+          )
+          if (matched) {
+            output = [
+              `Architectural Decision Matrix: ${matched.title}`,
+              '--------------------------------------------------------------------------------',
+              `Category : ${matched.category}`,
+              `Scope    : ${matched.summary}`,
+              '--------------------------------------------------------------------------------',
+              'Paradigms Evaluated:',
+              ...matched.options.flatMap((opt, idx) => [
+                `  [Option ${String.fromCharCode(65 + idx)}] ${opt.name} (${opt.paradigm})`,
+                `    Best For     : ${opt.bestFor}`,
+                `    Avoid When   : ${opt.avoidWhen}`,
+                `    Telemetry    : ${opt.productionMetric}`,
+                `    Invariant    : ${opt.invariant}`
+              ]),
+              '--------------------------------------------------------------------------------',
+              'Evaluation Scoring (1 - 5 Scale):',
+              ...matched.criteria.map(c => 
+                `  - ${c.label.padEnd(28, ' ')}: [A: ${c.scoreA}/5] [B: ${c.scoreB}/5] ${c.scoreC !== undefined ? `[C: ${c.scoreC}/5]` : ''} (${c.note})`
+              ),
+              '--------------------------------------------------------------------------------',
+              'Principal Architect Production Verdict:',
+              `  ${matched.productionVerdict}`,
+              `  Case Study: ${matched.caseStudy}`
+            ]
+            break
+          }
+        }
+
+        output = [
+          'System Design Architectural Trade-Off Matrix:',
+          '--------------------------------------------------------------------------------',
+          'Evaluate multi-paradigm system design decisions, latency bounds, and invariants.',
+          '',
+          ...ARCHITECTURAL_TRADEOFFS.flatMap((t, idx) => [
+            `${idx + 1}. [ ${t.id} ] : ${t.title}`,
+            `   Category  : ${t.category}`,
+            `   Paradigms : ${t.options.map(o => o.name).join(' vs ')}`,
+            `   Deep Dive : "compare ${t.id.split('-')[0]}" (e.g. "compare saga", "compare ai", "compare concurrency", "compare service")`,
+            ''
+          ]),
+          '--------------------------------------------------------------------------------',
+          'Tip: Run "compare saga" or "compare ai" for granular side-by-side evaluation metrics.'
         ]
         break
       }

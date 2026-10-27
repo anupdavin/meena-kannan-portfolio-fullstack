@@ -1,6 +1,6 @@
 {
   "version": "1.0.0",
-  "generatedAt": "2026-10-27T10:08:54.501Z",
+  "generatedAt": "2026-10-27T10:21:51.379Z",
   "nodes": {
     "src/components/architecture/AdrExplorer.tsx": {
       "file": "src/components/architecture/AdrExplorer.tsx",
@@ -151,6 +151,19 @@
       ],
       "loc": 1413
     },
+    "src/components/architecture/TradeoffMatrix.tsx": {
+      "file": "src/components/architecture/TradeoffMatrix.tsx",
+      "imports": [
+        "react",
+        "framer-motion",
+        "lucide-react",
+        "@/data/architecturalTradeoffs"
+      ],
+      "exports": [
+        "TradeoffMatrix"
+      ],
+      "loc": 326
+    },
     "src/components/architecture/workbenchConfigs.ts": {
       "file": "src/components/architecture/workbenchConfigs.ts",
       "imports": [],
@@ -205,12 +218,13 @@
         "lucide-react",
         "@/components/architecture/ByteByteGoDiagram",
         "@/components/architecture/ByteByteGoAiCodex",
-        "@/components/architecture/AdrExplorer"
+        "@/components/architecture/AdrExplorer",
+        "@/components/architecture/TradeoffMatrix"
       ],
       "exports": [
         "ArchitectureLab"
       ],
-      "loc": 147
+      "loc": 158
     },
     "src/components/portfolio/ContactTerminal.tsx": {
       "file": "src/components/portfolio/ContactTerminal.tsx",
@@ -244,12 +258,13 @@
         "react",
         "framer-motion",
         "lucide-react",
-        "@/data/architecturalDecisions"
+        "@/data/architecturalDecisions",
+        "@/data/architecturalTradeoffs"
       ],
       "exports": [
         "InteractiveCli"
       ],
-      "loc": 896
+      "loc": 957
     },
     "src/components/portfolio/ProjectsShowcase.tsx": {
       "file": "src/components/portfolio/ProjectsShowcase.tsx",
@@ -376,6 +391,17 @@
         "ARCHITECTURAL_DECISIONS"
       ],
       "loc": 144
+    },
+    "src/data/architecturalTradeoffs.ts": {
+      "file": "src/data/architecturalTradeoffs.ts",
+      "imports": [],
+      "exports": [
+        "TradeoffCriterion",
+        "TradeoffOption",
+        "ArchitecturalTradeoff",
+        "ARCHITECTURAL_TRADEOFFS"
+      ],
+      "loc": 191
     },
     "src/data/architectureSystems.ts": {
       "file": "src/data/architectureSystems.ts",
@@ -554,6 +580,7 @@
     "ChaosScenarioDef": "src/components/architecture/SystemDesignCanvas.tsx",
     "SystemDesignCanvasProps": "src/components/architecture/SystemDesignCanvas.tsx",
     "SystemDesignCanvas": "src/components/architecture/SystemDesignCanvas.tsx",
+    "TradeoffMatrix": "src/components/architecture/TradeoffMatrix.tsx",
     "SystemStepDef": "src/components/architecture/workbenchConfigs.ts",
     "NodeRuntimeSpec": "src/components/architecture/workbenchConfigs.ts",
     "WorkbenchSystemConfig": "src/components/architecture/workbenchConfigs.ts",
@@ -584,6 +611,10 @@
     "Progress": "src/components/ui/progress.tsx",
     "Textarea": "src/components/ui/textarea.tsx",
     "ARCHITECTURAL_DECISIONS": "src/data/architecturalDecisions.ts",
+    "TradeoffCriterion": "src/data/architecturalTradeoffs.ts",
+    "TradeoffOption": "src/data/architecturalTradeoffs.ts",
+    "ArchitecturalTradeoff": "src/data/architecturalTradeoffs.ts",
+    "ARCHITECTURAL_TRADEOFFS": "src/data/architecturalTradeoffs.ts",
     "ArchitectureNode": "src/data/architectureSystems.ts",
     "ArchitectureEdge": "src/data/architectureSystems.ts",
     "StepFlow": "src/data/architectureSystems.ts",

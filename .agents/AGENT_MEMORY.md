@@ -20,6 +20,10 @@
 
 | Run Timestamp | Focus Area | Action Completed | Lessons Learned / Gotchas |
 | :--- | :--- | :--- | :--- |
+| `2026-10-27 10:21:45` | Autonomous Verification | All 35 tests passed, 0 lint warnings, CodeGraph synchronized. | Verified zero regressions under Superpowers TDD protocol. |
+| `2026-10-27 10:20:00` | System Design Trade-Off Matrix (Track R) | Implemented interactive TradeoffMatrix (`TradeoffMatrix.tsx`, `architecturalTradeoffs.ts`), mounted in `ArchitectureLab.tsx`, added `tradeoffs` and `compare <id>` commands in `InteractiveCli.tsx`, indexed in chat assistant, and expanded test suite to 46/46 passing tests. | Providing side-by-side comparative analysis of Saga vs 2PC, RAG vs Fine-Tuning, Virtual Threads vs Reactive, and gRPC vs REST vs MCP demonstrates Principal Architect rigor in evaluating operational trade-offs and invariants. |
+| `2026-10-27 10:09:00` | 1-Click Mermaid & High-Res SVG Export (Track Q) | Added 1-click Mermaid diagram syntax export and native high-resolution SVG download to `ByteByteGoAiCodex.tsx`; verified with 45/45 tests passing. | Enables technical leads and recruiters to copy architecture diagrams directly into PRs, GitHub markdown, and Confluence documentation with 1-click. |
+| `2026-10-27 10:20:29` | Autonomous Verification | All 35 tests passed, 0 lint warnings, CodeGraph synchronized. | Verified zero regressions under Superpowers TDD protocol. |
 | `2026-10-27 10:08:48` | Autonomous Verification | All 35 tests passed, 0 lint warnings, CodeGraph synchronized. | Verified zero regressions under Superpowers TDD protocol. |
 | `2026-10-27 10:00:10` | Autonomous Verification | All 35 tests passed, 0 lint warnings, CodeGraph synchronized. | Verified zero regressions under Superpowers TDD protocol. |
 | `2026-10-27 09:48:46` | Autonomous Verification | All 35 tests passed, 0 lint warnings, CodeGraph synchronized. | Verified zero regressions under Superpowers TDD protocol. |
@@ -174,6 +178,17 @@
 - [x] **Task P1:** Add `'ai'`, `'ai-terms'`, `'paradigms'` to `AVAILABLE_COMMANDS` in `InteractiveCli.tsx`.
 - [x] **Task P2:** Implement sub-command paradigm routing for `ai agent`, `ai lrm`, `ai vector`, `ai rag`, and `ai mcp` returning structured specs, invariant rules, and production stacks.
 - [x] **Task P3:** Expand automated unit tests in `tests/portfolio.test.mjs` verifying `ai` command aliases, sub-command argument routing, and zero em/en-dashes (45/45 passing tests).
+
+### Track Q: Architecture Export Suite (Mermaid & Pure SVG)
+- [x] **Task Q1:** Add 1-click Mermaid diagram syntax clipboard copy to `ByteByteGoAiCodex.tsx` for GitHub PRs, markdown docs, and Confluence.
+- [x] **Task Q2:** Add high-resolution pure SVG file download to `ByteByteGoAiCodex.tsx` for architectural documentation.
+- [x] **Task Q3:** Expand automated unit tests in `tests/portfolio.test.mjs` verifying Mermaid and SVG download export handlers (45/45 passing tests).
+
+### Track R: Architectural Trade-Off Matrix & System Design Decision Matrix
+- [x] **Task R1:** Implement structured evaluation dataset `src/data/architecturalTradeoffs.ts` covering Saga vs 2PC, RAG vs Fine-Tuning, Virtual Threads vs Reactive, and gRPC vs REST vs MCP.
+- [x] **Task R2:** Build interactive Swiss Technical Editorial Tradeoff Explorer `src/components/architecture/TradeoffMatrix.tsx` with 1-click Markdown clipboard export.
+- [x] **Task R3:** Mount `TradeoffMatrix` inside `ArchitectureLab.tsx` and integrate `tradeoffs` and `compare <id>` commands into `InteractiveCli.tsx`.
+- [x] **Task R4:** Expand automated unit tests in `tests/portfolio.test.mjs` (46/46 passing tests).
 
 ---
 

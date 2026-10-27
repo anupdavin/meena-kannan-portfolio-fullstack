@@ -33,6 +33,7 @@ describe('Portfolio Verification & Asset Integrity', () => {
     assert.ok(ids.includes('architectural-decisions'), 'Knowledge base must index Architectural Decision Records');
     assert.ok(ids.includes('model-context-protocol'), 'Knowledge base must index Model Context Protocol');
     assert.ok(ids.includes('saga-distributed-transactions'), 'Knowledge base must index Saga transactions');
+    assert.ok(ids.includes('architectural-tradeoffs'), 'Knowledge base must index Architectural Tradeoffs');
 
     for (const item of content) {
       assert.ok(item.id, 'Entry must have an ID');
@@ -526,6 +527,33 @@ describe('Production Architectural Decision Records (ADR) & CLI Integration', ()
     assert.ok(techCode.includes('Vector Databases & pgvector'), 'TechStack must include pgvector');
     assert.ok(techCode.includes('Large Reasoning Models (LRM)'), 'TechStack must include LRM');
     assert.ok(!/[\u2013\u2014]/.test(techCode), 'TechStack.tsx must contain zero em/en-dashes');
+  });
+
+  test('TradeoffMatrix and architecturalTradeoffs.ts define system design comparative evaluations', () => {
+    const tradeoffDataPath = path.join(rootDir, 'src', 'data', 'architecturalTradeoffs.ts');
+    assert.ok(fs.existsSync(tradeoffDataPath), 'architecturalTradeoffs.ts must exist');
+    const dataCode = fs.readFileSync(tradeoffDataPath, 'utf8');
+    assert.ok(dataCode.includes('distributed-transactions'), 'Must define distributed transactions tradeoff');
+    assert.ok(dataCode.includes('ai-context-augmentation'), 'Must define AI context augmentation tradeoff');
+    assert.ok(dataCode.includes('concurrency-runtime'), 'Must define concurrency runtime tradeoff');
+    assert.ok(dataCode.includes('service-protocols'), 'Must define service protocols tradeoff');
+    assert.ok(!/[\u2013\u2014]/.test(dataCode), 'architecturalTradeoffs.ts must contain zero em/en-dashes');
+
+    const componentPath = path.join(rootDir, 'src', 'components', 'architecture', 'TradeoffMatrix.tsx');
+    assert.ok(fs.existsSync(componentPath), 'TradeoffMatrix.tsx must exist');
+    const compCode = fs.readFileSync(componentPath, 'utf8');
+    assert.ok(compCode.includes('handleCopyMarkdown'), 'TradeoffMatrix must support 1-click Markdown copy');
+    assert.ok(compCode.includes('ARCHITECTURAL_TRADEOFFS'), 'TradeoffMatrix must render ARCHITECTURAL_TRADEOFFS');
+    assert.ok(!/[\u2013\u2014]/.test(compCode), 'TradeoffMatrix.tsx must contain zero em/en-dashes');
+
+    const labCode = fs.readFileSync(path.join(rootDir, 'src', 'components', 'portfolio', 'ArchitectureLab.tsx'), 'utf8');
+    assert.ok(labCode.includes('TradeoffMatrix'), 'ArchitectureLab must mount TradeoffMatrix');
+
+    const cliCode = fs.readFileSync(path.join(rootDir, 'src', 'components', 'portfolio', 'InteractiveCli.tsx'), 'utf8');
+    assert.ok(cliCode.includes("'tradeoffs'"), "InteractiveCli must support 'tradeoffs' command");
+    assert.ok(cliCode.includes("'compare'"), "InteractiveCli must support 'compare' command");
+    assert.ok(cliCode.includes('[ $ tradeoffs ]'), "InteractiveCli must include '[ $ tradeoffs ]' quick chip");
+    assert.ok(!/[\u2013\u2014]/.test(cliCode), 'InteractiveCli.tsx must contain zero em/en-dashes');
   });
 });
 

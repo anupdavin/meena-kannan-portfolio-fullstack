@@ -94,5 +94,11 @@
     "title": "Choreographed Saga & Transactional Outbox CDC",
     "text": "To guarantee dual-write consistency without distributed two-phase commit (2PC) bottlenecks, Meena implements the Transactional Outbox pattern with Debezium CDC and Kafka event streaming. If downstream payment or fulfillment fails, choreographed compensating rollback events restore eventual consistency within 180ms.",
     "url": "#architecture"
+  },
+  {
+    "id": "architectural-tradeoffs",
+    "title": "System Design & Architectural Trade-off Decisions",
+    "text": "Meena evaluates distributed architecture tradeoffs across four core paradigms: (1) Choreographed Saga vs Orchestrated Saga vs 2PC (eventual consistency vs centralized state vs blocking locks), (2) Hybrid RAG vs Domain Fine-Tuning vs Prompt Caching (dynamic grounding vs weight adaptation vs KV cache reuse), (3) Java 21 Virtual Threads vs Reactive WebFlux vs OS Platform Threads (imperative Loom vs event loop vs 1:1 kernel threads), and (4) gRPC vs REST vs Model Context Protocol (binary protobuf vs public JSON vs agentic tool contracts).",
+    "url": "#architecture"
   }
 ]
