@@ -58,6 +58,7 @@ import { AtomicCommitSandbox } from '@/components/architecture/AtomicCommitSandb
 import { FeatureFlagSandbox } from '@/components/architecture/FeatureFlagSandbox'
 import { TenantIsolationSandbox } from '@/components/architecture/TenantIsolationSandbox'
 import { ZeroTrustMeshSandbox } from '@/components/architecture/ZeroTrustMeshSandbox'
+import { SplitBrainResolverSandbox } from '@/components/architecture/SplitBrainResolverSandbox'
 import { ARCHITECTURE_SYSTEMS } from '@/data/architectureSystems'
 import { ARCHITECTURAL_DECISIONS } from '@/data/architecturalDecisions'
 import { ARCHITECTURAL_TRADEOFFS } from '@/data/architecturalTradeoffs'
@@ -84,6 +85,7 @@ import { ATOMIC_COMMIT_PARADIGMS } from '@/data/atomicCommitModels'
 import { FEATURE_FLAG_MODELS } from '@/data/featureFlagModels'
 import { TENANT_ISOLATION_MODELS } from '@/data/tenantIsolationModels'
 import { ZERO_TRUST_MESH_MODELS } from '@/data/zeroTrustMeshModels'
+import { SPLIT_BRAIN_PARADIGMS } from '@/data/splitBrainResolverModels'
 
 const AI_TERMS_SUMMARY = [
   { id: 'agentic-ai', title: 'Agentic AI', text: 'Perception-action loop, DAG memory, tool execution, LangGraph' },
@@ -128,6 +130,7 @@ export default function ArchitectureLab() {
         featureflags: 5,
         tenantisolation: 5,
         zerotrustmesh: 5,
+        splitbrain: 5,
         isActive: false
       }
     }
@@ -413,8 +416,20 @@ export default function ArchitectureLab() {
       z.description.toLowerCase().includes(q)
     ).length
 
+    const splitBrainCount = SPLIT_BRAIN_PARADIGMS.filter(s =>
+      s.name.toLowerCase().includes(q) ||
+      s.id.toLowerCase().includes(q) ||
+      s.category.toLowerCase().includes(q) ||
+      s.badge.toLowerCase().includes(q) ||
+      s.algorithmFormula.toLowerCase().includes(q) ||
+      s.healingLatency.toLowerCase().includes(q) ||
+      s.splitBrainDefenseGuarantee.toLowerCase().includes(q) ||
+      s.architecturalInvariant.toLowerCase().includes(q) ||
+      s.description.toLowerCase().includes(q)
+    ).length
+
     return {
-      total: workbenchCount + aiCount + adrCount + tradeoffCount + evolutionCount + chaosCount + gatewayCount + traceCount + kafkaCount + ratelimitCount + multiregionCount + shardingCount + cdnCount + circuitBreakerCount + concurrencyCount + raftCount + vectorCount + priorityCount + sagasCount + cacheCount + eventSourcingCount + dlqCount + idempotencyCount + atomicCommitCount + featureFlagCount + tenantIsolationCount + zeroTrustMeshCount,
+      total: workbenchCount + aiCount + adrCount + tradeoffCount + evolutionCount + chaosCount + gatewayCount + traceCount + kafkaCount + ratelimitCount + multiregionCount + shardingCount + cdnCount + circuitBreakerCount + concurrencyCount + raftCount + vectorCount + priorityCount + sagasCount + cacheCount + eventSourcingCount + dlqCount + idempotencyCount + atomicCommitCount + featureFlagCount + tenantIsolationCount + zeroTrustMeshCount + splitBrainCount,
       workbench: workbenchCount,
       aiCodex: aiCount,
       adr: adrCount,
@@ -442,6 +457,7 @@ export default function ArchitectureLab() {
       featureflags: featureFlagCount,
       tenantisolation: tenantIsolationCount,
       zerotrustmesh: zeroTrustMeshCount,
+      splitbrain: splitBrainCount,
       isActive: true
     }
   }, [searchQuery])
@@ -851,6 +867,17 @@ export default function ArchitectureLab() {
             <ShieldCheck className="w-3.5 h-3.5 text-cyan-400" />
             <span>Zero-Trust Mesh ({matchStats.zerotrustmesh})</span>
           </a>
+          <a 
+            href="#architecture-split-brain-resolver"
+            className={`px-3 py-1.5 rounded-lg border transition-all flex items-center gap-1.5 cursor-pointer ${
+              matchStats.isActive && matchStats.splitbrain > 0
+                ? 'bg-amber-500/10 border-amber-500/50 text-amber-400 shadow-[0_0_10px_rgba(245,158,11,0.15)] font-bold'
+                : 'bg-slate-900 border-slate-800 hover:border-amber-500/50 hover:text-amber-400 text-slate-300'
+            }`}
+          >
+            <Zap className="w-3.5 h-3.5 text-amber-400" />
+            <span>Split-Brain Resolver ({matchStats.splitbrain})</span>
+          </a>
         </div>
       </div>
 
@@ -1180,6 +1207,18 @@ export default function ArchitectureLab() {
         className="scroll-mt-24"
       >
         <ZeroTrustMeshSandbox />
+      </motion.div>
+
+      {/* 2.31. Distributed Chaos Engineering & Automated Network Partition Split-Brain Resolver Sandbox */}
+      <motion.div
+        id="architecture-split-brain-resolver"
+        initial={{ opacity: 0, y: 25 }}
+        whileInView={{ opacity: 1, y: 0 }}
+        viewport={{ once: true }}
+        transition={{ duration: 0.6, delay: 1.40 }}
+        className="scroll-mt-24"
+      >
+        <SplitBrainResolverSandbox />
       </motion.div>
 
       {/* 3. Architectural Design Pillars Strip */}

@@ -1534,6 +1534,43 @@ describe('Production Architectural Decision Records (ADR) & CLI Integration', ()
     assert.ok(indexHtml.includes('id="architecture-zero-trust-mesh"'), 'index.html must include #architecture-zero-trust-mesh landmark');
     assert.ok(!/[\u2013\u2014]/.test(indexHtml), 'index.html must contain zero em/en-dashes');
   });
+
+  test('SplitBrainResolverSandbox and splitBrainResolverModels.ts define quorum fencing, vector healing and chaos drills with CLI integration', () => {
+    const sbDataPath = path.join(rootDir, 'src', 'data', 'splitBrainResolverModels.ts');
+    assert.ok(fs.existsSync(sbDataPath), 'splitBrainResolverModels.ts must exist');
+    const sbDataCode = fs.readFileSync(sbDataPath, 'utf8');
+    assert.ok(sbDataCode.includes('quorum-fencing-generation-tokens'), 'Must define quorum-fencing-generation-tokens model');
+    assert.ok(sbDataCode.includes('semi-lattice-vector-clocks'), 'Must define semi-lattice-vector-clocks model');
+    assert.ok(sbDataCode.includes('asymmetric-wan-partition-failover'), 'Must define asymmetric-wan-partition-failover model');
+    assert.ok(sbDataCode.includes('dual-master-reconciliation-rollback'), 'Must define dual-master-reconciliation-rollback model');
+    assert.ok(sbDataCode.includes('chaos-gameday-blast-containment'), 'Must define chaos-gameday-blast-containment model');
+    assert.ok(!/[\u2013\u2014]/.test(sbDataCode), 'splitBrainResolverModels.ts must contain zero em/en-dashes');
+
+    const componentPath = path.join(rootDir, 'src', 'components', 'architecture', 'SplitBrainResolverSandbox.tsx');
+    assert.ok(fs.existsSync(componentPath), 'SplitBrainResolverSandbox.tsx must exist');
+    const compCode = fs.readFileSync(componentPath, 'utf8');
+    assert.ok(compCode.includes('handleCopyRfc'), 'SplitBrainResolverSandbox must support 1-click RFC copy');
+    assert.ok(compCode.includes('SPLIT_BRAIN_MODELS'), 'SplitBrainResolverSandbox must render SPLIT_BRAIN_MODELS');
+    assert.ok(!/[\u2013\u2014]/.test(compCode), 'SplitBrainResolverSandbox.tsx must contain zero em/en-dashes');
+
+    const labCode = fs.readFileSync(path.join(rootDir, 'src', 'components', 'portfolio', 'ArchitectureLab.tsx'), 'utf8');
+    assert.ok(labCode.includes('SplitBrainResolverSandbox'), 'ArchitectureLab must mount SplitBrainResolverSandbox');
+    assert.ok(labCode.includes('id="architecture-split-brain-resolver"'), 'ArchitectureLab must define anchor #architecture-split-brain-resolver');
+
+    const cliCode = fs.readFileSync(path.join(rootDir, 'src', 'components', 'portfolio', 'InteractiveCli.tsx'), 'utf8');
+    assert.ok(cliCode.includes("'splitbrain'"), "InteractiveCli must support 'splitbrain' command");
+    assert.ok(cliCode.includes('[ $ splitbrain ]'), "InteractiveCli must include '[ $ splitbrain ]' quick chip");
+    assert.ok(cliCode.includes('SPLIT_BRAIN_PARADIGMS'), 'InteractiveCli must search across SPLIT_BRAIN_PARADIGMS');
+    assert.ok(!/[\u2013\u2014]/.test(cliCode), 'InteractiveCli.tsx must contain zero em/en-dashes');
+
+    const chatIndex = fs.readFileSync(path.join(rootDir, 'public', 'chat', 'index.json'), 'utf8');
+    assert.ok(chatIndex.includes('distributed-split-brain-resolver'), 'public/chat/index.json must index distributed-split-brain-resolver');
+    assert.ok(!/[\u2013\u2014]/.test(chatIndex), 'public/chat/index.json must contain zero em/en-dashes');
+
+    const indexHtml = fs.readFileSync(path.join(rootDir, 'index.html'), 'utf8');
+    assert.ok(indexHtml.includes('id="architecture-split-brain-resolver"'), 'index.html must include #architecture-split-brain-resolver landmark');
+    assert.ok(!/[\u2013\u2014]/.test(indexHtml), 'index.html must contain zero em/en-dashes');
+  });
 });
 
 

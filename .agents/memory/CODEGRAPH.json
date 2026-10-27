@@ -1,6 +1,6 @@
 {
   "version": "1.0.0",
-  "generatedAt": "2026-10-27T20:20:55.445Z",
+  "generatedAt": "2026-10-27T20:40:54.001Z",
   "nodes": {
     "src/components/architecture/AdrExplorer.tsx": {
       "file": "src/components/architecture/AdrExplorer.tsx",
@@ -345,6 +345,16 @@
       ],
       "loc": 470
     },
+    "src/components/architecture/SplitBrainResolverSandbox.tsx": {
+      "file": "src/components/architecture/SplitBrainResolverSandbox.tsx",
+      "imports": [
+        "../../data/splitBrainResolverModels"
+      ],
+      "exports": [
+        "SplitBrainResolverSandbox"
+      ],
+      "loc": 505
+    },
     "src/components/architecture/SvgPrimitives.tsx": {
       "file": "src/components/architecture/SvgPrimitives.tsx",
       "imports": [
@@ -525,6 +535,7 @@
         "@/components/architecture/FeatureFlagSandbox",
         "@/components/architecture/TenantIsolationSandbox",
         "@/components/architecture/ZeroTrustMeshSandbox",
+        "@/components/architecture/SplitBrainResolverSandbox",
         "@/data/architectureSystems",
         "@/data/architecturalDecisions",
         "@/data/architecturalTradeoffs",
@@ -550,12 +561,13 @@
         "@/data/atomicCommitModels",
         "@/data/featureFlagModels",
         "@/data/tenantIsolationModels",
-        "@/data/zeroTrustMeshModels"
+        "@/data/zeroTrustMeshModels",
+        "@/data/splitBrainResolverModels"
       ],
       "exports": [
         "ArchitectureLab"
       ],
-      "loc": 1238
+      "loc": 1277
     },
     "src/components/portfolio/ContactTerminal.tsx": {
       "file": "src/components/portfolio/ContactTerminal.tsx",
@@ -627,12 +639,13 @@
         "@/data/featureFlagModels",
         "@/data/tenantIsolationModels",
         "@/data/zeroTrustMeshModels",
+        "@/data/splitBrainResolverModels",
         "@/data/executiveBriefing"
       ],
       "exports": [
         "InteractiveCli"
       ],
-      "loc": 3739
+      "loc": 3857
     },
     "src/components/portfolio/ProjectsShowcase.tsx": {
       "file": "src/components/portfolio/ProjectsShowcase.tsx",
@@ -685,7 +698,7 @@
       "exports": [
         "TerminalHero"
       ],
-      "loc": 624
+      "loc": 626
     },
     "src/components/ui/badge.tsx": {
       "file": "src/components/ui/badge.tsx",
@@ -1008,6 +1021,22 @@
       ],
       "loc": 467
     },
+    "src/data/splitBrainResolverModels.ts": {
+      "file": "src/data/splitBrainResolverModels.ts",
+      "imports": [],
+      "exports": [
+        "ClusterNode",
+        "SplitBrainParadigm",
+        "PartitionDrillResult",
+        "INITIAL_CLUSTER_NODES",
+        "SPLIT_BRAIN_MODELS",
+        "VectorClock",
+        "mergeVectorClocks",
+        "compareCausality",
+        "SPLIT_BRAIN_PARADIGMS"
+      ],
+      "loc": 452
+    },
     "src/data/tenantIsolationModels.ts": {
       "file": "src/data/tenantIsolationModels.ts",
       "imports": [],
@@ -1153,6 +1182,11 @@
       "type": "import"
     },
     {
+      "source": "src/components/architecture/SplitBrainResolverSandbox.tsx",
+      "target": "src/data/splitBrainResolverModels.ts",
+      "type": "import"
+    },
+    {
       "source": "src/components/architecture/SystemDesignCanvas.tsx",
       "target": "src/components/architecture/ArchNode.tsx",
       "type": "import"
@@ -1221,6 +1255,7 @@
     "MultiRegionReplicationSandbox": "src/components/architecture/MultiRegionReplicationSandbox.tsx",
     "RaftConsensusSandbox": "src/components/architecture/RaftConsensusSandbox.tsx",
     "RateLimiterSandbox": "src/components/architecture/RateLimiterSandbox.tsx",
+    "SplitBrainResolverSandbox": "src/components/architecture/SplitBrainResolverSandbox.tsx",
     "BoundaryContainerProps": "src/components/architecture/SvgPrimitives.tsx",
     "BoundaryContainer": "src/components/architecture/SvgPrimitives.tsx",
     "DatabaseCylinderProps": "src/components/architecture/SvgPrimitives.tsx",
@@ -1363,6 +1398,15 @@
     "checkJointQuorum": "src/data/raftConsensus.ts",
     "RateLimitingAlgorithm": "src/data/rateLimitingAlgorithms.ts",
     "RATE_LIMITING_ALGORITHMS": "src/data/rateLimitingAlgorithms.ts",
+    "ClusterNode": "src/data/splitBrainResolverModels.ts",
+    "SplitBrainParadigm": "src/data/splitBrainResolverModels.ts",
+    "PartitionDrillResult": "src/data/splitBrainResolverModels.ts",
+    "INITIAL_CLUSTER_NODES": "src/data/splitBrainResolverModels.ts",
+    "SPLIT_BRAIN_MODELS": "src/data/splitBrainResolverModels.ts",
+    "VectorClock": "src/data/splitBrainResolverModels.ts",
+    "mergeVectorClocks": "src/data/splitBrainResolverModels.ts",
+    "compareCausality": "src/data/splitBrainResolverModels.ts",
+    "SPLIT_BRAIN_PARADIGMS": "src/data/splitBrainResolverModels.ts",
     "TenantProfile": "src/data/tenantIsolationModels.ts",
     "TenantIsolationParadigm": "src/data/tenantIsolationModels.ts",
     "SecurityProbeResult": "src/data/tenantIsolationModels.ts",

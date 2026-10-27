@@ -27,6 +27,7 @@ import { ATOMIC_COMMIT_PARADIGMS } from '@/data/atomicCommitModels'
 import { FEATURE_FLAG_MODELS } from '@/data/featureFlagModels'
 import { TENANT_ISOLATION_MODELS } from '@/data/tenantIsolationModels'
 import { ZERO_TRUST_MESH_MODELS } from '@/data/zeroTrustMeshModels'
+import { SPLIT_BRAIN_PARADIGMS } from '@/data/splitBrainResolverModels'
 import { EXECUTIVE_BRIEFING } from '@/data/executiveBriefing'
 
 interface HistoryEntry {
@@ -161,6 +162,9 @@ const AVAILABLE_COMMANDS = [
   'mtls',
   'svid',
   'meshpolicy',
+  'fencing',
+  'epochtoken',
+  'partitionhealing',
   'adr',
   'decisions',
   'tradeoffs',
@@ -220,6 +224,7 @@ const QUICK_CHIPS = [
   { label: '[ $ flags ]', cmd: 'featureflag' },
   { label: '[ $ rls ]', cmd: 'rls' },
   { label: '[ $ mtls ]', cmd: 'mtls' },
+  { label: '[ $ splitbrain ]', cmd: 'splitbrain' },
   { label: '[ $ find kafka ]', cmd: 'find kafka' },
   { label: '[ $ tradeoffs ]', cmd: 'tradeoffs' },
   { label: '[ $ adr ]', cmd: 'adr' },
@@ -265,6 +270,7 @@ const COMMAND_HELP = [
   '  flags           - Inspect dynamic feature flags, MurmurHash3 bucketing & canary rollback (or "flags <id>")',
   '  rls             - Inspect multi-tenant Row-Level Security, schema routing & KMS envelope (or "rls <id>")',
   '  mtls            - Inspect Zero-Trust SPIFFE/SPIRE workload identity & Envoy mTLS (or "mtls <id>")',
+  '  splitbrain      - Inspect split-brain quorum fencing & semi-lattice vector healing (or "splitbrain <id>")',
   '  find <query>    - Search cross-cutting architecture systems, ADRs, AI codex & trade-offs',
   '  tradeoffs       - Evaluate system design decision trade-offs (or "compare <topic>")',
   '  stats           - View production performance & impact metrics (99.99% SLA)',
@@ -1043,7 +1049,7 @@ export default function InteractiveCli() {
           ]
           break
         }
-        if (sub === 'replication' || sub === 'multiregion' || sub === 'crdt' || sub === 'splitbrain' || args.some(a => a.toLowerCase().includes('replicat') || a.toLowerCase().includes('region') || a.toLowerCase().includes('crdt'))) {
+        if (sub === 'replication' || sub === 'multiregion' || sub === 'crdt' || args.some(a => a.toLowerCase().includes('replicat') || a.toLowerCase().includes('region') || a.toLowerCase().includes('crdt'))) {
           output = [
             'Routing to Multi-Region Database Replication & Conflict Resolution (#architecture-multi-region):',
             '  1. Aurora Global Database    : Physical Storage Layer Replication (RPO < 1s, RTO < 1m)',
@@ -1251,6 +1257,32 @@ export default function InteractiveCli() {
           ]
           break
         }
+        if (sub === 'zerotrust' || sub === 'spiffe' || sub === 'mtls' || sub === 'svid' || sub === 'meshpolicy' || args.some(a => a.toLowerCase().includes('zerotrust') || a.toLowerCase().includes('spiffe') || a.toLowerCase().includes('mtls'))) {
+          output = [
+            'Routing to Distributed Zero-Trust Service Mesh & SPIFFE/SPIRE Mutual TLS (#architecture-zero-trust-mesh):',
+            '  1. SPIFFE/SPIRE Attestation  : Ephemeral Unix domain socket Workload API issuing 60-min X.509 SVIDs',
+            '  2. Envoy Proxy Sidecar mTLS  : Strict SAN validation rejecting unverified caller identities (HTTP 495)',
+            '  3. Least-Privilege AuthPolicy: Deny-by-default Layer-7 RBAC evaluating SPIFFE ID & HTTP verb in sub-0.08ms',
+            '  4. Zero-Trust Egress Shield  : TLS SNI pinning & DNS egress proxies eliminating data exfiltration and SSRF',
+            '  5. eBPF Socket Redirection   : Cilium sockmap zero-copy bypass delivering sub-15us co-located IPC transfers',
+            '--------------------------------------------------------------------------------',
+            'Interactive Sandbox: Live in #architecture-zero-trust-mesh with live handshake & SVID rotation simulator.'
+          ]
+          break
+        }
+        if (sub === 'splitbrain' || sub === 'fencing' || sub === 'epochtoken' || sub === 'partitionhealing' || args.some(a => a.toLowerCase().includes('splitbrain') || a.toLowerCase().includes('partition') || a.toLowerCase().includes('fencing'))) {
+          output = [
+            'Routing to Distributed Chaos & Split-Brain Quorum Fencing (#architecture-split-brain-resolver):',
+            '  1. Quorum Generation Fencing : Kleppmann fencing tokens rejecting zombie partitioned writes (HTTP 409)',
+            '  2. Semi-Lattice Vector Healing : Join-semilattice (A v B) CRDT vector state reconciliation without data loss',
+            '  3. Asymmetric WAN DNS Failover: Route53 ARC deep health checks with automated DNS cutover (RPO < 1s)',
+            '  4. Dual-Master Reconciliation : Compensating saga rollback for diverged uncommitted split-brain transactions',
+            '  5. Chaos Mesh GameDay Matrix  : Automated blast-radius containment with eBPF network partition injection',
+            '--------------------------------------------------------------------------------',
+            'Interactive Sandbox: Live in #architecture-split-brain-resolver with live WAN cable cut & fencing generator.'
+          ]
+          break
+        }
         output = [
           'ByteByteGo Interactive Architecture Lab Navigator:',
           '--------------------------------------------------------------------------------',
@@ -1281,6 +1313,8 @@ export default function InteractiveCli() {
           '  [ 24 ] "architecture 2pc"     : Distributed 2PC vs Saga & Atomic Commit (#architecture-atomic-commit)',
           '  [ 25 ] "architecture flags"   : Dynamic Feature Flags & Canary Rollout (#architecture-feature-flags)',
           '  [ 26 ] "architecture rls"     : Multi-Tenant RLS & Cryptographic Isolation (#architecture-tenant-isolation)',
+          '  [ 27 ] "architecture zerotrust": Zero-Trust Service Mesh & Envoy mTLS (#architecture-zero-trust-mesh)',
+          '  [ 28 ] "architecture splitbrain": Split-Brain Quorum Fencing & Partition Healing (#architecture-split-brain-resolver)',
           '--------------------------------------------------------------------------------',
           'Clean Architecture Principles Enforced:',
           '  + Domain Isolation     : Core business domains decouple from libraries and vendor SDKs',
@@ -1783,7 +1817,6 @@ export default function InteractiveCli() {
       case 'replication':
       case 'multiregion':
       case 'crdt':
-      case 'splitbrain':
       case 'aurora': {
         const target = args[0]?.toLowerCase().trim()
         if (target) {
@@ -2868,6 +2901,68 @@ export default function InteractiveCli() {
         ]
         break
       }
+      case 'splitbrain':
+      case 'fencing':
+      case 'epochtoken':
+      case 'partitionhealing': {
+        const target = args[0]?.toLowerCase().trim()
+        if (target) {
+          const matched = SPLIT_BRAIN_PARADIGMS.find(m =>
+            m.id === target ||
+            m.id.includes(target) ||
+            m.name.toLowerCase().includes(target) ||
+            m.badge.toLowerCase().includes(target) ||
+            (target === '1' && m.id === 'quorum-fencing-generation-tokens') ||
+            (target === '2' && m.id === 'semi-lattice-vector-clocks') ||
+            (target === '3' && m.id === 'asymmetric-wan-partition-failover') ||
+            (target === '4' && m.id === 'dual-master-reconciliation-rollback') ||
+            (target === '5' && m.id === 'chaos-gameday-blast-containment')
+          )
+          if (matched) {
+            output = [
+              '--------------------------------------------------------------------------------',
+              `Split-Brain Resolver Model: ${matched.name} [${matched.badge}]`,
+              '--------------------------------------------------------------------------------',
+              `Category            : ${matched.category}`,
+              `Reconciliation Latency: ${matched.reconciliationLatency}`,
+              `Defense SLA         : ${matched.splitBrainDefenseSla}`,
+              `Mathematical Formula: ${matched.algorithmFormula}`,
+              `Blast Radius Guard  : ${matched.blastRadiusContainment}`,
+              '--------------------------------------------------------------------------------',
+              'WORKFLOW PHASES & RECONCILIATION INVARIANTS:',
+              ...matched.workflowPhases.map(p =>
+                `  * [${p.name}] :: ${p.description} -> Invariant: ${p.invariants}`
+              ),
+              '--------------------------------------------------------------------------------',
+              'PRODUCTION OUTCOMES & INVARIANTS:',
+              ...Object.entries(matched.productionOutcomes).map(([k, v]) => `  + ${k}: ${v}`),
+              '',
+              `Architectural Invariant: "${matched.architecturalInvariant}"`,
+              '--------------------------------------------------------------------------------',
+              'Full live interactive WAN partition injector & fencing generator in #architecture-split-brain-resolver.'
+            ]
+            break
+          }
+        }
+
+        output = [
+          'Distributed Chaos Engineering & Automated Network Partition Split-Brain Resolver Sandbox:',
+          '--------------------------------------------------------------------------------',
+          'Explore 5 enterprise split-brain quorum fencing & semi-lattice partition healing architectures:',
+          '',
+          ...SPLIT_BRAIN_PARADIGMS.flatMap((m, idx) => [
+            `${idx + 1}. [ ${m.id} ] : ${m.name} (${m.badge})`,
+            `   Category   : ${m.category}`,
+            `   Latency    : ${m.reconciliationLatency.split(';')[0]}`,
+            `   SLA        : ${m.splitBrainDefenseSla.split(';')[0]}`,
+            `   Deep Dive  : "splitbrain ${idx + 1}" or "splitbrain ${m.id.split('-')[0]}" (e.g. "splitbrain quorum", "splitbrain semi", "splitbrain asymmetric", "splitbrain dual", "splitbrain chaos")`,
+            ''
+          ]),
+          '--------------------------------------------------------------------------------',
+          'Tip: Run "splitbrain <id>" (e.g. "splitbrain 1" or "splitbrain quorum") to inspect Kleppmann fencing invariants.'
+        ]
+        break
+      }
       case 'find':
       case 'search': {
         const query = args.join(' ').toLowerCase().trim()
@@ -2877,7 +2972,7 @@ export default function InteractiveCli() {
             '--------------------------------------------------------------------------------',
             'Search cross-cutting distributed systems, ADRs, AI paradigms, and trade-offs.',
             'Usage: find <query> (e.g. "find kafka", "find redis", "find mcp", "find saga")',
-            'Available Domains: Systems, ADR Governance, AI Codex, Trade-Off Matrix, Evolution Diffs, Chaos Drills, API Gateway, Distributed Traces, Kafka Event Streams, Distributed Rate Limiting, Multi-Region Replication, Database Sharding, Edge CDN Caching, Circuit Breakers, Concurrency & Deadlocks, Raft Consensus, Vector Search, Traffic Priority & QoS, Distributed Sagas & Compensations, Distributed Cache Stampede & Coherence, Distributed Event Sourcing & CQRS, Distributed DLQ & Retries, Distributed Idempotency & CAS Locks, Distributed 2PC vs Saga Commit & Drift Reconciler, Dynamic Feature Flagging & Canary Splitter, Multi-Tenant RLS & Cryptographic Isolation, Zero-Trust Service Mesh & SPIFFE mTLS'
+            'Available Domains: Systems, ADR Governance, AI Codex, Trade-Off Matrix, Evolution Diffs, Chaos Drills, API Gateway, Distributed Traces, Kafka Event Streams, Distributed Rate Limiting, Multi-Region Replication, Database Sharding, Edge CDN Caching, Circuit Breakers, Concurrency & Deadlocks, Raft Consensus, Vector Search, Traffic Priority & QoS, Distributed Sagas & Compensations, Distributed Cache Stampede & Coherence, Distributed Event Sourcing & CQRS, Distributed DLQ & Retries, Distributed Idempotency & CAS Locks, Distributed 2PC vs Saga Commit & Drift Reconciler, Dynamic Feature Flagging & Canary Splitter, Multi-Tenant RLS & Cryptographic Isolation, Zero-Trust Service Mesh & SPIFFE mTLS, Split-Brain Quorum Fencing & Partition Healing'
           ]
           break
         }
@@ -3459,6 +3554,29 @@ export default function InteractiveCli() {
               `  Category   : ${z.category} (${z.badge})`,
               `  Handshake  : ${z.handshakeLatency.split(';')[0]}`,
               `  Anchor     : #architecture-zero-trust-mesh`,
+              ''
+            )
+          }
+        })
+
+        // 28. Search Distributed Split-Brain Quorum Fencing & Partition Healing
+        SPLIT_BRAIN_PARADIGMS.forEach(sb => {
+          if (
+            sb.name.toLowerCase().includes(query) ||
+            sb.id.toLowerCase().includes(query) ||
+            sb.category.toLowerCase().includes(query) ||
+            sb.badge.toLowerCase().includes(query) ||
+            sb.algorithmFormula.toLowerCase().includes(query) ||
+            sb.reconciliationLatency.toLowerCase().includes(query) ||
+            sb.splitBrainDefenseSla.toLowerCase().includes(query) ||
+            sb.architecturalInvariant.toLowerCase().includes(query) ||
+            sb.description.toLowerCase().includes(query)
+          ) {
+            results.push(
+              `[Split-Brain Resolver] ${sb.name}`,
+              `  Category   : ${sb.category} (${sb.badge})`,
+              `  Latency    : ${sb.reconciliationLatency.split(';')[0]}`,
+              `  Anchor     : #architecture-split-brain-resolver`,
               ''
             )
           }
