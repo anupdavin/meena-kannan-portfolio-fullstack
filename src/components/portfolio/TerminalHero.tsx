@@ -274,15 +274,15 @@ export default function TerminalHero() {
               <span className="w-2 h-2 rounded-full bg-emerald-400" />
               <span>Available for Enterprise Roles & Strategic Consulting</span>
             </div>
-            <button
-              onClick={() => scrollToSection('architecture')}
+            <a
+              href="#architecture-ai-codex"
               className="inline-flex items-center gap-1.5 px-3 py-1 sm:px-3 sm:py-1.5 rounded-full bg-teal-500/10 border border-teal-500/40 hover:border-teal-400 text-teal-300 text-[11px] sm:text-xs font-mono transition-all cursor-pointer group"
-              aria-label="Jump to ByteByteGo Architecture Lab"
+              aria-label="Jump to ByteByteGo AI Terms Infographic"
             >
               <span className="w-2 h-2 rounded-full bg-teal-400 animate-pulse" />
-              <span>ByteByteGo AI & Distributed Lab</span>
+              <span>ByteByteGo AI Terms Infographic</span>
               <span className="text-teal-400 group-hover:translate-x-0.5 transition-transform">&rarr;</span>
-            </button>
+            </a>
           </div>
 
           {/* Heading */}
@@ -335,12 +335,21 @@ export default function TerminalHero() {
             </button>
 
             <a
+              href="#architecture-ai-codex"
+              aria-label="View ByteByteGo AI Terms Infographic"
+              className="inline-flex items-center justify-center gap-2 px-4 py-3 rounded-xl font-mono text-xs sm:text-sm bg-teal-500/15 border border-teal-500/40 text-teal-300 hover:text-white hover:bg-teal-500/25 hover:border-teal-400 transition-all cursor-pointer active:scale-[0.98] min-h-[46px]"
+            >
+              <span className="w-2 h-2 rounded-full bg-teal-400 animate-pulse" />
+              <span>AI Terms Infographic (5 Terms)</span>
+            </a>
+
+            <a
               href="/Meena_Kannan_Senior_Architect_Resume.pdf"
               download="Meena_Kannan_Senior_Architect_Resume.pdf"
               target="_blank"
               rel="noreferrer"
               aria-label="Download Meena Kannan's Resume PDF"
-              className="inline-flex items-center justify-center gap-2 px-5 py-3 rounded-xl font-mono text-xs sm:text-sm bg-slate-900 border border-slate-700 text-slate-200 hover:text-white hover:border-emerald-400 transition-all cursor-pointer active:scale-[0.98] min-h-[46px]"
+              className="inline-flex items-center justify-center gap-2 px-4 py-3 rounded-xl font-mono text-xs sm:text-sm bg-slate-900 border border-slate-700 text-slate-200 hover:text-white hover:border-emerald-400 transition-all cursor-pointer active:scale-[0.98] min-h-[46px]"
             >
               <Download className="w-4 h-4 text-emerald-400 shrink-0" />
               <span>Executive CV (PDF)</span>

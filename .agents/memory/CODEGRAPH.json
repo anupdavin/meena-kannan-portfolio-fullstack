@@ -1,6 +1,6 @@
 {
   "version": "1.0.0",
-  "generatedAt": "2026-10-27T10:56:18.360Z",
+  "generatedAt": "2026-10-27T11:05:38.521Z",
   "nodes": {
     "src/components/architecture/AdrExplorer.tsx": {
       "file": "src/components/architecture/AdrExplorer.tsx",
@@ -73,7 +73,7 @@
         "AiTermSpec",
         "ByteByteGoAiCodex"
       ],
-      "loc": 827
+      "loc": 1484
     },
     "src/components/architecture/ByteByteGoDiagram.tsx": {
       "file": "src/components/architecture/ByteByteGoDiagram.tsx",
@@ -228,7 +228,7 @@
       "exports": [
         "ArchitectureLab"
       ],
-      "loc": 347
+      "loc": 350
     },
     "src/components/portfolio/ContactTerminal.tsx": {
       "file": "src/components/portfolio/ContactTerminal.tsx",
@@ -321,7 +321,7 @@
       "exports": [
         "TerminalHero"
       ],
-      "loc": 499
+      "loc": 508
     },
     "src/components/ui/badge.tsx": {
       "file": "src/components/ui/badge.tsx",

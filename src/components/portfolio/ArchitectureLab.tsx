@@ -249,7 +249,7 @@ export default function ArchitectureLab() {
         whileInView={{ opacity: 1, y: 0 }}
         viewport={{ once: true }}
         transition={{ duration: 0.6 }}
-        className="rounded-2xl border border-slate-800 bg-[#090e18]/90 shadow-2xl overflow-hidden"
+        className="rounded-2xl border border-slate-800 bg-[#090e18]/90 shadow-2xl overflow-hidden scroll-mt-24"
       >
         <ByteByteGoDiagram 
           systemId="saas-platform" 
@@ -265,6 +265,7 @@ export default function ArchitectureLab() {
         whileInView={{ opacity: 1, y: 0 }}
         viewport={{ once: true }}
         transition={{ duration: 0.6, delay: 0.1 }}
+        className="scroll-mt-24"
       >
         <ByteByteGoAiCodex />
       </motion.div>
@@ -276,6 +277,7 @@ export default function ArchitectureLab() {
         whileInView={{ opacity: 1, y: 0 }}
         viewport={{ once: true }}
         transition={{ duration: 0.6, delay: 0.15 }}
+        className="scroll-mt-24"
       >
         <AdrExplorer />
       </motion.div>
@@ -287,6 +289,7 @@ export default function ArchitectureLab() {
         whileInView={{ opacity: 1, y: 0 }}
         viewport={{ once: true }}
         transition={{ duration: 0.6, delay: 0.2 }}
+        className="scroll-mt-24"
       >
         <TradeoffMatrix />
       </motion.div>
