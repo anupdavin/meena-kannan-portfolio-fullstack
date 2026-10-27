@@ -577,6 +577,22 @@ describe('Production Architectural Decision Records (ADR) & CLI Integration', ()
     assert.ok(cliCode.includes('"architecture adr"'), 'InteractiveCli must support "architecture adr"');
     assert.ok(cliCode.includes('"architecture tradeoffs"'), 'InteractiveCli must support "architecture tradeoffs"');
   });
+
+  test('ArchitectureLab and InteractiveCli implement cross-cutting topology search and keyword spotlight', () => {
+    const labCode = fs.readFileSync(path.join(rootDir, 'src', 'components', 'portfolio', 'ArchitectureLab.tsx'), 'utf8');
+    assert.ok(labCode.includes('searchQuery'), 'ArchitectureLab must manage searchQuery state');
+    assert.ok(labCode.includes('matchStats'), 'ArchitectureLab must derive matchStats across all 4 architecture domains');
+    assert.ok(labCode.includes('QUICK_KEYWORDS'), 'ArchitectureLab must define QUICK_KEYWORDS preset pills');
+    assert.ok(labCode.includes('Search architecture by keyword'), 'ArchitectureLab must provide accessible search input placeholder');
+
+    const cliCode = fs.readFileSync(path.join(rootDir, 'src', 'components', 'portfolio', 'InteractiveCli.tsx'), 'utf8');
+    assert.ok(cliCode.includes("'find'"), "InteractiveCli must include 'find' command");
+    assert.ok(cliCode.includes("'search'"), "InteractiveCli must include 'search' command");
+    assert.ok(cliCode.includes('[ $ find kafka ]'), "InteractiveCli must provide '[ $ find kafka ]' quick chip");
+    assert.ok(cliCode.includes("case 'find':"), "InteractiveCli switch must handle 'find' command");
+    assert.ok(cliCode.includes('ARCHITECTURE_SYSTEMS'), 'InteractiveCli must search across ARCHITECTURE_SYSTEMS');
+    assert.ok(!/[\u2013\u2014]/.test(cliCode), 'InteractiveCli.tsx must contain zero em/en-dashes');
+  });
 });
 
 

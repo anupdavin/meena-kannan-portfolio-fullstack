@@ -3,6 +3,7 @@ import { motion } from 'framer-motion'
 import { Terminal as TerminalIcon, CornerDownLeft, Trash2 } from 'lucide-react'
 import { ARCHITECTURAL_DECISIONS } from '@/data/architecturalDecisions'
 import { ARCHITECTURAL_TRADEOFFS } from '@/data/architecturalTradeoffs'
+import { ARCHITECTURE_SYSTEMS } from '@/data/architectureSystems'
 
 interface HistoryEntry {
   command: string
@@ -26,6 +27,8 @@ const AVAILABLE_COMMANDS = [
   'decisions',
   'tradeoffs',
   'compare',
+  'find',
+  'search',
   'stats',
   'metrics',
   'benchmark',
@@ -49,6 +52,7 @@ const AVAILABLE_COMMANDS = [
 const QUICK_CHIPS = [
   { label: '[ $ whoami ]', cmd: 'whoami' },
   { label: '[ $ architecture ]', cmd: 'architecture' },
+  { label: '[ $ find kafka ]', cmd: 'find kafka' },
   { label: '[ $ tradeoffs ]', cmd: 'tradeoffs' },
   { label: '[ $ adr ]', cmd: 'adr' },
   { label: '[ $ ai-codex ]', cmd: 'ai-codex' },
@@ -69,6 +73,7 @@ const COMMAND_HELP = [
   '  skills          - Print summary of core technology stack & competencies',
   '  projects        - List featured systems, or type "project <id>" for deep architecture review',
   '  experience      - Output career journey, or type "experience <id>" for deep milestone review',
+  '  find <query>    - Search cross-cutting architecture systems, ADRs, AI codex & trade-offs',
   '  tradeoffs       - Evaluate system design decision trade-offs (or "compare <topic>")',
   '  stats           - View production performance & impact metrics (99.99% SLA)',
   '  metrics         - Print live architecture cluster telemetry, throughput & cache stats',
@@ -745,6 +750,115 @@ export default function InteractiveCli() {
           '--------------------------------------------------------------------------------',
           'Tip: Run "compare saga" or "compare ai" for granular side-by-side evaluation metrics.'
         ]
+        break
+      }
+      case 'find':
+      case 'search': {
+        const query = args.join(' ').toLowerCase().trim()
+        if (!query) {
+          output = [
+            'Architecture Topology Search:',
+            '--------------------------------------------------------------------------------',
+            'Search cross-cutting distributed systems, ADRs, AI paradigms, and trade-offs.',
+            'Usage: find <query> (e.g. "find kafka", "find redis", "find mcp", "find saga")',
+            'Available Domains: Systems, ADR Governance, AI Codex, Trade-Off Matrix'
+          ]
+          break
+        }
+
+        const results: string[] = []
+
+        // 1. Search Distributed Systems
+        Object.values(ARCHITECTURE_SYSTEMS).forEach(s => {
+          if (
+            s.title.toLowerCase().includes(query) ||
+            s.tagline.toLowerCase().includes(query) ||
+            s.nodes.some(n => 
+              n.label.toLowerCase().includes(query) ||
+              n.sublabel.toLowerCase().includes(query) ||
+              n.techBadge.toLowerCase().includes(query) ||
+              n.specs.technology.toLowerCase().includes(query)
+            )
+          ) {
+            results.push(
+              `[Distributed System] ${s.title}`,
+              `  Highlights : ${s.tagline}`,
+              `  Anchor     : #architecture-workbench`,
+              ''
+            )
+          }
+        })
+
+        // 2. Search AI Codex
+        const aiTerms = [
+          { name: 'Agentic AI', desc: 'Goal-driven perception/action loops, DAG memory, LangGraph workflows' },
+          { name: 'Large Reasoning Model (LRM)', desc: 'Test-time compute, Chain-of-Thought (CoT), RLVR self-reflection' },
+          { name: 'Vector Database', desc: 'HNSW indexing, pgvector similarity search, dense embeddings' },
+          { name: 'Retrieval Augmented Generation (RAG)', desc: 'Hybrid BM25 keyword + dense vector rerank, context isolation' },
+          { name: 'Model Context Protocol (MCP)', desc: 'JSON-RPC 2.0 tool server protocol, stdio/SSE transports' }
+        ]
+        aiTerms.forEach(t => {
+          if (t.name.toLowerCase().includes(query) || t.desc.toLowerCase().includes(query)) {
+            results.push(
+              `[AI Systems Codex] ${t.name}`,
+              `  Concept    : ${t.desc}`,
+              `  Anchor     : #architecture-ai-codex`,
+              ''
+            )
+          }
+        })
+
+        // 3. Search ADRs
+        ARCHITECTURAL_DECISIONS.forEach(a => {
+          if (
+            a.id.toLowerCase().includes(query) ||
+            a.title.toLowerCase().includes(query) ||
+            a.context.toLowerCase().includes(query) ||
+            a.decision.toLowerCase().includes(query) ||
+            a.pattern.toLowerCase().includes(query)
+          ) {
+            results.push(
+              `[ADR Record] ${a.id}: ${a.title}`,
+              `  Decision   : ${a.pattern} (${a.status})`,
+              `  Anchor     : #architecture-adr-ledger`,
+              ''
+            )
+          }
+        })
+
+        // 4. Search Trade-Offs
+        ARCHITECTURAL_TRADEOFFS.forEach(t => {
+          if (
+            t.title.toLowerCase().includes(query) ||
+            t.category.toLowerCase().includes(query) ||
+            t.summary.toLowerCase().includes(query) ||
+            t.productionVerdict.toLowerCase().includes(query) ||
+            t.options.some(o => o.name.toLowerCase().includes(query) || o.paradigm.toLowerCase().includes(query))
+          ) {
+            results.push(
+              `[Trade-Off Matrix] ${t.title}`,
+              `  Verdict    : ${t.productionVerdict}`,
+              `  Anchor     : #architecture-tradeoff-matrix`,
+              ''
+            )
+          }
+        })
+
+        if (results.length === 0) {
+          output = [
+            `No direct architecture matches found for "${query}".`,
+            'Try searching for: kafka, redis, mcp, postgres, saga, threads, or rag.',
+            'Tip: Explore the live visual components in #architecture.'
+          ]
+        } else {
+          output = [
+            `Architecture Topology Search: "${query}" (${Math.floor(results.length / 4)} Pattern Matches)`,
+            '--------------------------------------------------------------------------------',
+            ...results,
+            '--------------------------------------------------------------------------------',
+            'Deep Navigation: Use Fast Jump anchors in #architecture to inspect live components.'
+          ]
+        }
         break
       }
       case 'mcp':

@@ -268,10 +268,21 @@ export default function TerminalHero() {
           transition={{ duration: 0.7 }} 
           className="lg:col-span-6 space-y-5 sm:space-y-6 min-w-0 w-full"
         >
-          {/* Availability Status Badge */}
-          <div className="inline-flex items-center gap-2 px-3 py-1 sm:px-3.5 sm:py-1.5 rounded-full bg-emerald-500/10 border border-emerald-500/30 text-emerald-400 text-[11px] sm:text-xs font-mono shadow-sm">
-            <span className="w-2 h-2 rounded-full bg-emerald-400" />
-            <span>Available for Enterprise Roles & Strategic Consulting</span>
+          {/* Availability & Featured Architecture Lab Badges */}
+          <div className="flex flex-wrap items-center gap-2">
+            <div className="inline-flex items-center gap-2 px-3 py-1 sm:px-3.5 sm:py-1.5 rounded-full bg-emerald-500/10 border border-emerald-500/30 text-emerald-400 text-[11px] sm:text-xs font-mono shadow-sm">
+              <span className="w-2 h-2 rounded-full bg-emerald-400" />
+              <span>Available for Enterprise Roles & Strategic Consulting</span>
+            </div>
+            <button
+              onClick={() => scrollToSection('architecture')}
+              className="inline-flex items-center gap-1.5 px-3 py-1 sm:px-3 sm:py-1.5 rounded-full bg-teal-500/10 border border-teal-500/40 hover:border-teal-400 text-teal-300 text-[11px] sm:text-xs font-mono transition-all cursor-pointer group"
+              aria-label="Jump to ByteByteGo Architecture Lab"
+            >
+              <span className="w-2 h-2 rounded-full bg-teal-400 animate-pulse" />
+              <span>ByteByteGo AI & Distributed Lab</span>
+              <span className="text-teal-400 group-hover:translate-x-0.5 transition-transform">&rarr;</span>
+            </button>
           </div>
 
           {/* Heading */}
@@ -315,11 +326,11 @@ export default function TerminalHero() {
           {/* Streamlined CTAs: Primary Action + Secondary Action */}
           <div className="flex flex-wrap items-center gap-3 pt-2">
             <button
-              onClick={() => scrollToSection('projects')}
-              aria-label="Explore Systems Architecture"
+              onClick={() => scrollToSection('architecture')}
+              aria-label="Explore ByteByteGo Architecture Lab"
               className="inline-flex items-center justify-center gap-2 px-6 py-3.5 rounded-xl font-sans font-bold text-sm bg-emerald-500 text-slate-950 hover:bg-emerald-400 shadow-lg shadow-emerald-500/25 transition-all cursor-pointer group active:scale-[0.98] min-h-[46px]"
             >
-              <span>Explore Systems Architecture</span>
+              <span>Explore ByteByteGo Architecture</span>
               <ArrowRight className="w-4 h-4 group-hover:translate-x-1 transition-transform" />
             </button>
 

@@ -1,6 +1,6 @@
 {
   "version": "1.0.0",
-  "generatedAt": "2026-10-27T10:35:03.401Z",
+  "generatedAt": "2026-10-27T10:56:18.360Z",
   "nodes": {
     "src/components/architecture/AdrExplorer.tsx": {
       "file": "src/components/architecture/AdrExplorer.tsx",
@@ -214,17 +214,21 @@
     "src/components/portfolio/ArchitectureLab.tsx": {
       "file": "src/components/portfolio/ArchitectureLab.tsx",
       "imports": [
+        "react",
         "framer-motion",
         "lucide-react",
         "@/components/architecture/ByteByteGoDiagram",
         "@/components/architecture/ByteByteGoAiCodex",
         "@/components/architecture/AdrExplorer",
-        "@/components/architecture/TradeoffMatrix"
+        "@/components/architecture/TradeoffMatrix",
+        "@/data/architectureSystems",
+        "@/data/architecturalDecisions",
+        "@/data/architecturalTradeoffs"
       ],
       "exports": [
         "ArchitectureLab"
       ],
-      "loc": 200
+      "loc": 347
     },
     "src/components/portfolio/ContactTerminal.tsx": {
       "file": "src/components/portfolio/ContactTerminal.tsx",
@@ -259,12 +263,13 @@
         "framer-motion",
         "lucide-react",
         "@/data/architecturalDecisions",
-        "@/data/architecturalTradeoffs"
+        "@/data/architecturalTradeoffs",
+        "@/data/architectureSystems"
       ],
       "exports": [
         "InteractiveCli"
       ],
-      "loc": 1005
+      "loc": 1119
     },
     "src/components/portfolio/ProjectsShowcase.tsx": {
       "file": "src/components/portfolio/ProjectsShowcase.tsx",
@@ -316,7 +321,7 @@
       "exports": [
         "TerminalHero"
       ],
-      "loc": 488
+      "loc": 499
     },
     "src/components/ui/badge.tsx": {
       "file": "src/components/ui/badge.tsx",
@@ -451,7 +456,7 @@
       "exports": [
         "Layout"
       ],
-      "loc": 312
+      "loc": 324
     },
     "src/pages/Portfolio.tsx": {
       "file": "src/pages/Portfolio.tsx",

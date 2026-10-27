@@ -18,7 +18,7 @@ const NAV_LINKS = [
   { label: 'Home', href: '#hero', id: 'hero' },
   { label: 'About', href: '#about', id: 'about' },
   { label: 'Skills', href: '#skills', id: 'skills' },
-  { label: 'Architecture', href: '#architecture', id: 'architecture' },
+  { label: 'Architecture', href: '#architecture', id: 'architecture', badge: 'ByteByteGo' },
   { label: 'Projects', href: '#projects', id: 'projects' },
   { label: 'Experience', href: '#experience', id: 'experience' },
   { label: 'Contact', href: '#contact', id: 'contact' },
@@ -118,13 +118,18 @@ export default function Layout() {
                     key={link.label}
                     href={link.href}
                     onClick={(e) => handleNavClick(e, link.href)}
-                    className={`text-xs font-mono transition-all py-1.5 px-3 rounded-lg relative cursor-pointer ${
+                    className={`text-xs font-mono transition-all py-1.5 px-3 rounded-lg relative cursor-pointer flex items-center gap-1.5 ${
                       isActive 
                         ? 'text-white font-bold bg-slate-800/80 border border-slate-700' 
                         : 'text-slate-400 hover:text-slate-200 hover:bg-slate-900/60'
                     }`}
                   >
                     <span>{link.label}</span>
+                    {link.badge && (
+                      <span className="px-1.5 py-0.5 rounded text-[9px] font-mono bg-teal-500/20 text-teal-300 border border-teal-500/30">
+                        {link.badge}
+                      </span>
+                    )}
                     {isActive && (
                       <span className="absolute bottom-0 left-3 right-3 h-0.5 bg-emerald-400 rounded-full" />
                     )}
@@ -234,7 +239,14 @@ export default function Layout() {
                             : 'text-slate-300 hover:text-white hover:bg-slate-900/60'
                         }`}
                       >
-                        <span>{link.label}</span>
+                        <div className="flex items-center gap-2">
+                          <span>{link.label}</span>
+                          {link.badge && (
+                            <span className="px-1.5 py-0.5 rounded text-[9px] font-mono bg-teal-500/20 text-teal-300 border border-teal-500/30">
+                              {link.badge}
+                            </span>
+                          )}
+                        </div>
                         {isActive ? (
                           <span className="w-2 h-2 rounded-full bg-emerald-400" />
                         ) : (

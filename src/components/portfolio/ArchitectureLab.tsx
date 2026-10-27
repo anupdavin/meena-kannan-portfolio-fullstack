@@ -1,3 +1,4 @@
+import { useState, useMemo } from 'react'
 import { motion } from 'framer-motion'
 import { 
   Network, 
@@ -9,14 +10,84 @@ import {
   GitBranch,
   Bot,
   FileText,
-  GitCompare
+  GitCompare,
+  Search,
+  X
 } from 'lucide-react'
 import ByteByteGoDiagram from '@/components/architecture/ByteByteGoDiagram'
 import ByteByteGoAiCodex from '@/components/architecture/ByteByteGoAiCodex'
 import AdrExplorer from '@/components/architecture/AdrExplorer'
 import TradeoffMatrix from '@/components/architecture/TradeoffMatrix'
+import { ARCHITECTURE_SYSTEMS } from '@/data/architectureSystems'
+import { ARCHITECTURAL_DECISIONS } from '@/data/architecturalDecisions'
+import { ARCHITECTURAL_TRADEOFFS } from '@/data/architecturalTradeoffs'
+
+const AI_TERMS_SUMMARY = [
+  { id: 'agentic-ai', title: 'Agentic AI', text: 'Perception-action loop, DAG memory, tool execution, LangGraph' },
+  { id: 'lrm', title: 'Large Reasoning Model (LRM)', text: 'Chain-of-thought, test-time compute, self-reflection, RLVR' },
+  { id: 'vectordb', title: 'Vector Database', text: 'HNSW index, pgvector, nearest neighbor, dense embeddings' },
+  { id: 'rag', title: 'Retrieval Augmented Generation (RAG)', text: 'BM25 lexical ranking, dense vector rerank, context isolation' },
+  { id: 'mcp', title: 'Model Context Protocol (MCP)', text: 'JSON-RPC 2.0, SSE, stdio, decoupled tool host server' }
+]
 
 export default function ArchitectureLab() {
+  const [searchQuery, setSearchQuery] = useState('')
+
+  const matchStats = useMemo(() => {
+    const q = searchQuery.trim().toLowerCase()
+    if (!q) {
+      return {
+        total: 0,
+        workbench: 4,
+        aiCodex: 5,
+        adr: 6,
+        tradeoffs: 4,
+        isActive: false
+      }
+    }
+
+    const workbenchCount = Object.values(ARCHITECTURE_SYSTEMS).filter(s => 
+      s.title.toLowerCase().includes(q) ||
+      s.tagline.toLowerCase().includes(q) ||
+      s.nodes.some(n => 
+        n.label.toLowerCase().includes(q) ||
+        n.sublabel.toLowerCase().includes(q) ||
+        n.techBadge.toLowerCase().includes(q) ||
+        n.specs.technology.toLowerCase().includes(q)
+      )
+    ).length
+
+    const aiCount = AI_TERMS_SUMMARY.filter(t => 
+      t.title.toLowerCase().includes(q) ||
+      t.text.toLowerCase().includes(q)
+    ).length
+
+    const adrCount = ARCHITECTURAL_DECISIONS.filter(a => 
+      a.id.toLowerCase().includes(q) ||
+      a.title.toLowerCase().includes(q) ||
+      a.context.toLowerCase().includes(q) ||
+      a.decision.toLowerCase().includes(q) ||
+      a.pattern.toLowerCase().includes(q)
+    ).length
+
+    const tradeoffCount = ARCHITECTURAL_TRADEOFFS.filter(t => 
+      t.title.toLowerCase().includes(q) ||
+      t.category.toLowerCase().includes(q) ||
+      t.summary.toLowerCase().includes(q) ||
+      t.options.some(o => o.name.toLowerCase().includes(q) || o.paradigm.toLowerCase().includes(q))
+    ).length
+
+    return {
+      total: workbenchCount + aiCount + adrCount + tradeoffCount,
+      workbench: workbenchCount,
+      aiCodex: aiCount,
+      adr: adrCount,
+      tradeoffs: tradeoffCount,
+      isActive: true
+    }
+  }, [searchQuery])
+
+  const QUICK_KEYWORDS = ['Kafka', 'Redis', 'Postgres', 'Java 21', 'MCP', 'RAG', 'Saga', 'Virtual Threads']
   return (
     <div className="max-w-7xl mx-auto space-y-8 sm:space-y-12">
       {/* 1. Terminal Section Header */}
@@ -60,39 +131,115 @@ export default function ArchitectureLab() {
         </div>
       </div>
 
-      {/* 1.5. Architecture Topology Fast-Jump Navigator */}
-      <div className="flex flex-wrap items-center gap-2 p-2 rounded-xl bg-slate-950/80 border border-slate-800/80 font-mono text-xs">
-        <span className="text-slate-400 px-2 py-1 uppercase text-[10px] tracking-wider font-semibold">
-          Fast Jump:
-        </span>
-        <a 
-          href="#architecture-workbench"
-          className="px-3 py-1.5 rounded-lg bg-slate-900 border border-slate-800 hover:border-cyan-500/50 hover:text-cyan-400 text-slate-300 transition-all flex items-center gap-1.5 cursor-pointer"
-        >
-          <Activity className="w-3.5 h-3.5 text-cyan-400" />
-          <span>Distributed Workbench (4)</span>
-        </a>
-        <a 
-          href="#architecture-ai-codex"
-          className="px-3 py-1.5 rounded-lg bg-slate-900 border border-slate-800 hover:border-teal-500/50 hover:text-teal-400 text-slate-300 transition-all flex items-center gap-1.5 cursor-pointer"
-        >
-          <Bot className="w-3.5 h-3.5 text-teal-400" />
-          <span>AI Systems Codex (5)</span>
-        </a>
-        <a 
-          href="#architecture-adr-ledger"
-          className="px-3 py-1.5 rounded-lg bg-slate-900 border border-slate-800 hover:border-indigo-500/50 hover:text-indigo-400 text-slate-300 transition-all flex items-center gap-1.5 cursor-pointer"
-        >
-          <FileText className="w-3.5 h-3.5 text-indigo-400" />
-          <span>ADR Governance Ledger (6)</span>
-        </a>
-        <a 
-          href="#architecture-tradeoff-matrix"
-          className="px-3 py-1.5 rounded-lg bg-slate-900 border border-slate-800 hover:border-amber-500/50 hover:text-amber-400 text-slate-300 transition-all flex items-center gap-1.5 cursor-pointer"
-        >
-          <GitCompare className="w-3.5 h-3.5 text-amber-400" />
-          <span>Decision Trade-Offs (4)</span>
-        </a>
+      {/* 1.5. Architecture Topology Fast-Jump Navigator & Live Search */}
+      <div className="space-y-3 p-3 sm:p-4 rounded-2xl bg-slate-950/80 border border-slate-800/80 font-mono text-xs shadow-xl">
+        {/* Search Input Row & Preset Chips */}
+        <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 pb-3 border-b border-slate-800/60">
+          <div className="relative flex-1 max-w-md">
+            <Search className="w-3.5 h-3.5 absolute left-3 top-1/2 -translate-y-1/2 text-slate-500" />
+            <input
+              type="text"
+              value={searchQuery}
+              onChange={(e) => setSearchQuery(e.target.value)}
+              placeholder="Search architecture by keyword (e.g. Kafka, Redis, MCP, Postgres)..."
+              className="w-full bg-slate-900/90 border border-slate-800 rounded-lg pl-9 pr-8 py-2 text-xs text-slate-200 placeholder:text-slate-500 focus:outline-none focus:border-cyan-500/60 focus:ring-1 focus:ring-cyan-500/30"
+              aria-label="Filter architecture components by technology or pattern"
+            />
+            {searchQuery && (
+              <button
+                onClick={() => setSearchQuery('')}
+                className="absolute right-2.5 top-1/2 -translate-y-1/2 text-slate-500 hover:text-slate-300 p-0.5 cursor-pointer"
+                aria-label="Clear architecture search filter"
+              >
+                <X className="w-3.5 h-3.5" />
+              </button>
+            )}
+          </div>
+
+          {/* Quick Keywords */}
+          <div className="flex items-center gap-1.5 overflow-x-auto scrollbar-thin py-0.5">
+            <span className="text-[10px] uppercase text-slate-500 font-semibold shrink-0">Pills:</span>
+            {QUICK_KEYWORDS.map(kw => (
+              <button
+                key={kw}
+                onClick={() => setSearchQuery(searchQuery.toLowerCase() === kw.toLowerCase() ? '' : kw)}
+                className={`px-2 py-0.5 rounded text-[11px] transition-all whitespace-nowrap cursor-pointer border ${
+                  searchQuery.toLowerCase() === kw.toLowerCase()
+                    ? 'bg-cyan-500/20 text-cyan-400 border-cyan-500/50 font-bold'
+                    : 'bg-slate-900 border-slate-800 text-slate-400 hover:text-slate-200 hover:border-slate-700'
+                }`}
+              >
+                {kw}
+              </button>
+            ))}
+          </div>
+        </div>
+
+        {/* Search Results Banner (if active) */}
+        {matchStats.isActive && (
+          <div className="flex items-center justify-between text-xs py-1.5 px-3 rounded-lg bg-cyan-950/30 border border-cyan-500/30 text-cyan-300">
+            <span>
+              Found <strong className="text-white">{matchStats.total}</strong> architecture patterns matching "{searchQuery}"
+            </span>
+            <button
+              onClick={() => setSearchQuery('')}
+              className="text-[10px] text-cyan-400 hover:underline cursor-pointer"
+            >
+              Reset Filter
+            </button>
+          </div>
+        )}
+
+        {/* 4 Fast Jump Buttons with live match counts */}
+        <div className="flex flex-wrap items-center gap-2 pt-1">
+          <span className="text-slate-400 px-1 py-1 uppercase text-[10px] tracking-wider font-semibold">
+            Fast Jump:
+          </span>
+          <a 
+            href="#architecture-workbench"
+            className={`px-3 py-1.5 rounded-lg border transition-all flex items-center gap-1.5 cursor-pointer ${
+              matchStats.isActive && matchStats.workbench > 0
+                ? 'bg-cyan-500/10 border-cyan-500/50 text-cyan-400 shadow-[0_0_10px_rgba(6,182,212,0.15)] font-bold'
+                : 'bg-slate-900 border-slate-800 hover:border-cyan-500/50 hover:text-cyan-400 text-slate-300'
+            }`}
+          >
+            <Activity className="w-3.5 h-3.5 text-cyan-400" />
+            <span>Distributed Workbench ({matchStats.workbench})</span>
+          </a>
+          <a 
+            href="#architecture-ai-codex"
+            className={`px-3 py-1.5 rounded-lg border transition-all flex items-center gap-1.5 cursor-pointer ${
+              matchStats.isActive && matchStats.aiCodex > 0
+                ? 'bg-teal-500/10 border-teal-500/50 text-teal-400 shadow-[0_0_10px_rgba(20,184,166,0.15)] font-bold'
+                : 'bg-slate-900 border-slate-800 hover:border-teal-500/50 hover:text-teal-400 text-slate-300'
+            }`}
+          >
+            <Bot className="w-3.5 h-3.5 text-teal-400" />
+            <span>AI Systems Codex ({matchStats.aiCodex})</span>
+          </a>
+          <a 
+            href="#architecture-adr-ledger"
+            className={`px-3 py-1.5 rounded-lg border transition-all flex items-center gap-1.5 cursor-pointer ${
+              matchStats.isActive && matchStats.adr > 0
+                ? 'bg-indigo-500/10 border-indigo-500/50 text-indigo-400 shadow-[0_0_10px_rgba(99,102,241,0.15)] font-bold'
+                : 'bg-slate-900 border-slate-800 hover:border-indigo-500/50 hover:text-indigo-400 text-slate-300'
+            }`}
+          >
+            <FileText className="w-3.5 h-3.5 text-indigo-400" />
+            <span>ADR Governance Ledger ({matchStats.adr})</span>
+          </a>
+          <a 
+            href="#architecture-tradeoff-matrix"
+            className={`px-3 py-1.5 rounded-lg border transition-all flex items-center gap-1.5 cursor-pointer ${
+              matchStats.isActive && matchStats.tradeoffs > 0
+                ? 'bg-amber-500/10 border-amber-500/50 text-amber-400 shadow-[0_0_10px_rgba(245,158,11,0.15)] font-bold'
+                : 'bg-slate-900 border-slate-800 hover:border-amber-500/50 hover:text-amber-400 text-slate-300'
+            }`}
+          >
+            <GitCompare className="w-3.5 h-3.5 text-amber-400" />
+            <span>Decision Trade-Offs ({matchStats.tradeoffs})</span>
+          </a>
+        </div>
       </div>
 
       {/* 2. Interactive Flagship Workbench */}
