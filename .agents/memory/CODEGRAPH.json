@@ -1,6 +1,6 @@
 {
   "version": "1.0.0",
-  "generatedAt": "2026-10-27T08:49:02.047Z",
+  "generatedAt": "2026-10-27T09:05:33.935Z",
   "nodes": {
     "src/components/architecture/AdrExplorer.tsx": {
       "file": "src/components/architecture/AdrExplorer.tsx",
@@ -190,12 +190,13 @@
         "react",
         "framer-motion",
         "lucide-react",
-        "@/components/architecture/AgenticWorkflowDiagram"
+        "@/components/architecture/AgenticWorkflowDiagram",
+        "@/components/portfolio/InteractiveCli"
       ],
       "exports": [
         "AboutTerminal"
       ],
-      "loc": 303
+      "loc": 315
     },
     "src/components/portfolio/ArchitectureLab.tsx": {
       "file": "src/components/portfolio/ArchitectureLab.tsx",
@@ -248,7 +249,7 @@
       "exports": [
         "InteractiveCli"
       ],
-      "loc": 752
+      "loc": 779
     },
     "src/components/portfolio/ProjectsShowcase.tsx": {
       "file": "src/components/portfolio/ProjectsShowcase.tsx",

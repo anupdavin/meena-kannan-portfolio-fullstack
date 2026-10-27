@@ -28,6 +28,8 @@ const AVAILABLE_COMMANDS = [
   'benchmark',
   'ai-codex',
   'codex',
+  'mcp',
+  'model-context-protocol',
   'resume',
   'curl-resume',
   'download',
@@ -43,6 +45,7 @@ const QUICK_CHIPS = [
   { label: '[ $ architecture ]', cmd: 'architecture' },
   { label: '[ $ adr ]', cmd: 'adr' },
   { label: '[ $ ai-codex ]', cmd: 'ai-codex' },
+  { label: '[ $ mcp ]', cmd: 'mcp' },
   { label: '[ $ skills ]', cmd: 'skills' },
   { label: '[ $ metrics ]', cmd: 'metrics' },
   { label: '[ $ contact ]', cmd: 'contact' },
@@ -63,6 +66,7 @@ const COMMAND_HELP = [
   '  metrics         - Print live architecture cluster telemetry, throughput & cache stats',
   '  benchmark       - Run simulated synthetic latency benchmark across distributed services',
   '  ai-codex        - Display ByteByteGo 5-pillar AI systems architecture codex',
+  '  mcp             - Inspect enterprise Model Context Protocol (MCP) server architecture',
   '  architecture    - Display Clean Architecture, DDD & Saga design principles',
   '  adr             - Inspect enterprise Architectural Decision Records (ADR-001..ADR-006)',
   '  hire            - Check current availability & consulting engagement models',
@@ -517,6 +521,29 @@ export default function InteractiveCli() {
         ]
         break
       }
+      case 'mcp':
+      case 'model-context-protocol':
+        output = [
+          'Model Context Protocol (MCP) Enterprise Architecture Specification:',
+          '--------------------------------------------------------------------------------',
+          'Protocol Spec   : Model Context Protocol (v2024-11-05 standard)',
+          'Architecture    : MCP Host <--> Protocol Transport <--> MCP Server Tool Bus',
+          'Supported Trans : stdio (local subprocess), Server-Sent Events (SSE / HTTP)',
+          'Runtime Engine  : Java 21 LTS / Spring Boot 3 / GraalVM Native Image',
+          '--------------------------------------------------------------------------------',
+          'Enterprise Capabilities & Tool Handlers:',
+          '  [Tools]     : query_database_topology, inspect_kafka_lag, simulate_chaos_partition',
+          '  [Resources] : postgres://schema/audit_log, kafka://cluster/payment_events',
+          '  [Prompts]   : architecture_audit_review, security_compliance_scan',
+          '--------------------------------------------------------------------------------',
+          'Zero-Trust Security Isolation:',
+          '  + Read-only database topology queries execute against restricted read replicas',
+          '  + Production DB credentials never leak to agent contexts or LLM prompts',
+          '  + Tool invocations enforce strict schema validation via JSON-RPC 2.0',
+          '--------------------------------------------------------------------------------',
+          'Explore live: See "Model Context Protocol" in the ByteByteGo AI Architecture Codex.'
+        ]
+        break
       case 'resume':
       case 'download':
       case 'curl-resume':

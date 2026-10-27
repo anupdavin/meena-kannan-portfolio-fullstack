@@ -135,6 +135,17 @@ describe('Interactive CLI & Assistant Query Engine', () => {
     assert.ok(cliCode.includes('MILESTONE_DETAILS'), 'InteractiveCli must define MILESTONE_DETAILS');
     assert.ok(cliCode.includes("case 'experience':"), "InteractiveCli switch must handle 'experience'");
   });
+
+  test('InteractiveCli.tsx supports Model Context Protocol inspection via mcp and is rendered in AboutTerminal', () => {
+    const cliCode = fs.readFileSync(path.join(rootDir, 'src', 'components', 'portfolio', 'InteractiveCli.tsx'), 'utf8');
+    assert.ok(cliCode.includes("'mcp'"), "InteractiveCli must include 'mcp' in AVAILABLE_COMMANDS");
+    assert.ok(cliCode.includes("'model-context-protocol'"), "InteractiveCli must include 'model-context-protocol' alias");
+    assert.ok(cliCode.includes('[ $ mcp ]'), "InteractiveCli must define [ $ mcp ] quick chip");
+    assert.ok(cliCode.includes("case 'mcp':"), "InteractiveCli switch must handle 'mcp'");
+
+    const aboutCode = fs.readFileSync(path.join(rootDir, 'src', 'components', 'portfolio', 'AboutTerminal.tsx'), 'utf8');
+    assert.ok(aboutCode.includes('<InteractiveCli'), 'AboutTerminal must render InteractiveCli in the about section');
+  });
 });
 
 describe('Mobile & Cross-Device Responsiveness Verification', () => {

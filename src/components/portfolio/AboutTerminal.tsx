@@ -12,6 +12,7 @@ import {
   Sparkles
 } from 'lucide-react'
 import AgenticWorkflowDiagram from '@/components/architecture/AgenticWorkflowDiagram'
+import InteractiveCli from '@/components/portfolio/InteractiveCli'
 
 const CORE_PILLARS = [
   {
@@ -297,6 +298,17 @@ export default function AboutTerminal() {
           </div>
         ))}
       </div>
+
+      {/* Interactive Developer CLI Shell */}
+      <motion.div 
+        initial={{ opacity: 0, y: 30 }} 
+        whileInView={{ opacity: 1, y: 0 }} 
+        viewport={{ once: true }} 
+        transition={{ duration: 0.6 }} 
+        className="mt-10 sm:mt-16"
+      >
+        <InteractiveCli />
+      </motion.div>
     </div>
   )
 }
