@@ -106,5 +106,17 @@
     "title": "AI Infrastructure Sizing & Capacity Planning",
     "text": "Meena architects enterprise capacity sizing models for AI workloads: Vector Database memory requirements (raw Float32 storage + HNSW graph edge overhead M=16 + OS page buffer), RAG context window saturation and prompt caching cost reduction (61% savings via KV-cache reuse), Large Reasoning Model (LRM) test-time compute budgets and GPU serving clusters, and Agentic AI spend ceilings with Docker sandbox memory isolation.",
     "url": "#architecture-ai-codex"
+  },
+  {
+    "id": "executive-briefing",
+    "title": "Executive Architecture Briefing & Recruiter Dossier",
+    "text": "Meena Kannan is a Lead Full-Stack & Principal Cloud Solutions Architect with 8+ years of production experience in high-throughput microservices (15,000+ TPS), multi-tenant enterprise SaaS (PostgreSQL RLS, -68% RDS spend), Java 21 Virtual Threads (50k+ WebSockets, -72% heap), and Agentic AI with Model Context Protocol (MCP). She is open to Principal Solutions Architect roles, distributed systems modernizations, and fractional advisory.",
+    "url": "#hero"
+  },
+  {
+    "id": "architecture-evolutions",
+    "title": "Monolith-to-Mesh Architecture Evolution Diffs",
+    "text": "Meena documents quantified architecture evolution diffs across 5 systems: (1) Multi-Tenant SaaS: DB connection starvation to PostgreSQL RLS (-84% P99, -68% RDS spend), (2) Distributed Checkout: 2PC locks to Choreographed Saga + Debezium CDC (15k TPS, 0 deadlocks), (3) Real-Time Streaming: OS thread OOM to Java 21 Virtual Threads (50k+ WS, -72% heap), (4) FinTech Ledger: mutable balances to append-only cryptographic double-entry ledger (0.00% double-spends), and (5) Agentic AI: prompt stuffing to decoupled MCP JSON-RPC 2.0 bus (-76% tokens).",
+    "url": "#architecture-evolution-diff"
   }
 ]

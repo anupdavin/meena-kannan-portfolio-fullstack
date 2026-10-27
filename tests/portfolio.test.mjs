@@ -667,6 +667,35 @@ describe('Production Architectural Decision Records (ADR) & CLI Integration', ()
     assert.ok(cliCode.includes('[ $ diff ]'), "InteractiveCli must include '[ $ diff ]' quick chip");
     assert.ok(!/[\u2013\u2014]/.test(cliCode), 'InteractiveCli.tsx must contain zero em/en-dashes');
   });
+
+  test('ExecutiveBriefingModal and executiveBriefing.ts define executive recruiter pitch with CLI and navbar integration', () => {
+    const briefingDataPath = path.join(rootDir, 'src', 'data', 'executiveBriefing.ts');
+    assert.ok(fs.existsSync(briefingDataPath), 'executiveBriefing.ts must exist');
+    const briefingDataCode = fs.readFileSync(briefingDataPath, 'utf8');
+    assert.ok(briefingDataCode.includes('candidateName'), 'Must define candidateName');
+    assert.ok(briefingDataCode.includes('Principal Cloud Solutions Architect'), 'Must define target role');
+    assert.ok(briefingDataCode.includes('verifiedOutcomes'), 'Must define verified outcomes');
+    assert.ok(briefingDataCode.includes('governingAdrs'), 'Must define governing ADRs');
+    assert.ok(!/[\u2013\u2014]/.test(briefingDataCode), 'executiveBriefing.ts must contain zero em/en-dashes');
+
+    const modalPath = path.join(rootDir, 'src', 'components', 'portfolio', 'ExecutiveBriefingModal.tsx');
+    assert.ok(fs.existsSync(modalPath), 'ExecutiveBriefingModal.tsx must exist');
+    const modalCode = fs.readFileSync(modalPath, 'utf8');
+    assert.ok(modalCode.includes('handleCopyMemo'), 'ExecutiveBriefingModal must support 1-click memo copy');
+    assert.ok(modalCode.includes('role="dialog"'), 'ExecutiveBriefingModal must define accessible role="dialog"');
+    assert.ok(modalCode.includes('aria-modal="true"'), 'ExecutiveBriefingModal must define aria-modal="true"');
+    assert.ok(!/[\u2013\u2014]/.test(modalCode), 'ExecutiveBriefingModal.tsx must contain zero em/en-dashes');
+
+    const layoutCode = fs.readFileSync(path.join(rootDir, 'src', 'pages', 'Layout.tsx'), 'utf8');
+    assert.ok(layoutCode.includes('ExecutiveBriefingModal'), 'Layout must import and embed ExecutiveBriefingModal');
+    assert.ok(layoutCode.includes('isBriefingOpen'), 'Layout must manage isBriefingOpen state');
+
+    const cliCode = fs.readFileSync(path.join(rootDir, 'src', 'components', 'portfolio', 'InteractiveCli.tsx'), 'utf8');
+    assert.ok(cliCode.includes("'briefing'"), "InteractiveCli must support 'briefing' command");
+    assert.ok(cliCode.includes("'pitch'"), "InteractiveCli must support 'pitch' command");
+    assert.ok(cliCode.includes('[ $ briefing ]'), "InteractiveCli must include '[ $ briefing ]' quick chip");
+    assert.ok(!/[\u2013\u2014]/.test(cliCode), 'InteractiveCli.tsx must contain zero em/en-dashes');
+  });
 });
 
 

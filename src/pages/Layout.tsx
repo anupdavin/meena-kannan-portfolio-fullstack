@@ -2,6 +2,7 @@ import { useState, useEffect } from 'react'
 import { Outlet } from 'react-router-dom'
 import MatrixBackground from '@/components/MatrixBackground'
 import ChatWidget from '@/components/ChatWidget'
+import ExecutiveBriefingModal from '@/components/portfolio/ExecutiveBriefingModal'
 import { motion, AnimatePresence } from 'framer-motion'
 import { 
   Menu, 
@@ -11,7 +12,8 @@ import {
   Github, 
   Linkedin, 
   Mail, 
-  ChevronRight
+  ChevronRight,
+  Award
 } from 'lucide-react'
 
 const NAV_LINKS = [
@@ -28,6 +30,7 @@ const NAV_LINKS = [
 export default function Layout() {
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false)
   const [activeSection, setActiveSection] = useState('hero')
+  const [isBriefingOpen, setIsBriefingOpen] = useState(false)
 
   // Lock body scroll when mobile menu is open
   useEffect(() => {
@@ -141,6 +144,14 @@ export default function Layout() {
 
             {/* Right Status Badge & Contact CTA (Desktop/Tablet) */}
             <div className="hidden sm:flex items-center gap-2 lg:gap-2.5">
+              <button
+                onClick={() => setIsBriefingOpen(true)}
+                className="px-3 py-1.5 rounded-xl bg-slate-900 border border-emerald-500/40 hover:border-emerald-400 text-emerald-300 font-bold font-mono text-xs hover:bg-slate-800 transition-colors cursor-pointer flex items-center gap-1.5 shadow-sm active:scale-[0.98]"
+              >
+                <Award className="w-3.5 h-3.5 text-emerald-400" />
+                <span>Executive Briefing</span>
+              </button>
+
               <a
                 href="https://github.com/meenak95"
                 target="_blank"
@@ -296,6 +307,18 @@ export default function Layout() {
                     </a>
                   </div>
 
+                  {/* Executive Briefing CTA for Mobile */}
+                  <button
+                    onClick={() => {
+                      setMobileMenuOpen(false)
+                      setIsBriefingOpen(true)
+                    }}
+                    className="w-full py-2.5 px-4 rounded-xl bg-slate-900 border border-emerald-500/40 text-emerald-300 font-bold text-xs flex items-center justify-center gap-2 hover:bg-slate-800 transition-colors font-mono cursor-pointer"
+                  >
+                    <Award className="w-3.5 h-3.5 text-emerald-400" />
+                    <span>Open Executive Architecture Briefing</span>
+                  </button>
+
                   {/* Primary CTA */}
                   <a
                     href="#contact"
@@ -319,6 +342,12 @@ export default function Layout() {
 
       {/* Floating AI Chat Widget */}
       <ChatWidget />
+
+      {/* Executive Briefing Modal Dialog */}
+      <ExecutiveBriefingModal
+        isOpen={isBriefingOpen}
+        onClose={() => setIsBriefingOpen(false)}
+      />
     </div>
   )
 }

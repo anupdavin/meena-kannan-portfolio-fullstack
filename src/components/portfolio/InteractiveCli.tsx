@@ -5,6 +5,7 @@ import { ARCHITECTURAL_DECISIONS } from '@/data/architecturalDecisions'
 import { ARCHITECTURAL_TRADEOFFS } from '@/data/architecturalTradeoffs'
 import { ARCHITECTURE_SYSTEMS } from '@/data/architectureSystems'
 import { ARCHITECTURE_EVOLUTIONS } from '@/data/architectureEvolutions'
+import { EXECUTIVE_BRIEFING } from '@/data/executiveBriefing'
 
 interface HistoryEntry {
   command: string
@@ -23,6 +24,10 @@ const AVAILABLE_COMMANDS = [
   'timeline',
   'contact',
   'hire',
+  'briefing',
+  'pitch',
+  'executive',
+  'dossier',
   'architecture',
   'diff',
   'evolution',
@@ -61,6 +66,7 @@ const AVAILABLE_COMMANDS = [
 
 const QUICK_CHIPS = [
   { label: '[ $ whoami ]', cmd: 'whoami' },
+  { label: '[ $ briefing ]', cmd: 'briefing' },
   { label: '[ $ architecture ]', cmd: 'architecture' },
   { label: '[ $ diff ]', cmd: 'diff' },
   { label: '[ $ find kafka ]', cmd: 'find kafka' },
@@ -83,6 +89,7 @@ const COMMAND_HELP = [
   'Available Commands:',
   '  help            - Show this command reference list',
   '  whoami          - Display Meena Kannan\'s professional background & role',
+  '  briefing        - Print 1-page Executive Architecture Dossier & recruiter pitch memo',
   '  skills          - Print summary of core technology stack & competencies',
   '  projects        - List featured systems, or type "project <id>" for deep architecture review',
   '  experience      - Output career journey, or type "experience <id>" for deep milestone review',
@@ -362,6 +369,49 @@ export default function InteractiveCli() {
           'Focus Area : Clean Architecture, Choreographed Sagas, Distributed Microservices, Cloud Native',
           'Status     : OPEN to Senior / Staff / Architect roles & Strategic B2B Consulting',
           'Location   : Remote / Global (Singapore / India with US/EU timezone overlap)'
+        ]
+        break
+      case 'briefing':
+      case 'pitch':
+      case 'executive':
+      case 'dossier':
+        output = [
+          '================================================================================',
+          `EXECUTIVE ARCHITECTURE BRIEFING: ${EXECUTIVE_BRIEFING.candidateName}`,
+          `Role       : ${EXECUTIVE_BRIEFING.targetRole}`,
+          `Scale      : ${EXECUTIVE_BRIEFING.experienceYears} | Location: ${EXECUTIVE_BRIEFING.location}`,
+          '================================================================================',
+          '',
+          'CORE VALUE PROPOSITION:',
+          `  ${EXECUTIVE_BRIEFING.coreValueProposition}`,
+          '',
+          'ARCHITECTURAL PILLARS & INVARIANTS:',
+          ...EXECUTIVE_BRIEFING.pillars.flatMap((p, idx) => [
+            `  ${idx + 1}. ${p.title}`,
+            `     Stack     : ${p.technologies}`,
+            `     Invariant : ${p.invariant}`,
+            ''
+          ]),
+          'QUANTIFIED PRODUCTION BUSINESS IMPACTS:',
+          ...EXECUTIVE_BRIEFING.verifiedOutcomes.map(o => 
+            `  - ${o.metric.padEnd(32, ' ')}: ${o.before} -> ${o.after} (${o.impact})`
+          ),
+          '',
+          'VERIFIED ARCHITECTURAL DECISION RECORDS (ADRs):',
+          ...EXECUTIVE_BRIEFING.governingAdrs.map(a => 
+            `  [${a.id}] ${a.title} -> ${a.impact}`
+          ),
+          '',
+          'TARGET ENGAGEMENT MODELS:',
+          ...EXECUTIVE_BRIEFING.engagementModels.map(m => 
+            `  * ${m.roleTitle} [${m.availability}]`
+          ),
+          '',
+          'DIRECT CONTACT & RESUME DOWNLOAD:',
+          `  Email    : ${EXECUTIVE_BRIEFING.contact.email}`,
+          `  LinkedIn : ${EXECUTIVE_BRIEFING.contact.linkedin}`,
+          `  Resume   : ${EXECUTIVE_BRIEFING.contact.resumeUrl} (type "download" or "resume")`,
+          '================================================================================'
         ]
         break
       case 'skills':

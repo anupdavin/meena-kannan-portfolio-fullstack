@@ -1,6 +1,6 @@
 {
   "version": "1.0.0",
-  "generatedAt": "2026-10-27T12:36:51.017Z",
+  "generatedAt": "2026-10-27T12:50:04.314Z",
   "nodes": {
     "src/components/architecture/AdrExplorer.tsx": {
       "file": "src/components/architecture/AdrExplorer.tsx",
@@ -257,6 +257,18 @@
       ],
       "loc": 548
     },
+    "src/components/portfolio/ExecutiveBriefingModal.tsx": {
+      "file": "src/components/portfolio/ExecutiveBriefingModal.tsx",
+      "imports": [
+        "lucide-react",
+        "@/data/executiveBriefing"
+      ],
+      "exports": [
+        "ExecutiveBriefingModalProps",
+        "ExecutiveBriefingModal"
+      ],
+      "loc": 316
+    },
     "src/components/portfolio/ExperienceTimeline.tsx": {
       "file": "src/components/portfolio/ExperienceTimeline.tsx",
       "imports": [
@@ -278,12 +290,13 @@
         "@/data/architecturalDecisions",
         "@/data/architecturalTradeoffs",
         "@/data/architectureSystems",
-        "@/data/architectureEvolutions"
+        "@/data/architectureEvolutions",
+        "@/data/executiveBriefing"
       ],
       "exports": [
         "InteractiveCli"
       ],
-      "loc": 1308
+      "loc": 1358
     },
     "src/components/portfolio/ProjectsShowcase.tsx": {
       "file": "src/components/portfolio/ProjectsShowcase.tsx",
@@ -454,6 +467,15 @@
       ],
       "loc": 2016
     },
+    "src/data/executiveBriefing.ts": {
+      "file": "src/data/executiveBriefing.ts",
+      "imports": [],
+      "exports": [
+        "ExecutiveBriefingData",
+        "EXECUTIVE_BRIEFING"
+      ],
+      "loc": 121
+    },
     "src/main.tsx": {
       "file": "src/main.tsx",
       "imports": [
@@ -474,13 +496,14 @@
         "react-router-dom",
         "@/components/MatrixBackground",
         "@/components/ChatWidget",
+        "@/components/portfolio/ExecutiveBriefingModal",
         "framer-motion",
         "lucide-react"
       ],
       "exports": [
         "Layout"
       ],
-      "loc": 325
+      "loc": 354
     },
     "src/pages/Portfolio.tsx": {
       "file": "src/pages/Portfolio.tsx",
@@ -620,6 +643,8 @@
     "AboutTerminal": "src/components/portfolio/AboutTerminal.tsx",
     "ArchitectureLab": "src/components/portfolio/ArchitectureLab.tsx",
     "ContactTerminal": "src/components/portfolio/ContactTerminal.tsx",
+    "ExecutiveBriefingModalProps": "src/components/portfolio/ExecutiveBriefingModal.tsx",
+    "ExecutiveBriefingModal": "src/components/portfolio/ExecutiveBriefingModal.tsx",
     "ExperienceTimeline": "src/components/portfolio/ExperienceTimeline.tsx",
     "InteractiveCli": "src/components/portfolio/InteractiveCli.tsx",
     "ArchitecturalDecisionRecord": "src/data/architecturalDecisions.ts",
@@ -656,6 +681,8 @@
     "ARCHITECTURE_SYSTEMS": "src/data/architectureSystems.ts",
     "ByteByteGoSystemConfig": "src/data/byteByteGoConfigs.ts",
     "BYTEBYTEGO_SYSTEMS": "src/data/byteByteGoConfigs.ts",
+    "ExecutiveBriefingData": "src/data/executiveBriefing.ts",
+    "EXECUTIVE_BRIEFING": "src/data/executiveBriefing.ts",
     "Layout": "src/pages/Layout.tsx",
     "Portfolio": "src/pages/Portfolio.tsx"
   }
