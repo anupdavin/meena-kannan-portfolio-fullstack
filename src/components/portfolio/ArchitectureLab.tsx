@@ -196,17 +196,6 @@ export default function ArchitectureLab() {
             Fast Jump:
           </span>
           <a 
-            href="#architecture-workbench"
-            className={`px-3 py-1.5 rounded-lg border transition-all flex items-center gap-1.5 cursor-pointer ${
-              matchStats.isActive && matchStats.workbench > 0
-                ? 'bg-cyan-500/10 border-cyan-500/50 text-cyan-400 shadow-[0_0_10px_rgba(6,182,212,0.15)] font-bold'
-                : 'bg-slate-900 border-slate-800 hover:border-cyan-500/50 hover:text-cyan-400 text-slate-300'
-            }`}
-          >
-            <Activity className="w-3.5 h-3.5 text-cyan-400" />
-            <span>Distributed Workbench ({matchStats.workbench})</span>
-          </a>
-          <a 
             href="#architecture-ai-codex"
             className={`px-3 py-1.5 rounded-lg border transition-all flex items-center gap-1.5 cursor-pointer ${
               matchStats.isActive && matchStats.aiCodex > 0
@@ -216,6 +205,17 @@ export default function ArchitectureLab() {
           >
             <Bot className="w-3.5 h-3.5 text-teal-400" />
             <span>AI Systems Codex ({matchStats.aiCodex})</span>
+          </a>
+          <a 
+            href="#architecture-workbench"
+            className={`px-3 py-1.5 rounded-lg border transition-all flex items-center gap-1.5 cursor-pointer ${
+              matchStats.isActive && matchStats.workbench > 0
+                ? 'bg-cyan-500/10 border-cyan-500/50 text-cyan-400 shadow-[0_0_10px_rgba(6,182,212,0.15)] font-bold'
+                : 'bg-slate-900 border-slate-800 hover:border-cyan-500/50 hover:text-cyan-400 text-slate-300'
+            }`}
+          >
+            <Activity className="w-3.5 h-3.5 text-cyan-400" />
+            <span>Distributed Workbench ({matchStats.workbench})</span>
           </a>
           <a 
             href="#architecture-adr-ledger"
@@ -242,13 +242,25 @@ export default function ArchitectureLab() {
         </div>
       </div>
 
-      {/* 2. Interactive Flagship Workbench */}
+      {/* 2. Flagship ByteByteGo AI Architecture Codex (Interactive Infographic) */}
+      <motion.div
+        id="architecture-ai-codex"
+        initial={{ opacity: 0, y: 25 }}
+        whileInView={{ opacity: 1, y: 0 }}
+        viewport={{ once: true }}
+        transition={{ duration: 0.6 }}
+        className="scroll-mt-24"
+      >
+        <ByteByteGoAiCodex />
+      </motion.div>
+
+      {/* 2.5. Interactive Flagship Workbench (Saga / Outbox / Java 21) */}
       <motion.div
         id="architecture-workbench"
         initial={{ opacity: 0, y: 25 }}
         whileInView={{ opacity: 1, y: 0 }}
         viewport={{ once: true }}
-        transition={{ duration: 0.6 }}
+        transition={{ duration: 0.6, delay: 0.1 }}
         className="rounded-2xl border border-slate-800 bg-[#090e18]/90 shadow-2xl overflow-hidden scroll-mt-24"
       >
         <ByteByteGoDiagram 
@@ -256,18 +268,6 @@ export default function ArchitectureLab() {
           variant="workbench" 
           allowSystemSwitch={true}
         />
-      </motion.div>
-
-      {/* 2.5. ByteByteGo AI Architecture Codex (Interactive Infographic) */}
-      <motion.div
-        id="architecture-ai-codex"
-        initial={{ opacity: 0, y: 25 }}
-        whileInView={{ opacity: 1, y: 0 }}
-        viewport={{ once: true }}
-        transition={{ duration: 0.6, delay: 0.1 }}
-        className="scroll-mt-24"
-      >
-        <ByteByteGoAiCodex />
       </motion.div>
 
       {/* 2.6. Production Architectural Decision Records (ADR) Explorer */}

@@ -21,7 +21,12 @@ import {
   ExternalLink,
   Eye,
   FileText,
-  Zap
+  Zap,
+  ShieldAlert,
+  ZoomIn,
+  ZoomOut,
+  Maximize2,
+  X
 } from 'lucide-react'
 
 export interface AiTermSpec {
@@ -1044,6 +1049,21 @@ export default function ByteByteGoAiCodex() {
   const [activeRagStep, setActiveRagStep] = useState<number | null>(null)
   const [selectedMcpServer, setSelectedMcpServer] = useState<'A' | 'B' | 'C' | null>(null)
   const [copiedSpecId, setCopiedSpecId] = useState<string | null>(null)
+  const [isChaosMode, setIsChaosMode] = useState<boolean>(false)
+  const [isLightboxOpen, setIsLightboxOpen] = useState<boolean>(false)
+  const [lightboxZoom, setLightboxZoom] = useState<number>(1)
+
+  // Lightbox Escape key dismiss
+  useEffect(() => {
+    const handleKeyDown = (e: KeyboardEvent) => {
+      if (e.key === 'Escape' && isLightboxOpen) {
+        setIsLightboxOpen(false)
+        setLightboxZoom(1)
+      }
+    }
+    window.addEventListener('keydown', handleKeyDown)
+    return () => window.removeEventListener('keydown', handleKeyDown)
+  }, [isLightboxOpen])
 
   // Auto-play step-through for Explorer Mode
   useEffect(() => {
@@ -1263,8 +1283,72 @@ export default function ByteByteGoAiCodex() {
             {copiedBadge ? <CheckCircle2 className="w-3.5 h-3.5 text-emerald-500" /> : <Copy className="w-3.5 h-3.5 text-slate-500" />}
             <span>{copiedBadge ? 'Copied!' : 'Spec JSON'}</span>
           </button>
+
+          {/* Chaos Resilience Mode Toggle */}
+          <button
+            onClick={() => setIsChaosMode(!isChaosMode)}
+            className={`px-2.5 py-1.5 rounded-xl border text-xs font-mono flex items-center gap-1.5 transition-all cursor-pointer ${
+              isChaosMode
+                ? 'bg-rose-500/15 border-rose-500 text-rose-400 font-bold shadow-sm'
+                : 'border-slate-200 dark:border-slate-800 bg-slate-100 dark:bg-slate-900/80 hover:bg-slate-200 dark:hover:bg-slate-800 text-slate-700 dark:text-slate-300'
+            }`}
+            aria-label="Toggle Chaos Resilience Simulation"
+            title="Simulate distributed partition failures and automated failover telemetry across all 5 paradigms"
+          >
+            <ShieldAlert className={`w-3.5 h-3.5 ${isChaosMode ? 'text-rose-400 animate-pulse' : 'text-slate-500'}`} />
+            <span>{isChaosMode ? 'Chaos Active' : 'Chaos Mode'}</span>
+          </button>
+
+          {/* Lightbox Zoom Modal Trigger */}
+          <button
+            onClick={() => {
+              setIsLightboxOpen(true)
+              setLightboxZoom(1)
+            }}
+            className="px-2.5 py-1.5 rounded-xl border border-slate-200 dark:border-slate-800 bg-slate-100 dark:bg-slate-900/80 hover:bg-slate-200 dark:hover:bg-slate-800 text-slate-700 dark:text-slate-300 text-xs font-mono flex items-center gap-1.5 transition-all cursor-pointer"
+            aria-label="Open Fullscreen Infographic Lightbox"
+            title="Open high-resolution poster in fullscreen lightbox with zoom"
+          >
+            <Maximize2 className="w-3.5 h-3.5 text-sky-500" />
+            <span>Fullscreen</span>
+          </button>
         </div>
       </div>
+
+      {/* Chaos Invariant Resilience Simulation Banner */}
+      {isChaosMode && (
+        <div className="mb-6 p-4 rounded-2xl bg-rose-950/20 border border-rose-500/40 text-xs font-mono space-y-3">
+          <div className="flex items-center justify-between">
+            <div className="flex items-center gap-2 text-rose-400 font-bold">
+              <ShieldAlert className="w-4 h-4 animate-pulse" />
+              <span>CHAOS INJECTION TELEMETRY: 5-PARADIGM RESILIENCE ACTIVE</span>
+            </div>
+            <span className="text-[10px] text-rose-300/80 uppercase">Simulated Partitions & Invariant Verification</span>
+          </div>
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-5 gap-2.5 pt-1">
+            <div className="p-2.5 rounded-xl bg-slate-900/80 border border-emerald-500/30">
+              <span className="text-emerald-400 font-bold block text-[11px]">1. Agentic AI</span>
+              <span className="text-slate-400 text-[10px] leading-tight block mt-0.5">504 Gateway Timeout injected &rarr; Circuit breaker tripped &rarr; Fallback retry in 420ms</span>
+            </div>
+            <div className="p-2.5 rounded-xl bg-slate-900/80 border border-cyan-500/30">
+              <span className="text-cyan-400 font-bold block text-[11px]">2. LRM Reasoning</span>
+              <span className="text-slate-400 text-[10px] leading-tight block mt-0.5">Token budget ceiling hit (4096 tok) &rarr; Early-exit triggered &rarr; Confirmed 98.4% score</span>
+            </div>
+            <div className="p-2.5 rounded-xl bg-slate-900/80 border border-purple-500/30">
+              <span className="text-purple-400 font-bold block text-[11px]">3. Vector Database</span>
+              <span className="text-slate-400 text-[10px] leading-tight block mt-0.5">Primary pgvector node failed &rarr; Read replica promoted in 65ms &rarr; Zero query drops</span>
+            </div>
+            <div className="p-2.5 rounded-xl bg-slate-900/80 border border-amber-500/30">
+              <span className="text-amber-400 font-bold block text-[11px]">4. RAG Pipeline</span>
+              <span className="text-slate-400 text-[10px] leading-tight block mt-0.5">Dense search p99 &gt; 800ms &rarr; Fallback to L2 Redis cache (12ms hit ratio: 94.6%)</span>
+            </div>
+            <div className="p-2.5 rounded-xl bg-slate-900/80 border border-pink-500/30">
+              <span className="text-pink-400 font-bold block text-[11px]">5. MCP Protocol</span>
+              <span className="text-slate-400 text-[10px] leading-tight block mt-0.5">GitHub API HTTP 429 &rarr; Token bucket throttled &rarr; Smooth backoff buffer drain</span>
+            </div>
+          </div>
+        </div>
+      )}
 
       {/* ========================================================= */}
       {/* VIEW MODE 1: FULL POSTER VIEW (ALL 5 SECTIONS STACKED)    */}
@@ -1840,6 +1924,100 @@ export default function ByteByteGoAiCodex() {
           </div>
         </div>
       )}
+
+      {/* ========================================================= */}
+      {/* LIGHTBOX MODAL: FULLSCREEN HIGH-RES INFOGRAPHIC INSPECTOR */}
+      {/* ========================================================= */}
+      <AnimatePresence>
+        {isLightboxOpen && (
+          <motion.div
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            exit={{ opacity: 0 }}
+            className="fixed inset-0 z-[100] flex flex-col bg-slate-950/95 backdrop-blur-xl p-4 sm:p-6"
+            role="dialog"
+            aria-modal="true"
+            aria-label="ByteByteGo AI Terms Infographic Fullscreen Lightbox"
+          >
+            {/* Lightbox Header Bar */}
+            <div className="flex items-center justify-between pb-3 border-b border-slate-800 text-xs font-mono">
+              <div className="flex items-center gap-3">
+                <div className="w-2.5 h-6 rounded-full bg-[#00a884]" />
+                <span className="text-white font-bold text-sm">ByteByteGo AI Terms Reference (High Resolution)</span>
+                <span className="text-slate-400 hidden sm:inline">• Zoom: {Math.round(lightboxZoom * 100)}%</span>
+              </div>
+
+              <div className="flex items-center gap-2">
+                {/* Zoom In */}
+                <button
+                  onClick={() => setLightboxZoom(prev => Math.min(2.5, prev + 0.25))}
+                  className="p-1.5 rounded-lg bg-slate-900 hover:bg-slate-800 text-slate-300 border border-slate-700 cursor-pointer"
+                  aria-label="Zoom In"
+                  title="Zoom In (+25%)"
+                >
+                  <ZoomIn className="w-4 h-4" />
+                </button>
+
+                {/* Zoom Out */}
+                <button
+                  onClick={() => setLightboxZoom(prev => Math.max(0.5, prev - 0.25))}
+                  className="p-1.5 rounded-lg bg-slate-900 hover:bg-slate-800 text-slate-300 border border-slate-700 cursor-pointer"
+                  aria-label="Zoom Out"
+                  title="Zoom Out (-25%)"
+                >
+                  <ZoomOut className="w-4 h-4" />
+                </button>
+
+                {/* Reset Zoom */}
+                <button
+                  onClick={() => setLightboxZoom(1)}
+                  className="px-2.5 py-1.5 rounded-lg bg-slate-900 hover:bg-slate-800 text-slate-300 border border-slate-700 cursor-pointer"
+                  aria-label="Reset Zoom"
+                >
+                  100%
+                </button>
+
+                {/* Direct Download */}
+                <a
+                  href="/architecture/bytebytego-ai-terms-reference.jpg"
+                  download="ByteByteGo-AI-Terms-Reference.jpg"
+                  className="px-3 py-1.5 rounded-lg bg-[#00a884] hover:bg-[#008f70] text-white font-bold flex items-center gap-1.5 cursor-pointer"
+                >
+                  <Download className="w-3.5 h-3.5" />
+                  <span className="hidden sm:inline">Download</span>
+                </a>
+
+                {/* Close Modal */}
+                <button
+                  onClick={() => {
+                    setIsLightboxOpen(false)
+                    setLightboxZoom(1)
+                  }}
+                  className="p-1.5 rounded-lg bg-slate-800 hover:bg-rose-900/50 text-slate-300 hover:text-white border border-slate-700 cursor-pointer ml-2"
+                  aria-label="Close Lightbox"
+                  title="Close (Escape)"
+                >
+                  <X className="w-4 h-4" />
+                </button>
+              </div>
+            </div>
+
+            {/* Lightbox Image Container (Scrollable & Zoomable) */}
+            <div className="flex-1 overflow-auto flex items-center justify-center p-2 sm:p-4">
+              <div 
+                style={{ transform: `scale(${lightboxZoom})`, transformOrigin: 'center center' }} 
+                className="transition-transform duration-200 max-w-full"
+              >
+                <img
+                  src="/architecture/bytebytego-ai-terms-reference.jpg"
+                  alt="ByteByteGo AI Terms You Need to Know Reference Poster"
+                  className="max-h-[82vh] w-auto rounded-xl shadow-2xl object-contain border border-slate-800"
+                />
+              </div>
+            </div>
+          </motion.div>
+        )}
+      </AnimatePresence>
 
     </div>
   )

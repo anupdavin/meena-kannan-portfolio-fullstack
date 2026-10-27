@@ -75,30 +75,30 @@
     "id": "ai-codex",
     "title": "ByteByteGo AI Systems Architecture Codex",
     "text": "Meena architected the ByteByteGo AI Architecture Codex covering 5 production paradigms: (1) Agentic AI orchestrator-worker workflows with goal decomposition, (2) Large Reasoning Models (LRMs) utilizing deliberate test-time compute, (3) Vector Databases (pgvector / HNSW index) for high-dimensional semantic search, (4) Production RAG pipelines with hybrid BM25 lexical ranking and sub-120ms p95 retrieval, and (5) Model Context Protocol (MCP) tool integration.",
-    "url": "#architecture"
+    "url": "#architecture-ai-codex"
   },
   {
     "id": "architectural-decisions",
     "title": "Production Architectural Decision Records (ADRs)",
     "text": "Meena maintains a formal ADR governance ledger: ADR-001 (Choreographed Saga with Kafka compensation), ADR-002 (Transactional Outbox CDC with Debezium), ADR-003 (Java 21 Virtual Threads with sub-80ms p99 latency), ADR-004 (L1 Caffeine + L2 Redis tiered caching with 94% hit ratio), ADR-005 (Zero-Trust Envoy mTLS mesh with automated SPIFFE identity rotation), and ADR-006 (Model Context Protocol enterprise tool integration).",
-    "url": "#architecture"
+    "url": "#architecture-adr-ledger"
   },
   {
     "id": "model-context-protocol",
     "title": "Model Context Protocol (MCP) Enterprise Architecture",
     "text": "Meena implements enterprise Model Context Protocol (MCP) servers in Java 21 LTS with JSON-RPC over stdio and Server-Sent Events (SSE). Her MCP tool servers expose secure database topology inspection, Kafka consumer lag telemetry, and chaos partition simulation to autonomous agents without exposing underlying credentials.",
-    "url": "#architecture"
+    "url": "#architecture-ai-codex"
   },
   {
     "id": "saga-distributed-transactions",
     "title": "Choreographed Saga & Transactional Outbox CDC",
     "text": "To guarantee dual-write consistency without distributed two-phase commit (2PC) bottlenecks, Meena implements the Transactional Outbox pattern with Debezium CDC and Kafka event streaming. If downstream payment or fulfillment fails, choreographed compensating rollback events restore eventual consistency within 180ms.",
-    "url": "#architecture"
+    "url": "#architecture-workbench"
   },
   {
     "id": "architectural-tradeoffs",
     "title": "System Design & Architectural Trade-off Decisions",
     "text": "Meena evaluates distributed architecture tradeoffs across four core paradigms: (1) Choreographed Saga vs Orchestrated Saga vs 2PC (eventual consistency vs centralized state vs blocking locks), (2) Hybrid RAG vs Domain Fine-Tuning vs Prompt Caching (dynamic grounding vs weight adaptation vs KV cache reuse), (3) Java 21 Virtual Threads vs Reactive WebFlux vs OS Platform Threads (imperative Loom vs event loop vs 1:1 kernel threads), and (4) gRPC vs REST vs Model Context Protocol (binary protobuf vs public JSON vs agentic tool contracts).",
-    "url": "#architecture"
+    "url": "#architecture-tradeoff-matrix"
   }
 ]

@@ -44,11 +44,11 @@ const FAQ_MAP: Record<string, { answer: string; url?: string }> = {
   },
   'ai': {
     answer: "Meena specializes in modern AI architectures: Agentic AI workflows with autonomous goal decomposition, Large Reasoning Models (LRMs) utilizing deliberate test-time compute, pgvector similarity indexing, production RAG with hybrid BM25 lexical ranking, and Model Context Protocol (MCP) server design. Explore the interactive ByteByteGo AI Architecture Codex in the Architecture section.",
-    url: "#architecture"
+    url: "#architecture-ai-codex"
   },
   'mcp': {
     answer: "Model Context Protocol (MCP) is an open standard that decouples AI models from system tools and data sources. Meena implements enterprise MCP servers in Java 21 LTS with JSON-RPC over stdio and SSE transports, exposing secure database topology queries, Kafka consumer lag telemetry, and chaos simulation tools.",
-    url: "#architecture"
+    url: "#architecture-ai-codex"
   },
   'adr': {
     answer: "Meena documents engineering trade-offs using formal Architectural Decision Records (ADRs). Her ledger includes ADR-001 (Choreographed Saga), ADR-002 (Transactional Outbox CDC), ADR-003 (Java 21 Virtual Threads), ADR-004 (L1 Caffeine + L2 Redis Caching), ADR-005 (Zero-Trust Envoy mTLS), and ADR-006 (Model Context Protocol). Inspect them in the interactive ADR Explorer in the Architecture Lab.",
@@ -60,7 +60,7 @@ const FAQ_MAP: Record<string, { answer: string; url?: string }> = {
   },
   'saga': {
     answer: "Meena implements Choreographed Saga transactions using Kafka event streaming and compensating transactions. When payment or inventory steps fail, automated rollback events restore ledger consistency without blocking distributed 2PC locks.",
-    url: "#architecture"
+    url: "#architecture-workbench"
   },
   'saas': {
     answer: "Meena built the Meena Kannan Enterprise SaaS Platform: a multi-tenant portfolio & project management SaaS with Clean Architecture, Spring Boot 3, PostgreSQL, Redis caching, and Docker (99.99% SLA).",

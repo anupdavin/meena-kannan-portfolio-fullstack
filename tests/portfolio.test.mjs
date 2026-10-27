@@ -81,10 +81,15 @@ describe('Portfolio Verification & Asset Integrity', () => {
     assert.ok(codexCode.includes('activeAgentNode'), 'Must support interactive Agentic AI node inspection');
     assert.ok(codexCode.includes('selectedDataType'), 'Must support multi-modal Vector DB format selection');
     assert.ok(codexCode.includes('mermaidDiagram'), 'Must define Mermaid diagram representations for enterprise architectures');
+    assert.ok(codexCode.includes('isChaosMode'), 'Must implement Chaos Resilience Mode for distributed failure injection');
+    assert.ok(codexCode.includes('isLightboxOpen'), 'Must implement Fullscreen Lightbox Zoom Modal for infographic inspection');
     assert.ok(!/[\u2013\u2014]/.test(codexCode), 'ByteByteGoAiCodex must contain zero em/en-dashes');
 
     const labCode = fs.readFileSync(path.join(rootDir, 'src', 'components', 'portfolio', 'ArchitectureLab.tsx'), 'utf8');
     assert.ok(labCode.includes('ByteByteGoAiCodex'), 'ArchitectureLab must render ByteByteGoAiCodex');
+
+    const layoutCode = fs.readFileSync(path.join(rootDir, 'src', 'pages', 'Layout.tsx'), 'utf8');
+    assert.ok(layoutCode.includes('AI Codex'), 'Layout must define direct navigation link to AI Codex');
   });
 
   test('index.html contains valid favicon.svg link, OpenGraph tags, and pre-rendered semantic landmarks', () => {
@@ -96,6 +101,8 @@ describe('Portfolio Verification & Asset Integrity', () => {
     assert.ok(html.includes('<header'), 'Must include semantic <header> landmark');
     assert.ok(html.includes('<main'), 'Must include semantic <main> landmark');
     assert.ok(html.includes('<section'), 'Must include semantic <section> landmark');
+    assert.ok(html.includes('id="architecture"'), 'Must include pre-rendered <section id="architecture"> landmark');
+    assert.ok(html.includes('id="architecture-ai-codex"'), 'Must include pre-rendered AI Codex container');
     assert.ok(html.includes('<footer'), 'Must include semantic <footer> landmark');
     assert.ok(!html.includes('<div id="root"></div>'), 'Root must not be an empty shell; must have pre-rendered structure');
   });
