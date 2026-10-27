@@ -16,6 +16,8 @@ const AVAILABLE_COMMANDS = [
   'projects',
   'project',
   'experience',
+  'exp',
+  'timeline',
   'contact',
   'hire',
   'architecture',
@@ -56,7 +58,7 @@ const COMMAND_HELP = [
   '  whoami          - Display Meena Kannan\'s professional background & role',
   '  skills          - Print summary of core technology stack & competencies',
   '  projects        - List featured systems, or type "project <id>" for deep architecture review',
-  '  experience      - Output career journey summary & 8+ years leadership milestones',
+  '  experience      - Output career journey, or type "experience <id>" for deep milestone review',
   '  stats           - View production performance & impact metrics (99.99% SLA)',
   '  metrics         - Print live architecture cluster telemetry, throughput & cache stats',
   '  benchmark       - Run simulated synthetic latency benchmark across distributed services',
@@ -171,6 +173,71 @@ const PROJECT_DETAILS: Record<string, string[]> = {
     'Architectural Decision Record (ADR):',
     '  ADR-004: Immutable Double-Entry Ledger with Cryptographic Hash Chaining.',
     '  Passed SOC-2 Type II and PCI-DSS Level 1 compliance with zero findings.',
+    '--------------------------------------------------------------------------------'
+  ]
+}
+
+const MILESTONE_DETAILS: Record<string, string[]> = {
+  '1': [
+    '--------------------------------------------------------------------------------',
+    '[2022 - Present] Lead Full-Stack & Cloud Solutions Architect',
+    'Domain   : Enterprise Cloud Modernization | Tier-1 Financial & SaaS (Singapore/Global)',
+    'Scope    : Squad leadership (12+ engineers across 3 squads), monolith decomposition',
+    '--------------------------------------------------------------------------------',
+    'Architectural Deliverables & Impact:',
+    '  * Zero-Downtime Microservices Migration: Decomposed legacy core into autonomous',
+    '    Kafka event-driven services with Spring Boot 3 & Java 21 Virtual Threads.',
+    '    Metric: System SLA improved 99.85% -> 99.99% under 12,000 peak req/s.',
+    '  * AWS Cloud Spend Optimization: Cut monthly spend by 38% ($42,000 -> $26,000/mo)',
+    '    via ECS Fargate Graviton, Karpenter spot bin-packing, and two-tier Redis caching.',
+    '  * Squad Velocity & CI/CD: Automated GitHub Actions with Testcontainers validation,',
+    '    slashing release turnaround from 48 hours to under 15 minutes.',
+    'Key Patterns: Clean Architecture, Choreographed Saga, Transactional Outbox, Virtual Threads',
+    '--------------------------------------------------------------------------------'
+  ],
+  '2': [
+    '--------------------------------------------------------------------------------',
+    '[2020 - 2022] Senior Full-Stack & Distributed Systems Engineer',
+    'Domain   : Distributed Systems Core & High-Frequency Ingest Infrastructure (FinTech)',
+    'Scope    : Non-blocking payment APIs, real-time WebSocket meshes, KMS tokenization',
+    '--------------------------------------------------------------------------------',
+    'Architectural Deliverables & Impact:',
+    '  * High-Throughput APIs: Non-blocking REST & gRPC ingest pipelines serving 50k+ active',
+    '    sessions with sub-90ms P99 latency during flash-trading surges.',
+    '  * Real-Time Broadcast Latency: Clustered WebSocket mesh backed by Redis Pub/Sub,',
+    '    reducing sync latency from 5,000ms HTTP polling to 18ms instant broadcasts.',
+    '  * Zero-Leakage Data Security: AWS KMS envelope encryption and tokenized vault storage',
+    '    passing SOC-2 Type II audit with zero findings across 3.5M+ customer records.',
+    'Key Patterns: Clustered WebSockets, Redis Pub/Sub, Envelope Encryption, gRPC',
+    '--------------------------------------------------------------------------------'
+  ],
+  '3': [
+    '--------------------------------------------------------------------------------',
+    '[2018 - 2020] Full-Stack Software Engineer',
+    'Domain   : Enterprise SaaS & Workflow Automation',
+    'Scope    : Multi-tenant billing engine, PostgreSQL query optimization, webhook queues',
+    '--------------------------------------------------------------------------------',
+    'Architectural Deliverables & Impact:',
+    '  * Database Latency Reduction: Optimized SQL query plans and composite partial indexes',
+    '    over 25M+ rows in PostgreSQL, reducing execution latency by 65%.',
+    '  * Asynchronous Webhook Queue: Zero packet loss on $2M+ monthly transaction alerts.',
+    '  * Automated Test Harness: JUnit & Mockito suites driving defect escapes down by 75%.',
+    'Key Patterns: Hexagonal Architecture, Composite Indexing, Asynchronous Webhooks',
+    '--------------------------------------------------------------------------------'
+  ],
+  '4': [
+    '--------------------------------------------------------------------------------',
+    '[2016 - 2018] Software Engineer & Solutions Developer',
+    'Domain   : Relational Database Optimization & Enterprise Core Services',
+    'Scope    : Inventory management systems, responsive portals, telemetry monitoring',
+    '--------------------------------------------------------------------------------',
+    'Architectural Deliverables & Impact:',
+    '  * Relational DB Optimization: Tuned HikariCP connection pools, boosting reporting',
+    '    throughput 4.2x from 250 to 1,050 queries per second (QPS).',
+    '  * Modular Component Library: TypeScript & React UI system cutting release cycles from',
+    '    6 weeks down to 3.5 weeks.',
+    '  * Production Observability: Prometheus & Grafana alerting dropping MTTD from 45m to 4m.',
+    'Key Patterns: HikariCP Pool Tuning, Prometheus Metrics, Modular UI Systems',
     '--------------------------------------------------------------------------------'
   ]
 }
@@ -336,13 +403,38 @@ export default function InteractiveCli() {
         ]
         break
       case 'experience':
+      case 'exp':
+      case 'timeline': {
+        const query = args[0]?.toLowerCase()
+        if (query) {
+          if (query === '1' || query.includes('lead') || query.includes('recent') || query.includes('architect')) {
+            output = MILESTONE_DETAILS['1']
+            break
+          }
+          if (query === '2' || query.includes('fintech') || query.includes('distributed')) {
+            output = MILESTONE_DETAILS['2']
+            break
+          }
+          if (query === '3' || query.includes('saas') || query.includes('billing')) {
+            output = MILESTONE_DETAILS['3']
+            break
+          }
+          if (query === '4' || query.includes('web') || query.includes('inventory') || query.includes('core')) {
+            output = MILESTONE_DETAILS['4']
+            break
+          }
+        }
         output = [
-          '2022 - Present : Lead Full-Stack & Cloud Solutions Architect (Enterprise SaaS & Cloud Migration)',
-          '2020 - 2022    : Senior Full-Stack Software Engineer (FinTech & High-Frequency Scale-ups)',
-          '2018 - 2020    : Full-Stack Software Engineer (Enterprise SaaS & Workflow Automation)',
-          '2016 - 2018    : Software Engineer & Solutions Developer (Distributed Database & Web Systems)'
+          'Career Journey & Architecture Leadership Milestones:',
+          '  [1] 2022 - Present : Lead Full-Stack & Solutions Architect (99.99% SLA, -38% AWS spend, 3 squads)',
+          '  [2] 2020 - 2022    : Senior Full-Stack Engineer (50k+ sessions, 18ms sync, Zero-leakage KMS)',
+          '  [3] 2018 - 2020    : Full-Stack Software Engineer (-65% SQL query latency over 25M+ rows)',
+          '  [4] 2016 - 2018    : Software Engineer & Developer (4.2x DB throughput, 45m -> 4m MTTD)',
+          '--------------------------------------------------------------------------------',
+          'Tip: Type "experience <id>" (e.g. "experience 1" or "exp lead") for full metric details.'
         ]
         break
+      }
       case 'contact':
         output = [
           'Direct Contact Channels:',

@@ -119,6 +119,14 @@ describe('Interactive CLI & Assistant Query Engine', () => {
     assert.ok(cliCode.includes("case 'project':"), "InteractiveCli switch must handle 'project'");
     assert.ok(!/[\u2013\u2014]/.test(cliCode), 'InteractiveCli.tsx must contain zero em/en-dashes');
   });
+
+  test('InteractiveCli.tsx supports deep experience milestone inspection via experience <id>', () => {
+    const cliCode = fs.readFileSync(path.join(rootDir, 'src', 'components', 'portfolio', 'InteractiveCli.tsx'), 'utf8');
+    assert.ok(cliCode.includes("'exp'"), "InteractiveCli must include 'exp' in AVAILABLE_COMMANDS");
+    assert.ok(cliCode.includes("'timeline'"), "InteractiveCli must include 'timeline' in AVAILABLE_COMMANDS");
+    assert.ok(cliCode.includes('MILESTONE_DETAILS'), 'InteractiveCli must define MILESTONE_DETAILS');
+    assert.ok(cliCode.includes("case 'experience':"), "InteractiveCli switch must handle 'experience'");
+  });
 });
 
 describe('Mobile & Cross-Device Responsiveness Verification', () => {

@@ -1,6 +1,6 @@
 {
   "version": "1.0.0",
-  "generatedAt": "2026-10-27T08:03:18.909Z",
+  "generatedAt": "2026-10-27T08:17:49.121Z",
   "nodes": {
     "src/components/architecture/AdrExplorer.tsx": {
       "file": "src/components/architecture/AdrExplorer.tsx",
@@ -249,7 +249,7 @@
       "exports": [
         "InteractiveCli"
       ],
-      "loc": 660
+      "loc": 752
     },
     "src/components/portfolio/ProjectsShowcase.tsx": {
       "file": "src/components/portfolio/ProjectsShowcase.tsx",

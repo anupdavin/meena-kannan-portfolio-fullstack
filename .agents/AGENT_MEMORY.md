@@ -20,6 +20,9 @@
 
 | Run Timestamp | Focus Area | Action Completed | Lessons Learned / Gotchas |
 | :--- | :--- | :--- | :--- |
+| `2026-10-27 08:17:43` | Autonomous Verification | All 35 tests passed, 0 lint warnings, CodeGraph synchronized. | Verified zero regressions under Superpowers TDD protocol. |
+| `2026-10-27 08:17:00` | Career Milestone Telemetry (Track I) | Added deep inspection for `experience <id>` (aliases `exp`, `timeline`) in `InteractiveCli.tsx` (`exp 1`/`lead`, `exp 2`/`fintech`, `exp 3`/`saas`, `exp 4`/`web`) with squad leadership scale, cloud spend cut, and SLA metrics; expanded test suite to 42/42 passing tests. | Providing interactive CLI inspection of leadership scope and concrete architectural outcomes reinforces high-craft developer UX for senior technical interviewers. |
+| `2026-10-27 08:16:51` | Autonomous Verification | All 35 tests passed, 0 lint warnings, CodeGraph synchronized. | Verified zero regressions under Superpowers TDD protocol. |
 | `2026-10-27 08:03:13` | Autonomous Verification | All 35 tests passed, 0 lint warnings, CodeGraph synchronized. | Verified zero regressions under Superpowers TDD protocol. |
 | `2026-10-27 08:02:00` | Deep Project Telemetry (Track H) | Implemented `project <id>` deep-dive command in `InteractiveCli.tsx` (`project 1`/`saas`, `project 2`/`saga`, `project 3`/`realtime`, `project 4`/`fintech`) with bottleneck drivers, metrics, and ADR rationale; expanded test suite to 41/41 passing tests. | Providing instant terminal access to deep enterprise project telemetry allows technical recruiters and leads to inspect architectural impact metrics without clicking through modals. |
 | `2026-10-27 08:02:09` | Autonomous Verification | All 35 tests passed, 0 lint warnings, CodeGraph synchronized. | Verified zero regressions under Superpowers TDD protocol. |
@@ -111,6 +114,11 @@
 - [x] **Task H1:** Implement `project <id>` deep-dive query in `InteractiveCli.tsx` (`project 1`/`saas`, `project 2`/`saga`, `project 3`/`realtime`, `project 4`/`fintech`).
 - [x] **Task H2:** Provide structured bottleneck drivers, architecture solutions, production metrics, and ADR context directly in CLI.
 - [x] **Task H3:** Add automated unit test assertions for `project` command and zero em/en-dashes (41/41 passing tests).
+
+### Track I: Career Milestones & Leadership Telemetry
+- [x] **Task I1:** Implement `experience <id>` query with aliases `exp` and `timeline` in `InteractiveCli.tsx` (`exp 1`/`lead`, `exp 2`/`fintech`, `exp 3`/`saas`, `exp 4`/`web`).
+- [x] **Task I2:** Provide structured deliverables, squad scale (12+ engineers across 3 squads), AWS spend cut, and SLA telemetry in CLI output.
+- [x] **Task I3:** Add automated unit test assertions for `experience` command routing and zero em/en-dashes (42/42 passing tests).
 
 ---
 
