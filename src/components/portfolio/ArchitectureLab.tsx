@@ -19,6 +19,7 @@ import {
   GitCommit,
   Radio,
   ShieldAlert,
+  Database,
   X
 } from 'lucide-react'
 import ByteByteGoDiagram from '@/components/architecture/ByteByteGoDiagram'
@@ -32,6 +33,7 @@ import DistributedTraceInspector from '@/components/architecture/DistributedTrac
 import KafkaStreamMonitor from '@/components/architecture/KafkaStreamMonitor'
 import RateLimiterSandbox from '@/components/architecture/RateLimiterSandbox'
 import MultiRegionReplicationSandbox from '@/components/architecture/MultiRegionReplicationSandbox'
+import DatabaseShardingSandbox from '@/components/architecture/DatabaseShardingSandbox'
 import { ARCHITECTURE_SYSTEMS } from '@/data/architectureSystems'
 import { ARCHITECTURAL_DECISIONS } from '@/data/architecturalDecisions'
 import { ARCHITECTURAL_TRADEOFFS } from '@/data/architecturalTradeoffs'
@@ -42,6 +44,7 @@ import { DISTRIBUTED_TRACES } from '@/data/distributedTraces'
 import { KAFKA_TOPIC_STREAMS } from '@/data/kafkaStreams'
 import { RATE_LIMITING_ALGORITHMS } from '@/data/rateLimitingAlgorithms'
 import { MULTI_REGION_STRATEGIES } from '@/data/multiRegionReplication'
+import { DATABASE_SHARDING_STRATEGIES } from '@/data/databaseSharding'
 
 const AI_TERMS_SUMMARY = [
   { id: 'agentic-ai', title: 'Agentic AI', text: 'Perception-action loop, DAG memory, tool execution, LangGraph' },
@@ -70,6 +73,7 @@ export default function ArchitectureLab() {
         kafka: 5,
         ratelimit: 5,
         multiregion: 5,
+        sharding: 5,
         isActive: false
       }
     }
@@ -173,8 +177,19 @@ export default function ArchitectureLab() {
       m.productionUseCase.system.toLowerCase().includes(q)
     ).length
 
+    const shardingCount = DATABASE_SHARDING_STRATEGIES.filter(s => 
+      s.name.toLowerCase().includes(q) ||
+      s.id.toLowerCase().includes(q) ||
+      s.strategyName.toLowerCase().includes(q) ||
+      s.subtitle.toLowerCase().includes(q) ||
+      s.partitionAlgorithm.toLowerCase().includes(q) ||
+      s.summary.toLowerCase().includes(q) ||
+      s.governingAdr.toLowerCase().includes(q) ||
+      s.productionUseCase.system.toLowerCase().includes(q)
+    ).length
+
     return {
-      total: workbenchCount + aiCount + adrCount + tradeoffCount + evolutionCount + chaosCount + gatewayCount + traceCount + kafkaCount + ratelimitCount + multiregionCount,
+      total: workbenchCount + aiCount + adrCount + tradeoffCount + evolutionCount + chaosCount + gatewayCount + traceCount + kafkaCount + ratelimitCount + multiregionCount + shardingCount,
       workbench: workbenchCount,
       aiCodex: aiCount,
       adr: adrCount,
@@ -186,6 +201,7 @@ export default function ArchitectureLab() {
       kafka: kafkaCount,
       ratelimit: ratelimitCount,
       multiregion: multiregionCount,
+      sharding: shardingCount,
       isActive: true
     }
   }, [searchQuery])
@@ -419,6 +435,17 @@ export default function ArchitectureLab() {
             <Globe2 className="w-3.5 h-3.5 text-sky-400" />
             <span>Multi-Region ({matchStats.multiregion})</span>
           </a>
+          <a 
+            href="#architecture-database-sharding"
+            className={`px-3 py-1.5 rounded-lg border transition-all flex items-center gap-1.5 cursor-pointer ${
+              matchStats.isActive && matchStats.sharding > 0
+                ? 'bg-emerald-500/10 border-emerald-500/50 text-emerald-400 shadow-[0_0_10px_rgba(16,185,129,0.15)] font-bold'
+                : 'bg-slate-900 border-slate-800 hover:border-emerald-500/50 hover:text-emerald-400 text-slate-300'
+            }`}
+          >
+            <Database className="w-3.5 h-3.5 text-emerald-400" />
+            <span>Database Sharding ({matchStats.sharding})</span>
+          </a>
         </div>
       </div>
 
@@ -556,6 +583,18 @@ export default function ArchitectureLab() {
         className="scroll-mt-24"
       >
         <MultiRegionReplicationSandbox />
+      </motion.div>
+
+      {/* 2.15. Database Sharding & Consistent Hashing Topology Playground */}
+      <motion.div
+        id="architecture-database-sharding"
+        initial={{ opacity: 0, y: 25 }}
+        whileInView={{ opacity: 1, y: 0 }}
+        viewport={{ once: true }}
+        transition={{ duration: 0.6, delay: 0.6 }}
+        className="scroll-mt-24"
+      >
+        <DatabaseShardingSandbox />
       </motion.div>
 
       {/* 3. Architectural Design Pillars Strip */}

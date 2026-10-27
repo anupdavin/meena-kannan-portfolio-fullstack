@@ -1,6 +1,6 @@
 {
   "version": "1.0.0",
-  "generatedAt": "2026-10-27T14:55:07.855Z",
+  "generatedAt": "2026-10-27T15:12:17.599Z",
   "nodes": {
     "src/components/architecture/AdrExplorer.tsx": {
       "file": "src/components/architecture/AdrExplorer.tsx",
@@ -144,6 +144,18 @@
       ],
       "exports": [],
       "loc": 5
+    },
+    "src/components/architecture/DatabaseShardingSandbox.tsx": {
+      "file": "src/components/architecture/DatabaseShardingSandbox.tsx",
+      "imports": [
+        "react",
+        "lucide-react",
+        "@/data/databaseSharding"
+      ],
+      "exports": [
+        "DatabaseShardingSandbox"
+      ],
+      "loc": 624
     },
     "src/components/architecture/DistributedTraceInspector.tsx": {
       "file": "src/components/architecture/DistributedTraceInspector.tsx",
@@ -312,6 +324,7 @@
         "@/components/architecture/KafkaStreamMonitor",
         "@/components/architecture/RateLimiterSandbox",
         "@/components/architecture/MultiRegionReplicationSandbox",
+        "@/components/architecture/DatabaseShardingSandbox",
         "@/data/architectureSystems",
         "@/data/architecturalDecisions",
         "@/data/architecturalTradeoffs",
@@ -321,12 +334,13 @@
         "@/data/distributedTraces",
         "@/data/kafkaStreams",
         "@/data/rateLimitingAlgorithms",
-        "@/data/multiRegionReplication"
+        "@/data/multiRegionReplication",
+        "@/data/databaseSharding"
       ],
       "exports": [
         "ArchitectureLab"
       ],
-      "loc": 614
+      "loc": 653
     },
     "src/components/portfolio/ContactTerminal.tsx": {
       "file": "src/components/portfolio/ContactTerminal.tsx",
@@ -382,12 +396,13 @@
         "@/data/kafkaStreams",
         "@/data/rateLimitingAlgorithms",
         "@/data/multiRegionReplication",
+        "@/data/databaseSharding",
         "@/data/executiveBriefing"
       ],
       "exports": [
         "InteractiveCli"
       ],
-      "loc": 2018
+      "loc": 2126
     },
     "src/components/portfolio/ProjectsShowcase.tsx": {
       "file": "src/components/portfolio/ProjectsShowcase.tsx",
@@ -439,7 +454,7 @@
       "exports": [
         "TerminalHero"
       ],
-      "loc": 556
+      "loc": 558
     },
     "src/components/ui/badge.tsx": {
       "file": "src/components/ui/badge.tsx",
@@ -567,6 +582,17 @@
         "CHAOS_DRILLS"
       ],
       "loc": 524
+    },
+    "src/data/databaseSharding.ts": {
+      "file": "src/data/databaseSharding.ts",
+      "imports": [],
+      "exports": [
+        "ShardNode",
+        "RoutingProbe",
+        "DatabaseShardingStrategy",
+        "DATABASE_SHARDING_STRATEGIES"
+      ],
+      "loc": 348
     },
     "src/data/distributedTraces.ts": {
       "file": "src/data/distributedTraces.ts",
@@ -765,6 +791,7 @@
     "ByteByteGoWorkbenchProps": "src/components/architecture/ByteByteGoWorkbench.tsx",
     "ByteByteGoWorkbench": "src/components/architecture/ByteByteGoWorkbench.tsx",
     "ChaosResilienceMatrix": "src/components/architecture/ChaosResilienceMatrix.tsx",
+    "DatabaseShardingSandbox": "src/components/architecture/DatabaseShardingSandbox.tsx",
     "DistributedTraceInspector": "src/components/architecture/DistributedTraceInspector.tsx",
     "KafkaStreamMonitor": "src/components/architecture/KafkaStreamMonitor.tsx",
     "MultiRegionReplicationSandbox": "src/components/architecture/MultiRegionReplicationSandbox.tsx",
@@ -841,6 +868,10 @@
     "ChaosTraceStep": "src/data/chaosDrills.ts",
     "ChaosDrill": "src/data/chaosDrills.ts",
     "CHAOS_DRILLS": "src/data/chaosDrills.ts",
+    "ShardNode": "src/data/databaseSharding.ts",
+    "RoutingProbe": "src/data/databaseSharding.ts",
+    "DatabaseShardingStrategy": "src/data/databaseSharding.ts",
+    "DATABASE_SHARDING_STRATEGIES": "src/data/databaseSharding.ts",
     "SpanRecord": "src/data/distributedTraces.ts",
     "DistributedTrace": "src/data/distributedTraces.ts",
     "DISTRIBUTED_TRACES": "src/data/distributedTraces.ts",

@@ -922,6 +922,43 @@ describe('Production Architectural Decision Records (ADR) & CLI Integration', ()
     assert.ok(indexHtml.includes('id="architecture-multi-region"'), 'index.html must include #architecture-multi-region landmark');
     assert.ok(!/[\u2013\u2014]/.test(indexHtml), 'index.html must contain zero em/en-dashes');
   });
+
+  test('DatabaseShardingSandbox and databaseSharding.ts define consistent hashing and database sharding with CLI integration', () => {
+    const shardingDataPath = path.join(rootDir, 'src', 'data', 'databaseSharding.ts');
+    assert.ok(fs.existsSync(shardingDataPath), 'databaseSharding.ts must exist');
+    const shardingDataCode = fs.readFileSync(shardingDataPath, 'utf8');
+    assert.ok(shardingDataCode.includes('consistent-hashing'), 'Must define consistent-hashing strategy');
+    assert.ok(shardingDataCode.includes('hash-modulo'), 'Must define hash-modulo strategy');
+    assert.ok(shardingDataCode.includes('range-based'), 'Must define range-based strategy');
+    assert.ok(shardingDataCode.includes('directory-lookup'), 'Must define directory-lookup strategy');
+    assert.ok(shardingDataCode.includes('geo-partitioning'), 'Must define geo-partitioning strategy');
+    assert.ok(!/[\u2013\u2014]/.test(shardingDataCode), 'databaseSharding.ts must contain zero em/en-dashes');
+
+    const componentPath = path.join(rootDir, 'src', 'components', 'architecture', 'DatabaseShardingSandbox.tsx');
+    assert.ok(fs.existsSync(componentPath), 'DatabaseShardingSandbox.tsx must exist');
+    const compCode = fs.readFileSync(componentPath, 'utf8');
+    assert.ok(compCode.includes('handleCopyRfc'), 'DatabaseShardingSandbox must support 1-click RFC copy');
+    assert.ok(compCode.includes('DATABASE_SHARDING_STRATEGIES'), 'DatabaseShardingSandbox must render DATABASE_SHARDING_STRATEGIES');
+    assert.ok(!/[\u2013\u2014]/.test(compCode), 'DatabaseShardingSandbox.tsx must contain zero em/en-dashes');
+
+    const labCode = fs.readFileSync(path.join(rootDir, 'src', 'components', 'portfolio', 'ArchitectureLab.tsx'), 'utf8');
+    assert.ok(labCode.includes('DatabaseShardingSandbox'), 'ArchitectureLab must mount DatabaseShardingSandbox');
+    assert.ok(labCode.includes('id="architecture-database-sharding"'), 'ArchitectureLab must define anchor #architecture-database-sharding');
+
+    const cliCode = fs.readFileSync(path.join(rootDir, 'src', 'components', 'portfolio', 'InteractiveCli.tsx'), 'utf8');
+    assert.ok(cliCode.includes("'sharding'"), "InteractiveCli must support 'sharding' command");
+    assert.ok(cliCode.includes('[ $ sharding ]'), "InteractiveCli must include '[ $ sharding ]' quick chip");
+    assert.ok(cliCode.includes('DATABASE_SHARDING_STRATEGIES'), 'InteractiveCli must search across DATABASE_SHARDING_STRATEGIES');
+    assert.ok(!/[\u2013\u2014]/.test(cliCode), 'InteractiveCli.tsx must contain zero em/en-dashes');
+
+    const chatIndex = fs.readFileSync(path.join(rootDir, 'public', 'chat', 'index.json'), 'utf8');
+    assert.ok(chatIndex.includes('database-sharding'), 'public/chat/index.json must index database-sharding');
+    assert.ok(!/[\u2013\u2014]/.test(chatIndex), 'public/chat/index.json must contain zero em/en-dashes');
+
+    const indexHtml = fs.readFileSync(path.join(rootDir, 'index.html'), 'utf8');
+    assert.ok(indexHtml.includes('id="architecture-database-sharding"'), 'index.html must include #architecture-database-sharding landmark');
+    assert.ok(!/[\u2013\u2014]/.test(indexHtml), 'index.html must contain zero em/en-dashes');
+  });
 });
 
 

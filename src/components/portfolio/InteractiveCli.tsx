@@ -11,6 +11,7 @@ import { DISTRIBUTED_TRACES } from '@/data/distributedTraces'
 import { KAFKA_TOPIC_STREAMS } from '@/data/kafkaStreams'
 import { RATE_LIMITING_ALGORITHMS } from '@/data/rateLimitingAlgorithms'
 import { MULTI_REGION_STRATEGIES } from '@/data/multiRegionReplication'
+import { DATABASE_SHARDING_STRATEGIES } from '@/data/databaseSharding'
 import { EXECUTIVE_BRIEFING } from '@/data/executiveBriefing'
 
 interface HistoryEntry {
@@ -66,6 +67,10 @@ const AVAILABLE_COMMANDS = [
   'crdt',
   'splitbrain',
   'aurora',
+  'sharding',
+  'consistenthashing',
+  'reshard',
+  'ring',
   'adr',
   'decisions',
   'tradeoffs',
@@ -109,6 +114,7 @@ const QUICK_CHIPS = [
   { label: '[ $ kafka ]', cmd: 'kafka' },
   { label: '[ $ ratelimit ]', cmd: 'ratelimit' },
   { label: '[ $ multiregion ]', cmd: 'multiregion' },
+  { label: '[ $ sharding ]', cmd: 'sharding' },
   { label: '[ $ find kafka ]', cmd: 'find kafka' },
   { label: '[ $ tradeoffs ]', cmd: 'tradeoffs' },
   { label: '[ $ adr ]', cmd: 'adr' },
@@ -140,6 +146,7 @@ const COMMAND_HELP = [
   '  kafka           - Inspect Kafka event topics, partition lag & ISR quorums (or "kafka <id>")',
   '  ratelimit       - Evaluate distributed rate limiters & traffic shaping algorithms (or "ratelimit <id>")',
   '  multiregion     - Inspect multi-region replication topologies & conflict resolution (or "replication <id>")',
+  '  sharding        - Inspect database sharding topologies & consistent hash ring (or "sharding <id>")',
   '  find <query>    - Search cross-cutting architecture systems, ADRs, AI codex & trade-offs',
   '  tradeoffs       - Evaluate system design decision trade-offs (or "compare <topic>")',
   '  stats           - View production performance & impact metrics (99.99% SLA)',
@@ -931,6 +938,19 @@ export default function InteractiveCli() {
           ]
           break
         }
+        if (sub === 'sharding' || sub === 'consistenthashing' || sub === 'reshard' || sub === 'ring' || args.some(a => a.toLowerCase().includes('shard') || a.toLowerCase().includes('ring') || a.toLowerCase().includes('hash'))) {
+          output = [
+            'Routing to Database Sharding & Consistent Hashing Topology (#architecture-database-sharding):',
+            '  1. Consistent Hashing Ring  : Virtual Nodes on 360-degree integer circle (minimal K/N churn)',
+            '  2. Hash Modulo Partitioning : Deterministic MurmurHash3 integer modulo (uniform distribution)',
+            '  3. Range-Based Sharding     : Contiguous lexicographical/temporal intervals (local range scans)',
+            '  4. Directory-Based Lookup   : Dynamic metadata router with Redis L1 cache (VIP shard isolation)',
+            '  5. Geo-Partitioning         : Sovereign regulatory clusters (GDPR Frankfurt, CCPA Virginia)',
+            '--------------------------------------------------------------------------------',
+            'Interactive Sandbox: Live in #architecture-database-sharding with hash ring & rebalance simulator.'
+          ]
+          break
+        }
         output = [
           'ByteByteGo Interactive Architecture Lab Navigator:',
           '--------------------------------------------------------------------------------',
@@ -946,6 +966,7 @@ export default function InteractiveCli() {
           '  [ 9 ] "architecture kafka"     : Kafka Event Streams & Partition Lag (#architecture-event-streams)',
           '  [ 10 ] "architecture ratelimit": Distributed Rate Limiting Algorithms (#architecture-rate-limiter)',
           '  [ 11 ] "architecture multiregion": Multi-Region Database Replication (#architecture-multi-region)',
+          '  [ 12 ] "architecture sharding": Database Sharding & Consistent Hashing (#architecture-database-sharding)',
           '--------------------------------------------------------------------------------',
           'Clean Architecture Principles Enforced:',
           '  + Domain Isolation     : Core business domains decouple from libraries and vendor SDKs',
@@ -1509,6 +1530,70 @@ export default function InteractiveCli() {
         ]
         break
       }
+      case 'sharding':
+      case 'consistenthashing':
+      case 'reshard':
+      case 'ring': {
+        const target = args[0]?.toLowerCase().trim()
+        if (target) {
+          const matched = DATABASE_SHARDING_STRATEGIES.find(s =>
+            s.id === target ||
+            s.id.includes(target) ||
+            s.name.toLowerCase().includes(target) ||
+            s.strategyName.toLowerCase().includes(target) ||
+            (target === '1' && s.id === 'consistent-hashing') ||
+            (target === '2' && s.id === 'hash-modulo') ||
+            (target === '3' && s.id === 'range-based') ||
+            (target === '4' && s.id === 'directory-lookup') ||
+            (target === '5' && s.id === 'geo-partitioning')
+          )
+          if (matched) {
+            output = [
+              '--------------------------------------------------------------------------------',
+              `Database Sharding Strategy: ${matched.name} (${matched.subtitle})`,
+              '--------------------------------------------------------------------------------',
+              `Core Paradigm   : ${matched.strategyName}`,
+              `Algorithm       : ${matched.partitionAlgorithm}`,
+              `Rebalance Cost  : ${matched.rebalancingOverhead}`,
+              `Hotspot Guard   : ${matched.hotspotResilience}`,
+              `Cross-Shard Cost: ${matched.crossShardJoinComplexity}`,
+              `Governing ADR   : ${matched.governingAdr}`,
+              '--------------------------------------------------------------------------------',
+              'SHARD CLUSTER TOPOLOGY:',
+              ...matched.shards.map(sh => `  * ${sh.name} [${sh.status.toUpperCase()}] :: Range: ${sh.assignedRange} | Keys: ${sh.keyCount.toLocaleString()} | Storage: ${sh.storageUsageGb}GB | CPU: ${sh.cpuUtilizationPct}%`),
+              '--------------------------------------------------------------------------------',
+              'SAMPLE ROUTING PROBES:',
+              ...matched.routingProbes.map(rp => `  - Key "${rp.key}" (${rp.entityType}) -> ${rp.targetShardName} | Hash: ${rp.hashHex}`),
+              '--------------------------------------------------------------------------------',
+              `PRODUCTION WORKLOAD: ${matched.productionUseCase.system}`,
+              `  Entity        : ${matched.productionUseCase.entity}`,
+              `  Throughput    : ${matched.productionUseCase.workload}`,
+              `  Justification : ${matched.productionUseCase.justification}`,
+              '--------------------------------------------------------------------------------',
+              'Full live interactive hash ring visualizer available in #architecture-database-sharding.'
+            ]
+            break
+          }
+        }
+
+        output = [
+          'Database Sharding & Consistent Hashing Topology Playground:',
+          '--------------------------------------------------------------------------------',
+          'Explore 5 horizontal database sharding architectures across distributed clusters:',
+          '',
+          ...DATABASE_SHARDING_STRATEGIES.flatMap((s, idx) => [
+            `${idx + 1}. [ ${s.id} ] : ${s.name} (${s.subtitle})`,
+            `   Paradigm      : ${s.strategyName} | ADR: ${s.governingAdr}`,
+            `   Partitioning  : ${s.partitionAlgorithm.split('(')[0].trim()}`,
+            `   Rebalance Cost: ${s.rebalancingOverhead.split(':')[0]}`,
+            `   Deep Dive     : "sharding ${idx + 1}" or "sharding ${s.id.split('-')[0]}" (e.g. "sharding ring", "sharding hash", "sharding range", "sharding directory", "sharding geo")`,
+            ''
+          ]),
+          '--------------------------------------------------------------------------------',
+          'Tip: Run "sharding <id>" (e.g. "sharding 1" or "sharding ring") to inspect shard topology and probes.'
+        ]
+        break
+      }
       case 'find':
       case 'search': {
         const query = args.join(' ').toLowerCase().trim()
@@ -1518,7 +1603,7 @@ export default function InteractiveCli() {
             '--------------------------------------------------------------------------------',
             'Search cross-cutting distributed systems, ADRs, AI paradigms, and trade-offs.',
             'Usage: find <query> (e.g. "find kafka", "find redis", "find mcp", "find saga")',
-            'Available Domains: Systems, ADR Governance, AI Codex, Trade-Off Matrix, Evolution Diffs, Chaos Drills, API Gateway, Distributed Traces, Kafka Event Streams, Distributed Rate Limiting, Multi-Region Replication'
+            'Available Domains: Systems, ADR Governance, AI Codex, Trade-Off Matrix, Evolution Diffs, Chaos Drills, API Gateway, Distributed Traces, Kafka Event Streams, Distributed Rate Limiting, Multi-Region Replication, Database Sharding'
           ]
           break
         }
@@ -1738,6 +1823,29 @@ export default function InteractiveCli() {
               `[Multi-Region Replication] ${m.name}`,
               `  Strategy   : ${m.strategyName} (${m.consensusModel.split(' ')[0]})`,
               `  Anchor     : #architecture-multi-region`,
+              ''
+            )
+          }
+        })
+
+        // 12. Search Database Sharding & Consistent Hashing
+        DATABASE_SHARDING_STRATEGIES.forEach(s => {
+          if (
+            s.name.toLowerCase().includes(query) ||
+            s.id.toLowerCase().includes(query) ||
+            s.strategyName.toLowerCase().includes(query) ||
+            s.subtitle.toLowerCase().includes(query) ||
+            s.partitionAlgorithm.toLowerCase().includes(query) ||
+            s.summary.toLowerCase().includes(query) ||
+            s.governingAdr.toLowerCase().includes(query) ||
+            s.productionUseCase.system.toLowerCase().includes(query) ||
+            s.shards.some(sh => sh.name.toLowerCase().includes(query) || sh.id.toLowerCase().includes(query)) ||
+            s.routingProbes.some(rp => rp.key.toLowerCase().includes(query) || rp.targetShardName.toLowerCase().includes(query))
+          ) {
+            results.push(
+              `[Database Sharding] ${s.name}`,
+              `  Strategy   : ${s.strategyName} (${s.shards.length} Shards)`,
+              `  Anchor     : #architecture-database-sharding`,
               ''
             )
           }

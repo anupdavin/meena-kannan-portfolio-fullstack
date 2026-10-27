@@ -154,5 +154,11 @@
     "title": "Multi-Region Database Replication & Conflict Resolution Simulator",
     "text": "Meena designs fault-tolerant multi-region database architectures with deterministic conflict resolution across 5 enterprise models: (1) Aurora Global Database: Physical storage layer redo log replication across US, Europe, and Asia Pacific with sub-second RPO and under 1 minute managed failover, (2) DynamoDB Global Tables: Fully active-active multi-master tables with Last-Write-Wins (LWW) microsecond timestamp arbitration, (3) Conflict-Free Replicated Data Types (CRDTs): Monotonic state semi-lattices (PN-Counters and LWW-Element-Sets) ensuring mathematical convergence without central coordinators, (4) Distributed Raft Consensus: Strict serializability across CockroachDB range leases with Hybrid Logical Clocks (HLC) preventing dual-commit double spends, and (5) Kafka MirrorMaker 2: Asynchronous active-active event fabric with origin-cluster loop prevention headers.",
     "url": "#architecture-multi-region"
+  },
+  {
+    "id": "database-sharding-topology",
+    "title": "Database Sharding & Consistent Hashing Topology Playground",
+    "text": "Meena architects horizontal database sharding and distributed cluster topologies across 5 enterprise strategies: (1) Consistent Hashing Ring: 360-degree virtual node token ring (150 vnodes per physical shard) minimizing key churn to K/N during dynamic scale-out in real-time WebSocket state clusters, (2) Hash-Based Modulo Sharding: Deterministic MurmurHash3 modulo arithmetic achieving uniform key distribution with zero lookup metadata for multi-tenant SaaS platforms, (3) Range-Based Sharding: Contiguous temporal and lexicographical slicing enabling sub-millisecond local scans for FinTech audit journals, (4) Directory-Based Lookup Sharding: Dynamic metadata catalog with Redis L1 cache allowing seamless dedicated hardware promotion for Tier-1 enterprise accounts, and (5) Geo-Partitioning: Regulatory data sovereignty pinning customer records to Frankfurt (GDPR), Virginia (CCPA), and Singapore (MAS) storage clusters.",
+    "url": "#architecture-database-sharding"
   }
 ]
