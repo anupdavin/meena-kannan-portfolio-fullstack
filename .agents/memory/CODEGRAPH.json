@@ -1,6 +1,6 @@
 {
   "version": "1.0.0",
-  "generatedAt": "2026-10-27T13:55:27.783Z",
+  "generatedAt": "2026-10-27T14:18:26.224Z",
   "nodes": {
     "src/components/architecture/AdrExplorer.tsx": {
       "file": "src/components/architecture/AdrExplorer.tsx",
@@ -157,6 +157,18 @@
       ],
       "loc": 443
     },
+    "src/components/architecture/KafkaStreamMonitor.tsx": {
+      "file": "src/components/architecture/KafkaStreamMonitor.tsx",
+      "imports": [
+        "react",
+        "lucide-react",
+        "@/data/kafkaStreams"
+      ],
+      "exports": [
+        "KafkaStreamMonitor"
+      ],
+      "loc": 411
+    },
     "src/components/architecture/SvgPrimitives.tsx": {
       "file": "src/components/architecture/SvgPrimitives.tsx",
       "imports": [
@@ -273,18 +285,20 @@
         "@/components/architecture/ChaosResilienceMatrix",
         "@/components/architecture/ApiGatewayPlayground",
         "@/components/architecture/DistributedTraceInspector",
+        "@/components/architecture/KafkaStreamMonitor",
         "@/data/architectureSystems",
         "@/data/architecturalDecisions",
         "@/data/architecturalTradeoffs",
         "@/data/architectureEvolutions",
         "@/data/chaosDrills",
         "@/data/gatewayRoutes",
-        "@/data/distributedTraces"
+        "@/data/distributedTraces",
+        "@/data/kafkaStreams"
       ],
       "exports": [
         "ArchitectureLab"
       ],
-      "loc": 500
+      "loc": 537
     },
     "src/components/portfolio/ContactTerminal.tsx": {
       "file": "src/components/portfolio/ContactTerminal.tsx",
@@ -337,12 +351,13 @@
         "@/data/chaosDrills",
         "@/data/gatewayRoutes",
         "@/data/distributedTraces",
+        "@/data/kafkaStreams",
         "@/data/executiveBriefing"
       ],
       "exports": [
         "InteractiveCli"
       ],
-      "loc": 1701
+      "loc": 1805
     },
     "src/components/portfolio/ProjectsShowcase.tsx": {
       "file": "src/components/portfolio/ProjectsShowcase.tsx",
@@ -394,7 +409,7 @@
       "exports": [
         "TerminalHero"
       ],
-      "loc": 508
+      "loc": 553
     },
     "src/components/ui/badge.tsx": {
       "file": "src/components/ui/badge.tsx",
@@ -609,7 +624,7 @@
       "exports": [
         "Portfolio"
       ],
-      "loc": 293
+      "loc": 298
     },
     "src/vite-env.d.ts": {
       "file": "src/vite-env.d.ts",
@@ -702,6 +717,7 @@
     "ByteByteGoWorkbench": "src/components/architecture/ByteByteGoWorkbench.tsx",
     "ChaosResilienceMatrix": "src/components/architecture/ChaosResilienceMatrix.tsx",
     "DistributedTraceInspector": "src/components/architecture/DistributedTraceInspector.tsx",
+    "KafkaStreamMonitor": "src/components/architecture/KafkaStreamMonitor.tsx",
     "BoundaryContainerProps": "src/components/architecture/SvgPrimitives.tsx",
     "BoundaryContainer": "src/components/architecture/SvgPrimitives.tsx",
     "DatabaseCylinderProps": "src/components/architecture/SvgPrimitives.tsx",
