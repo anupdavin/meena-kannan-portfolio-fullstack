@@ -67,3 +67,13 @@ This document serves as the persistent semantic memory layer for AI coding agent
 * **Decision:** Implemented an interactive 5-paradigm sandbox demonstrating Append-Only Event Stores with UUIDv7 monotonic version checks and optimistic concurrency control, deterministic functional event folding ($State_t = foldl(applyEvent, InitialState, Events[0..t])$), periodic checkpoint snapshots every 100 events cutting hydration latency by 99% from 180ms to 1.8ms, CQRS read projections via Debezium CDC, and in-flight schema upcasting without destructive database migrations.
 * **Blast Radius:** Mounted in `ArchitectureLab.tsx` under `#architecture-event-sourcing`; integrated into `InteractiveCli.tsx` with `eventsourcing` command and `[ $ eventsourcing ]` quick chip; indexed in `index.html` Sub-Section 21 and `public/chat/index.json`. Verified in test 25 of `tests/portfolio.test.mjs`.
 
+---
+
+## ADR-022: Distributed Dead-Letter Queue (DLQ) & Non-Blocking Retry Matrix
+* **Status:** Accepted & Enforced
+* **Target Components:** [`DlqRetrySandbox.tsx`](file:///src/components/architecture/DlqRetrySandbox.tsx), [`dlqRetryModels.ts`](file:///src/data/dlqRetryModels.ts), [`ArchitectureLab.tsx`](file:///src/components/portfolio/ArchitectureLab.tsx)
+* **Context:** Mission-critical event streaming architectures require robust fault isolation, poison-pill quarantine, and zero head-of-line blocking on primary high-throughput partitions (15k TPS) during downstream service disruptions.
+* **Decision:** Implemented an interactive 5-paradigm sandbox demonstrating Exponential Backoff with Decorrelated Jitter ($sleep = \min(cap, random(base, sleep \cdot 3))$), Non-Blocking Staggered Kafka Delay Topics (10s, 1m, 5m graduated escalation), Poison Pill Quarantine & Dead-Letter Parking Lot with sub-2ms bypass for deserialization errors, Idempotent Batch DLQ Replay with Circuit Guard and Redis leases, and Causal Watermarking Reconciliation preventing delayed events from corrupting current aggregate states.
+* **Blast Radius:** Mounted in `ArchitectureLab.tsx` under `#architecture-dlq-retry`; integrated into `InteractiveCli.tsx` with `dlq`, `retry`, `poisonpill` commands and `[ $ dlq ]` quick chip; indexed in `index.html` Sub-Section 22 and `public/chat/index.json`. Verified in test 26 of `tests/portfolio.test.mjs`.
+
+

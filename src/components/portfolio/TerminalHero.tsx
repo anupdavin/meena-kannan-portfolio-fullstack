@@ -30,7 +30,8 @@ import {
   GitFork,
   GitMerge,
   Search,
-  History
+  History,
+  AlertOctagon
 } from 'lucide-react'
 import HeroArchitectureTopology from '@/components/architecture/HeroArchitectureTopology'
 
@@ -192,6 +193,7 @@ const ARCHITECTURE_ENGINES = [
   { id: 'architecture-distributed-sagas', label: 'Sagas & CDC', badge: 'Temporal Saga', icon: GitMerge, border: 'border-cyan-500/40 text-cyan-300 hover:bg-cyan-500/10' },
   { id: 'architecture-distributed-cache', label: 'Cache Stampede', badge: 'XFetch Mutex', icon: Database, border: 'border-cyan-500/40 text-cyan-300 hover:bg-cyan-500/10' },
   { id: 'architecture-event-sourcing', label: 'Event Sourcing', badge: 'CQRS Replay', icon: History, border: 'border-amber-500/40 text-amber-300 hover:bg-amber-500/10' },
+  { id: 'architecture-dlq-retry', label: 'DLQ Retries', badge: 'Poison Pill DLQ', icon: AlertOctagon, border: 'border-rose-500/40 text-rose-300 hover:bg-rose-500/10' },
 ]
 
 export default function TerminalHero() {
@@ -432,7 +434,7 @@ export default function TerminalHero() {
             <div className="flex items-center justify-between text-[11px] font-mono">
               <span className="text-slate-300 font-bold uppercase tracking-wider flex items-center gap-1.5">
                 <span className="w-2 h-2 rounded-full bg-cyan-400 animate-pulse" />
-                21 Interactive Architecture Engines
+                22 Interactive Architecture Engines
               </span>
               <span className="text-slate-500 text-[10px]">Direct Fast Jump &darr;</span>
             </div>

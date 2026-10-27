@@ -214,5 +214,11 @@
     "title": "Distributed Event Sourcing, CQRS & Snapshot Materialization Sandbox",
     "text": "Meena architects enterprise event sourcing, CQRS, and temporal state reconstruction systems across 5 paradigms: (1) Append-Only Event Store: UUIDv7 chronological streams guarded by monotonic version checks and optimistic concurrency control (OCC) guaranteeing complete SOC2 and PCI-DSS immutable auditability, (2) Point-in-Time State Reconstruction: Deterministic pure functional event folding State_t = foldl(applyEvent, InitialState, Events[0..t]) enabling time-travel debugging and temporal audits in sub-22ms, (3) Snapshot Materialization Engine: Periodic checkpoint snapshots every 100 events cutting aggregate hydration latency by 99% from 180ms down to 1.8ms, (4) CQRS Read Projections via Debezium CDC: Transactional outbox event streaming into Kafka partition keys with idempotent projection consumers maintaining sub-1.2ms GET read views in Elasticsearch and PostgreSQL, and (5) Event Schema Evolution with Upcasters: In-flight deterministic JSON transformation chains (V1 to V2) during deserialization avoiding destructive database table migrations.",
     "url": "#architecture-event-sourcing"
+  },
+  {
+    "id": "distributed-dlq-retries",
+    "title": "Distributed Dead-Letter Queue (DLQ) & Non-Blocking Retry Matrix Sandbox",
+    "text": "Meena architects enterprise dead-letter queue (DLQ) and non-blocking retry engines across 5 paradigms: (1) Exponential Backoff with Decorrelated Jitter: Non-harmonic delay scaling sleep = min(cap, random(base, sleep * 3)) breaking thundering herd retry harmonics, (2) Non-Blocking Staggered Retry Topics: Multi-tier Kafka delay queues (orders.retry.10s, 1m, 5m) ensuring zero head-of-line blocking on primary 15,000 TPS event streams, (3) Poison Pill Quarantine & Dead-Letter Parking Lot: Instant sub-2ms bypass to quarantine database for non-retryable deserialization and schema corruptions with SRE alerting, (4) Idempotent DLQ Replay with Circuit Guard: Rate-limited 250 msg/s re-injection guarded by Redis idempotency locks and automated circuit breaker trips if error rates exceed 5%, and (5) Out-of-Order DLQ Reconciliation: Causal watermarking and state rebasing preventing obsolete replayed events from overwriting newer aggregate states.",
+    "url": "#architecture-dlq-retry"
   }
 ]

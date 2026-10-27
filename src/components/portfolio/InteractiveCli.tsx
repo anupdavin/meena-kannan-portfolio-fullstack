@@ -21,6 +21,7 @@ import { TRAFFIC_PRIORITY_MODELS } from '@/data/trafficPriority'
 import { DISTRIBUTED_SAGA_MODELS } from '@/data/distributedSagas'
 import { DISTRIBUTED_CACHE_MODELS } from '@/data/distributedCache'
 import { EVENT_SOURCING_MODELS } from '@/data/eventSourcing'
+import { DLQ_RETRY_MODELS } from '@/data/dlqRetryModels'
 import { EXECUTIVE_BRIEFING } from '@/data/executiveBriefing'
 
 interface HistoryEntry {
@@ -122,6 +123,11 @@ const AVAILABLE_COMMANDS = [
   'snapshot',
   'replay',
   'upcaster',
+  'dlq',
+  'retry',
+  'poisonpill',
+  'backoffjitter',
+  'parkinglot',
   'adr',
   'decisions',
   'tradeoffs',
@@ -175,6 +181,7 @@ const QUICK_CHIPS = [
   { label: '[ $ sagas ]', cmd: 'sagas' },
   { label: '[ $ cache ]', cmd: 'cache' },
   { label: '[ $ eventsourcing ]', cmd: 'eventsourcing' },
+  { label: '[ $ dlq ]', cmd: 'dlq' },
   { label: '[ $ find kafka ]', cmd: 'find kafka' },
   { label: '[ $ tradeoffs ]', cmd: 'tradeoffs' },
   { label: '[ $ adr ]', cmd: 'adr' },
@@ -214,6 +221,7 @@ const COMMAND_HELP = [
   '  sagas           - Inspect distributed Saga orchestration, choreography & compensation (or "sagas <id>")',
   '  cache           - Inspect distributed cache stampede protection & mutex leasing (or "cache <id>")',
   '  eventsourcing   - Inspect distributed event sourcing, CQRS & snapshotting (or "eventsourcing <id>")',
+  '  dlq             - Inspect dead-letter queue, poison-pill quarantine & retries (or "dlq <id>")',
   '  find <query>    - Search cross-cutting architecture systems, ADRs, AI codex & trade-offs',
   '  tradeoffs       - Evaluate system design decision trade-offs (or "compare <topic>")',
   '  stats           - View production performance & impact metrics (99.99% SLA)',
@@ -1135,6 +1143,19 @@ export default function InteractiveCli() {
           ]
           break
         }
+        if (sub === 'dlq' || sub === 'retry' || sub === 'poisonpill' || sub === 'backoffjitter' || sub === 'parkinglot' || args.some(a => a.toLowerCase().includes('dlq') || a.toLowerCase().includes('retry') || a.toLowerCase().includes('poison'))) {
+          output = [
+            'Routing to Distributed Dead-Letter Queue (DLQ) & Non-Blocking Retry Matrix (#architecture-dlq-retry):',
+            '  1. Decorrelated Jitter     : Non-harmonic backoff scaling sleep = min(cap, random(base, sleep * 3))',
+            '  2. Staggered Delay Topics  : Asynchronous 10s, 1m, 5m Kafka delay tiers eliminating head-of-line blocking',
+            '  3. Poison Pill Quarantine  : Instant sub-2ms bypass to parking lot for non-retryable schema errors',
+            '  4. Idempotent DLQ Replay   : Rate-limited 250 msg/s re-injection guarded by circuit breaker and Redis locks',
+            '  5. Causal Reconciliation   : Causal watermarking preventing delayed events from overwriting modern state',
+            '--------------------------------------------------------------------------------',
+            'Interactive Sandbox: Live in #architecture-dlq-retry with poison-pill injector and replay stepper.'
+          ]
+          break
+        }
         output = [
           'ByteByteGo Interactive Architecture Lab Navigator:',
           '--------------------------------------------------------------------------------',
@@ -1160,6 +1181,7 @@ export default function InteractiveCli() {
           '  [ 19 ] "architecture sagas"   : Distributed Sagas & Compensations (#architecture-distributed-sagas)',
           '  [ 20 ] "architecture cache"   : Distributed Cache Stampede & Coherence (#architecture-distributed-cache)',
           '  [ 21 ] "architecture eventsourcing": Distributed Event Sourcing & CQRS (#architecture-event-sourcing)',
+          '  [ 22 ] "architecture dlq"     : Dead-Letter Queue & Retry Matrix (#architecture-dlq-retry)',
           '--------------------------------------------------------------------------------',
           'Clean Architecture Principles Enforced:',
           '  + Domain Isolation     : Core business domains decouple from libraries and vendor SDKs',
@@ -2368,6 +2390,69 @@ export default function InteractiveCli() {
         ]
         break
       }
+      case 'dlq':
+      case 'retry':
+      case 'poisonpill':
+      case 'backoffjitter':
+      case 'parkinglot': {
+        const target = args[0]?.toLowerCase().trim()
+        if (target) {
+          const matched = DLQ_RETRY_MODELS.find(m =>
+            m.id === target ||
+            m.id.includes(target) ||
+            m.name.toLowerCase().includes(target) ||
+            m.badge.toLowerCase().includes(target) ||
+            (target === '1' && m.id === 'exponential-decorrelated-jitter') ||
+            (target === '2' && m.id === 'staggered-retry-topics') ||
+            (target === '3' && m.id === 'poison-pill-quarantine') ||
+            (target === '4' && m.id === 'idempotent-dlq-replay-stepper') ||
+            (target === '5' && m.id === 'out-of-order-dlq-reconciliation')
+          )
+          if (matched) {
+            output = [
+              '--------------------------------------------------------------------------------',
+              `DLQ & Retry Model: ${matched.name} [${matched.badge}]`,
+              '--------------------------------------------------------------------------------',
+              `Core Paradigm       : ${matched.paradigm}`,
+              `Algorithm Formula   : ${matched.algorithmFormula}`,
+              `Recovery SLA        : ${matched.recoveryLatency}`,
+              `Poison Pill Defense : ${matched.poisonPillIsolation}`,
+              `HoL Blocking Guard  : ${matched.headOfLineBlockingDefense}`,
+              '--------------------------------------------------------------------------------',
+              'WORKFLOW PHASES & INVARIANTS:',
+              ...matched.workflowPhases.map(p =>
+                `  * [${p.name}] :: ${p.description} -> Invariant: ${p.invariants}`
+              ),
+              '--------------------------------------------------------------------------------',
+              'PRODUCTION OUTCOMES & INVARIANTS:',
+              ...Object.entries(matched.productionOutcomes).map(([k, v]) => `  + ${k}: ${v}`),
+              '',
+              `Architectural Invariant: "${matched.architecturalInvariant}"`,
+              '--------------------------------------------------------------------------------',
+              'Full live interactive poison pill and retry simulator in #architecture-dlq-retry.'
+            ]
+            break
+          }
+        }
+
+        output = [
+          'Distributed Dead-Letter Queue (DLQ) & Non-Blocking Retry Matrix Sandbox:',
+          '--------------------------------------------------------------------------------',
+          'Explore 5 enterprise fault isolation and poison-pill retry architectures:',
+          '',
+          ...DLQ_RETRY_MODELS.flatMap((m, idx) => [
+            `${idx + 1}. [ ${m.id} ] : ${m.name} (${m.badge})`,
+            `   Paradigm   : ${m.paradigm}`,
+            `   Recovery   : ${m.recoveryLatency.split(';')[0]}`,
+            `   Isolation  : ${m.poisonPillIsolation.split(';')[0]}`,
+            `   Deep Dive  : "dlq ${idx + 1}" or "dlq ${m.id.split('-')[0]}" (e.g. "dlq jitter", "dlq staggered", "dlq poison", "dlq replay", "dlq reconciliation")`,
+            ''
+          ]),
+          '--------------------------------------------------------------------------------',
+          'Tip: Run "dlq <id>" (e.g. "dlq 1" or "dlq poison") to inspect backoff algorithms and quarantine rules.'
+        ]
+        break
+      }
       case 'find':
       case 'search': {
         const query = args.join(' ').toLowerCase().trim()
@@ -2822,6 +2907,29 @@ export default function InteractiveCli() {
               `  Paradigm   : ${e.paradigm} (${e.badge})`,
               `  Replay SLA : ${e.replayEfficiency.split(';')[0]}`,
               `  Anchor     : #architecture-event-sourcing`,
+              ''
+            )
+          }
+        })
+
+        // 22. Search Distributed DLQ & Retries
+        DLQ_RETRY_MODELS.forEach(d => {
+          if (
+            d.name.toLowerCase().includes(query) ||
+            d.id.toLowerCase().includes(query) ||
+            d.paradigm.toLowerCase().includes(query) ||
+            d.badge.toLowerCase().includes(query) ||
+            d.algorithmFormula.toLowerCase().includes(query) ||
+            d.recoveryLatency.toLowerCase().includes(query) ||
+            d.poisonPillIsolation.toLowerCase().includes(query) ||
+            d.headOfLineBlockingDefense.toLowerCase().includes(query) ||
+            d.architecturalInvariant.toLowerCase().includes(query)
+          ) {
+            results.push(
+              `[DLQ & Retries] ${d.name}`,
+              `  Paradigm   : ${d.paradigm} (${d.badge})`,
+              `  Recovery   : ${d.recoveryLatency.split(';')[0]}`,
+              `  Anchor     : #architecture-dlq-retry`,
               ''
             )
           }

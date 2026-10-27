@@ -1312,6 +1312,43 @@ describe('Production Architectural Decision Records (ADR) & CLI Integration', ()
     assert.ok(indexHtml.includes('id="architecture-event-sourcing"'), 'index.html must include #architecture-event-sourcing landmark');
     assert.ok(!/[\u2013\u2014]/.test(indexHtml), 'index.html must contain zero em/en-dashes');
   });
+
+  test('DlqRetrySandbox and dlqRetryModels.ts define distributed dead-letter queue, poison-pill quarantine and retries with CLI integration', () => {
+    const dlqDataPath = path.join(rootDir, 'src', 'data', 'dlqRetryModels.ts');
+    assert.ok(fs.existsSync(dlqDataPath), 'dlqRetryModels.ts must exist');
+    const dlqDataCode = fs.readFileSync(dlqDataPath, 'utf8');
+    assert.ok(dlqDataCode.includes('exponential-decorrelated-jitter'), 'Must define exponential-decorrelated-jitter model');
+    assert.ok(dlqDataCode.includes('staggered-retry-topics'), 'Must define staggered-retry-topics model');
+    assert.ok(dlqDataCode.includes('poison-pill-quarantine'), 'Must define poison-pill-quarantine model');
+    assert.ok(dlqDataCode.includes('idempotent-dlq-replay-stepper'), 'Must define idempotent-dlq-replay-stepper model');
+    assert.ok(dlqDataCode.includes('out-of-order-dlq-reconciliation'), 'Must define out-of-order-dlq-reconciliation model');
+    assert.ok(!/[\u2013\u2014]/.test(dlqDataCode), 'dlqRetryModels.ts must contain zero em/en-dashes');
+
+    const componentPath = path.join(rootDir, 'src', 'components', 'architecture', 'DlqRetrySandbox.tsx');
+    assert.ok(fs.existsSync(componentPath), 'DlqRetrySandbox.tsx must exist');
+    const compCode = fs.readFileSync(componentPath, 'utf8');
+    assert.ok(compCode.includes('copyRfcReport'), 'DlqRetrySandbox must support 1-click RFC copy');
+    assert.ok(compCode.includes('DLQ_RETRY_MODELS'), 'DlqRetrySandbox must render DLQ_RETRY_MODELS');
+    assert.ok(!/[\u2013\u2014]/.test(compCode), 'DlqRetrySandbox.tsx must contain zero em/en-dashes');
+
+    const labCode = fs.readFileSync(path.join(rootDir, 'src', 'components', 'portfolio', 'ArchitectureLab.tsx'), 'utf8');
+    assert.ok(labCode.includes('DlqRetrySandbox'), 'ArchitectureLab must mount DlqRetrySandbox');
+    assert.ok(labCode.includes('id="architecture-dlq-retry"'), 'ArchitectureLab must define anchor #architecture-dlq-retry');
+
+    const cliCode = fs.readFileSync(path.join(rootDir, 'src', 'components', 'portfolio', 'InteractiveCli.tsx'), 'utf8');
+    assert.ok(cliCode.includes("'dlq'"), "InteractiveCli must support 'dlq' command");
+    assert.ok(cliCode.includes('[ $ dlq ]'), "InteractiveCli must include '[ $ dlq ]' quick chip");
+    assert.ok(cliCode.includes('DLQ_RETRY_MODELS'), 'InteractiveCli must search across DLQ_RETRY_MODELS');
+    assert.ok(!/[\u2013\u2014]/.test(cliCode), 'InteractiveCli.tsx must contain zero em/en-dashes');
+
+    const chatIndex = fs.readFileSync(path.join(rootDir, 'public', 'chat', 'index.json'), 'utf8');
+    assert.ok(chatIndex.includes('distributed-dlq-retries'), 'public/chat/index.json must index distributed-dlq-retries');
+    assert.ok(!/[\u2013\u2014]/.test(chatIndex), 'public/chat/index.json must contain zero em/en-dashes');
+
+    const indexHtml = fs.readFileSync(path.join(rootDir, 'index.html'), 'utf8');
+    assert.ok(indexHtml.includes('id="architecture-dlq-retry"'), 'index.html must include #architecture-dlq-retry landmark');
+    assert.ok(!/[\u2013\u2014]/.test(indexHtml), 'index.html must contain zero em/en-dashes');
+  });
 });
 
 

@@ -659,6 +659,16 @@
                 High-throughput immutable event streaming, deterministic temporal state reconstruction, and asynchronous query view materialization across 5 enterprise architectures: Append-Only Event Store (UUIDv7 chronological aggregate streams guarded by optimistic concurrency control monotonic version checks), Point-in-Time State Reconstruction (deterministic pure functional event folding for temporal audit replays and time-travel debugging), Snapshot Materialization (periodic checkpoints every 100 events cutting aggregate hydration latency by 99% from 180ms to 1.8ms), CQRS Read Projections via Debezium CDC (asynchronous PostgreSQL WAL tailing streamed into Kafka to maintain polyglot read models in Elasticsearch and PostgreSQL with sub-1.2ms GET queries), and Event Schema Evolution with In-Flight Upcasters (zero-downtime on-the-fly JSON transformations from V1 to V2 without destructive database DDL migrations).
               </p>
             </div>
+
+            <!-- Sub-Section 22: Distributed Dead-Letter Queue (DLQ) & Non-Blocking Retry Matrix Sandbox -->
+            <div id="architecture-dlq-retry" style="background: rgba(9, 14, 24, 0.7); border: 1px solid #1e293b; border-radius: 16px; padding: 1.5rem; margin-top: 1rem;">
+              <h3 style="color: #f43f5e; font-size: 1.25rem; font-weight: bold; margin-bottom: 0.5rem;">
+                Distributed Dead-Letter Queue (DLQ) &amp; Non-Blocking Retry Matrix Sandbox
+              </h3>
+              <p style="color: #94a3b8; font-size: 0.85rem; line-height: 1.6;">
+                High-resilience fault isolation, non-blocking delay scheduling, and poison-pill triage across 5 enterprise architectures: Exponential Backoff with Decorrelated Jitter (non-harmonic delay scaling breaking thundering herd retry harmonics), Non-Blocking Staggered Retry Topics (orders.retry.10s, orders.retry.1m, orders.retry.5m delay queues eliminating head-of-line blocking on primary 15k TPS partitions), Poison Pill Quarantine and Dead-Letter Parking Lot (sub-2ms containment of unparseable JSON and schema mismatches with instant SRE alerting), Idempotent DLQ Message Replay with Circuit Guard (rate-limited 250 msg/s re-injection guarded by Redis idempotency locks and circuit breaker health checks), and Out-of-Order DLQ Event Reconciliation (causal watermarking and state rebasing preventing delayed historical events from corrupting newer aggregate states).
+              </p>
+            </div>
           </section>
 
           <!-- Projects & Interactive Architecture Section Landmark -->

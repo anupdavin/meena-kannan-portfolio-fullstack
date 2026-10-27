@@ -24,6 +24,7 @@ import {
   GitFork,
   GitMerge,
   History,
+  AlertOctagon,
   X
 } from 'lucide-react'
 import ByteByteGoDiagram from '@/components/architecture/ByteByteGoDiagram'
@@ -47,6 +48,7 @@ import TrafficPrioritySandbox from '@/components/architecture/TrafficPrioritySan
 import DistributedSagasSandbox from '@/components/architecture/DistributedSagasSandbox'
 import DistributedCacheSandbox from '@/components/architecture/DistributedCacheSandbox'
 import EventSourcingSandbox from '@/components/architecture/EventSourcingSandbox'
+import DlqRetrySandbox from '@/components/architecture/DlqRetrySandbox'
 import { ARCHITECTURE_SYSTEMS } from '@/data/architectureSystems'
 import { ARCHITECTURAL_DECISIONS } from '@/data/architecturalDecisions'
 import { ARCHITECTURAL_TRADEOFFS } from '@/data/architecturalTradeoffs'
@@ -67,6 +69,7 @@ import { TRAFFIC_PRIORITY_MODELS } from '@/data/trafficPriority'
 import { DISTRIBUTED_SAGA_MODELS } from '@/data/distributedSagas'
 import { DISTRIBUTED_CACHE_MODELS } from '@/data/distributedCache'
 import { EVENT_SOURCING_MODELS } from '@/data/eventSourcing'
+import { DLQ_RETRY_MODELS } from '@/data/dlqRetryModels'
 
 const AI_TERMS_SUMMARY = [
   { id: 'agentic-ai', title: 'Agentic AI', text: 'Perception-action loop, DAG memory, tool execution, LangGraph' },
@@ -105,6 +108,7 @@ export default function ArchitectureLab() {
         sagas: 5,
         cache: 5,
         eventsourcing: 5,
+        dlq: 5,
         isActive: false
       }
     }
@@ -319,8 +323,20 @@ export default function ArchitectureLab() {
       e.architecturalInvariant.toLowerCase().includes(q)
     ).length
 
+    const dlqCount = DLQ_RETRY_MODELS.filter(d =>
+      d.name.toLowerCase().includes(q) ||
+      d.id.toLowerCase().includes(q) ||
+      d.paradigm.toLowerCase().includes(q) ||
+      d.badge.toLowerCase().includes(q) ||
+      d.algorithmFormula.toLowerCase().includes(q) ||
+      d.recoveryLatency.toLowerCase().includes(q) ||
+      d.poisonPillIsolation.toLowerCase().includes(q) ||
+      d.headOfLineBlockingDefense.toLowerCase().includes(q) ||
+      d.architecturalInvariant.toLowerCase().includes(q)
+    ).length
+
     return {
-      total: workbenchCount + aiCount + adrCount + tradeoffCount + evolutionCount + chaosCount + gatewayCount + traceCount + kafkaCount + ratelimitCount + multiregionCount + shardingCount + cdnCount + circuitBreakerCount + concurrencyCount + raftCount + vectorCount + priorityCount + sagasCount + cacheCount + eventSourcingCount,
+      total: workbenchCount + aiCount + adrCount + tradeoffCount + evolutionCount + chaosCount + gatewayCount + traceCount + kafkaCount + ratelimitCount + multiregionCount + shardingCount + cdnCount + circuitBreakerCount + concurrencyCount + raftCount + vectorCount + priorityCount + sagasCount + cacheCount + eventSourcingCount + dlqCount,
       workbench: workbenchCount,
       aiCodex: aiCount,
       adr: adrCount,
@@ -342,6 +358,7 @@ export default function ArchitectureLab() {
       sagas: sagasCount,
       cache: cacheCount,
       eventsourcing: eventSourcingCount,
+      dlq: dlqCount,
       isActive: true
     }
   }, [searchQuery])
@@ -685,6 +702,17 @@ export default function ArchitectureLab() {
             <History className="w-3.5 h-3.5 text-amber-400" />
             <span>Event Sourcing &amp; CQRS ({matchStats.eventsourcing})</span>
           </a>
+          <a 
+            href="#architecture-dlq-retry"
+            className={`px-3 py-1.5 rounded-lg border transition-all flex items-center gap-1.5 cursor-pointer ${
+              matchStats.isActive && matchStats.dlq > 0
+                ? 'bg-rose-500/10 border-rose-500/50 text-rose-400 shadow-[0_0_10px_rgba(244,63,94,0.15)] font-bold'
+                : 'bg-slate-900 border-slate-800 hover:border-rose-500/50 hover:text-rose-400 text-slate-300'
+            }`}
+          >
+            <AlertOctagon className="w-3.5 h-3.5 text-rose-400" />
+            <span>DLQ &amp; Retries ({matchStats.dlq})</span>
+          </a>
         </div>
       </div>
 
@@ -942,6 +970,18 @@ export default function ArchitectureLab() {
         className="scroll-mt-24"
       >
         <EventSourcingSandbox />
+      </motion.div>
+
+      {/* 2.25. Distributed Dead-Letter Queue (DLQ) & Non-Blocking Retry Matrix Sandbox */}
+      <motion.div
+        id="architecture-dlq-retry"
+        initial={{ opacity: 0, y: 25 }}
+        whileInView={{ opacity: 1, y: 0 }}
+        viewport={{ once: true }}
+        transition={{ duration: 0.6, delay: 1.10 }}
+        className="scroll-mt-24"
+      >
+        <DlqRetrySandbox />
       </motion.div>
 
       {/* 3. Architectural Design Pillars Strip */}
