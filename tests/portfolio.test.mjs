@@ -165,6 +165,10 @@ describe('ByteByteGo Architecture & Stock Image Elimination Verification', () =>
   test('AboutTerminal.tsx embeds Agentic AI Orchestrator-Worker Workflow Diagram in ByteByteGo style', () => {
     const aboutCode = fs.readFileSync(path.join(rootDir, 'src', 'components', 'portfolio', 'AboutTerminal.tsx'), 'utf8');
     assert.ok(aboutCode.includes('AgenticWorkflowDiagram') || aboutCode.includes('CleanArchitectureRadar'), 'AboutTerminal must embed AgenticWorkflowDiagram');
+    assert.ok(aboutCode.includes('CleanArchitectureSpec.java'), 'AboutTerminal must include CleanArchitectureSpec.java');
+    assert.ok(aboutCode.includes('SagaPaymentCoordinator.java'), 'AboutTerminal must include SagaPaymentCoordinator.java');
+    assert.ok(aboutCode.includes('TenantIsolationFilter.java'), 'AboutTerminal must include TenantIsolationFilter.java');
+    assert.ok(aboutCode.includes('role="tablist"'), 'AboutTerminal must provide accessible role="tablist"');
     
     const diagramCode = fs.readFileSync(path.join(rootDir, 'src', 'components', 'architecture', 'AgenticWorkflowDiagram.tsx'), 'utf8');
     assert.ok(diagramCode.includes('AGENTIC AI ARCHITECTURE BLUEPRINT'), 'Must define Agentic AI Architecture Blueprint');

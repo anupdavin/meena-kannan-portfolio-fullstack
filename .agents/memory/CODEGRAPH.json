@@ -1,6 +1,6 @@
 {
   "version": "1.0.0",
-  "generatedAt": "2026-10-27T07:21:03.784Z",
+  "generatedAt": "2026-10-27T07:33:30.855Z",
   "nodes": {
     "src/components/architecture/AdrExplorer.tsx": {
       "file": "src/components/architecture/AdrExplorer.tsx",
@@ -196,7 +196,7 @@
       "exports": [
         "AboutTerminal"
       ],
-      "loc": 225
+      "loc": 303
     },
     "src/components/portfolio/ArchitectureLab.tsx": {
       "file": "src/components/portfolio/ArchitectureLab.tsx",

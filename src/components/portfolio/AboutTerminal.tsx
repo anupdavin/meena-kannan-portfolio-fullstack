@@ -40,11 +40,12 @@ const CORE_PILLARS = [
   }
 ]
 
-export default function AboutTerminal() {
-  const [copied, setCopied] = useState(false)
-
-  const copyCode = () => {
-    const codeSnippet = `package dev.meenakannan.core.architecture;
+const CODE_SPECIFICATIONS = [
+  {
+    fileName: 'CleanArchitectureSpec.java',
+    pattern: 'Hexagonal / Virtual Threads',
+    language: 'java',
+    code: `package dev.meenakannan.core.architecture;
 
 /**
  * Domain Core Architecture Specification: Ports & Adapters (Hexagonal)
@@ -76,7 +77,93 @@ public final class CleanArchitectureSpec {
         });
     }
 }`
-    navigator.clipboard.writeText(codeSnippet)
+  },
+  {
+    fileName: 'SagaPaymentCoordinator.java',
+    pattern: 'Choreographed Saga & Rollback',
+    language: 'java',
+    code: `package dev.meenakannan.distributed.saga;
+
+/**
+ * Choreographed Saga Coordinator: Multi-Stage Distributed Settlement
+ * Non-blocking rollback handler with idempotency and dead-letter safety.
+ */
+@SagaParticipant(topic = "financial.settlement.events", partitionKey = "accountId")
+public final class SagaPaymentCoordinator {
+
+    private final KafkaTemplate<String, DomainEvent> eventBus;
+    private final PaymentLedgerPort ledgerPort;
+    private final CircuitBreaker circuitBreaker;
+
+    public CompletableFuture<SagaOutcome> processStage(PaymentIntentEvent intent) {
+        return circuitBreaker.executeSupplier(() -> {
+            try {
+                // Execute local ACID ledger balance deduction
+                var transaction = ledgerPort.deductWithLease(intent.accountId(), intent.amount());
+                eventBus.send("financial.settlement.cleared", intent.orderId(), transaction.asEvent());
+                return CompletableFuture.completedFuture(SagaOutcome.COMMITTED);
+            } catch (InsufficientFundsException | LockTimeoutException ex) {
+                // Trigger non-blocking compensating compensation
+                emitCompensatingRollback(intent, ex.getReason());
+                return CompletableFuture.completedFuture(SagaOutcome.COMPENSATED);
+            }
+        });
+    }
+
+    private void emitCompensatingRollback(PaymentIntentEvent intent, FailureReason reason) {
+        var compensation = new SagaRollbackEvent(intent.orderId(), intent.accountId(), reason);
+        eventBus.send("financial.settlement.failed", intent.orderId(), compensation);
+    }
+}`
+  },
+  {
+    fileName: 'TenantIsolationFilter.java',
+    pattern: 'PostgreSQL RLS & JWT Claims',
+    language: 'java',
+    code: `package dev.meenakannan.security.multitenancy;
+
+/**
+ * Enterprise Multi-Tenant Isolation Filter: PostgreSQL Row-Level Security (RLS)
+ * Extracts cryptographically signed claims and enforces tenant session isolation.
+ */
+@Component
+@Order(Ordered.HIGHEST_PRECEDENCE)
+public final class TenantIsolationFilter extends OncePerRequestFilter {
+
+    private final JwtTokenValidator tokenValidator;
+    private final DataSource dataSource;
+
+    @Override
+    protected void doFilterInternal(HttpServletRequest req, HttpServletResponse res, FilterChain chain)
+            throws ServletException, IOException {
+
+        var authHeader = req.getHeader("Authorization");
+        var tenantClaims = tokenValidator.extractVerifiedTenant(authHeader);
+
+        // Bind tenant identity to PostgreSQL RLS session context
+        try (var connection = dataSource.getConnection();
+             var statement = connection.prepareStatement("SET LOCAL app.current_tenant_id = ?")) {
+            statement.setString(1, tenantClaims.tenantId().value());
+            statement.execute();
+
+            TenantContextHolder.setContext(tenantClaims);
+            chain.doFilter(req, res);
+        } finally {
+            TenantContextHolder.clear();
+        }
+    }
+}`
+  }
+]
+
+export default function AboutTerminal() {
+  const [activeTab, setActiveTab] = useState(0)
+  const [copied, setCopied] = useState(false)
+
+  const activeSpec = CODE_SPECIFICATIONS[activeTab]
+
+  const copyCode = () => {
+    navigator.clipboard.writeText(activeSpec.code)
     setCopied(true)
     setTimeout(() => setCopied(false), 2000)
   }
@@ -113,54 +200,45 @@ public final class CleanArchitectureSpec {
           transition={{ duration: 0.6 }} 
           className="lg:col-span-6 rounded-2xl border border-slate-800 bg-[#070b14] overflow-hidden shadow-2xl min-w-0 w-full"
         >
-          <div className="flex items-center justify-between px-3.5 py-2.5 sm:px-4 sm:py-3 bg-[#0d1424] border-b border-slate-800">
-            <span className="text-xs font-mono text-emerald-400 flex items-center gap-2">
-              <Code className="w-4 h-4" />
-              CleanArchitectureSpec.java
-            </span>
-            <button 
-              onClick={copyCode}
-              aria-label="Copy code snippet"
-              className="text-xs font-mono text-slate-400 hover:text-white flex items-center gap-1.5 px-2 py-1 rounded hover:bg-slate-800 transition-colors cursor-pointer"
-            >
-              {copied ? <Check className="w-3.5 h-3.5 text-emerald-400" /> : <Copy className="w-3.5 h-3.5" />}
-              <span>{copied ? 'Copied' : 'Copy'}</span>
-            </button>
+          {/* Tabs Header */}
+          <div className="flex flex-col sm:flex-row sm:items-center justify-between bg-[#0d1424] border-b border-slate-800 px-2 sm:px-3 py-2 gap-2">
+            <div className="flex items-center gap-1 overflow-x-auto touch-scroll" role="tablist" aria-label="Architecture code specifications">
+              {CODE_SPECIFICATIONS.map((spec, idx) => (
+                <button
+                  key={spec.fileName}
+                  role="tab"
+                  aria-selected={activeTab === idx}
+                  tabIndex={0}
+                  onClick={() => setActiveTab(idx)}
+                  className={`px-2.5 py-1.5 rounded-lg text-xs font-mono flex items-center gap-1.5 whitespace-nowrap transition-all ${
+                    activeTab === idx
+                      ? 'bg-slate-900 text-emerald-400 border border-emerald-500/40 font-bold'
+                      : 'text-slate-400 hover:text-slate-200 hover:bg-slate-900/40 border border-transparent'
+                  }`}
+                >
+                  <Code className="w-3.5 h-3.5" />
+                  <span>{spec.fileName}</span>
+                </button>
+              ))}
+            </div>
+
+            <div className="flex items-center justify-between sm:justify-end gap-2 shrink-0 px-1">
+              <span className="hidden md:inline font-mono text-[11px] text-slate-500 bg-slate-950 border border-slate-800 px-2 py-0.5 rounded">
+                {activeSpec.pattern}
+              </span>
+              <button 
+                onClick={copyCode}
+                aria-label={`Copy ${activeSpec.fileName} code snippet`}
+                className="text-xs font-mono text-slate-400 hover:text-white flex items-center gap-1.5 px-2.5 py-1 rounded-md bg-slate-900/60 hover:bg-slate-800 border border-slate-800 transition-colors cursor-pointer"
+              >
+                {copied ? <Check className="w-3.5 h-3.5 text-emerald-400" /> : <Copy className="w-3.5 h-3.5" />}
+                <span>{copied ? 'Copied' : 'Copy'}</span>
+              </button>
+            </div>
           </div>
 
-          <pre className="p-3.5 sm:p-5 text-[11px] sm:text-xs font-mono text-emerald-300/90 leading-relaxed overflow-x-auto touch-scroll max-w-full">
-{`package dev.meenakannan.core.architecture;
-
-/**
- * Domain Core Architecture Specification: Ports & Adapters (Hexagonal)
- * Zero framework coupling in core domain layer. Deterministic & testable.
- */
-@DomainAggregate(boundedContext = "EnterpriseCore", version = "3.2.0")
-public final class CleanArchitectureSpec {
-
-    // Primary Port: Ingress transaction execution boundary
-    public record TransactionCommand(TenantId tenantId, OrderId orderId, Money amount) {}
-
-    // Secondary Port: Distributed Event Outbox publication
-    public interface OutboxPublisherPort {
-        void emitWithGuaranteedDelivery(DomainEvent event, IdempotencyKey key);
-    }
-
-    // Secondary Port: Sharded ACID Storage with Row-Level Security
-    public interface TenantPersistencePort {
-        Optional<TenantContext> loadWithIsolation(TenantId tenantId);
-        void commitTransactionWithOutbox(TenantContext ctx, OutboxRecord record);
-    }
-
-    // Ingress use-case orchestrator executed on Java 21 Virtual Threads
-    public TransactionReceipt orchestrate(TransactionCommand cmd, OutboxPublisherPort outbox) {
-        return VirtualThreadDispatcher.execute(() -> {
-            var validatedContext = validateDomainInvariants(cmd);
-            outbox.emitWithGuaranteedDelivery(new OrderInitiatedEvent(cmd), IdempotencyKey.generate());
-            return TransactionReceipt.approved(cmd.orderId(), LatencyBudget.sub80ms());
-        });
-    }
-}`}
+          <pre className="p-3.5 sm:p-5 text-[11px] sm:text-xs font-mono text-emerald-300/90 leading-relaxed overflow-x-auto touch-scroll max-w-full h-[360px]">
+            {activeSpec.code}
           </pre>
         </motion.div>
 

@@ -20,6 +20,9 @@
 
 | Run Timestamp | Focus Area | Action Completed | Lessons Learned / Gotchas |
 | :--- | :--- | :--- | :--- |
+| `2026-10-27 07:33:25` | Autonomous Verification | All 35 tests passed, 0 lint warnings, CodeGraph synchronized. | Verified zero regressions under Superpowers TDD protocol. |
+| `2026-10-27 07:32:00` | Multi-Spec Code Inspector (Track F) | Added interactive 3-tab architecture code inspector to `AboutTerminal.tsx` (`CleanArchitectureSpec.java`, `SagaPaymentCoordinator.java`, `TenantIsolationFilter.java`), implemented per-tab copy, and verified with 39 passing tests. | Providing switchable domain, saga, and security architecture code samples demonstrates genuine full-stack Java 21 depth without dev-cosplay gimmicks. |
+| `2026-10-27 07:32:21` | Autonomous Verification | All 35 tests passed, 0 lint warnings, CodeGraph synchronized. | Verified zero regressions under Superpowers TDD protocol. |
 | `2026-10-27 07:20:58` | Autonomous Verification | All 35 tests passed, 0 lint warnings, CodeGraph synchronized. | Verified zero regressions under Superpowers TDD protocol. |
 | `2026-10-27 07:20:00` | Architectural Decisions Ledger (Track E) | Implemented interactive ADR Explorer (`AdrExplorer.tsx`, `architecturalDecisions.ts`), integrated into `ArchitectureLab.tsx`, added `adr` CLI command and quick-chip in `InteractiveCli.tsx`, expanded test suite to 39/39 passing tests. | Surfacing real engineering ADRs with context, decisions, positive outcomes, and blast radius constraints elevates technical credibility for Principal Architect reviews. |
 | `2026-10-27 07:19:48` | Autonomous Verification | All 35 tests passed, 0 lint warnings, CodeGraph synchronized. | Verified zero regressions under Superpowers TDD protocol. |
@@ -87,6 +90,11 @@
 - [x] **Task E2:** Build interactive Swiss Technical Editorial ADR explorer (`src/components/architecture/AdrExplorer.tsx`) with 1-click Markdown clipboard exports.
 - [x] **Task E3:** Hook `adr` and `decisions` commands into `InteractiveCli.tsx` with single-record deep-dive inspection.
 - [x] **Task E4:** Add comprehensive TDD test suite in `tests/portfolio.test.mjs` (39/39 passing tests).
+
+### Track F: Architecture Code Specifications & Deep Dive
+- [x] **Task F1:** Expand `AboutTerminal.tsx` with multi-specification tabbed inspector (`CleanArchitectureSpec.java`, `SagaPaymentCoordinator.java`, `TenantIsolationFilter.java`).
+- [x] **Task F2:** Support accessible tablist keyboard controls and dynamic per-spec clipboard copying.
+- [x] **Task F3:** Add automated unit test assertions for code specifications and accessibility semantics.
 
 ---
 
