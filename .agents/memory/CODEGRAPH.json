@@ -1,6 +1,6 @@
 {
   "version": "1.0.0",
-  "generatedAt": "2026-10-27T14:37:42.136Z",
+  "generatedAt": "2026-10-27T14:55:07.855Z",
   "nodes": {
     "src/components/architecture/AdrExplorer.tsx": {
       "file": "src/components/architecture/AdrExplorer.tsx",
@@ -169,6 +169,18 @@
       ],
       "loc": 411
     },
+    "src/components/architecture/MultiRegionReplicationSandbox.tsx": {
+      "file": "src/components/architecture/MultiRegionReplicationSandbox.tsx",
+      "imports": [
+        "react",
+        "lucide-react",
+        "@/data/multiRegionReplication"
+      ],
+      "exports": [
+        "MultiRegionReplicationSandbox"
+      ],
+      "loc": 455
+    },
     "src/components/architecture/RateLimiterSandbox.tsx": {
       "file": "src/components/architecture/RateLimiterSandbox.tsx",
       "imports": [
@@ -299,6 +311,7 @@
         "@/components/architecture/DistributedTraceInspector",
         "@/components/architecture/KafkaStreamMonitor",
         "@/components/architecture/RateLimiterSandbox",
+        "@/components/architecture/MultiRegionReplicationSandbox",
         "@/data/architectureSystems",
         "@/data/architecturalDecisions",
         "@/data/architecturalTradeoffs",
@@ -307,12 +320,13 @@
         "@/data/gatewayRoutes",
         "@/data/distributedTraces",
         "@/data/kafkaStreams",
-        "@/data/rateLimitingAlgorithms"
+        "@/data/rateLimitingAlgorithms",
+        "@/data/multiRegionReplication"
       ],
       "exports": [
         "ArchitectureLab"
       ],
-      "loc": 575
+      "loc": 614
     },
     "src/components/portfolio/ContactTerminal.tsx": {
       "file": "src/components/portfolio/ContactTerminal.tsx",
@@ -367,12 +381,13 @@
         "@/data/distributedTraces",
         "@/data/kafkaStreams",
         "@/data/rateLimitingAlgorithms",
+        "@/data/multiRegionReplication",
         "@/data/executiveBriefing"
       ],
       "exports": [
         "InteractiveCli"
       ],
-      "loc": 1910
+      "loc": 2018
     },
     "src/components/portfolio/ProjectsShowcase.tsx": {
       "file": "src/components/portfolio/ProjectsShowcase.tsx",
@@ -424,7 +439,7 @@
       "exports": [
         "TerminalHero"
       ],
-      "loc": 554
+      "loc": 556
     },
     "src/components/ui/badge.tsx": {
       "file": "src/components/ui/badge.tsx",
@@ -593,6 +608,16 @@
       ],
       "loc": 280
     },
+    "src/data/multiRegionReplication.ts": {
+      "file": "src/data/multiRegionReplication.ts",
+      "imports": [],
+      "exports": [
+        "RegionNode",
+        "MultiRegionReplicationStrategy",
+        "MULTI_REGION_STRATEGIES"
+      ],
+      "loc": 305
+    },
     "src/data/rateLimitingAlgorithms.ts": {
       "file": "src/data/rateLimitingAlgorithms.ts",
       "imports": [],
@@ -742,6 +767,7 @@
     "ChaosResilienceMatrix": "src/components/architecture/ChaosResilienceMatrix.tsx",
     "DistributedTraceInspector": "src/components/architecture/DistributedTraceInspector.tsx",
     "KafkaStreamMonitor": "src/components/architecture/KafkaStreamMonitor.tsx",
+    "MultiRegionReplicationSandbox": "src/components/architecture/MultiRegionReplicationSandbox.tsx",
     "RateLimiterSandbox": "src/components/architecture/RateLimiterSandbox.tsx",
     "BoundaryContainerProps": "src/components/architecture/SvgPrimitives.tsx",
     "BoundaryContainer": "src/components/architecture/SvgPrimitives.tsx",
@@ -827,6 +853,9 @@
     "KafkaConsumerGroup": "src/data/kafkaStreams.ts",
     "KafkaTopicStream": "src/data/kafkaStreams.ts",
     "KAFKA_TOPIC_STREAMS": "src/data/kafkaStreams.ts",
+    "RegionNode": "src/data/multiRegionReplication.ts",
+    "MultiRegionReplicationStrategy": "src/data/multiRegionReplication.ts",
+    "MULTI_REGION_STRATEGIES": "src/data/multiRegionReplication.ts",
     "RateLimitingAlgorithm": "src/data/rateLimitingAlgorithms.ts",
     "RATE_LIMITING_ALGORITHMS": "src/data/rateLimitingAlgorithms.ts",
     "Layout": "src/pages/Layout.tsx",

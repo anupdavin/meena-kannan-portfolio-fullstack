@@ -884,6 +884,44 @@ describe('Production Architectural Decision Records (ADR) & CLI Integration', ()
     assert.ok(indexHtml.includes('id="architecture-rate-limiter"'), 'index.html must include #architecture-rate-limiter landmark');
     assert.ok(!/[\u2013\u2014]/.test(indexHtml), 'index.html must contain zero em/en-dashes');
   });
+
+  test('MultiRegionReplicationSandbox and multiRegionReplication.ts define multi-region database topologies with CLI integration', () => {
+    const multiDataPath = path.join(rootDir, 'src', 'data', 'multiRegionReplication.ts');
+    assert.ok(fs.existsSync(multiDataPath), 'multiRegionReplication.ts must exist');
+    const multiDataCode = fs.readFileSync(multiDataPath, 'utf8');
+    assert.ok(multiDataCode.includes('aurora-global'), 'Must define aurora-global strategy');
+    assert.ok(multiDataCode.includes('dynamodb-global'), 'Must define dynamodb-global strategy');
+    assert.ok(multiDataCode.includes('crdt-mesh'), 'Must define crdt-mesh strategy');
+    assert.ok(multiDataCode.includes('raft-consensus'), 'Must define raft-consensus strategy');
+    assert.ok(multiDataCode.includes('kafka-mirrormaker'), 'Must define kafka-mirrormaker strategy');
+    assert.ok(!/[\u2013\u2014]/.test(multiDataCode), 'multiRegionReplication.ts must contain zero em/en-dashes');
+
+    const componentPath = path.join(rootDir, 'src', 'components', 'architecture', 'MultiRegionReplicationSandbox.tsx');
+    assert.ok(fs.existsSync(componentPath), 'MultiRegionReplicationSandbox.tsx must exist');
+    const compCode = fs.readFileSync(componentPath, 'utf8');
+    assert.ok(compCode.includes('handleCopyRfc'), 'MultiRegionReplicationSandbox must support 1-click RFC copy');
+    assert.ok(compCode.includes('MULTI_REGION_STRATEGIES'), 'MultiRegionReplicationSandbox must render MULTI_REGION_STRATEGIES');
+    assert.ok(!/[\u2013\u2014]/.test(compCode), 'MultiRegionReplicationSandbox.tsx must contain zero em/en-dashes');
+
+    const labCode = fs.readFileSync(path.join(rootDir, 'src', 'components', 'portfolio', 'ArchitectureLab.tsx'), 'utf8');
+    assert.ok(labCode.includes('MultiRegionReplicationSandbox'), 'ArchitectureLab must mount MultiRegionReplicationSandbox');
+    assert.ok(labCode.includes('id="architecture-multi-region"'), 'ArchitectureLab must define anchor #architecture-multi-region');
+
+    const cliCode = fs.readFileSync(path.join(rootDir, 'src', 'components', 'portfolio', 'InteractiveCli.tsx'), 'utf8');
+    assert.ok(cliCode.includes("'replication'"), "InteractiveCli must support 'replication' command");
+    assert.ok(cliCode.includes("'multiregion'"), "InteractiveCli must support 'multiregion' command");
+    assert.ok(cliCode.includes('[ $ multiregion ]'), "InteractiveCli must include '[ $ multiregion ]' quick chip");
+    assert.ok(cliCode.includes('MULTI_REGION_STRATEGIES'), 'InteractiveCli must search across MULTI_REGION_STRATEGIES');
+    assert.ok(!/[\u2013\u2014]/.test(cliCode), 'InteractiveCli.tsx must contain zero em/en-dashes');
+
+    const chatIndex = fs.readFileSync(path.join(rootDir, 'public', 'chat', 'index.json'), 'utf8');
+    assert.ok(chatIndex.includes('multi-region-database-replication'), 'public/chat/index.json must index multi-region-database-replication');
+    assert.ok(!/[\u2013\u2014]/.test(chatIndex), 'public/chat/index.json must contain zero em/en-dashes');
+
+    const indexHtml = fs.readFileSync(path.join(rootDir, 'index.html'), 'utf8');
+    assert.ok(indexHtml.includes('id="architecture-multi-region"'), 'index.html must include #architecture-multi-region landmark');
+    assert.ok(!/[\u2013\u2014]/.test(indexHtml), 'index.html must contain zero em/en-dashes');
+  });
 });
 
 

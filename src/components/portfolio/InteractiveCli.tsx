@@ -10,6 +10,7 @@ import { GATEWAY_ROUTES } from '@/data/gatewayRoutes'
 import { DISTRIBUTED_TRACES } from '@/data/distributedTraces'
 import { KAFKA_TOPIC_STREAMS } from '@/data/kafkaStreams'
 import { RATE_LIMITING_ALGORITHMS } from '@/data/rateLimitingAlgorithms'
+import { MULTI_REGION_STRATEGIES } from '@/data/multiRegionReplication'
 import { EXECUTIVE_BRIEFING } from '@/data/executiveBriefing'
 
 interface HistoryEntry {
@@ -60,6 +61,11 @@ const AVAILABLE_COMMANDS = [
   'throttling',
   'tokenbucket',
   'leakybucket',
+  'replication',
+  'multiregion',
+  'crdt',
+  'splitbrain',
+  'aurora',
   'adr',
   'decisions',
   'tradeoffs',
@@ -102,6 +108,7 @@ const QUICK_CHIPS = [
   { label: '[ $ trace ]', cmd: 'trace' },
   { label: '[ $ kafka ]', cmd: 'kafka' },
   { label: '[ $ ratelimit ]', cmd: 'ratelimit' },
+  { label: '[ $ multiregion ]', cmd: 'multiregion' },
   { label: '[ $ find kafka ]', cmd: 'find kafka' },
   { label: '[ $ tradeoffs ]', cmd: 'tradeoffs' },
   { label: '[ $ adr ]', cmd: 'adr' },
@@ -132,6 +139,7 @@ const COMMAND_HELP = [
   '  trace           - Inspect OpenTelemetry distributed traces & span flamegraphs (or "trace <id>")',
   '  kafka           - Inspect Kafka event topics, partition lag & ISR quorums (or "kafka <id>")',
   '  ratelimit       - Evaluate distributed rate limiters & traffic shaping algorithms (or "ratelimit <id>")',
+  '  multiregion     - Inspect multi-region replication topologies & conflict resolution (or "replication <id>")',
   '  find <query>    - Search cross-cutting architecture systems, ADRs, AI codex & trade-offs',
   '  tradeoffs       - Evaluate system design decision trade-offs (or "compare <topic>")',
   '  stats           - View production performance & impact metrics (99.99% SLA)',
@@ -910,6 +918,19 @@ export default function InteractiveCli() {
           ]
           break
         }
+        if (sub === 'replication' || sub === 'multiregion' || sub === 'crdt' || sub === 'splitbrain' || args.some(a => a.toLowerCase().includes('replicat') || a.toLowerCase().includes('region') || a.toLowerCase().includes('crdt'))) {
+          output = [
+            'Routing to Multi-Region Database Replication & Conflict Resolution (#architecture-multi-region):',
+            '  1. Aurora Global Database    : Physical Storage Layer Replication (RPO < 1s, RTO < 1m)',
+            '  2. DynamoDB Global Tables    : Active-Active Multi-Master with Last-Write-Wins (LWW)',
+            '  3. Conflict-Free Data Types  : State-Based CRDTs (PN-Counters, LWW-Set, Monotonic Lattice)',
+            '  4. Raft Consensus Ranges     : Multi-Region Quorum with HLC TrueTime (Strict Serializability)',
+            '  5. Async Eventual CDC Fabric : Debezium + Kafka MirrorMaker 2 (Zero Loop Mirrored Fabric)',
+            '--------------------------------------------------------------------------------',
+            'Interactive Sandbox: Live in #architecture-multi-region with WAN split-brain simulator.'
+          ]
+          break
+        }
         output = [
           'ByteByteGo Interactive Architecture Lab Navigator:',
           '--------------------------------------------------------------------------------',
@@ -924,6 +945,7 @@ export default function InteractiveCli() {
           '  [ 8 ] "architecture trace"     : OpenTelemetry Distributed Tracing (#architecture-distributed-tracing)',
           '  [ 9 ] "architecture kafka"     : Kafka Event Streams & Partition Lag (#architecture-event-streams)',
           '  [ 10 ] "architecture ratelimit": Distributed Rate Limiting Algorithms (#architecture-rate-limiter)',
+          '  [ 11 ] "architecture multiregion": Multi-Region Database Replication (#architecture-multi-region)',
           '--------------------------------------------------------------------------------',
           'Clean Architecture Principles Enforced:',
           '  + Domain Isolation     : Core business domains decouple from libraries and vendor SDKs',
@@ -1423,6 +1445,70 @@ export default function InteractiveCli() {
         ]
         break
       }
+      case 'replication':
+      case 'multiregion':
+      case 'crdt':
+      case 'splitbrain':
+      case 'aurora': {
+        const target = args[0]?.toLowerCase().trim()
+        if (target) {
+          const matched = MULTI_REGION_STRATEGIES.find(m => 
+            m.id === target ||
+            m.id.includes(target) ||
+            m.name.toLowerCase().includes(target) ||
+            m.strategyName.toLowerCase().includes(target) ||
+            (target === '1' && m.id === 'aurora-global') ||
+            (target === '2' && m.id === 'dynamodb-global') ||
+            (target === '3' && m.id === 'crdt-mesh') ||
+            (target === '4' && m.id === 'raft-consensus') ||
+            (target === '5' && m.id === 'kafka-mirrormaker')
+          )
+          if (matched) {
+            output = [
+              '--------------------------------------------------------------------------------',
+              `Multi-Region Strategy: ${matched.name} (${matched.subtitle})`,
+              '--------------------------------------------------------------------------------',
+              `Core Paradigm   : ${matched.strategyName}`,
+              `Topology Model  : ${matched.topology}`,
+              `Consensus Quorum: ${matched.consensusModel}`,
+              `SLA Targets     : RPO: ${matched.rpoTarget} | RTO: ${matched.rtoTarget}`,
+              `Consistency     : ${matched.consistencyLevel}`,
+              `Conflict Rule   : ${matched.conflictResolution}`,
+              `Governing ADR   : ${matched.governingAdr}`,
+              '--------------------------------------------------------------------------------',
+              'GLOBAL REGION TOPOLOGY:',
+              ...matched.regions.map(r => `  * ${r.name} [${r.role.toUpperCase()}] :: Ping: ${r.pingMs}ms | Lag: ${r.replicationLagMs}ms | Conns: ${r.activeConnections}`),
+              '--------------------------------------------------------------------------------',
+              `CONFLICT ARBITRATION SCENARIO: "${matched.conflictScenario.title}"`,
+              `  - Write A (${matched.conflictScenario.writeA.region}): ${matched.conflictScenario.writeA.payload}`,
+              `  - Write B (${matched.conflictScenario.writeB.region}): ${matched.conflictScenario.writeB.payload}`,
+              `  - Rule: ${matched.conflictScenario.resolutionRule}`,
+              `  - Outcome: ${matched.conflictScenario.resolvedOutcome}`,
+              '--------------------------------------------------------------------------------',
+              'Full live cross-region simulator available in #architecture-multi-region.'
+            ]
+            break
+          }
+        }
+
+        output = [
+          'Multi-Region Database Replication & Conflict Resolution Simulator:',
+          '--------------------------------------------------------------------------------',
+          'Explore 5 multi-region replication architectures across global data centers:',
+          '',
+          ...MULTI_REGION_STRATEGIES.flatMap((m, idx) => [
+            `${idx + 1}. [ ${m.id} ] : ${m.name} (${m.subtitle})`,
+            `   Paradigm      : ${m.strategyName} | Consensus: ${m.consensusModel.split(' ')[0]}`,
+            `   SLA Targets   : RPO: ${m.rpoTarget} | RTO: ${m.rtoTarget}`,
+            `   Conflict Model: ${m.conflictResolution.split(' ')[0]} | Consistency: ${m.consistencyLevel.split(' ')[0]}`,
+            `   Deep Dive     : "multiregion ${idx + 1}" or "multiregion ${m.id.split('-')[0]}" (e.g. "multiregion aurora", "multiregion dynamodb", "multiregion crdt", "multiregion raft")`,
+            ''
+          ]),
+          '--------------------------------------------------------------------------------',
+          'Tip: Run "multiregion <id>" (e.g. "multiregion 1" or "multiregion crdt") to inspect conflict arbitration.'
+        ]
+        break
+      }
       case 'find':
       case 'search': {
         const query = args.join(' ').toLowerCase().trim()
@@ -1432,7 +1518,7 @@ export default function InteractiveCli() {
             '--------------------------------------------------------------------------------',
             'Search cross-cutting distributed systems, ADRs, AI paradigms, and trade-offs.',
             'Usage: find <query> (e.g. "find kafka", "find redis", "find mcp", "find saga")',
-            'Available Domains: Systems, ADR Governance, AI Codex, Trade-Off Matrix, Evolution Diffs, Chaos Drills, API Gateway, Distributed Traces, Kafka Event Streams, Distributed Rate Limiting'
+            'Available Domains: Systems, ADR Governance, AI Codex, Trade-Off Matrix, Evolution Diffs, Chaos Drills, API Gateway, Distributed Traces, Kafka Event Streams, Distributed Rate Limiting, Multi-Region Replication'
           ]
           break
         }
@@ -1630,6 +1716,28 @@ export default function InteractiveCli() {
               `[Rate Limiter] ${a.algorithmName}`,
               `  Algorithm  : ${a.id} (${a.capacityLimit}, ${a.refillRate})`,
               `  Anchor     : #architecture-rate-limiter`,
+              ''
+            )
+          }
+        })
+
+        // 11. Search Multi-Region Database Replication
+        MULTI_REGION_STRATEGIES.forEach(m => {
+          if (
+            m.name.toLowerCase().includes(query) ||
+            m.id.toLowerCase().includes(query) ||
+            m.strategyName.toLowerCase().includes(query) ||
+            m.subtitle.toLowerCase().includes(query) ||
+            m.topology.toLowerCase().includes(query) ||
+            m.summary.toLowerCase().includes(query) ||
+            m.governingAdr.toLowerCase().includes(query) ||
+            m.productionUseCase.system.toLowerCase().includes(query) ||
+            m.regions.some(r => r.name.toLowerCase().includes(query) || r.id.toLowerCase().includes(query))
+          ) {
+            results.push(
+              `[Multi-Region Replication] ${m.name}`,
+              `  Strategy   : ${m.strategyName} (${m.consensusModel.split(' ')[0]})`,
+              `  Anchor     : #architecture-multi-region`,
               ''
             )
           }

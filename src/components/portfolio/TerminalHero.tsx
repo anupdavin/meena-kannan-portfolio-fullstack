@@ -22,7 +22,8 @@ import {
   Flame,
   Globe,
   GitCommit,
-  Radio
+  Radio,
+  Globe2
 } from 'lucide-react'
 
 type FileTab = 'java' | 'k8s' | 'metrics' | 'mcp'
@@ -172,6 +173,7 @@ const ARCHITECTURE_ENGINES = [
   { id: 'architecture-distributed-tracing', label: 'Tracing', badge: 'OTel Spans', icon: GitCommit, border: 'border-purple-500/40 text-purple-300 hover:bg-purple-500/10' },
   { id: 'architecture-event-streams', label: 'Kafka Streams', badge: 'ISR Lag', icon: Radio, border: 'border-cyan-500/40 text-cyan-300 hover:bg-cyan-500/10' },
   { id: 'architecture-rate-limiter', label: 'Rate Limiter', badge: 'Redis Lua', icon: Sliders, border: 'border-emerald-500/40 text-emerald-300 hover:bg-emerald-500/10' },
+  { id: 'architecture-multi-region', label: 'Multi-Region', badge: 'CRDT & Raft', icon: Globe2, border: 'border-sky-500/40 text-sky-300 hover:bg-sky-500/10' },
 ]
 
 export default function TerminalHero() {
@@ -406,12 +408,12 @@ export default function TerminalHero() {
             </div>
           </div>
 
-          {/* 10 Live Architecture Engines Fast-Jump Dock */}
+          {/* 11 Live Architecture Engines Fast-Jump Dock */}
           <div className="pt-3 border-t border-slate-800/80 space-y-2">
             <div className="flex items-center justify-between text-[11px] font-mono">
               <span className="text-slate-300 font-bold uppercase tracking-wider flex items-center gap-1.5">
                 <span className="w-2 h-2 rounded-full bg-cyan-400 animate-pulse" />
-                10 Interactive Architecture Engines
+                11 Interactive Architecture Engines
               </span>
               <span className="text-slate-500 text-[10px]">Direct Fast Jump &darr;</span>
             </div>

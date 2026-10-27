@@ -148,5 +148,11 @@
     "title": "Distributed Rate Limiting & Traffic Shaping Algorithms",
     "text": "Meena architectures production distributed rate limiters and traffic shapers with Redis Lua script evaluation across 5 systems: (1) Token Bucket: Multi-Tenant SaaS edge ingress with 5,000 token capacity and 1,000 tokens/sec refill to absorb tenant bursts, (2) Leaky Bucket: E-Commerce Saga checkout smoother with 15,000 FIFO queue capacity draining at constant 2,500 req/sec to prevent downstream Kafka consumer storms, (3) Fixed Window Counter: Real-Time WebSocket handshake metering (50,000 req/min) evaluated via single Redis INCR, (4) Sliding Window Log: FinTech PCI-DSS payment authorization meter using Redis Sorted Sets (ZSET) guaranteeing zero boundary burst overflow, and (5) Sliding Window Counter: Weighted interpolation algorithm controlling AI agent MCP tool call budgets (10,000 calls/min).",
     "url": "#architecture-rate-limiter"
+  },
+  {
+    "id": "multi-region-database-replication",
+    "title": "Multi-Region Database Replication & Conflict Resolution Simulator",
+    "text": "Meena designs fault-tolerant multi-region database architectures with deterministic conflict resolution across 5 enterprise models: (1) Aurora Global Database: Physical storage layer redo log replication across US, Europe, and Asia Pacific with sub-second RPO and under 1 minute managed failover, (2) DynamoDB Global Tables: Fully active-active multi-master tables with Last-Write-Wins (LWW) microsecond timestamp arbitration, (3) Conflict-Free Replicated Data Types (CRDTs): Monotonic state semi-lattices (PN-Counters and LWW-Element-Sets) ensuring mathematical convergence without central coordinators, (4) Distributed Raft Consensus: Strict serializability across CockroachDB range leases with Hybrid Logical Clocks (HLC) preventing dual-commit double spends, and (5) Kafka MirrorMaker 2: Asynchronous active-active event fabric with origin-cluster loop prevention headers.",
+    "url": "#architecture-multi-region"
   }
 ]

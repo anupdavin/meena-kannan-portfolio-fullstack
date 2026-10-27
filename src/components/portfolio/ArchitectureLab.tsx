@@ -15,6 +15,7 @@ import {
   Search,
   Flame,
   Globe,
+  Globe2,
   GitCommit,
   Radio,
   ShieldAlert,
@@ -30,6 +31,7 @@ import ApiGatewayPlayground from '@/components/architecture/ApiGatewayPlayground
 import DistributedTraceInspector from '@/components/architecture/DistributedTraceInspector'
 import KafkaStreamMonitor from '@/components/architecture/KafkaStreamMonitor'
 import RateLimiterSandbox from '@/components/architecture/RateLimiterSandbox'
+import MultiRegionReplicationSandbox from '@/components/architecture/MultiRegionReplicationSandbox'
 import { ARCHITECTURE_SYSTEMS } from '@/data/architectureSystems'
 import { ARCHITECTURAL_DECISIONS } from '@/data/architecturalDecisions'
 import { ARCHITECTURAL_TRADEOFFS } from '@/data/architecturalTradeoffs'
@@ -39,6 +41,7 @@ import { GATEWAY_ROUTES } from '@/data/gatewayRoutes'
 import { DISTRIBUTED_TRACES } from '@/data/distributedTraces'
 import { KAFKA_TOPIC_STREAMS } from '@/data/kafkaStreams'
 import { RATE_LIMITING_ALGORITHMS } from '@/data/rateLimitingAlgorithms'
+import { MULTI_REGION_STRATEGIES } from '@/data/multiRegionReplication'
 
 const AI_TERMS_SUMMARY = [
   { id: 'agentic-ai', title: 'Agentic AI', text: 'Perception-action loop, DAG memory, tool execution, LangGraph' },
@@ -66,6 +69,7 @@ export default function ArchitectureLab() {
         traces: 5,
         kafka: 5,
         ratelimit: 5,
+        multiregion: 5,
         isActive: false
       }
     }
@@ -158,8 +162,19 @@ export default function ArchitectureLab() {
       r.productionUseCase.system.toLowerCase().includes(q)
     ).length
 
+    const multiregionCount = MULTI_REGION_STRATEGIES.filter(m => 
+      m.name.toLowerCase().includes(q) ||
+      m.id.toLowerCase().includes(q) ||
+      m.strategyName.toLowerCase().includes(q) ||
+      m.subtitle.toLowerCase().includes(q) ||
+      m.topology.toLowerCase().includes(q) ||
+      m.summary.toLowerCase().includes(q) ||
+      m.governingAdr.toLowerCase().includes(q) ||
+      m.productionUseCase.system.toLowerCase().includes(q)
+    ).length
+
     return {
-      total: workbenchCount + aiCount + adrCount + tradeoffCount + evolutionCount + chaosCount + gatewayCount + traceCount + kafkaCount + ratelimitCount,
+      total: workbenchCount + aiCount + adrCount + tradeoffCount + evolutionCount + chaosCount + gatewayCount + traceCount + kafkaCount + ratelimitCount + multiregionCount,
       workbench: workbenchCount,
       aiCodex: aiCount,
       adr: adrCount,
@@ -170,6 +185,7 @@ export default function ArchitectureLab() {
       traces: traceCount,
       kafka: kafkaCount,
       ratelimit: ratelimitCount,
+      multiregion: multiregionCount,
       isActive: true
     }
   }, [searchQuery])
@@ -392,6 +408,17 @@ export default function ArchitectureLab() {
             <ShieldAlert className="w-3.5 h-3.5 text-emerald-400" />
             <span>Rate Limiter ({matchStats.ratelimit})</span>
           </a>
+          <a 
+            href="#architecture-multi-region"
+            className={`px-3 py-1.5 rounded-lg border transition-all flex items-center gap-1.5 cursor-pointer ${
+              matchStats.isActive && matchStats.multiregion > 0
+                ? 'bg-sky-500/10 border-sky-500/50 text-sky-400 shadow-[0_0_10px_rgba(14,165,233,0.15)] font-bold'
+                : 'bg-slate-900 border-slate-800 hover:border-sky-500/50 hover:text-sky-400 text-slate-300'
+            }`}
+          >
+            <Globe2 className="w-3.5 h-3.5 text-sky-400" />
+            <span>Multi-Region ({matchStats.multiregion})</span>
+          </a>
         </div>
       </div>
 
@@ -517,6 +544,18 @@ export default function ArchitectureLab() {
         className="scroll-mt-24"
       >
         <RateLimiterSandbox />
+      </motion.div>
+
+      {/* 2.14. Multi-Region Database Replication & Conflict Resolution Simulator */}
+      <motion.div
+        id="architecture-multi-region"
+        initial={{ opacity: 0, y: 25 }}
+        whileInView={{ opacity: 1, y: 0 }}
+        viewport={{ once: true }}
+        transition={{ duration: 0.6, delay: 0.55 }}
+        className="scroll-mt-24"
+      >
+        <MultiRegionReplicationSandbox />
       </motion.div>
 
       {/* 3. Architectural Design Pillars Strip */}
