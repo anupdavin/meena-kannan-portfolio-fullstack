@@ -41,6 +41,7 @@ import CircuitBreakerSandbox from '@/components/architecture/CircuitBreakerSandb
 import DistributedConcurrencySandbox from '@/components/architecture/DistributedConcurrencySandbox'
 import RaftConsensusSandbox from '@/components/architecture/RaftConsensusSandbox'
 import VectorSearchSandbox from '@/components/architecture/VectorSearchSandbox'
+import TrafficPrioritySandbox from '@/components/architecture/TrafficPrioritySandbox'
 import { ARCHITECTURE_SYSTEMS } from '@/data/architectureSystems'
 import { ARCHITECTURAL_DECISIONS } from '@/data/architecturalDecisions'
 import { ARCHITECTURAL_TRADEOFFS } from '@/data/architecturalTradeoffs'
@@ -57,6 +58,7 @@ import { CIRCUIT_BREAKER_PATTERNS } from '@/data/circuitBreakers'
 import { CONCURRENCY_MODELS } from '@/data/distributedConcurrency'
 import { CONSENSUS_MODELS } from '@/data/raftConsensus'
 import { VECTOR_SEARCH_MODELS } from '@/data/vectorSearch'
+import { TRAFFIC_PRIORITY_MODELS } from '@/data/trafficPriority'
 
 const AI_TERMS_SUMMARY = [
   { id: 'agentic-ai', title: 'Agentic AI', text: 'Perception-action loop, DAG memory, tool execution, LangGraph' },
@@ -91,6 +93,7 @@ export default function ArchitectureLab() {
         concurrency: 5,
         raft: 5,
         vector: 5,
+        priority: 5,
         isActive: false
       }
     }
@@ -256,8 +259,20 @@ export default function ArchitectureLab() {
       v.architecturalInvariant.toLowerCase().includes(q)
     ).length
 
+    const priorityCount = TRAFFIC_PRIORITY_MODELS.filter(p =>
+      p.name.toLowerCase().includes(q) ||
+      p.id.toLowerCase().includes(q) ||
+      p.paradigm.toLowerCase().includes(q) ||
+      p.badge.toLowerCase().includes(q) ||
+      p.algorithmComplexity.toLowerCase().includes(q) ||
+      p.queueOverhead.toLowerCase().includes(q) ||
+      p.throughputProfile.toLowerCase().includes(q) ||
+      p.latencyGuarantee.toLowerCase().includes(q) ||
+      p.architecturalInvariant.toLowerCase().includes(q)
+    ).length
+
     return {
-      total: workbenchCount + aiCount + adrCount + tradeoffCount + evolutionCount + chaosCount + gatewayCount + traceCount + kafkaCount + ratelimitCount + multiregionCount + shardingCount + cdnCount + circuitBreakerCount + concurrencyCount + raftCount + vectorCount,
+      total: workbenchCount + aiCount + adrCount + tradeoffCount + evolutionCount + chaosCount + gatewayCount + traceCount + kafkaCount + ratelimitCount + multiregionCount + shardingCount + cdnCount + circuitBreakerCount + concurrencyCount + raftCount + vectorCount + priorityCount,
       workbench: workbenchCount,
       aiCodex: aiCount,
       adr: adrCount,
@@ -275,6 +290,7 @@ export default function ArchitectureLab() {
       concurrency: concurrencyCount,
       raft: raftCount,
       vector: vectorCount,
+      priority: priorityCount,
       isActive: true
     }
   }, [searchQuery])
@@ -574,6 +590,17 @@ export default function ArchitectureLab() {
             <Search className="w-3.5 h-3.5 text-teal-400" />
             <span>Vector Search ({matchStats.vector})</span>
           </a>
+          <a 
+            href="#architecture-traffic-priority"
+            className={`px-3 py-1.5 rounded-lg border transition-all flex items-center gap-1.5 cursor-pointer ${
+              matchStats.isActive && matchStats.priority > 0
+                ? 'bg-emerald-500/10 border-emerald-500/50 text-emerald-400 shadow-[0_0_10px_rgba(16,185,129,0.15)] font-bold'
+                : 'bg-slate-900 border-slate-800 hover:border-emerald-500/50 hover:text-emerald-400 text-slate-300'
+            }`}
+          >
+            <Sliders className="w-3.5 h-3.5 text-emerald-400" />
+            <span>Traffic Priority ({matchStats.priority})</span>
+          </a>
         </div>
       </div>
 
@@ -783,6 +810,18 @@ export default function ArchitectureLab() {
         className="scroll-mt-24"
       >
         <VectorSearchSandbox />
+      </motion.div>
+
+      {/* 2.21. Distributed Token-Bucket API Shaper & Bounded Priority Queuing */}
+      <motion.div
+        id="architecture-traffic-priority"
+        initial={{ opacity: 0, y: 25 }}
+        whileInView={{ opacity: 1, y: 0 }}
+        viewport={{ once: true }}
+        transition={{ duration: 0.6, delay: 0.9 }}
+        className="scroll-mt-24"
+      >
+        <TrafficPrioritySandbox />
       </motion.div>
 
       {/* 3. Architectural Design Pillars Strip */}

@@ -17,6 +17,7 @@ import { CIRCUIT_BREAKER_PATTERNS } from '@/data/circuitBreakers'
 import { CONCURRENCY_MODELS } from '@/data/distributedConcurrency'
 import { CONSENSUS_MODELS } from '@/data/raftConsensus'
 import { VECTOR_SEARCH_MODELS } from '@/data/vectorSearch'
+import { TRAFFIC_PRIORITY_MODELS } from '@/data/trafficPriority'
 import { EXECUTIVE_BRIEFING } from '@/data/executiveBriefing'
 
 interface HistoryEntry {
@@ -98,6 +99,11 @@ const AVAILABLE_COMMANDS = [
   'ivfpq',
   'rrf',
   'embeddings',
+  'qos',
+  'priorityqueue',
+  'wfq',
+  'codel',
+  'loadshedding',
   'adr',
   'decisions',
   'tradeoffs',
@@ -147,6 +153,7 @@ const QUICK_CHIPS = [
   { label: '[ $ concurrency ]', cmd: 'concurrency' },
   { label: '[ $ raft ]', cmd: 'raft' },
   { label: '[ $ vectorsearch ]', cmd: 'vectorsearch' },
+  { label: '[ $ qos ]', cmd: 'qos' },
   { label: '[ $ find kafka ]', cmd: 'find kafka' },
   { label: '[ $ tradeoffs ]', cmd: 'tradeoffs' },
   { label: '[ $ adr ]', cmd: 'adr' },
@@ -182,6 +189,7 @@ const COMMAND_HELP = [
   '  cdn             - Inspect Edge CDN caching, surrogate-key purges & SWR flows (or "cdn <id>")',
   '  circuitbreaker  - Evaluate distributed circuit breakers, bulkheads & backoff jitter (or "circuitbreaker <id>")',
   '  concurrency     - Inspect distributed deadlock detection & 2PL vs OCC concurrency (or "concurrency <id>")',
+  '  qos             - Inspect distributed QoS schedulers, token bucket & WFQ (or "qos <id>")',
   '  find <query>    - Search cross-cutting architecture systems, ADRs, AI codex & trade-offs',
   '  tradeoffs       - Evaluate system design decision trade-offs (or "compare <topic>")',
   '  stats           - View production performance & impact metrics (99.99% SLA)',
@@ -1051,6 +1059,19 @@ export default function InteractiveCli() {
           ]
           break
         }
+        if (sub === 'qos' || sub === 'priority' || sub === 'wfq' || sub === 'codel' || sub === 'loadshedding' || args.some(a => a.toLowerCase().includes('qos') || a.toLowerCase().includes('wfq') || a.toLowerCase().includes('priority'))) {
+          output = [
+            'Routing to Distributed Token-Bucket API Shaper & Bounded Priority Queuing (#architecture-traffic-priority):',
+            '  1. Tenant Priority Queuing : Multi-tier FIFO (VIP vs Pro vs Free) with WFQ anti-starvation credits',
+            '  2. Weighted Fair Queuing   : Virtual clock GPS scheduler tagged by virtual finish times (F_i)',
+            '  3. Controlled Delay (CoDel): AQM bufferbloat mitigation dropping packets when sojourn delay > 5ms',
+            '  4. Dual-Rate Token Bucket  : RFC 2698 CIR vs PIR dynamic surge metering with green/yellow/red tags',
+            '  5. Graceful Load Shedding  : Adaptive CPU-triggered drop-tail returning sub-1.2ms HTTP 429 Retry-After',
+            '--------------------------------------------------------------------------------',
+            'Interactive Sandbox: Live in #architecture-traffic-priority with multi-queue drain visualizer.'
+          ]
+          break
+        }
         output = [
           'ByteByteGo Interactive Architecture Lab Navigator:',
           '--------------------------------------------------------------------------------',
@@ -1072,6 +1093,7 @@ export default function InteractiveCli() {
           '  [ 15 ] "architecture concurrency": Concurrency & Deadlock Detection (#architecture-distributed-concurrency)',
           '  [ 16 ] "architecture raft"    : Distributed Raft Consensus Engine (#architecture-raft-consensus)',
           '  [ 17 ] "architecture vectorsearch": Distributed Vector Search & HNSW (#architecture-vector-search)',
+          '  [ 18 ] "architecture qos"     : Distributed QoS & Traffic Priority (#architecture-traffic-priority)',
           '--------------------------------------------------------------------------------',
           'Clean Architecture Principles Enforced:',
           '  + Domain Isolation     : Core business domains decouple from libraries and vendor SDKs',
@@ -2022,6 +2044,69 @@ export default function InteractiveCli() {
         ]
         break
       }
+      case 'qos':
+      case 'priorityqueue':
+      case 'wfq':
+      case 'codel':
+      case 'loadshedding': {
+        const target = args[0]?.toLowerCase().trim()
+        if (target) {
+          const matched = TRAFFIC_PRIORITY_MODELS.find(m => 
+            m.id === target ||
+            m.id.includes(target) ||
+            m.name.toLowerCase().includes(target) ||
+            m.badge.toLowerCase().includes(target) ||
+            (target === '1' && m.id === 'multi-tier-tenant-priority-queue') ||
+            (target === '2' && m.id === 'weighted-fair-queuing-wfq') ||
+            (target === '3' && m.id === 'controlled-delay-codel-aqm') ||
+            (target === '4' && m.id === 'dynamic-surge-token-bucket') ||
+            (target === '5' && m.id === 'graceful-load-shedding-backpressure')
+          )
+          if (matched) {
+            output = [
+              '--------------------------------------------------------------------------------',
+              `Traffic Priority Architecture: ${matched.name} [${matched.badge}]`,
+              '--------------------------------------------------------------------------------',
+              `Core Paradigm       : ${matched.paradigm}`,
+              `Algorithm Overhead  : ${matched.algorithmComplexity}`,
+              `Queue Overhead      : ${matched.queueOverhead}`,
+              `Throughput Capacity : ${matched.throughputProfile}`,
+              `Latency Target      : ${matched.latencyGuarantee}`,
+              '--------------------------------------------------------------------------------',
+              'WORKFLOW PHASES & INVARIANTS:',
+              ...matched.workflowPhases.map(p =>
+                `  * [${p.name}] :: ${p.description} -> Invariant: ${p.invariants}`
+              ),
+              '--------------------------------------------------------------------------------',
+              'PRODUCTION OUTCOMES & INVARIANTS:',
+              ...Object.entries(matched.productionOutcomes).map(([k, v]) => `  + ${k}: ${v}`),
+              '',
+              `Architectural Invariant: "${matched.architecturalInvariant}"`,
+              '--------------------------------------------------------------------------------',
+              'Full live interactive multi-queue packet drain and CoDel monitor in #architecture-traffic-priority.'
+            ]
+            break
+          }
+        }
+
+        output = [
+          'Distributed Token-Bucket API Shaper & Bounded Priority Queuing Sandbox:',
+          '--------------------------------------------------------------------------------',
+          'Explore 5 QoS, traffic shaping, and bufferbloat mitigation architectures:',
+          '',
+          ...TRAFFIC_PRIORITY_MODELS.flatMap((m, idx) => [
+            `${idx + 1}. [ ${m.id} ] : ${m.name} (${m.badge})`,
+            `   Paradigm      : ${m.paradigm}`,
+            `   Complexity    : ${m.algorithmComplexity}`,
+            `   Latency SLA   : ${m.latencyGuarantee}`,
+            `   Deep Dive     : "qos ${idx + 1}" or "qos ${m.id.split('-')[0]}" (e.g. "qos tenant", "qos wfq", "qos codel", "qos token", "qos shedding")`,
+            ''
+          ]),
+          '--------------------------------------------------------------------------------',
+          'Tip: Run "qos <id>" (e.g. "qos 1" or "qos wfq") to inspect queue drain and credit mechanics.'
+        ]
+        break
+      }
       case 'find':
       case 'search': {
         const query = args.join(' ').toLowerCase().trim()
@@ -2031,7 +2116,7 @@ export default function InteractiveCli() {
             '--------------------------------------------------------------------------------',
             'Search cross-cutting distributed systems, ADRs, AI paradigms, and trade-offs.',
             'Usage: find <query> (e.g. "find kafka", "find redis", "find mcp", "find saga")',
-            'Available Domains: Systems, ADR Governance, AI Codex, Trade-Off Matrix, Evolution Diffs, Chaos Drills, API Gateway, Distributed Traces, Kafka Event Streams, Distributed Rate Limiting, Multi-Region Replication, Database Sharding, Edge CDN Caching, Circuit Breakers, Concurrency & Deadlocks, Raft Consensus, Vector Search'
+            'Available Domains: Systems, ADR Governance, AI Codex, Trade-Off Matrix, Evolution Diffs, Chaos Drills, API Gateway, Distributed Traces, Kafka Event Streams, Distributed Rate Limiting, Multi-Region Replication, Database Sharding, Edge CDN Caching, Circuit Breakers, Concurrency & Deadlocks, Raft Consensus, Vector Search, Traffic Priority & QoS'
           ]
           break
         }
@@ -2382,6 +2467,29 @@ export default function InteractiveCli() {
               `  Paradigm   : ${v.paradigm} (${v.badge})`,
               `  Complexity : ${v.searchComplexity}`,
               `  Anchor     : #architecture-vector-search`,
+              ''
+            )
+          }
+        })
+
+        // 18. Search Distributed QoS & Priority Queuing
+        TRAFFIC_PRIORITY_MODELS.forEach(p => {
+          if (
+            p.name.toLowerCase().includes(query) ||
+            p.id.toLowerCase().includes(query) ||
+            p.paradigm.toLowerCase().includes(query) ||
+            p.badge.toLowerCase().includes(query) ||
+            p.algorithmComplexity.toLowerCase().includes(query) ||
+            p.queueOverhead.toLowerCase().includes(query) ||
+            p.throughputProfile.toLowerCase().includes(query) ||
+            p.latencyGuarantee.toLowerCase().includes(query) ||
+            p.architecturalInvariant.toLowerCase().includes(query)
+          ) {
+            results.push(
+              `[Traffic Priority QoS] ${p.name}`,
+              `  Paradigm   : ${p.paradigm} (${p.badge})`,
+              `  Latency    : ${p.latencyGuarantee}`,
+              `  Anchor     : #architecture-traffic-priority`,
               ''
             )
           }

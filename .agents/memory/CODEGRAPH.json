@@ -1,6 +1,6 @@
 {
   "version": "1.0.0",
-  "generatedAt": "2026-10-27T16:37:04.819Z",
+  "generatedAt": "2026-10-27T16:48:22.137Z",
   "nodes": {
     "src/components/architecture/AdrExplorer.tsx": {
       "file": "src/components/architecture/AdrExplorer.tsx",
@@ -320,6 +320,18 @@
       ],
       "loc": 326
     },
+    "src/components/architecture/TrafficPrioritySandbox.tsx": {
+      "file": "src/components/architecture/TrafficPrioritySandbox.tsx",
+      "imports": [
+        "react",
+        "lucide-react",
+        "@/data/trafficPriority"
+      ],
+      "exports": [
+        "TrafficPrioritySandbox"
+      ],
+      "loc": 577
+    },
     "src/components/architecture/VectorSearchSandbox.tsx": {
       "file": "src/components/architecture/VectorSearchSandbox.tsx",
       "imports": [
@@ -402,6 +414,7 @@
         "@/components/architecture/DistributedConcurrencySandbox",
         "@/components/architecture/RaftConsensusSandbox",
         "@/components/architecture/VectorSearchSandbox",
+        "@/components/architecture/TrafficPrioritySandbox",
         "@/data/architectureSystems",
         "@/data/architecturalDecisions",
         "@/data/architecturalTradeoffs",
@@ -417,12 +430,13 @@
         "@/data/circuitBreakers",
         "@/data/distributedConcurrency",
         "@/data/raftConsensus",
-        "@/data/vectorSearch"
+        "@/data/vectorSearch",
+        "@/data/trafficPriority"
       ],
       "exports": [
         "ArchitectureLab"
       ],
-      "loc": 841
+      "loc": 880
     },
     "src/components/portfolio/ContactTerminal.tsx": {
       "file": "src/components/portfolio/ContactTerminal.tsx",
@@ -484,12 +498,13 @@
         "@/data/distributedConcurrency",
         "@/data/raftConsensus",
         "@/data/vectorSearch",
+        "@/data/trafficPriority",
         "@/data/executiveBriefing"
       ],
       "exports": [
         "InteractiveCli"
       ],
-      "loc": 2662
+      "loc": 2770
     },
     "src/components/portfolio/ProjectsShowcase.tsx": {
       "file": "src/components/portfolio/ProjectsShowcase.tsx",
@@ -542,7 +557,7 @@
       "exports": [
         "TerminalHero"
       ],
-      "loc": 606
+      "loc": 607
     },
     "src/components/ui/badge.tsx": {
       "file": "src/components/ui/badge.tsx",
@@ -786,6 +801,15 @@
       ],
       "loc": 467
     },
+    "src/data/trafficPriority.ts": {
+      "file": "src/data/trafficPriority.ts",
+      "imports": [],
+      "exports": [
+        "TrafficPriorityModel",
+        "TRAFFIC_PRIORITY_MODELS"
+      ],
+      "loc": 379
+    },
     "src/data/vectorSearch.ts": {
       "file": "src/data/vectorSearch.ts",
       "imports": [],
@@ -966,6 +990,7 @@
     "SystemDesignCanvasProps": "src/components/architecture/SystemDesignCanvas.tsx",
     "SystemDesignCanvas": "src/components/architecture/SystemDesignCanvas.tsx",
     "TradeoffMatrix": "src/components/architecture/TradeoffMatrix.tsx",
+    "TrafficPrioritySandbox": "src/components/architecture/TrafficPrioritySandbox.tsx",
     "VectorSearchSandbox": "src/components/architecture/VectorSearchSandbox.tsx",
     "SystemStepDef": "src/components/architecture/workbenchConfigs.ts",
     "NodeRuntimeSpec": "src/components/architecture/workbenchConfigs.ts",
@@ -1053,6 +1078,8 @@
     "checkJointQuorum": "src/data/raftConsensus.ts",
     "RateLimitingAlgorithm": "src/data/rateLimitingAlgorithms.ts",
     "RATE_LIMITING_ALGORITHMS": "src/data/rateLimitingAlgorithms.ts",
+    "TrafficPriorityModel": "src/data/trafficPriority.ts",
+    "TRAFFIC_PRIORITY_MODELS": "src/data/trafficPriority.ts",
     "VectorSearchModel": "src/data/vectorSearch.ts",
     "VECTOR_SEARCH_MODELS": "src/data/vectorSearch.ts",
     "reciprocalRankFusion": "src/data/vectorSearch.ts",

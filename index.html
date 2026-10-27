@@ -619,6 +619,16 @@
                 High-dimensional approximate nearest neighbor (ANN) retrieval across 5 architectures: Hierarchical Navigable Small World (HNSW) graphs with multi-layer skip-lists (M=16, efSearch=64, sub-2ms P99), Inverted File with Product Quantization (IVF-PQ with 1024 Voronoi centroids and 8x compression), Distributed Sharded Vector Routing with Top-K Heap Merge across K embedding partitions, Hybrid Dense-Sparse Retrieval with Reciprocal Rank Fusion (RRF combining BM25 keyword frequency and pgvector cosine similarity), and Vector Quantization Memory Profiler (FP32 vs FP16 halfvec vs INT8 scalar quantization).
               </p>
             </div>
+
+            <!-- Sub-Section 18: Distributed Token-Bucket API Shaper & Bounded Priority Queuing Sandbox -->
+            <div id="architecture-traffic-priority" style="background: rgba(9, 14, 24, 0.7); border: 1px solid #1e293b; border-radius: 16px; padding: 1.5rem;">
+              <h3 style="color: #10b981; font-size: 1.25rem; font-weight: bold; margin-bottom: 0.5rem;">
+                Distributed Token-Bucket API Shaper &amp; Bounded Priority Queuing Sandbox
+              </h3>
+              <p style="color: #94a3b8; font-size: 0.85rem; line-height: 1.6;">
+                Quality of Service (QoS) and traffic shaping across 5 architectures: Multi-Tier Tenant Priority Queuing (Tier-1 VIP vs Pro vs Free with WFQ anti-starvation envelopes), Weighted Fair Queuing (WFQ scheduler calculating packet virtual finish times via Generalized Processor Sharing emulation), Controlled Delay (CoDel active queue management with 5ms queue soaking threshold and bufferbloat mitigation), Dual-Rate Three-Color Token Bucket (RFC 2698 CIR vs PIR metering with dynamic burst absorption), and Graceful Load Shedding with Downstream Backpressure (adaptive CPU-triggered drop-tail with sub-1.2ms HTTP 429 Retry-After responses).
+              </p>
+            </div>
           </section>
 
           <!-- Projects & Interactive Architecture Section Landmark -->
