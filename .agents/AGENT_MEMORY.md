@@ -240,6 +240,17 @@
 - [x] **Task X5:** Update `scripts/autonomous-cycle.mjs` with dynamic test pass counting.
 - [x] **Task X6:** Expand automated unit test suite in `tests/portfolio.test.mjs` (50/50 passing tests).
 
+### Track Y: 5th Flagship Enterprise Project & Agentic MCP Mesh Workbench
+- [x] **Task Y1:** Complete `agentic-mcp-mesh` subsystem and node runtime specifications in `src/components/architecture/workbenchConfigs.ts`.
+- [x] **Task Y2:** Build `renderSystem5()` SVG vector schematic in `src/components/architecture/ByteByteGoWorkbench.tsx` featuring LangGraph ReAct DAG state machine, Java 21 LTS MCP Gateway, pgvector HNSW episodic memory (1536d), disposable Docker tool sandboxes (512MB cgroups & 30s watchdog), and Redis Raft checkpointer.
+- [x] **Task Y3:** Implement HTTP 429 rate limit and token-bucket circuit breaker backpressure chaos failure mode in `ByteByteGoWorkbench.tsx`.
+- [x] **Task Y4:** Add system switcher tabs to `ByteByteGoWorkbench.tsx` and `SystemDesignCanvas.tsx` (`{ id: 'agentic-mcp-mesh', label: 'Agentic MCP Mesh' }`).
+- [x] **Task Y5:** Define complete `agentic-mcp-mesh` architecture specification in `src/data/architectureSystems.ts`.
+- [x] **Task Y6:** Add 5th project card to `src/components/portfolio/ProjectsShowcase.tsx` with ADR-006, telemetry metrics, Spring AI code snippet, and `'AI Systems & MCP'` category filter.
+- [x] **Task Y7:** Add `project 5` / `project ai` / `project mcp` deep-dive inspection to `src/components/portfolio/InteractiveCli.tsx`.
+- [x] **Task Y8:** Add Article 5 semantic HTML landmark to `index.html` static pre-rendered shell.
+- [x] **Task Y9:** Expand automated unit test suite in `tests/portfolio.test.mjs` asserting all 5 enterprise systems (50/50 passing tests).
+
 ---
 
 ## 4. Operational Guardrails for Scheduled Agent Runs
