@@ -29,6 +29,7 @@ import {
   Scale,
   ToggleLeft,
   Fingerprint,
+  Clock,
   X
 } from 'lucide-react'
 import ByteByteGoDiagram from '@/components/architecture/ByteByteGoDiagram'
@@ -63,6 +64,7 @@ import GslbAnycastSandbox from '@/components/architecture/GslbAnycastSandbox'
 import DistributedLockSandbox from '@/components/architecture/DistributedLockSandbox'
 import { WebhookIngressSandbox } from '@/components/architecture/WebhookIngressSandbox'
 import TopologyMeshSandbox from '@/components/architecture/TopologyMeshSandbox'
+import { MvccSnapshotSandbox } from '@/components/architecture/MvccSnapshotSandbox'
 import { ARCHITECTURE_SYSTEMS } from '@/data/architectureSystems'
 import { ARCHITECTURAL_DECISIONS } from '@/data/architecturalDecisions'
 import { ARCHITECTURAL_TRADEOFFS } from '@/data/architecturalTradeoffs'
@@ -94,6 +96,7 @@ import { GSLB_ANYCAST_MODELS } from '@/data/gslbAnycastModels'
 import { DISTRIBUTED_LOCK_MODELS } from '@/data/distributedLockModels'
 import { WEBHOOK_INGRESS_MODELS } from '@/data/webhookIngressModels'
 import { TOPOLOGY_MESH_MODELS } from '@/data/topologyMeshModels'
+import { MVCC_SNAPSHOT_MODELS } from '@/data/mvccSnapshotModels'
 
 const AI_TERMS_SUMMARY = [
   { id: 'agentic-ai', title: 'Agentic AI', text: 'Perception-action loop, DAG memory, tool execution, LangGraph' },
@@ -143,6 +146,7 @@ export default function ArchitectureLab() {
         distributedlock: 5,
         webhookingress: 5,
         topologymesh: 5,
+        mvcc: 5,
         isActive: false
       }
     }
@@ -490,8 +494,21 @@ export default function ArchitectureLab() {
       t.description.toLowerCase().includes(q)
     ).length
 
+    const mvccCount = MVCC_SNAPSHOT_MODELS.filter(m =>
+      m.name.toLowerCase().includes(q) ||
+      m.id.toLowerCase().includes(q) ||
+      m.category.toLowerCase().includes(q) ||
+      m.badge.toLowerCase().includes(q) ||
+      m.algorithmFormula.toLowerCase().includes(q) ||
+      (m.isolationGuarantee || '').toLowerCase().includes(q) ||
+      (m.readLatencySla || '').toLowerCase().includes(q) ||
+      (m.writeThroughputSla || '').toLowerCase().includes(q) ||
+      m.architecturalInvariant.toLowerCase().includes(q) ||
+      m.description.toLowerCase().includes(q)
+    ).length
+
     return {
-      total: workbenchCount + aiCount + adrCount + tradeoffCount + evolutionCount + chaosCount + gatewayCount + traceCount + kafkaCount + ratelimitCount + multiregionCount + shardingCount + cdnCount + circuitBreakerCount + concurrencyCount + raftCount + vectorCount + priorityCount + sagasCount + cacheCount + eventSourcingCount + dlqCount + idempotencyCount + atomicCommitCount + featureFlagCount + tenantIsolationCount + zeroTrustMeshCount + splitBrainCount + gslbAnycastCount + distributedLockCount + webhookIngressCount + topologyMeshCount,
+      total: workbenchCount + aiCount + adrCount + tradeoffCount + evolutionCount + chaosCount + gatewayCount + traceCount + kafkaCount + ratelimitCount + multiregionCount + shardingCount + cdnCount + circuitBreakerCount + concurrencyCount + raftCount + vectorCount + priorityCount + sagasCount + cacheCount + eventSourcingCount + dlqCount + idempotencyCount + atomicCommitCount + featureFlagCount + tenantIsolationCount + zeroTrustMeshCount + splitBrainCount + gslbAnycastCount + distributedLockCount + webhookIngressCount + topologyMeshCount + mvccCount,
       workbench: workbenchCount,
       aiCodex: aiCount,
       adr: adrCount,
@@ -524,6 +541,7 @@ export default function ArchitectureLab() {
       distributedlock: distributedLockCount,
       webhookingress: webhookIngressCount,
       topologymesh: topologyMeshCount,
+      mvcc: mvccCount,
       isActive: true
     }
   }, [searchQuery])
@@ -988,6 +1006,17 @@ export default function ArchitectureLab() {
             <Network className="w-3.5 h-3.5 text-cyan-400" />
             <span>Topology Mesh ({matchStats.topologymesh})</span>
           </a>
+          <a 
+            href="#architecture-mvcc-snapshot"
+            className={`px-3 py-1.5 rounded-lg border transition-all flex items-center gap-1.5 cursor-pointer ${
+              matchStats.isActive && matchStats.mvcc > 0
+                ? 'bg-violet-500/10 border-violet-500/50 text-violet-400 shadow-[0_0_10px_rgba(139,92,246,0.15)] font-bold'
+                : 'bg-slate-900 border-slate-800 hover:border-violet-500/50 hover:text-violet-400 text-slate-300'
+            }`}
+          >
+            <Clock className="w-3.5 h-3.5 text-violet-400" />
+            <span>MVCC Time-Travel ({matchStats.mvcc})</span>
+          </a>
         </div>
       </div>
 
@@ -1377,6 +1406,18 @@ export default function ArchitectureLab() {
         className="scroll-mt-24"
       >
         <TopologyMeshSandbox />
+      </motion.div>
+
+      {/* 2.36. Distributed Snapshot Isolation & MVCC Time-Travel Engine Sandbox */}
+      <motion.div
+        id="architecture-mvcc-snapshot"
+        initial={{ opacity: 0, y: 25 }}
+        whileInView={{ opacity: 1, y: 0 }}
+        viewport={{ once: true }}
+        transition={{ duration: 0.6, delay: 1.65 }}
+        className="scroll-mt-24"
+      >
+        <MvccSnapshotSandbox />
       </motion.div>
 
       {/* 3. Architectural Design Pillars Strip */}

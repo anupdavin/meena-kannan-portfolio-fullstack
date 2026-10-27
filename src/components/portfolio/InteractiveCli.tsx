@@ -32,6 +32,7 @@ import { GSLB_ANYCAST_MODELS } from '@/data/gslbAnycastModels'
 import { DISTRIBUTED_LOCK_MODELS } from '@/data/distributedLockModels'
 import { WEBHOOK_INGRESS_MODELS } from '@/data/webhookIngressModels'
 import { TOPOLOGY_MESH_MODELS } from '@/data/topologyMeshModels'
+import { MVCC_SNAPSHOT_MODELS } from '@/data/mvccSnapshotModels'
 import { EXECUTIVE_BRIEFING } from '@/data/executiveBriefing'
 
 interface HistoryEntry {
@@ -190,6 +191,12 @@ const AVAILABLE_COMMANDS = [
   'gossip',
   'consul',
   'xds',
+  'mvcc',
+  'snapshot',
+  'hlc',
+  'truetime',
+  'timetravel',
+  'vacuum',
   'adr',
   'decisions',
   'tradeoffs',
@@ -254,6 +261,7 @@ const QUICK_CHIPS = [
   { label: '[ $ lock ]', cmd: 'lock' },
   { label: '[ $ webhook ]', cmd: 'webhook' },
   { label: '[ $ discovery ]', cmd: 'discovery' },
+  { label: '[ $ mvcc ]', cmd: 'mvcc' },
   { label: '[ $ find kafka ]', cmd: 'find kafka' },
   { label: '[ $ tradeoffs ]', cmd: 'tradeoffs' },
   { label: '[ $ adr ]', cmd: 'adr' },
@@ -304,6 +312,7 @@ const COMMAND_HELP = [
   '  lock            - Inspect Redis Redlock, etcd Raft & ZooKeeper distributed leases (or "lock <id>")',
   '  webhook         - Inspect distributed webhook ingress, HMAC-SHA256 & replay defense (or "webhook <id>")',
   '  discovery       - Inspect Serf SWIM gossip, Envoy xDS & DNS service discovery (or "discovery <id>")',
+  '  mvcc            - Inspect PostgreSQL tuple headers, CockroachDB HLC & Spanner TrueTime (or "mvcc <id>")',
   '  find <query>    - Search cross-cutting architecture systems, ADRs, AI codex & trade-offs',
   '  tradeoffs       - Evaluate system design decision trade-offs (or "compare <topic>")',
   '  stats           - View production performance & impact metrics (99.99% SLA)',
@@ -1368,6 +1377,19 @@ export default function InteractiveCli() {
           ]
           break
         }
+        if (sub === 'mvcc' || sub === 'snapshot' || sub === 'hlc' || sub === 'truetime' || sub === 'timetravel' || sub === 'vacuum' || args.some(a => a.toLowerCase().includes('mvcc') || a.toLowerCase().includes('snapshot') || a.toLowerCase().includes('truetime'))) {
+          output = [
+            'Routing to Distributed Snapshot Isolation & MVCC Time-Travel Engine (#architecture-mvcc-snapshot):',
+            '  1. PostgreSQL Tuple Visibility: Heap t_xmin/t_xmax headers with non-blocking scans (sub-0.35ms)',
+            '  2. CockroachDB HLC Restarts   : Hybrid Logical Clock <physical, logical> with causal ordering & read restarts',
+            '  3. Spanner TrueTime Reads     : Atomic clocks with commit-wait 2 * epsilon for external linearizability',
+            '  4. Temporal Time-Travel       : Immutable manifest DAG trees with instant AS OF SYSTEM TIME scans',
+            '  5. Lock-Free Horizon VACUUM   : Monotonic global epoch horizon reclaiming dead tuples without table locks',
+            '--------------------------------------------------------------------------------',
+            'Interactive Sandbox: Live in #architecture-mvcc-snapshot with time-travel scrubber & VACUUM triggers.'
+          ]
+          break
+        }
         output = [
           'ByteByteGo Interactive Architecture Lab Navigator:',
           '--------------------------------------------------------------------------------',
@@ -1404,6 +1426,7 @@ export default function InteractiveCli() {
           '  [ 30 ] "architecture lock"      : Distributed Lock Manager & Consensus Leases (#architecture-distributed-lock)',
           '  [ 31 ] "architecture webhook"   : Distributed Webhook Ingress & HMAC-SHA256 (#architecture-webhook-ingress)',
           '  [ 32 ] "architecture discovery" : Distributed Topology Mesh & Service Discovery (#architecture-topology-mesh)',
+          '  [ 33 ] "architecture mvcc"      : Distributed Snapshot Isolation & MVCC Engine (#architecture-mvcc-snapshot)',
           '--------------------------------------------------------------------------------',
           'Clean Architecture Principles Enforced:',
           '  + Domain Isolation     : Core business domains decouple from libraries and vendor SDKs',
@@ -2167,9 +2190,9 @@ export default function InteractiveCli() {
       }
       case 'concurrency':
       case 'deadlock':
+      case 'deadlocks':
       case 'twophase':
-      case 'occ':
-      case 'mvcc': {
+      case 'occ': {
         const target = args[0]?.toLowerCase().trim()
         if (target) {
           const matched = CONCURRENCY_MODELS.find(m => 
@@ -2550,7 +2573,7 @@ export default function InteractiveCli() {
       }
       case 'eventsourcing':
       case 'cqrs':
-      case 'snapshot':
+      case 'snapshots':
       case 'replay':
       case 'upcaster': {
         const target = args[0]?.toLowerCase().trim()
@@ -3307,6 +3330,71 @@ export default function InteractiveCli() {
         ]
         break
       }
+      case 'mvcc':
+      case 'snapshot':
+      case 'hlc':
+      case 'truetime':
+      case 'timetravel':
+      case 'vacuum': {
+        const target = args[0]?.toLowerCase().trim()
+        if (target) {
+          const matched = MVCC_SNAPSHOT_MODELS.find(m =>
+            m.id === target ||
+            m.id.includes(target) ||
+            m.name.toLowerCase().includes(target) ||
+            m.badge.toLowerCase().includes(target) ||
+            (target === '1' && (m.id === 'postgres-mvcc-tuple-visibility' || m.id === 'postgres-heap-mvcc')) ||
+            (target === '2' && (m.id === 'cockroachdb-hlc-read-restarts' || m.id === 'cockroach-hlc-mvcc')) ||
+            (target === '3' && (m.id === 'spanner-truetime-external-consistency' || m.id === 'spanner-truetime-mvcc')) ||
+            (target === '4' && (m.id === 'git-temporal-time-travel-tables' || m.id === 'git-branchable-mvcc')) ||
+            (target === '5' && (m.id === 'epoch-horizon-lockfree-gc' || m.id === 'lockfree-vacuum-gc'))
+          )
+          if (matched) {
+            output = [
+              '--------------------------------------------------------------------------------',
+              `MVCC & Snapshot Isolation Model: ${matched.name} [${matched.badge}]`,
+              '--------------------------------------------------------------------------------',
+              `Category            : ${matched.category}`,
+              `Isolation Level     : ${matched.isolationGuarantee}`,
+              `Read Latency SLA    : ${matched.readLatencySla}`,
+              `Throughput SLA      : ${matched.writeThroughputSla}`,
+              `Mathematical Formula: ${matched.algorithmFormula}`,
+              `Blast Radius Guard  : ${matched.blastRadiusContainment}`,
+              '--------------------------------------------------------------------------------',
+              'WORKFLOW PHASES & MVCC INVARIANTS:',
+              ...matched.workflowPhases.map(p =>
+                `  * [${p.name}] :: ${p.description} -> Invariant: ${p.invariants}`
+              ),
+              '--------------------------------------------------------------------------------',
+              'PRODUCTION OUTCOMES & INVARIANTS:',
+              ...Object.entries(matched.productionOutcomes).map(([k, v]) => `  + ${k}: ${v}`),
+              '',
+              `Architectural Invariant: "${matched.architecturalInvariant}"`,
+              '--------------------------------------------------------------------------------',
+              'Full live interactive time-travel scrubber & VACUUM triggers in #architecture-mvcc-snapshot.'
+            ]
+            break
+          }
+        }
+
+        output = [
+          'Distributed Snapshot Isolation & MVCC Time-Travel Engine Sandbox:',
+          '--------------------------------------------------------------------------------',
+          'Explore 5 enterprise MVCC, hybrid logical clocks & temporal time-travel architectures:',
+          '',
+          ...MVCC_SNAPSHOT_MODELS.flatMap((m, idx) => [
+            `${idx + 1}. [ ${m.id} ] : ${m.name} (${m.badge})`,
+            `   Category   : ${m.category}`,
+            `   Isolation  : ${(m.isolationGuarantee || '').split(' ')[0]}`,
+            `   Read SLA   : ${(m.readLatencySla || '').split(';')[0]}`,
+            `   Deep Dive  : "mvcc ${idx + 1}" or "mvcc ${m.id.split('-')[0]}" (e.g. "mvcc postgres", "mvcc cockroach", "mvcc spanner", "mvcc git", "mvcc lockfree")`,
+            ''
+          ]),
+          '--------------------------------------------------------------------------------',
+          'Tip: Run "mvcc <id>" (e.g. "mvcc 1" or "mvcc postgres") to inspect heap tuple visibility invariants.'
+        ]
+        break
+      }
       case 'find':
       case 'search': {
         const query = args.join(' ').toLowerCase().trim()
@@ -3316,7 +3404,7 @@ export default function InteractiveCli() {
             '--------------------------------------------------------------------------------',
             'Search cross-cutting distributed systems, ADRs, AI paradigms, and trade-offs.',
             'Usage: find <query> (e.g. "find kafka", "find redis", "find mcp", "find saga")',
-            'Available Domains: Systems, ADR Governance, AI Codex, Trade-Off Matrix, Evolution Diffs, Chaos Drills, API Gateway, Distributed Traces, Kafka Event Streams, Distributed Rate Limiting, Multi-Region Replication, Database Sharding, Edge CDN Caching, Circuit Breakers, Concurrency & Deadlocks, Raft Consensus, Vector Search, Traffic Priority & QoS, Distributed Sagas & Compensations, Distributed Cache Stampede & Coherence, Distributed Event Sourcing & CQRS, Distributed DLQ & Retries, Distributed Idempotency & CAS Locks, Distributed 2PC vs Saga Commit & Drift Reconciler, Dynamic Feature Flagging & Canary Splitter, Multi-Tenant RLS & Cryptographic Isolation, Zero-Trust Service Mesh & SPIFFE mTLS, Split-Brain Quorum Fencing & Partition Healing, GSLB & BGP Anycast Routing, Distributed Lock Manager & Leases, Webhook Ingress & HMAC Verification, Dynamic Topology Mesh & Service Discovery'
+            'Available Domains: Systems, ADR Governance, AI Codex, Trade-Off Matrix, Evolution Diffs, Chaos Drills, API Gateway, Distributed Traces, Kafka Event Streams, Distributed Rate Limiting, Multi-Region Replication, Database Sharding, Edge CDN Caching, Circuit Breakers, Concurrency & Deadlocks, Raft Consensus, Vector Search, Traffic Priority & QoS, Distributed Sagas & Compensations, Distributed Cache Stampede & Coherence, Distributed Event Sourcing & CQRS, Distributed DLQ & Retries, Distributed Idempotency & CAS Locks, Distributed 2PC vs Saga Commit & Drift Reconciler, Dynamic Feature Flagging & Canary Splitter, Multi-Tenant RLS & Cryptographic Isolation, Zero-Trust Service Mesh & SPIFFE mTLS, Split-Brain Quorum Fencing & Partition Healing, GSLB & BGP Anycast Routing, Distributed Lock Manager & Leases, Webhook Ingress & HMAC Verification, Dynamic Topology Mesh & Service Discovery, Snapshot Isolation & MVCC Time-Travel'
           ]
           break
         }
@@ -4015,6 +4103,30 @@ export default function InteractiveCli() {
               `  Category   : ${tm.category} (${tm.badge})`,
               `  Convergence: ${tm.convergenceLatency.split(';')[0]}`,
               `  Anchor     : #architecture-topology-mesh`,
+              ''
+            )
+          }
+        })
+
+        // 33. Search Distributed Snapshot Isolation & MVCC Time-Travel Engine
+        MVCC_SNAPSHOT_MODELS.forEach(mv => {
+          if (
+            mv.name.toLowerCase().includes(query) ||
+            mv.id.toLowerCase().includes(query) ||
+            mv.category.toLowerCase().includes(query) ||
+            mv.badge.toLowerCase().includes(query) ||
+            mv.algorithmFormula.toLowerCase().includes(query) ||
+            (mv.isolationGuarantee || '').toLowerCase().includes(query) ||
+            (mv.readLatencySla || '').toLowerCase().includes(query) ||
+            (mv.writeThroughputSla || '').toLowerCase().includes(query) ||
+            mv.architecturalInvariant.toLowerCase().includes(query) ||
+            mv.description.toLowerCase().includes(query)
+          ) {
+            results.push(
+              `[MVCC & Snapshot Isolation] ${mv.name}`,
+              `  Category   : ${mv.category} (${mv.badge})`,
+              `  Read SLA   : ${(mv.readLatencySla || '').split(';')[0]}`,
+              `  Anchor     : #architecture-mvcc-snapshot`,
               ''
             )
           }

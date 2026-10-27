@@ -1719,6 +1719,43 @@ describe('Production Architectural Decision Records (ADR) & CLI Integration', ()
     assert.ok(indexHtml.includes('id="architecture-topology-mesh"'), 'index.html must include #architecture-topology-mesh landmark');
     assert.ok(!/[\u2013\u2014]/.test(indexHtml), 'index.html must contain zero em/en-dashes');
   });
+
+  test('MvccSnapshotSandbox and mvccSnapshotModels.ts define tuple visibility, HLC, and TrueTime with CLI integration', () => {
+    const mvccDataPath = path.join(rootDir, 'src', 'data', 'mvccSnapshotModels.ts');
+    assert.ok(fs.existsSync(mvccDataPath), 'mvccSnapshotModels.ts must exist');
+    const mvccDataCode = fs.readFileSync(mvccDataPath, 'utf8');
+    assert.ok(mvccDataCode.includes('postgres-mvcc-tuple-visibility'), 'Must define postgres-mvcc-tuple-visibility model');
+    assert.ok(mvccDataCode.includes('cockroachdb-hlc-read-restarts'), 'Must define cockroachdb-hlc-read-restarts model');
+    assert.ok(mvccDataCode.includes('spanner-truetime-external-consistency'), 'Must define spanner-truetime-external-consistency model');
+    assert.ok(mvccDataCode.includes('git-temporal-time-travel-tables'), 'Must define git-temporal-time-travel-tables model');
+    assert.ok(mvccDataCode.includes('epoch-horizon-lockfree-gc'), 'Must define epoch-horizon-lockfree-gc model');
+    assert.ok(!/[\u2013\u2014]/.test(mvccDataCode), 'mvccSnapshotModels.ts must contain zero em/en-dashes');
+
+    const componentPath = path.join(rootDir, 'src', 'components', 'architecture', 'MvccSnapshotSandbox.tsx');
+    assert.ok(fs.existsSync(componentPath), 'MvccSnapshotSandbox.tsx must exist');
+    const compCode = fs.readFileSync(componentPath, 'utf8');
+    assert.ok(compCode.includes('copyRfcReport'), 'MvccSnapshotSandbox must support 1-click RFC copy');
+    assert.ok(compCode.includes('MVCC_SNAPSHOT_MODELS'), 'MvccSnapshotSandbox must render MVCC_SNAPSHOT_MODELS');
+    assert.ok(!/[\u2013\u2014]/.test(compCode), 'MvccSnapshotSandbox.tsx must contain zero em/en-dashes');
+
+    const labCode = fs.readFileSync(path.join(rootDir, 'src', 'components', 'portfolio', 'ArchitectureLab.tsx'), 'utf8');
+    assert.ok(labCode.includes('MvccSnapshotSandbox'), 'ArchitectureLab must mount MvccSnapshotSandbox');
+    assert.ok(labCode.includes('id="architecture-mvcc-snapshot"'), 'ArchitectureLab must define anchor #architecture-mvcc-snapshot');
+
+    const cliCode = fs.readFileSync(path.join(rootDir, 'src', 'components', 'portfolio', 'InteractiveCli.tsx'), 'utf8');
+    assert.ok(cliCode.includes("'mvcc'"), "InteractiveCli must support 'mvcc' command");
+    assert.ok(cliCode.includes('[ $ mvcc ]'), "InteractiveCli must include '[ $ mvcc ]' quick chip");
+    assert.ok(cliCode.includes('MVCC_SNAPSHOT_MODELS'), 'InteractiveCli must search across MVCC_SNAPSHOT_MODELS');
+    assert.ok(!/[\u2013\u2014]/.test(cliCode), 'InteractiveCli.tsx must contain zero em/en-dashes');
+
+    const chatIndex = fs.readFileSync(path.join(rootDir, 'public', 'chat', 'index.json'), 'utf8');
+    assert.ok(chatIndex.includes('distributed-mvcc-snapshot'), 'public/chat/index.json must index distributed-mvcc-snapshot');
+    assert.ok(!/[\u2013\u2014]/.test(chatIndex), 'public/chat/index.json must contain zero em/en-dashes');
+
+    const indexHtml = fs.readFileSync(path.join(rootDir, 'index.html'), 'utf8');
+    assert.ok(indexHtml.includes('id="architecture-mvcc-snapshot"'), 'index.html must include #architecture-mvcc-snapshot landmark');
+    assert.ok(!/[\u2013\u2014]/.test(indexHtml), 'index.html must contain zero em/en-dashes');
+  });
 });
 
 

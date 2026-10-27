@@ -280,5 +280,11 @@
     "title": "Distributed Dynamic Topology Mesh & Service Discovery Consensus Sandbox",
     "text": "Meena architects enterprise dynamic service discovery, gossip failure detection, and mesh routing fabrics across 5 paradigms: (1) HashiCorp Serf SWIM Gossip Protocol: SWIM weakly-consistent failure detection with indirect k-peer probe delegation and monotonic incarnation number refutations converging across 1,000 nodes in sub-250ms, (2) Envoy Dynamic Endpoint Discovery Service: gRPC xDS v3 Delta Discovery push streaming endpoint updates in sub-45ms without proxy reloads, (3) CoreDNS Dynamic SRV Weight Records: RFC 2782 DNS SRV priority and weight load balancing with NodeLocal DNSCache resolving queries in sub-1.2ms, (4) Netflix Eureka Heartbeat Registry with Self-Preservation Mode: AP-mode registry freezing automated lease evictions when renewals drop below 85% during network splits, and (5) Decentralized Kademlia Distributed Hash Table: 160-bit XOR metric distance routing with O(log N) hop bounds and zero central coordinators.",
     "url": "#architecture-topology-mesh"
+  },
+  {
+    "id": "distributed-mvcc-snapshot",
+    "title": "Distributed Snapshot Isolation & MVCC Time-Travel Engine Sandbox",
+    "text": "Meena architects enterprise non-blocking multi-version concurrency control, distributed causal orderings, and temporal time-travel engines across 5 paradigms: (1) PostgreSQL Heap Tuple Visibility: Header t_xmin and t_xmax transaction bitmaps resolving non-blocking snapshot isolation in sub-0.35ms without shared read locks, (2) CockroachDB Hybrid Logical Clock with Read Restarts: HLC tracking physical NTP time alongside monotonic logical counters to enforce serializable isolation across multi-region Raft ranges, (3) Google Cloud Spanner TrueTime External Consistency: Atomic clocks with commit-wait 2 * epsilon for external linearizability, (4) Git-Like Temporal Time-Travel Tables: Immutable copy-on-write manifest trees enabling instant point-in-time queries AS OF SYSTEM TIME, and (5) Lock-Free Epoch-Horizon VACUUM Freezing: Monotonic epoch horizon reclaiming dead tuple versions without holding table-level write locks.",
+    "url": "#architecture-mvcc-snapshot"
   }
 ]

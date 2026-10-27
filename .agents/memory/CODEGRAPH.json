@@ -1,6 +1,6 @@
 {
   "version": "1.0.0",
-  "generatedAt": "2026-10-27T21:39:15.852Z",
+  "generatedAt": "2026-10-27T21:48:24.136Z",
   "nodes": {
     "src/components/architecture/AdrExplorer.tsx": {
       "file": "src/components/architecture/AdrExplorer.tsx",
@@ -344,6 +344,17 @@
       ],
       "loc": 455
     },
+    "src/components/architecture/MvccSnapshotSandbox.tsx": {
+      "file": "src/components/architecture/MvccSnapshotSandbox.tsx",
+      "imports": [
+        "lucide-react",
+        "../../data/mvccSnapshotModels"
+      ],
+      "exports": [
+        "MvccSnapshotSandbox"
+      ],
+      "loc": 552
+    },
     "src/components/architecture/RaftConsensusSandbox.tsx": {
       "file": "src/components/architecture/RaftConsensusSandbox.tsx",
       "imports": [
@@ -585,6 +596,7 @@
         "@/components/architecture/DistributedLockSandbox",
         "@/components/architecture/WebhookIngressSandbox",
         "@/components/architecture/TopologyMeshSandbox",
+        "@/components/architecture/MvccSnapshotSandbox",
         "@/data/architectureSystems",
         "@/data/architecturalDecisions",
         "@/data/architecturalTradeoffs",
@@ -615,12 +627,13 @@
         "@/data/gslbAnycastModels",
         "@/data/distributedLockModels",
         "@/data/webhookIngressModels",
-        "@/data/topologyMeshModels"
+        "@/data/topologyMeshModels",
+        "@/data/mvccSnapshotModels"
       ],
       "exports": [
         "ArchitectureLab"
       ],
-      "loc": 1435
+      "loc": 1476
     },
     "src/components/portfolio/ContactTerminal.tsx": {
       "file": "src/components/portfolio/ContactTerminal.tsx",
@@ -697,12 +710,13 @@
         "@/data/distributedLockModels",
         "@/data/webhookIngressModels",
         "@/data/topologyMeshModels",
+        "@/data/mvccSnapshotModels",
         "@/data/executiveBriefing"
       ],
       "exports": [
         "InteractiveCli"
       ],
-      "loc": 4295
+      "loc": 4407
     },
     "src/components/portfolio/ProjectsShowcase.tsx": {
       "file": "src/components/portfolio/ProjectsShowcase.tsx",
@@ -755,7 +769,7 @@
       "exports": [
         "TerminalHero"
       ],
-      "loc": 631
+      "loc": 633
     },
     "src/components/ui/badge.tsx": {
       "file": "src/components/ui/badge.tsx",
@@ -1085,6 +1099,19 @@
       ],
       "loc": 305
     },
+    "src/data/mvccSnapshotModels.ts": {
+      "file": "src/data/mvccSnapshotModels.ts",
+      "imports": [],
+      "exports": [
+        "TupleVersion",
+        "ActiveTransaction",
+        "MvccSnapshotModel",
+        "INITIAL_TUPLE_VERSIONS",
+        "INITIAL_TRANSACTIONS",
+        "MVCC_SNAPSHOT_MODELS"
+      ],
+      "loc": 646
+    },
     "src/data/raftConsensus.ts": {
       "file": "src/data/raftConsensus.ts",
       "imports": [],
@@ -1297,6 +1324,11 @@
       "type": "import"
     },
     {
+      "source": "src/components/architecture/MvccSnapshotSandbox.tsx",
+      "target": "src/data/mvccSnapshotModels.ts",
+      "type": "import"
+    },
+    {
       "source": "src/components/architecture/SplitBrainResolverSandbox.tsx",
       "target": "src/data/splitBrainResolverModels.ts",
       "type": "import"
@@ -1380,6 +1412,7 @@
     "IdempotencySandbox": "src/components/architecture/IdempotencySandbox.tsx",
     "KafkaStreamMonitor": "src/components/architecture/KafkaStreamMonitor.tsx",
     "MultiRegionReplicationSandbox": "src/components/architecture/MultiRegionReplicationSandbox.tsx",
+    "MvccSnapshotSandbox": "src/components/architecture/MvccSnapshotSandbox.tsx",
     "RaftConsensusSandbox": "src/components/architecture/RaftConsensusSandbox.tsx",
     "RateLimiterSandbox": "src/components/architecture/RateLimiterSandbox.tsx",
     "SplitBrainResolverSandbox": "src/components/architecture/SplitBrainResolverSandbox.tsx",
@@ -1534,6 +1567,12 @@
     "RegionNode": "src/data/multiRegionReplication.ts",
     "MultiRegionReplicationStrategy": "src/data/multiRegionReplication.ts",
     "MULTI_REGION_STRATEGIES": "src/data/multiRegionReplication.ts",
+    "TupleVersion": "src/data/mvccSnapshotModels.ts",
+    "ActiveTransaction": "src/data/mvccSnapshotModels.ts",
+    "MvccSnapshotModel": "src/data/mvccSnapshotModels.ts",
+    "INITIAL_TUPLE_VERSIONS": "src/data/mvccSnapshotModels.ts",
+    "INITIAL_TRANSACTIONS": "src/data/mvccSnapshotModels.ts",
+    "MVCC_SNAPSHOT_MODELS": "src/data/mvccSnapshotModels.ts",
     "ConsensusModel": "src/data/raftConsensus.ts",
     "CONSENSUS_MODELS": "src/data/raftConsensus.ts",
     "evaluateQuorumCommit": "src/data/raftConsensus.ts",
