@@ -18,6 +18,7 @@ import { CONCURRENCY_MODELS } from '@/data/distributedConcurrency'
 import { CONSENSUS_MODELS } from '@/data/raftConsensus'
 import { VECTOR_SEARCH_MODELS } from '@/data/vectorSearch'
 import { TRAFFIC_PRIORITY_MODELS } from '@/data/trafficPriority'
+import { DISTRIBUTED_SAGA_MODELS } from '@/data/distributedSagas'
 import { EXECUTIVE_BRIEFING } from '@/data/executiveBriefing'
 
 interface HistoryEntry {
@@ -104,6 +105,11 @@ const AVAILABLE_COMMANDS = [
   'wfq',
   'codel',
   'loadshedding',
+  'sagas',
+  'orchestration',
+  'choreography',
+  'compensation',
+  'outbox',
   'adr',
   'decisions',
   'tradeoffs',
@@ -154,6 +160,7 @@ const QUICK_CHIPS = [
   { label: '[ $ raft ]', cmd: 'raft' },
   { label: '[ $ vectorsearch ]', cmd: 'vectorsearch' },
   { label: '[ $ qos ]', cmd: 'qos' },
+  { label: '[ $ sagas ]', cmd: 'sagas' },
   { label: '[ $ find kafka ]', cmd: 'find kafka' },
   { label: '[ $ tradeoffs ]', cmd: 'tradeoffs' },
   { label: '[ $ adr ]', cmd: 'adr' },
@@ -190,6 +197,7 @@ const COMMAND_HELP = [
   '  circuitbreaker  - Evaluate distributed circuit breakers, bulkheads & backoff jitter (or "circuitbreaker <id>")',
   '  concurrency     - Inspect distributed deadlock detection & 2PL vs OCC concurrency (or "concurrency <id>")',
   '  qos             - Inspect distributed QoS schedulers, token bucket & WFQ (or "qos <id>")',
+  '  sagas           - Inspect distributed Saga orchestration, choreography & compensation (or "sagas <id>")',
   '  find <query>    - Search cross-cutting architecture systems, ADRs, AI codex & trade-offs',
   '  tradeoffs       - Evaluate system design decision trade-offs (or "compare <topic>")',
   '  stats           - View production performance & impact metrics (99.99% SLA)',
@@ -2107,6 +2115,74 @@ export default function InteractiveCli() {
         ]
         break
       }
+      case 'sagas':
+      case 'orchestration':
+      case 'choreography':
+      case 'compensation':
+      case 'outbox': {
+        const target = args[0]?.toLowerCase().trim()
+        if (target) {
+          const matched = DISTRIBUTED_SAGA_MODELS.find(m => 
+            m.id === target ||
+            m.id.includes(target) ||
+            m.name.toLowerCase().includes(target) ||
+            m.badge.toLowerCase().includes(target) ||
+            (target === '1' && m.id === 'orchestrated-saga-temporal') ||
+            (target === '2' && m.id === 'choreographed-saga-kafka') ||
+            (target === '3' && m.id === 'backward-compensation-recovery') ||
+            (target === '4' && m.id === 'forward-recovery-retry') ||
+            (target === '5' && m.id === 'dual-write-atomic-outbox')
+          )
+          if (matched) {
+            output = [
+              '--------------------------------------------------------------------------------',
+              `Distributed Saga Model: ${matched.name} [${matched.badge}]`,
+              '--------------------------------------------------------------------------------',
+              `Core Paradigm       : ${matched.paradigm}`,
+              `Coordination Style  : ${matched.coordinationModel}`,
+              `Coupling Model      : ${matched.couplingType}`,
+              `Fault Recovery      : ${matched.faultRecoveryStyle}`,
+              `Isolation Guarantee : ${matched.isolationGuarantee}`,
+              '--------------------------------------------------------------------------------',
+              'WORKFLOW PHASES & INVARIANTS:',
+              ...matched.workflowPhases.map(p =>
+                `  * [${p.name}] :: ${p.description} -> Invariant: ${p.invariants}`
+              ),
+              '--------------------------------------------------------------------------------',
+              'SAGA ACTIVITIES & COMPENSATING TRANSACTIONS:',
+              ...matched.steps.map((s, idx) =>
+                `  ${idx + 1}. [${s.service}] Forward: ${s.action} | Compensate: ${s.compensatingAction} (${s.durationMs}ms)`
+              ),
+              '--------------------------------------------------------------------------------',
+              'PRODUCTION OUTCOMES & INVARIANTS:',
+              ...Object.entries(matched.productionOutcomes).map(([k, v]) => `  + ${k}: ${v}`),
+              '',
+              `Architectural Invariant: "${matched.architecturalInvariant}"`,
+              '--------------------------------------------------------------------------------',
+              'Full live interactive transaction stepper and failure injection in #architecture-distributed-sagas.'
+            ]
+            break
+          }
+        }
+
+        output = [
+          'Distributed Saga Orchestration vs Choreography & Compensation State Engine:',
+          '--------------------------------------------------------------------------------',
+          'Explore 5 distributed transaction and compensation architectures across microservices:',
+          '',
+          ...DISTRIBUTED_SAGA_MODELS.flatMap((m, idx) => [
+            `${idx + 1}. [ ${m.id} ] : ${m.name} (${m.badge})`,
+            `   Paradigm      : ${m.paradigm}`,
+            `   Coordination  : ${m.coordinationModel.split(';')[0]}`,
+            `   Fault Style   : ${m.faultRecoveryStyle}`,
+            `   Deep Dive     : "sagas ${idx + 1}" or "sagas ${m.id.split('-')[0]}" (e.g. "sagas temporal", "sagas kafka", "sagas backward", "sagas forward", "sagas outbox")`,
+            ''
+          ]),
+          '--------------------------------------------------------------------------------',
+          'Tip: Run "sagas <id>" (e.g. "sagas 1" or "sagas temporal") to inspect forward activities and compensation logic.'
+        ]
+        break
+      }
       case 'find':
       case 'search': {
         const query = args.join(' ').toLowerCase().trim()
@@ -2116,7 +2192,7 @@ export default function InteractiveCli() {
             '--------------------------------------------------------------------------------',
             'Search cross-cutting distributed systems, ADRs, AI paradigms, and trade-offs.',
             'Usage: find <query> (e.g. "find kafka", "find redis", "find mcp", "find saga")',
-            'Available Domains: Systems, ADR Governance, AI Codex, Trade-Off Matrix, Evolution Diffs, Chaos Drills, API Gateway, Distributed Traces, Kafka Event Streams, Distributed Rate Limiting, Multi-Region Replication, Database Sharding, Edge CDN Caching, Circuit Breakers, Concurrency & Deadlocks, Raft Consensus, Vector Search, Traffic Priority & QoS'
+            'Available Domains: Systems, ADR Governance, AI Codex, Trade-Off Matrix, Evolution Diffs, Chaos Drills, API Gateway, Distributed Traces, Kafka Event Streams, Distributed Rate Limiting, Multi-Region Replication, Database Sharding, Edge CDN Caching, Circuit Breakers, Concurrency & Deadlocks, Raft Consensus, Vector Search, Traffic Priority & QoS, Distributed Sagas & Compensations'
           ]
           break
         }
@@ -2490,6 +2566,30 @@ export default function InteractiveCli() {
               `  Paradigm   : ${p.paradigm} (${p.badge})`,
               `  Latency    : ${p.latencyGuarantee}`,
               `  Anchor     : #architecture-traffic-priority`,
+              ''
+            )
+          }
+        })
+
+        // 19. Search Distributed Sagas & Compensation
+        DISTRIBUTED_SAGA_MODELS.forEach(s => {
+          if (
+            s.name.toLowerCase().includes(query) ||
+            s.id.toLowerCase().includes(query) ||
+            s.paradigm.toLowerCase().includes(query) ||
+            s.badge.toLowerCase().includes(query) ||
+            s.coordinationModel.toLowerCase().includes(query) ||
+            s.couplingType.toLowerCase().includes(query) ||
+            s.faultRecoveryStyle.toLowerCase().includes(query) ||
+            s.isolationGuarantee.toLowerCase().includes(query) ||
+            s.architecturalInvariant.toLowerCase().includes(query) ||
+            s.steps.some(st => st.name.toLowerCase().includes(query) || st.service.toLowerCase().includes(query) || st.action.toLowerCase().includes(query))
+          ) {
+            results.push(
+              `[Distributed Saga] ${s.name}`,
+              `  Paradigm   : ${s.paradigm} (${s.badge})`,
+              `  Recovery   : ${s.faultRecoveryStyle}`,
+              `  Anchor     : #architecture-distributed-sagas`,
               ''
             )
           }

@@ -1,6 +1,6 @@
 {
   "version": "1.0.0",
-  "generatedAt": "2026-10-27T16:48:22.137Z",
+  "generatedAt": "2026-10-27T17:00:25.125Z",
   "nodes": {
     "src/components/architecture/AdrExplorer.tsx": {
       "file": "src/components/architecture/AdrExplorer.tsx",
@@ -180,6 +180,18 @@
         "DistributedConcurrencySandbox"
       ],
       "loc": 391
+    },
+    "src/components/architecture/DistributedSagasSandbox.tsx": {
+      "file": "src/components/architecture/DistributedSagasSandbox.tsx",
+      "imports": [
+        "react",
+        "lucide-react",
+        "@/data/distributedSagas"
+      ],
+      "exports": [
+        "DistributedSagasSandbox"
+      ],
+      "loc": 567
     },
     "src/components/architecture/DistributedTraceInspector.tsx": {
       "file": "src/components/architecture/DistributedTraceInspector.tsx",
@@ -415,6 +427,7 @@
         "@/components/architecture/RaftConsensusSandbox",
         "@/components/architecture/VectorSearchSandbox",
         "@/components/architecture/TrafficPrioritySandbox",
+        "@/components/architecture/DistributedSagasSandbox",
         "@/data/architectureSystems",
         "@/data/architecturalDecisions",
         "@/data/architecturalTradeoffs",
@@ -431,12 +444,13 @@
         "@/data/distributedConcurrency",
         "@/data/raftConsensus",
         "@/data/vectorSearch",
-        "@/data/trafficPriority"
+        "@/data/trafficPriority",
+        "@/data/distributedSagas"
       ],
       "exports": [
         "ArchitectureLab"
       ],
-      "loc": 880
+      "loc": 920
     },
     "src/components/portfolio/ContactTerminal.tsx": {
       "file": "src/components/portfolio/ContactTerminal.tsx",
@@ -499,12 +513,13 @@
         "@/data/raftConsensus",
         "@/data/vectorSearch",
         "@/data/trafficPriority",
+        "@/data/distributedSagas",
         "@/data/executiveBriefing"
       ],
       "exports": [
         "InteractiveCli"
       ],
-      "loc": 2770
+      "loc": 2870
     },
     "src/components/portfolio/ProjectsShowcase.tsx": {
       "file": "src/components/portfolio/ProjectsShowcase.tsx",
@@ -557,7 +572,7 @@
       "exports": [
         "TerminalHero"
       ],
-      "loc": 607
+      "loc": 609
     },
     "src/components/ui/badge.tsx": {
       "file": "src/components/ui/badge.tsx",
@@ -717,6 +732,16 @@
         "findDeadlockCycles"
       ],
       "loc": 335
+    },
+    "src/data/distributedSagas.ts": {
+      "file": "src/data/distributedSagas.ts",
+      "imports": [],
+      "exports": [
+        "SagaStep",
+        "DistributedSagaModel",
+        "DISTRIBUTED_SAGA_MODELS"
+      ],
+      "loc": 654
     },
     "src/data/distributedTraces.ts": {
       "file": "src/data/distributedTraces.ts",
@@ -961,6 +986,7 @@
     "CircuitBreakerSandbox": "src/components/architecture/CircuitBreakerSandbox.tsx",
     "DatabaseShardingSandbox": "src/components/architecture/DatabaseShardingSandbox.tsx",
     "DistributedConcurrencySandbox": "src/components/architecture/DistributedConcurrencySandbox.tsx",
+    "DistributedSagasSandbox": "src/components/architecture/DistributedSagasSandbox.tsx",
     "DistributedTraceInspector": "src/components/architecture/DistributedTraceInspector.tsx",
     "EdgeCdnSandbox": "src/components/architecture/EdgeCdnSandbox.tsx",
     "HeroArchitectureTopology": "src/components/architecture/HeroArchitectureTopology.tsx",
@@ -1053,6 +1079,9 @@
     "CONCURRENCY_MODELS": "src/data/distributedConcurrency.ts",
     "validateTransaction": "src/data/distributedConcurrency.ts",
     "findDeadlockCycles": "src/data/distributedConcurrency.ts",
+    "SagaStep": "src/data/distributedSagas.ts",
+    "DistributedSagaModel": "src/data/distributedSagas.ts",
+    "DISTRIBUTED_SAGA_MODELS": "src/data/distributedSagas.ts",
     "SpanRecord": "src/data/distributedTraces.ts",
     "DistributedTrace": "src/data/distributedTraces.ts",
     "DISTRIBUTED_TRACES": "src/data/distributedTraces.ts",

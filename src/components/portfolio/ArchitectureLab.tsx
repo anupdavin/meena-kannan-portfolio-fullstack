@@ -22,6 +22,7 @@ import {
   Database,
   CloudLightning,
   GitFork,
+  GitMerge,
   X
 } from 'lucide-react'
 import ByteByteGoDiagram from '@/components/architecture/ByteByteGoDiagram'
@@ -42,6 +43,7 @@ import DistributedConcurrencySandbox from '@/components/architecture/Distributed
 import RaftConsensusSandbox from '@/components/architecture/RaftConsensusSandbox'
 import VectorSearchSandbox from '@/components/architecture/VectorSearchSandbox'
 import TrafficPrioritySandbox from '@/components/architecture/TrafficPrioritySandbox'
+import DistributedSagasSandbox from '@/components/architecture/DistributedSagasSandbox'
 import { ARCHITECTURE_SYSTEMS } from '@/data/architectureSystems'
 import { ARCHITECTURAL_DECISIONS } from '@/data/architecturalDecisions'
 import { ARCHITECTURAL_TRADEOFFS } from '@/data/architecturalTradeoffs'
@@ -59,6 +61,7 @@ import { CONCURRENCY_MODELS } from '@/data/distributedConcurrency'
 import { CONSENSUS_MODELS } from '@/data/raftConsensus'
 import { VECTOR_SEARCH_MODELS } from '@/data/vectorSearch'
 import { TRAFFIC_PRIORITY_MODELS } from '@/data/trafficPriority'
+import { DISTRIBUTED_SAGA_MODELS } from '@/data/distributedSagas'
 
 const AI_TERMS_SUMMARY = [
   { id: 'agentic-ai', title: 'Agentic AI', text: 'Perception-action loop, DAG memory, tool execution, LangGraph' },
@@ -94,6 +97,7 @@ export default function ArchitectureLab() {
         raft: 5,
         vector: 5,
         priority: 5,
+        sagas: 5,
         isActive: false
       }
     }
@@ -271,8 +275,20 @@ export default function ArchitectureLab() {
       p.architecturalInvariant.toLowerCase().includes(q)
     ).length
 
+    const sagasCount = DISTRIBUTED_SAGA_MODELS.filter(s =>
+      s.name.toLowerCase().includes(q) ||
+      s.id.toLowerCase().includes(q) ||
+      s.paradigm.toLowerCase().includes(q) ||
+      s.badge.toLowerCase().includes(q) ||
+      s.coordinationModel.toLowerCase().includes(q) ||
+      s.couplingType.toLowerCase().includes(q) ||
+      s.faultRecoveryStyle.toLowerCase().includes(q) ||
+      s.isolationGuarantee.toLowerCase().includes(q) ||
+      s.architecturalInvariant.toLowerCase().includes(q)
+    ).length
+
     return {
-      total: workbenchCount + aiCount + adrCount + tradeoffCount + evolutionCount + chaosCount + gatewayCount + traceCount + kafkaCount + ratelimitCount + multiregionCount + shardingCount + cdnCount + circuitBreakerCount + concurrencyCount + raftCount + vectorCount + priorityCount,
+      total: workbenchCount + aiCount + adrCount + tradeoffCount + evolutionCount + chaosCount + gatewayCount + traceCount + kafkaCount + ratelimitCount + multiregionCount + shardingCount + cdnCount + circuitBreakerCount + concurrencyCount + raftCount + vectorCount + priorityCount + sagasCount,
       workbench: workbenchCount,
       aiCodex: aiCount,
       adr: adrCount,
@@ -291,6 +307,7 @@ export default function ArchitectureLab() {
       raft: raftCount,
       vector: vectorCount,
       priority: priorityCount,
+      sagas: sagasCount,
       isActive: true
     }
   }, [searchQuery])
@@ -601,6 +618,17 @@ export default function ArchitectureLab() {
             <Sliders className="w-3.5 h-3.5 text-emerald-400" />
             <span>Traffic Priority ({matchStats.priority})</span>
           </a>
+          <a 
+            href="#architecture-distributed-sagas"
+            className={`px-3 py-1.5 rounded-lg border transition-all flex items-center gap-1.5 cursor-pointer ${
+              matchStats.isActive && matchStats.sagas > 0
+                ? 'bg-cyan-500/10 border-cyan-500/50 text-cyan-400 shadow-[0_0_10px_rgba(6,182,212,0.15)] font-bold'
+                : 'bg-slate-900 border-slate-800 hover:border-cyan-500/50 hover:text-cyan-400 text-slate-300'
+            }`}
+          >
+            <GitMerge className="w-3.5 h-3.5 text-cyan-400" />
+            <span>Sagas &amp; Compensation ({matchStats.sagas})</span>
+          </a>
         </div>
       </div>
 
@@ -822,6 +850,18 @@ export default function ArchitectureLab() {
         className="scroll-mt-24"
       >
         <TrafficPrioritySandbox />
+      </motion.div>
+
+      {/* 2.22. Distributed Saga Orchestration vs Choreography & Compensation State Engine */}
+      <motion.div
+        id="architecture-distributed-sagas"
+        initial={{ opacity: 0, y: 25 }}
+        whileInView={{ opacity: 1, y: 0 }}
+        viewport={{ once: true }}
+        transition={{ duration: 0.6, delay: 0.95 }}
+        className="scroll-mt-24"
+      >
+        <DistributedSagasSandbox />
       </motion.div>
 
       {/* 3. Architectural Design Pillars Strip */}

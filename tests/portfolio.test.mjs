@@ -1201,6 +1201,43 @@ describe('Production Architectural Decision Records (ADR) & CLI Integration', ()
     assert.ok(indexHtml.includes('id="architecture-traffic-priority"'), 'index.html must include #architecture-traffic-priority landmark');
     assert.ok(!/[\u2013\u2014]/.test(indexHtml), 'index.html must contain zero em/en-dashes');
   });
+
+  test('DistributedSagasSandbox and distributedSagas.ts define distributed sagas, compensation and CDC outbox with CLI integration', () => {
+    const sagasDataPath = path.join(rootDir, 'src', 'data', 'distributedSagas.ts');
+    assert.ok(fs.existsSync(sagasDataPath), 'distributedSagas.ts must exist');
+    const sagasDataCode = fs.readFileSync(sagasDataPath, 'utf8');
+    assert.ok(sagasDataCode.includes('orchestrated-saga-temporal'), 'Must define orchestrated-saga-temporal model');
+    assert.ok(sagasDataCode.includes('choreographed-saga-kafka'), 'Must define choreographed-saga-kafka model');
+    assert.ok(sagasDataCode.includes('backward-compensation-recovery'), 'Must define backward-compensation-recovery model');
+    assert.ok(sagasDataCode.includes('forward-recovery-retry'), 'Must define forward-recovery-retry model');
+    assert.ok(sagasDataCode.includes('dual-write-atomic-outbox'), 'Must define dual-write-atomic-outbox model');
+    assert.ok(!/[\u2013\u2014]/.test(sagasDataCode), 'distributedSagas.ts must contain zero em/en-dashes');
+
+    const componentPath = path.join(rootDir, 'src', 'components', 'architecture', 'DistributedSagasSandbox.tsx');
+    assert.ok(fs.existsSync(componentPath), 'DistributedSagasSandbox.tsx must exist');
+    const compCode = fs.readFileSync(componentPath, 'utf8');
+    assert.ok(compCode.includes('copyRfcReport'), 'DistributedSagasSandbox must support 1-click RFC copy');
+    assert.ok(compCode.includes('DISTRIBUTED_SAGA_MODELS'), 'DistributedSagasSandbox must render DISTRIBUTED_SAGA_MODELS');
+    assert.ok(!/[\u2013\u2014]/.test(compCode), 'DistributedSagasSandbox.tsx must contain zero em/en-dashes');
+
+    const labCode = fs.readFileSync(path.join(rootDir, 'src', 'components', 'portfolio', 'ArchitectureLab.tsx'), 'utf8');
+    assert.ok(labCode.includes('DistributedSagasSandbox'), 'ArchitectureLab must mount DistributedSagasSandbox');
+    assert.ok(labCode.includes('id="architecture-distributed-sagas"'), 'ArchitectureLab must define anchor #architecture-distributed-sagas');
+
+    const cliCode = fs.readFileSync(path.join(rootDir, 'src', 'components', 'portfolio', 'InteractiveCli.tsx'), 'utf8');
+    assert.ok(cliCode.includes("'sagas'"), "InteractiveCli must support 'sagas' command");
+    assert.ok(cliCode.includes('[ $ sagas ]'), "InteractiveCli must include '[ $ sagas ]' quick chip");
+    assert.ok(cliCode.includes('DISTRIBUTED_SAGA_MODELS'), 'InteractiveCli must search across DISTRIBUTED_SAGA_MODELS');
+    assert.ok(!/[\u2013\u2014]/.test(cliCode), 'InteractiveCli.tsx must contain zero em/en-dashes');
+
+    const chatIndex = fs.readFileSync(path.join(rootDir, 'public', 'chat', 'index.json'), 'utf8');
+    assert.ok(chatIndex.includes('distributed-sagas-compensation'), 'public/chat/index.json must index distributed-sagas-compensation');
+    assert.ok(!/[\u2013\u2014]/.test(chatIndex), 'public/chat/index.json must contain zero em/en-dashes');
+
+    const indexHtml = fs.readFileSync(path.join(rootDir, 'index.html'), 'utf8');
+    assert.ok(indexHtml.includes('id="architecture-distributed-sagas"'), 'index.html must include #architecture-distributed-sagas landmark');
+    assert.ok(!/[\u2013\u2014]/.test(indexHtml), 'index.html must contain zero em/en-dashes');
+  });
 });
 
 
