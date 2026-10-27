@@ -601,12 +601,22 @@
             </div>
 
             <!-- Sub-Section 16: Distributed Consensus & Raft Leader Election State Machine -->
-            <div id="architecture-raft-consensus" style="background: rgba(9, 14, 24, 0.7); border: 1px solid #1e293b; border-radius: 16px; padding: 1.5rem;">
+            <div id="architecture-raft-consensus" style="background: rgba(9, 14, 24, 0.7); border: 1px solid #1e293b; border-radius: 16px; padding: 1.5rem; margin-bottom: 2rem;">
               <h3 style="color: #10b981; font-size: 1.25rem; font-weight: bold; margin-bottom: 0.5rem;">
                 Distributed Consensus &amp; Raft Leader Election State Machine Sandbox
               </h3>
               <p style="color: #94a3b8; font-size: 0.85rem; line-height: 1.6;">
                 Fault-tolerant replicated state machine consensus across 5 paradigms: Raft Randomized Timer Leader Election (150ms-300ms election timeouts and majority voting), Raft Log Replication (AppendEntries RPC, commitIndex monotonic advancement, and state machine apply), Multi-Raft WAN Network Partition &amp; Quorum Isolation (strict majority formula Q = floor(N/2) + 1 freezing minority writes to eliminate split-brain), Raft Joint Consensus Dynamic Cluster Membership (two-phase Cold to Cold,new to Cnew migration without downtime), and Multi-Paxos vs Raft Comparative Evaluation (Synod prepare/promise vs strong leader leases).
+              </p>
+            </div>
+
+            <!-- Sub-Section 17: Distributed Sharded Vector Search & HNSW Indexing Sandbox -->
+            <div id="architecture-vector-search" style="background: rgba(9, 14, 24, 0.7); border: 1px solid #1e293b; border-radius: 16px; padding: 1.5rem;">
+              <h3 style="color: #14b8a6; font-size: 1.25rem; font-weight: bold; margin-bottom: 0.5rem;">
+                Distributed Sharded Vector Search &amp; HNSW Indexing Sandbox
+              </h3>
+              <p style="color: #94a3b8; font-size: 0.85rem; line-height: 1.6;">
+                High-dimensional approximate nearest neighbor (ANN) retrieval across 5 architectures: Hierarchical Navigable Small World (HNSW) graphs with multi-layer skip-lists (M=16, efSearch=64, sub-2ms P99), Inverted File with Product Quantization (IVF-PQ with 1024 Voronoi centroids and 8x compression), Distributed Sharded Vector Routing with Top-K Heap Merge across K embedding partitions, Hybrid Dense-Sparse Retrieval with Reciprocal Rank Fusion (RRF combining BM25 keyword frequency and pgvector cosine similarity), and Vector Quantization Memory Profiler (FP32 vs FP16 halfvec vs INT8 scalar quantization).
               </p>
             </div>
           </section>

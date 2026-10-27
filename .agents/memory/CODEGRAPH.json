@@ -1,6 +1,6 @@
 {
   "version": "1.0.0",
-  "generatedAt": "2026-10-27T16:19:59.421Z",
+  "generatedAt": "2026-10-27T16:37:04.819Z",
   "nodes": {
     "src/components/architecture/AdrExplorer.tsx": {
       "file": "src/components/architecture/AdrExplorer.tsx",
@@ -320,6 +320,18 @@
       ],
       "loc": 326
     },
+    "src/components/architecture/VectorSearchSandbox.tsx": {
+      "file": "src/components/architecture/VectorSearchSandbox.tsx",
+      "imports": [
+        "react",
+        "lucide-react",
+        "@/data/vectorSearch"
+      ],
+      "exports": [
+        "VectorSearchSandbox"
+      ],
+      "loc": 490
+    },
     "src/components/architecture/workbenchConfigs.ts": {
       "file": "src/components/architecture/workbenchConfigs.ts",
       "imports": [],
@@ -389,6 +401,7 @@
         "@/components/architecture/CircuitBreakerSandbox",
         "@/components/architecture/DistributedConcurrencySandbox",
         "@/components/architecture/RaftConsensusSandbox",
+        "@/components/architecture/VectorSearchSandbox",
         "@/data/architectureSystems",
         "@/data/architecturalDecisions",
         "@/data/architecturalTradeoffs",
@@ -403,12 +416,13 @@
         "@/data/edgeCdnCaching",
         "@/data/circuitBreakers",
         "@/data/distributedConcurrency",
-        "@/data/raftConsensus"
+        "@/data/raftConsensus",
+        "@/data/vectorSearch"
       ],
       "exports": [
         "ArchitectureLab"
       ],
-      "loc": 803
+      "loc": 841
     },
     "src/components/portfolio/ContactTerminal.tsx": {
       "file": "src/components/portfolio/ContactTerminal.tsx",
@@ -469,12 +483,13 @@
         "@/data/circuitBreakers",
         "@/data/distributedConcurrency",
         "@/data/raftConsensus",
+        "@/data/vectorSearch",
         "@/data/executiveBriefing"
       ],
       "exports": [
         "InteractiveCli"
       ],
-      "loc": 2556
+      "loc": 2662
     },
     "src/components/portfolio/ProjectsShowcase.tsx": {
       "file": "src/components/portfolio/ProjectsShowcase.tsx",
@@ -527,7 +542,7 @@
       "exports": [
         "TerminalHero"
       ],
-      "loc": 604
+      "loc": 606
     },
     "src/components/ui/badge.tsx": {
       "file": "src/components/ui/badge.tsx",
@@ -771,6 +786,16 @@
       ],
       "loc": 467
     },
+    "src/data/vectorSearch.ts": {
+      "file": "src/data/vectorSearch.ts",
+      "imports": [],
+      "exports": [
+        "VectorSearchModel",
+        "VECTOR_SEARCH_MODELS",
+        "reciprocalRankFusion"
+      ],
+      "loc": 325
+    },
     "src/main.tsx": {
       "file": "src/main.tsx",
       "imports": [
@@ -941,6 +966,7 @@
     "SystemDesignCanvasProps": "src/components/architecture/SystemDesignCanvas.tsx",
     "SystemDesignCanvas": "src/components/architecture/SystemDesignCanvas.tsx",
     "TradeoffMatrix": "src/components/architecture/TradeoffMatrix.tsx",
+    "VectorSearchSandbox": "src/components/architecture/VectorSearchSandbox.tsx",
     "SystemStepDef": "src/components/architecture/workbenchConfigs.ts",
     "NodeRuntimeSpec": "src/components/architecture/workbenchConfigs.ts",
     "WorkbenchSystemConfig": "src/components/architecture/workbenchConfigs.ts",
@@ -1027,6 +1053,9 @@
     "checkJointQuorum": "src/data/raftConsensus.ts",
     "RateLimitingAlgorithm": "src/data/rateLimitingAlgorithms.ts",
     "RATE_LIMITING_ALGORITHMS": "src/data/rateLimitingAlgorithms.ts",
+    "VectorSearchModel": "src/data/vectorSearch.ts",
+    "VECTOR_SEARCH_MODELS": "src/data/vectorSearch.ts",
+    "reciprocalRankFusion": "src/data/vectorSearch.ts",
     "Layout": "src/pages/Layout.tsx",
     "Portfolio": "src/pages/Portfolio.tsx"
   }

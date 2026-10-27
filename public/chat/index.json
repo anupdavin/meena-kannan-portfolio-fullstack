@@ -184,5 +184,11 @@
     "title": "Distributed Consensus & Raft Leader Election State Machine Sandbox",
     "text": "Meena designs production replicated state machine consensus and leader election engines across 5 paradigms: (1) Raft Randomized Timer Leader Election: Randomized election timeouts (150ms-300ms) and majority votes (floor(N/2)+1) achieving sub-250ms failover without central coordinators, (2) Raft Log Replication: AppendEntries RPC pipeline advancing commitIndex upon majority replication and applying commands deterministically to local state machines, (3) Multi-Raft Network Partition & Quorum Isolation: Mathematical quorum intersection ensures minority partitions (<=2 of 5 nodes) freeze writes to eliminate split-brain dual-leader commits, (4) Joint Consensus Dynamic Cluster Reconfiguration: Two-phase Cold to Cold,new to Cnew migration allowing zero-downtime cluster resizing, and (5) Multi-Paxos vs Raft Comparative Evaluation: Contrasts classic Synod 2-phase rounds with amortized stable leader leases.",
     "url": "#architecture-raft-consensus"
+  },
+  {
+    "id": "distributed-vector-search",
+    "title": "Distributed Sharded Vector Search & HNSW Indexing Sandbox",
+    "text": "Meena architects enterprise approximate nearest neighbor (ANN) vector search and retrieval engines across 5 paradigms: (1) Hierarchical Navigable Small World (HNSW) Graphs: Multi-layer proximity graph with skip-list routing (M=16, efSearch=64) delivering sub-2ms P99 search latency across 5M 1536d vectors with 98.4% Recall@10, (2) Inverted File with Product Quantization (IVF-PQ): 1024 Voronoi coarse centroids and 8-byte sub-vector quantization achieving 8.2x memory compression and 24,000 QPS throughput via Asymmetric Distance Computation (ADC), (3) Distributed Sharded Vector Routing: Coordinator dispatching parallel scatter queries to K embedding shards with bounded min-heap merge guaranteeing exact global top-K results, (4) Hybrid Dense-Sparse Retrieval with Reciprocal Rank Fusion: Combines BM25 lexical keyword matches with pgvector cosine similarity via non-parametric RRF scoring (k=60), improving MRR@10 by +28.4%, and (5) Quantized Vector Memory Sizing: Scalar quantization (FP16 halfvec and INT8 scalar) cutting AWS memory footprint by 75% while preserving 99.2% relative recall.",
+    "url": "#architecture-vector-search"
   }
 ]

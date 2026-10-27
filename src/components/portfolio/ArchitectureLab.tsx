@@ -40,6 +40,7 @@ import EdgeCdnSandbox from '@/components/architecture/EdgeCdnSandbox'
 import CircuitBreakerSandbox from '@/components/architecture/CircuitBreakerSandbox'
 import DistributedConcurrencySandbox from '@/components/architecture/DistributedConcurrencySandbox'
 import RaftConsensusSandbox from '@/components/architecture/RaftConsensusSandbox'
+import VectorSearchSandbox from '@/components/architecture/VectorSearchSandbox'
 import { ARCHITECTURE_SYSTEMS } from '@/data/architectureSystems'
 import { ARCHITECTURAL_DECISIONS } from '@/data/architecturalDecisions'
 import { ARCHITECTURAL_TRADEOFFS } from '@/data/architecturalTradeoffs'
@@ -55,6 +56,7 @@ import { EDGE_CDN_STRATEGIES } from '@/data/edgeCdnCaching'
 import { CIRCUIT_BREAKER_PATTERNS } from '@/data/circuitBreakers'
 import { CONCURRENCY_MODELS } from '@/data/distributedConcurrency'
 import { CONSENSUS_MODELS } from '@/data/raftConsensus'
+import { VECTOR_SEARCH_MODELS } from '@/data/vectorSearch'
 
 const AI_TERMS_SUMMARY = [
   { id: 'agentic-ai', title: 'Agentic AI', text: 'Perception-action loop, DAG memory, tool execution, LangGraph' },
@@ -88,6 +90,7 @@ export default function ArchitectureLab() {
         circuitbreaker: 5,
         concurrency: 5,
         raft: 5,
+        vector: 5,
         isActive: false
       }
     }
@@ -242,8 +245,19 @@ export default function ArchitectureLab() {
       r.architecturalInvariant.toLowerCase().includes(q)
     ).length
 
+    const vectorCount = VECTOR_SEARCH_MODELS.filter(v =>
+      v.name.toLowerCase().includes(q) ||
+      v.id.toLowerCase().includes(q) ||
+      v.paradigm.toLowerCase().includes(q) ||
+      v.badge.toLowerCase().includes(q) ||
+      v.searchComplexity.toLowerCase().includes(q) ||
+      v.memoryProfile.toLowerCase().includes(q) ||
+      v.recallAccuracy.toLowerCase().includes(q) ||
+      v.architecturalInvariant.toLowerCase().includes(q)
+    ).length
+
     return {
-      total: workbenchCount + aiCount + adrCount + tradeoffCount + evolutionCount + chaosCount + gatewayCount + traceCount + kafkaCount + ratelimitCount + multiregionCount + shardingCount + cdnCount + circuitBreakerCount + concurrencyCount + raftCount,
+      total: workbenchCount + aiCount + adrCount + tradeoffCount + evolutionCount + chaosCount + gatewayCount + traceCount + kafkaCount + ratelimitCount + multiregionCount + shardingCount + cdnCount + circuitBreakerCount + concurrencyCount + raftCount + vectorCount,
       workbench: workbenchCount,
       aiCodex: aiCount,
       adr: adrCount,
@@ -260,6 +274,7 @@ export default function ArchitectureLab() {
       circuitbreaker: circuitBreakerCount,
       concurrency: concurrencyCount,
       raft: raftCount,
+      vector: vectorCount,
       isActive: true
     }
   }, [searchQuery])
@@ -548,6 +563,17 @@ export default function ArchitectureLab() {
             <Radio className="w-3.5 h-3.5 text-emerald-400" />
             <span>Raft Consensus ({matchStats.raft})</span>
           </a>
+          <a 
+            href="#architecture-vector-search"
+            className={`px-3 py-1.5 rounded-lg border transition-all flex items-center gap-1.5 cursor-pointer ${
+              matchStats.isActive && matchStats.vector > 0
+                ? 'bg-teal-500/10 border-teal-500/50 text-teal-400 shadow-[0_0_10px_rgba(20,184,166,0.15)] font-bold'
+                : 'bg-slate-900 border-slate-800 hover:border-teal-500/50 hover:text-teal-400 text-slate-300'
+            }`}
+          >
+            <Search className="w-3.5 h-3.5 text-teal-400" />
+            <span>Vector Search ({matchStats.vector})</span>
+          </a>
         </div>
       </div>
 
@@ -745,6 +771,18 @@ export default function ArchitectureLab() {
         className="scroll-mt-24"
       >
         <RaftConsensusSandbox />
+      </motion.div>
+
+      {/* 2.20. Distributed Sharded Vector Search & HNSW Indexing Sandbox */}
+      <motion.div
+        id="architecture-vector-search"
+        initial={{ opacity: 0, y: 25 }}
+        whileInView={{ opacity: 1, y: 0 }}
+        viewport={{ once: true }}
+        transition={{ duration: 0.6, delay: 0.85 }}
+        className="scroll-mt-24"
+      >
+        <VectorSearchSandbox />
       </motion.div>
 
       {/* 3. Architectural Design Pillars Strip */}

@@ -1127,6 +1127,43 @@ describe('Production Architectural Decision Records (ADR) & CLI Integration', ()
     assert.ok(indexHtml.includes('id="architecture-raft-consensus"'), 'index.html must include #architecture-raft-consensus landmark');
     assert.ok(!/[\u2013\u2014]/.test(indexHtml), 'index.html must contain zero em/en-dashes');
   });
+
+  test('VectorSearchSandbox and vectorSearch.ts define distributed vector search and HNSW indexing with CLI integration', () => {
+    const vectorDataPath = path.join(rootDir, 'src', 'data', 'vectorSearch.ts');
+    assert.ok(fs.existsSync(vectorDataPath), 'vectorSearch.ts must exist');
+    const vectorDataCode = fs.readFileSync(vectorDataPath, 'utf8');
+    assert.ok(vectorDataCode.includes('hnsw-skip-list-graphs'), 'Must define hnsw-skip-list-graphs model');
+    assert.ok(vectorDataCode.includes('ivf-pq-quantization'), 'Must define ivf-pq-quantization model');
+    assert.ok(vectorDataCode.includes('sharded-vector-routing'), 'Must define sharded-vector-routing model');
+    assert.ok(vectorDataCode.includes('hybrid-dense-sparse-rrf'), 'Must define hybrid-dense-sparse-rrf model');
+    assert.ok(vectorDataCode.includes('vector-quantization-profiler'), 'Must define vector-quantization-profiler model');
+    assert.ok(!/[\u2013\u2014]/.test(vectorDataCode), 'vectorSearch.ts must contain zero em/en-dashes');
+
+    const componentPath = path.join(rootDir, 'src', 'components', 'architecture', 'VectorSearchSandbox.tsx');
+    assert.ok(fs.existsSync(componentPath), 'VectorSearchSandbox.tsx must exist');
+    const compCode = fs.readFileSync(componentPath, 'utf8');
+    assert.ok(compCode.includes('copyRfcReport'), 'VectorSearchSandbox must support 1-click RFC copy');
+    assert.ok(compCode.includes('VECTOR_SEARCH_MODELS'), 'VectorSearchSandbox must render VECTOR_SEARCH_MODELS');
+    assert.ok(!/[\u2013\u2014]/.test(compCode), 'VectorSearchSandbox.tsx must contain zero em/en-dashes');
+
+    const labCode = fs.readFileSync(path.join(rootDir, 'src', 'components', 'portfolio', 'ArchitectureLab.tsx'), 'utf8');
+    assert.ok(labCode.includes('VectorSearchSandbox'), 'ArchitectureLab must mount VectorSearchSandbox');
+    assert.ok(labCode.includes('id="architecture-vector-search"'), 'ArchitectureLab must define anchor #architecture-vector-search');
+
+    const cliCode = fs.readFileSync(path.join(rootDir, 'src', 'components', 'portfolio', 'InteractiveCli.tsx'), 'utf8');
+    assert.ok(cliCode.includes("'vectorsearch'"), "InteractiveCli must support 'vectorsearch' command");
+    assert.ok(cliCode.includes('[ $ vectorsearch ]'), "InteractiveCli must include '[ $ vectorsearch ]' quick chip");
+    assert.ok(cliCode.includes('VECTOR_SEARCH_MODELS'), 'InteractiveCli must search across VECTOR_SEARCH_MODELS');
+    assert.ok(!/[\u2013\u2014]/.test(cliCode), 'InteractiveCli.tsx must contain zero em/en-dashes');
+
+    const chatIndex = fs.readFileSync(path.join(rootDir, 'public', 'chat', 'index.json'), 'utf8');
+    assert.ok(chatIndex.includes('distributed-vector-search'), 'public/chat/index.json must index distributed-vector-search');
+    assert.ok(!/[\u2013\u2014]/.test(chatIndex), 'public/chat/index.json must contain zero em/en-dashes');
+
+    const indexHtml = fs.readFileSync(path.join(rootDir, 'index.html'), 'utf8');
+    assert.ok(indexHtml.includes('id="architecture-vector-search"'), 'index.html must include #architecture-vector-search landmark');
+    assert.ok(!/[\u2013\u2014]/.test(indexHtml), 'index.html must contain zero em/en-dashes');
+  });
 });
 
 

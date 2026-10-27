@@ -16,6 +16,7 @@ import { EDGE_CDN_STRATEGIES } from '@/data/edgeCdnCaching'
 import { CIRCUIT_BREAKER_PATTERNS } from '@/data/circuitBreakers'
 import { CONCURRENCY_MODELS } from '@/data/distributedConcurrency'
 import { CONSENSUS_MODELS } from '@/data/raftConsensus'
+import { VECTOR_SEARCH_MODELS } from '@/data/vectorSearch'
 import { EXECUTIVE_BRIEFING } from '@/data/executiveBriefing'
 
 interface HistoryEntry {
@@ -92,6 +93,11 @@ const AVAILABLE_COMMANDS = [
   'consensus',
   'paxos',
   'election',
+  'vectorsearch',
+  'hnsw',
+  'ivfpq',
+  'rrf',
+  'embeddings',
   'adr',
   'decisions',
   'tradeoffs',
@@ -140,6 +146,7 @@ const QUICK_CHIPS = [
   { label: '[ $ circuitbreaker ]', cmd: 'circuitbreaker' },
   { label: '[ $ concurrency ]', cmd: 'concurrency' },
   { label: '[ $ raft ]', cmd: 'raft' },
+  { label: '[ $ vectorsearch ]', cmd: 'vectorsearch' },
   { label: '[ $ find kafka ]', cmd: 'find kafka' },
   { label: '[ $ tradeoffs ]', cmd: 'tradeoffs' },
   { label: '[ $ adr ]', cmd: 'adr' },
@@ -1031,6 +1038,19 @@ export default function InteractiveCli() {
           ]
           break
         }
+        if (sub === 'vectorsearch' || sub === 'hnsw' || sub === 'ivfpq' || sub === 'rrf' || sub === 'embeddings' || args.some(a => a.toLowerCase().includes('vector') || a.toLowerCase().includes('hnsw') || a.toLowerCase().includes('embedding'))) {
+          output = [
+            'Routing to Distributed Sharded Vector Search & HNSW Indexing Sandbox (#architecture-vector-search):',
+            '  1. HNSW Graph Skip-List    : O(log N) multi-layer proximity search (M=16, efSearch=64, 98.4% recall)',
+            '  2. IVF-PQ Quantization     : 8.2x RAM compression with Asymmetric Distance Computation (ADC)',
+            '  3. Sharded Vector Routing  : Horizontal scatter-gather partition fabric with bounded Top-K min-heap merge',
+            '  4. Hybrid Dense-Sparse RRF : Non-parametric Reciprocal Rank Fusion blending BM25 and pgvector (+28.4% MRR)',
+            '  5. Quantization Profiler   : SIMD hardware-accelerated integer dot-products (FP32 vs FP16 vs INT8)',
+            '--------------------------------------------------------------------------------',
+            'Interactive Sandbox: Live in #architecture-vector-search with 2D vector space projection probe.'
+          ]
+          break
+        }
         output = [
           'ByteByteGo Interactive Architecture Lab Navigator:',
           '--------------------------------------------------------------------------------',
@@ -1051,6 +1071,7 @@ export default function InteractiveCli() {
           '  [ 14 ] "architecture circuitbreaker": Distributed Circuit Breaker Mesh (#architecture-circuit-breaker)',
           '  [ 15 ] "architecture concurrency": Concurrency & Deadlock Detection (#architecture-distributed-concurrency)',
           '  [ 16 ] "architecture raft"    : Distributed Raft Consensus Engine (#architecture-raft-consensus)',
+          '  [ 17 ] "architecture vectorsearch": Distributed Vector Search & HNSW (#architecture-vector-search)',
           '--------------------------------------------------------------------------------',
           'Clean Architecture Principles Enforced:',
           '  + Domain Isolation     : Core business domains decouple from libraries and vendor SDKs',
@@ -1938,6 +1959,69 @@ export default function InteractiveCli() {
         ]
         break
       }
+      case 'vectorsearch':
+      case 'hnsw':
+      case 'ivfpq':
+      case 'rrf':
+      case 'embeddings': {
+        const target = args[0]?.toLowerCase().trim()
+        if (target) {
+          const matched = VECTOR_SEARCH_MODELS.find(m => 
+            m.id === target ||
+            m.id.includes(target) ||
+            m.name.toLowerCase().includes(target) ||
+            m.badge.toLowerCase().includes(target) ||
+            (target === '1' && m.id === 'hnsw-skip-list-graphs') ||
+            (target === '2' && m.id === 'ivf-pq-quantization') ||
+            (target === '3' && m.id === 'sharded-vector-routing') ||
+            (target === '4' && m.id === 'hybrid-dense-sparse-rrf') ||
+            (target === '5' && m.id === 'vector-quantization-profiler')
+          )
+          if (matched) {
+            output = [
+              '--------------------------------------------------------------------------------',
+              `Vector Search Architecture: ${matched.name} [${matched.badge}]`,
+              '--------------------------------------------------------------------------------',
+              `Core Paradigm       : ${matched.paradigm}`,
+              `Search Complexity   : ${matched.searchComplexity}`,
+              `Memory Profile      : ${matched.memoryProfile}`,
+              `Indexing Rate       : ${matched.indexingThroughput}`,
+              `Recall Accuracy     : ${matched.recallAccuracy}`,
+              '--------------------------------------------------------------------------------',
+              'WORKFLOW PHASES & INVARIANTS:',
+              ...matched.workflowPhases.map(p =>
+                `  * [${p.name}] :: ${p.description} -> Invariant: ${p.invariants}`
+              ),
+              '--------------------------------------------------------------------------------',
+              'PRODUCTION OUTCOMES & INVARIANTS:',
+              ...Object.entries(matched.productionOutcomes).map(([k, v]) => `  + ${k}: ${v}`),
+              '',
+              `Architectural Invariant: "${matched.architecturalInvariant}"`,
+              '--------------------------------------------------------------------------------',
+              'Full live interactive 2D hyperspace probe and HNSW beam traversal in #architecture-vector-search.'
+            ]
+            break
+          }
+        }
+
+        output = [
+          'Distributed Sharded Vector Search & HNSW Indexing Sandbox:',
+          '--------------------------------------------------------------------------------',
+          'Explore 5 vector search, quantization, and hybrid retrieval architectures:',
+          '',
+          ...VECTOR_SEARCH_MODELS.flatMap((m, idx) => [
+            `${idx + 1}. [ ${m.id} ] : ${m.name} (${m.badge})`,
+            `   Paradigm      : ${m.paradigm}`,
+            `   Complexity    : ${m.searchComplexity}`,
+            `   Recall Target : ${m.recallAccuracy}`,
+            `   Deep Dive     : "vectorsearch ${idx + 1}" or "vectorsearch ${m.id.split('-')[0]}" (e.g. "vectorsearch hnsw", "vectorsearch ivf", "vectorsearch sharded", "vectorsearch rrf", "vectorsearch quantization")`,
+            ''
+          ]),
+          '--------------------------------------------------------------------------------',
+          'Tip: Run "vectorsearch <id>" (e.g. "vectorsearch 1" or "vectorsearch hnsw") to inspect index traversal.'
+        ]
+        break
+      }
       case 'find':
       case 'search': {
         const query = args.join(' ').toLowerCase().trim()
@@ -1947,7 +2031,7 @@ export default function InteractiveCli() {
             '--------------------------------------------------------------------------------',
             'Search cross-cutting distributed systems, ADRs, AI paradigms, and trade-offs.',
             'Usage: find <query> (e.g. "find kafka", "find redis", "find mcp", "find saga")',
-            'Available Domains: Systems, ADR Governance, AI Codex, Trade-Off Matrix, Evolution Diffs, Chaos Drills, API Gateway, Distributed Traces, Kafka Event Streams, Distributed Rate Limiting, Multi-Region Replication, Database Sharding, Edge CDN Caching, Circuit Breakers, Concurrency & Deadlocks, Raft Consensus'
+            'Available Domains: Systems, ADR Governance, AI Codex, Trade-Off Matrix, Evolution Diffs, Chaos Drills, API Gateway, Distributed Traces, Kafka Event Streams, Distributed Rate Limiting, Multi-Region Replication, Database Sharding, Edge CDN Caching, Circuit Breakers, Concurrency & Deadlocks, Raft Consensus, Vector Search'
           ]
           break
         }
@@ -2276,6 +2360,28 @@ export default function InteractiveCli() {
               `  Paradigm   : ${c.paradigm} (${c.badge})`,
               `  Quorum     : ${c.quorumRequirement}`,
               `  Anchor     : #architecture-raft-consensus`,
+              ''
+            )
+          }
+        })
+
+        // 17. Search Distributed Vector Search & HNSW
+        VECTOR_SEARCH_MODELS.forEach(v => {
+          if (
+            v.name.toLowerCase().includes(query) ||
+            v.id.toLowerCase().includes(query) ||
+            v.paradigm.toLowerCase().includes(query) ||
+            v.badge.toLowerCase().includes(query) ||
+            v.searchComplexity.toLowerCase().includes(query) ||
+            v.memoryProfile.toLowerCase().includes(query) ||
+            v.recallAccuracy.toLowerCase().includes(query) ||
+            v.architecturalInvariant.toLowerCase().includes(query)
+          ) {
+            results.push(
+              `[Vector Search] ${v.name}`,
+              `  Paradigm   : ${v.paradigm} (${v.badge})`,
+              `  Complexity : ${v.searchComplexity}`,
+              `  Anchor     : #architecture-vector-search`,
               ''
             )
           }
