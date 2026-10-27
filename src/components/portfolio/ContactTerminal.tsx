@@ -28,6 +28,7 @@ const getDynamicEmail = () => `${EMAIL_USER}@${EMAIL_DOMAIN}`
 
 const ENGAGEMENT_TYPES = [
   'Full-Stack Architecture',
+  'AI Systems & MCP',
   'Cloud Migration',
   'Technical Advisory',
   'Full-Time / Contract'
@@ -71,6 +72,7 @@ export default function ContactTerminal() {
     '> 2. Full-Stack Enterprise SaaS Architecture (Spring Boot 3 + React 19)',
     '> 3. High-Concurrency Backend Tuning & Virtual Threads (Java 21)',
     '> 4. Cloud Infrastructure Modernization (AWS EKS / Terraform)',
+    '> 5. Agentic AI & Model Context Protocol (MCP) Enterprise Architecture',
     '',
     'meena@portfolio:~$ sla --response-guarantee',
     '> Response Window: All business & architecture inquiries answered within 24 hours',
@@ -416,7 +418,7 @@ export default function ContactTerminal() {
                   <Briefcase className="w-3.5 h-3.5 text-purple-400" />
                   <span>Engagement Type *</span>
                 </span>
-                <div className="grid grid-cols-2 sm:grid-cols-4 gap-2">
+                <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-5 gap-2">
                   {ENGAGEMENT_TYPES.map((type) => (
                     <button
                       key={type}

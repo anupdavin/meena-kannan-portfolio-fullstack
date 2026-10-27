@@ -1,6 +1,6 @@
 {
   "version": "1.0.0",
-  "generatedAt": "2026-10-27T09:05:33.935Z",
+  "generatedAt": "2026-10-27T09:20:19.989Z",
   "nodes": {
     "src/components/architecture/AdrExplorer.tsx": {
       "file": "src/components/architecture/AdrExplorer.tsx",
@@ -224,7 +224,7 @@
       "exports": [
         "ContactTerminal"
       ],
-      "loc": 546
+      "loc": 548
     },
     "src/components/portfolio/ExperienceTimeline.tsx": {
       "file": "src/components/portfolio/ExperienceTimeline.tsx",

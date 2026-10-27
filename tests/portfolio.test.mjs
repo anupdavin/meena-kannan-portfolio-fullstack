@@ -358,8 +358,11 @@ describe('Enterprise Architectural Upgrades & B2B Production Readiness', () => {
     assert.ok(contactCode.includes('Name / Company'), 'Must include Name / Company field');
     assert.ok(contactCode.includes('Engagement Type'), 'Must include Engagement Type field');
     assert.ok(contactCode.includes('Project Brief'), 'Must include Project Brief field');
+    assert.ok(contactCode.includes("'AI Systems & MCP'"), 'Must include AI Systems & MCP engagement type');
+    assert.ok(contactCode.includes('Agentic AI & Model Context Protocol (MCP) Enterprise Architecture'), 'Must feature Agentic AI & MCP core pillar');
     assert.ok(contactCode.includes('https://www.linkedin.com/in/meena-kannan'), 'Must link to LinkedIn');
     assert.ok(contactCode.includes('https://github.com/meenak95'), 'Must link to GitHub');
+    assert.ok(!/[\u2013\u2014]/.test(contactCode), 'ContactTerminal.tsx must contain zero em/en-dashes');
   });
 
   test('index.html contains valid JSON-LD Person and WebSite schema and meta tags', () => {
