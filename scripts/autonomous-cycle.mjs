@@ -42,7 +42,9 @@ const codegraphResult = run('node scripts/generate-codegraph.mjs', 'CodeGraph Re
 // 4. Update Memory Ledger if memory file exists
 if (fs.existsSync(memoryPath)) {
   const timestamp = startTime.toISOString().replace('T', ' ').substring(0, 19);
-  const logEntry = `| \`${timestamp}\` | Autonomous Verification | All 35 tests passed, 0 lint warnings, CodeGraph synchronized. | Verified zero regressions under Superpowers TDD protocol. |\n`;
+  const match = testResult.output.match(/# pass (\d+)/);
+  const testCount = match ? match[1] : 'All';
+  const logEntry = `| \`${timestamp}\` | Autonomous Verification | All ${testCount} tests passed, 0 lint warnings, CodeGraph synchronized. | Verified zero regressions under Superpowers TDD protocol. |\n`;
   
   let content = fs.readFileSync(memoryPath, 'utf8');
   const targetHeader = '| Run Timestamp | Focus Area | Action Completed | Lessons Learned / Gotchas |\n| :--- | :--- | :--- | :--- |\n';

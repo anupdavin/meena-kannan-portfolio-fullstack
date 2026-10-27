@@ -40,6 +40,9 @@ const AVAILABLE_COMMANDS = [
   'ai',
   'ai-terms',
   'paradigms',
+  'capacity',
+  'sizing',
+  'calculator',
   'mcp',
   'model-context-protocol',
   'resume',
@@ -60,6 +63,7 @@ const QUICK_CHIPS = [
   { label: '[ $ adr ]', cmd: 'adr' },
   { label: '[ $ bytebytego ]', cmd: 'bytebytego' },
   { label: '[ $ ai-codex ]', cmd: 'ai-codex' },
+  { label: '[ $ capacity ]', cmd: 'capacity' },
   { label: '[ $ mcp ]', cmd: 'mcp' },
   { label: '[ $ skills ]', cmd: 'skills' },
   { label: '[ $ metrics ]', cmd: 'metrics' },
@@ -84,6 +88,7 @@ const COMMAND_HELP = [
   '  benchmark       - Run simulated synthetic latency benchmark across distributed services',
   '  bytebytego      - Display ByteByteGo 5-pillar AI systems architecture infographic',
   '  ai-codex        - Display ByteByteGo 5-pillar AI systems architecture codex',
+  '  capacity        - Calculate AI architecture capacity, Vector DB RAM & RAG budgets',
   '  mcp             - Inspect enterprise Model Context Protocol (MCP) server architecture',
   '  architecture    - Display Clean Architecture, DDD & Saga design principles',
   '  adr             - Inspect enterprise Architectural Decision Records (ADR-001..ADR-006)',
@@ -538,6 +543,63 @@ export default function InteractiveCli() {
           '--------------------------------------------------------------------------------',
           'Tip: Type "ai agent", "ai lrm", "ai vector", "ai rag", or "ai mcp" for deep-dive specs.',
           'Interactive Visualizer: Live in the #architecture section ("AI Terms You Need to Know").'
+        ]
+        break
+      }
+      case 'capacity':
+      case 'sizing':
+      case 'calculator': {
+        const sub = args[0]?.toLowerCase()
+        if (sub === 'vector' || sub === 'vectordb') {
+          output = [
+            '--------------------------------------------------------------------------------',
+            '[Capacity Sizing] Vector Database (pgvector / HNSW)',
+            'Scale Metric  : 1,000,000 vectors @ 1536d (Float32)',
+            'Raw Storage   : 5.72 GB (count * dim * 4 bytes)',
+            'Graph Overhead: +7.15 GB (1.25x M=16 HNSW bidirectional edges)',
+            'Total RAM Req : 15.44 GB (includes 20% OS page buffer)',
+            'Search Latency: < 12ms p95 retrieval',
+            'Recommended   : AWS r6g.xlarge (32GB RAM, 4 vCPU) with EBS gp3',
+            'Key Invariant : HNSW graph index must reside 100% in RAM to prevent disk seeks.',
+            '--------------------------------------------------------------------------------'
+          ]
+          break
+        }
+        if (sub === 'rag') {
+          output = [
+            '--------------------------------------------------------------------------------',
+            '[Capacity Sizing] Retrieval-Augmented Generation (RAG)',
+            'Retrieval     : Top-5 chunks @ 512 tokens = 2,560 context tokens',
+            'Context Sat   : 2.0% of 128k context window',
+            'Reranker p95  : < 35ms (Cohere Rerank-3 cross-encoder neural ranking)',
+            'Daily Budget  : 50,000 queries -> $19.20/day (standard) -> $7.49/day (prompt-cached)',
+            'Cloud Savings : 61% reduction via KV-cache reuse on common prefix documents',
+            'Key Invariant : Isolated context boundaries eliminate prompt injection and dilution.',
+            '--------------------------------------------------------------------------------'
+          ]
+          break
+        }
+        if (sub === 'lrm' || sub === 'reasoning') {
+          output = [
+            '--------------------------------------------------------------------------------',
+            '[Capacity Sizing] Large Reasoning Model (Test-Time Compute)',
+            'Reasoning Cap : 2,048 tokens per query (Medium effort)',
+            'Verification  : 4 - 6 intermediate self-reflection CoT passes with backtracking',
+            'Mean Latency  : ~6.4s end-to-end to verified solution',
+            'Accuracy      : 97.8% empirical pass rate on formal verification suites',
+            'Cluster Spec  : 4x NVIDIA H100 SXM5 with vLLM continuous batching',
+            'Key Invariant : Deliberate test-time compute exchanges latency for logical correctness.',
+            '--------------------------------------------------------------------------------'
+          ]
+          break
+        }
+        output = [
+          'Enterprise Architecture Sizing & Capacity Simulator:',
+          '  + capacity vector : Calculate Vector DB RAM, HNSW overhead, and AWS instance tier',
+          '  + capacity rag    : Calculate RAG context window saturation, rerank latency & costs',
+          '  + capacity lrm    : Calculate LRM test-time compute budget, latency & GPU cluster',
+          '--------------------------------------------------------------------------------',
+          'Interactive Visualizer: Select "Capacity Planner" tab in the #architecture-ai-codex section.'
         ]
         break
       }

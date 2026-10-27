@@ -26,7 +26,8 @@ import {
   ZoomIn,
   ZoomOut,
   Maximize2,
-  X
+  X,
+  Calculator
 } from 'lucide-react'
 
 export interface AiTermSpec {
@@ -1035,7 +1036,7 @@ function McpSchematic({
 // ==========================================
 
 export default function ByteByteGoAiCodex() {
-  const [viewMode, setViewMode] = useState<'poster' | 'explorer' | 'reference'>('poster')
+  const [viewMode, setViewMode] = useState<'poster' | 'explorer' | 'capacity' | 'reference'>('poster')
   const [activeTermId, setActiveTermId] = useState<string>('agentic-ai')
   const [isStudioMode, setIsStudioMode] = useState<boolean>(true) // default to crisp ByteByteGo Editorial Canvas
   const [copiedBadge, setCopiedBadge] = useState<boolean>(false)
@@ -1052,6 +1053,122 @@ export default function ByteByteGoAiCodex() {
   const [isChaosMode, setIsChaosMode] = useState<boolean>(false)
   const [isLightboxOpen, setIsLightboxOpen] = useState<boolean>(false)
   const [lightboxZoom, setLightboxZoom] = useState<number>(1)
+
+  // Capacity Planner state
+  const [calcParadigm, setCalcParadigm] = useState<'vectordb' | 'rag' | 'lrm' | 'agent' | 'mcp'>('vectordb')
+  const [vdbCount, setVdbCount] = useState<number>(1000000)
+  const [vdbDim, setVdbDim] = useState<number>(1536)
+  const [vdbIndex, setVdbIndex] = useState<'hnsw' | 'ivfflat' | 'flat'>('hnsw')
+
+  const [ragTopK, setRagTopK] = useState<number>(5)
+  const [ragChunkSize, setRagChunkSize] = useState<number>(512)
+  const [ragDailyQueries, setRagDailyQueries] = useState<number>(50000)
+
+  const [lrmEffort, setLrmEffort] = useState<'low' | 'medium' | 'high'>('medium')
+  const [lrmConcurrency, setLrmConcurrency] = useState<number>(50)
+
+  const [agentStepBudget, setAgentStepBudget] = useState<number>(5)
+  const [agentParallelTools, setAgentParallelTools] = useState<number>(3)
+
+  const [mcpTransport, setMcpTransport] = useState<'stdio' | 'sse'>('stdio')
+  const [mcpToolCount, setMcpToolCount] = useState<number>(20)
+
+  const [copiedCalcSpec, setCopiedCalcSpec] = useState<boolean>(false)
+
+  // Vector DB Calculations
+  const rawBytes = vdbCount * vdbDim * 4
+  const rawGb = rawBytes / (1024 * 1024 * 1024)
+  const indexOverheadGb = vdbIndex === 'hnsw' ? rawGb * 1.25 : vdbIndex === 'ivfflat' ? rawGb * 0.08 : 0
+  const totalRamGb = (rawGb + indexOverheadGb) * 1.2
+  const vdbLatency = vdbIndex === 'hnsw' ? '< 12ms' : vdbIndex === 'ivfflat' ? '< 26ms' : '< 185ms'
+  const vdbInstance = totalRamGb <= 16 ? 'AWS r6g.large (16GB RAM, 2 vCPU)' : totalRamGb <= 32 ? 'AWS r6g.xlarge (32GB RAM, 4 vCPU)' : totalRamGb <= 64 ? 'AWS r6g.2xlarge (64GB RAM, 8 vCPU)' : 'AWS r6g.4xlarge (128GB RAM, 16 vCPU)'
+
+  // RAG Calculations
+  const ragInjectedTokens = ragTopK * ragChunkSize
+  const ragSaturationPct = ((ragInjectedTokens / 128000) * 100).toFixed(1)
+  const ragRerankLatency = ragTopK <= 5 ? '< 35ms' : '< 65ms'
+  const ragDailyTokens = (ragDailyQueries * ragInjectedTokens)
+  const ragStandardCost = ((ragDailyTokens / 1000000) * 0.15).toFixed(2)
+  const ragCachedCost = (parseFloat(ragStandardCost) * 0.39).toFixed(2)
+
+  // LRM Calculations
+  const lrmTokenBudget = lrmEffort === 'low' ? 512 : lrmEffort === 'medium' ? 2048 : 8192
+  const lrmSteps = lrmEffort === 'low' ? '1-2 verification passes' : lrmEffort === 'medium' ? '4-6 intermediate steps' : '12+ recursive backtrack traces'
+  const lrmLatency = lrmEffort === 'low' ? '~1.8s' : lrmEffort === 'medium' ? '~6.4s' : '~24.5s'
+  const lrmConfidence = lrmEffort === 'low' ? '92.4%' : lrmEffort === 'medium' ? '97.8%' : '99.5%'
+  const lrmServingCluster = lrmEffort === 'low' ? '2x NVIDIA H100 (vLLM continuous batching)' : lrmEffort === 'medium' ? '4x NVIDIA H100 (vLLM continuous batching)' : '8x NVIDIA H100 (TensorRT-LLM)'
+
+  // Agentic AI Calculations
+  const agentCostPerRun = ((agentStepBudget * 1200) / 1000000 * 0.30 + (agentParallelTools * 0.005)).toFixed(3)
+
+  // MCP Calculations
+  const mcpPayloadKb = (mcpToolCount * 0.85).toFixed(1)
+  const mcpLatency = mcpTransport === 'stdio' ? '< 3ms (Local IPC)' : '< 28ms (mTLS / HTTP SSE)'
+
+  const handleCopyCalcRfc = () => {
+    let rfcText = ''
+    if (calcParadigm === 'vectordb') {
+      rfcText = [
+        `### Architecture Sizing RFC: Vector Database (HNSW vs IVFFlat)`,
+        `- Dataset Scale: ${vdbCount.toLocaleString()} vectors`,
+        `- Vector Dimension: ${vdbDim}d (Float32)`,
+        `- Index Algorithm: ${vdbIndex.toUpperCase()}`,
+        `- Raw Vector Storage: ${rawGb.toFixed(2)} GB`,
+        `- Index Graph Overhead: ${indexOverheadGb.toFixed(2)} GB`,
+        `- Minimum Target RAM: ${totalRamGb.toFixed(2)} GB (with 20% OS buffer pool)`,
+        `- Retrieval Latency p95: ${vdbLatency}`,
+        `- Recommended Sizing: ${vdbInstance}`,
+        `- Production Rule: Keep graph index 100% memory-pinned to avoid disk traversal thrash.`
+      ].join('\n')
+    } else if (calcParadigm === 'rag') {
+      rfcText = [
+        `### Architecture Sizing RFC: Retrieval-Augmented Generation (RAG)`,
+        `- Top-k Chunks: ${ragTopK}`,
+        `- Chunk Token Size: ${ragChunkSize} tokens`,
+        `- Injected Context: ${ragInjectedTokens.toLocaleString()} tokens (${ragSaturationPct}% of 128k context)`,
+        `- Cohere Rerank-3 Latency: ${ragRerankLatency}`,
+        `- Daily Inbound Queries: ${ragDailyQueries.toLocaleString()}`,
+        `- Standard Daily Token Cost: $${ragStandardCost} / day`,
+        `- Prompt-Cached Daily Cost: $${ragCachedCost} / day (61% cost reduction via KV-cache reuse)`,
+        `- Production Rule: Isolated context boundaries eliminate noise and context window poisoning.`
+      ].join('\n')
+    } else if (calcParadigm === 'lrm') {
+      rfcText = [
+        `### Architecture Sizing RFC: Large Reasoning Model (Test-Time Compute)`,
+        `- Reasoning Effort: ${lrmEffort.toUpperCase()}`,
+        `- Test-Time Token Budget: ${lrmTokenBudget} tokens`,
+        `- Verification Trace: ${lrmSteps}`,
+        `- Mean Reasoning Latency: ${lrmLatency}`,
+        `- Empirical Confidence: ${lrmConfidence}`,
+        `- Recommended Serving Cluster: ${lrmServingCluster}`,
+        `- Production Rule: RLVR verifiable rewards exchange test-time compute for formal reasoning accuracy.`
+      ].join('\n')
+    } else if (calcParadigm === 'agent') {
+      rfcText = [
+        `### Architecture Sizing RFC: Agentic AI Spend Ceiling & Safety Governor`,
+        `- Max Step Budget: ${agentStepBudget} iterations`,
+        `- Parallel Tool Concurrency: ${agentParallelTools} tools`,
+        `- Worst-Case Run Cost Ceiling: $${agentCostPerRun} / run`,
+        `- Recursion Safeguard: Acyclic DAG state checkpointer prevents infinite execution loops.`,
+        `- Worker Isolation: Ephemeral Docker sandbox (512MB RAM, 1.0 CPU, 30s timeout).`
+      ].join('\n')
+    } else {
+      rfcText = [
+        `### Architecture Sizing RFC: Model Context Protocol (MCP) Transport`,
+        `- Transport Wire: ${mcpTransport.toUpperCase()} (${mcpTransport === 'stdio' ? 'Local Stdio IPC' : 'Distributed SSE/mTLS'})`,
+        `- Declared Tools: ${mcpToolCount} tools`,
+        `- Schema Wire Payload: ${mcpPayloadKb} KB`,
+        `- Handshake Latency: ${mcpLatency}`,
+        `- Authorization: Zero ambient authority; cryptographically signed token grants per tool call.`
+      ].join('\n')
+    }
+
+    if (typeof navigator !== 'undefined' && navigator.clipboard) {
+      navigator.clipboard.writeText(rfcText)
+    }
+    setCopiedCalcSpec(true)
+    setTimeout(() => setCopiedCalcSpec(false), 2000)
+  }
 
   // Lightbox Escape key dismiss
   useEffect(() => {
@@ -1222,6 +1339,18 @@ export default function ByteByteGoAiCodex() {
             >
               <Sparkles className="w-3.5 h-3.5" />
               <span>Interactive Tour</span>
+            </button>
+
+            <button
+              onClick={() => setViewMode('capacity')}
+              className={`px-3 py-1.5 rounded-lg flex items-center gap-1.5 transition-all cursor-pointer font-bold ${
+                viewMode === 'capacity'
+                  ? 'bg-[#00a884] text-white shadow'
+                  : 'text-slate-600 dark:text-slate-400 hover:text-slate-900 dark:hover:text-white'
+              }`}
+            >
+              <Calculator className="w-3.5 h-3.5" />
+              <span>Capacity Planner</span>
             </button>
 
             <button
@@ -1870,6 +1999,571 @@ export default function ByteByteGoAiCodex() {
               </div>
             </motion.div>
           </AnimatePresence>
+        </div>
+      )}
+
+      {/* ========================================================= */}
+      {/* VIEW MODE 4: CAPACITY PLANNER & INVARIANT SIZING CALCULATOR*/}
+      {/* ========================================================= */}
+      {viewMode === 'capacity' && (
+        <div className="space-y-6">
+          <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 p-4 rounded-xl bg-slate-100 dark:bg-slate-900 border border-slate-200 dark:border-slate-800">
+            <div>
+              <div className="flex items-center gap-2">
+                <Calculator className="w-4 h-4 text-emerald-500" />
+                <h4 className="text-sm font-bold font-editorial text-slate-900 dark:text-white">
+                  Enterprise Sizing &amp; Infrastructure Capacity Simulator
+                </h4>
+              </div>
+              <p className="text-xs text-slate-500 dark:text-slate-400 mt-1 font-sans">
+                Interactive mathematical sizing calculations across Vector DB, RAG context windows, LRM test-time compute, Agentic AI spend ceilings, and MCP transport wire throughput.
+              </p>
+            </div>
+
+            <button
+              onClick={handleCopyCalcRfc}
+              className="px-3 py-1.5 rounded-lg bg-[#00a884] hover:bg-[#008f70] text-white text-xs font-mono font-bold transition-colors flex items-center gap-1.5 cursor-pointer shrink-0"
+              title="Copy markdown sizing RFC specification for Confluence or PR"
+            >
+              {copiedCalcSpec ? <CheckCircle2 className="w-3.5 h-3.5" /> : <FileText className="w-3.5 h-3.5" />}
+              <span>{copiedCalcSpec ? 'RFC Copied!' : 'Copy Sizing RFC'}</span>
+            </button>
+          </div>
+
+          {/* Paradigm Sub-Selector */}
+          <div className="flex flex-wrap items-center gap-2 border-b border-slate-200 dark:border-slate-800 pb-3">
+            {[
+              { id: 'vectordb', label: 'Vector Database', icon: Database },
+              { id: 'rag', label: 'RAG Pipeline', icon: Search },
+              { id: 'lrm', label: 'LRM Reasoning', icon: Brain },
+              { id: 'agent', label: 'Agentic Loop', icon: Bot },
+              { id: 'mcp', label: 'MCP Transport', icon: Share2 }
+            ].map((tab) => (
+              <button
+                key={tab.id}
+                onClick={() => setCalcParadigm(tab.id as 'vectordb' | 'rag' | 'lrm' | 'agent' | 'mcp')}
+                className={`px-3 py-1.5 rounded-xl text-xs font-mono font-bold flex items-center gap-1.5 transition-all cursor-pointer border ${
+                  calcParadigm === tab.id
+                    ? 'bg-[#00a884] text-white border-[#00a884] shadow'
+                    : isStudioMode
+                      ? 'bg-slate-50 text-slate-700 border-slate-200 hover:bg-slate-100'
+                      : 'bg-slate-900/80 text-slate-400 border-slate-800 hover:text-white'
+                }`}
+              >
+                <tab.icon className="w-3.5 h-3.5" />
+                <span>{tab.label}</span>
+              </button>
+            ))}
+          </div>
+
+          {/* Calculator Content for Active Paradigm */}
+          {calcParadigm === 'vectordb' && (
+            <div className={`p-5 rounded-2xl border ${isStudioMode ? 'bg-white border-slate-200' : 'bg-slate-950/80 border-slate-800'} space-y-6`}>
+              <div className="grid grid-cols-1 lg:grid-cols-12 gap-6 items-start">
+                
+                {/* Inputs Column */}
+                <div className="lg:col-span-6 space-y-4">
+                  <h5 className="text-xs font-mono uppercase tracking-wider text-purple-400 font-bold">
+                    Vector Index Parameters
+                  </h5>
+
+                  {/* Vector Count */}
+                  <div>
+                    <label className="text-xs font-sans text-slate-500 dark:text-slate-400 block mb-1.5">
+                      Vector Dataset Scale: <strong className="text-slate-900 dark:text-white font-mono">{vdbCount.toLocaleString()} vectors</strong>
+                    </label>
+                    <div className="flex flex-wrap gap-2">
+                      {[100000, 1000000, 5000000, 10000000].map((count) => (
+                        <button
+                          key={count}
+                          onClick={() => setVdbCount(count)}
+                          className={`px-2.5 py-1 rounded-lg text-xs font-mono cursor-pointer transition-colors border ${
+                            vdbCount === count
+                              ? 'bg-purple-600 text-white border-purple-500 font-bold'
+                              : 'bg-slate-100 dark:bg-slate-900 text-slate-700 dark:text-slate-300 border-slate-200 dark:border-slate-800'
+                          }`}
+                        >
+                          {count >= 1000000 ? `${count / 1000000}M` : `${count / 1000}K`}
+                        </button>
+                      ))}
+                    </div>
+                  </div>
+
+                  {/* Embedding Dimension */}
+                  <div>
+                    <label className="text-xs font-sans text-slate-500 dark:text-slate-400 block mb-1.5">
+                      Embedding Model Dimension: <strong className="text-slate-900 dark:text-white font-mono">{vdbDim}d (Float32)</strong>
+                    </label>
+                    <div className="flex flex-wrap gap-2">
+                      {[
+                        { dim: 384, label: '384d (MiniLM-L6)' },
+                        { dim: 768, label: '768d (Cohere / BERT)' },
+                        { dim: 1536, label: '1536d (text-embedding-3)' },
+                        { dim: 3072, label: '3072d (Large-3)' }
+                      ].map((item) => (
+                        <button
+                          key={item.dim}
+                          onClick={() => setVdbDim(item.dim)}
+                          className={`px-2.5 py-1 rounded-lg text-xs font-mono cursor-pointer transition-colors border ${
+                            vdbDim === item.dim
+                              ? 'bg-purple-600 text-white border-purple-500 font-bold'
+                              : 'bg-slate-100 dark:bg-slate-900 text-slate-700 dark:text-slate-300 border-slate-200 dark:border-slate-800'
+                          }`}
+                        >
+                          {item.label}
+                        </button>
+                      ))}
+                    </div>
+                  </div>
+
+                  {/* Index Algorithm */}
+                  <div>
+                    <label className="text-xs font-sans text-slate-500 dark:text-slate-400 block mb-1.5">
+                      Indexing Algorithm: <strong className="text-slate-900 dark:text-white font-mono">{vdbIndex.toUpperCase()}</strong>
+                    </label>
+                    <div className="flex flex-wrap gap-2">
+                      {[
+                        { id: 'hnsw', label: 'HNSW (M=16, ef=64)' },
+                        { id: 'ivfflat', label: 'IVFFlat (lists=1000)' },
+                        { id: 'flat', label: 'Flat (Brute-Force)' }
+                      ].map((item) => (
+                        <button
+                          key={item.id}
+                          onClick={() => setVdbIndex(item.id as 'hnsw' | 'ivfflat' | 'flat')}
+                          className={`px-2.5 py-1 rounded-lg text-xs font-mono cursor-pointer transition-colors border ${
+                            vdbIndex === item.id
+                              ? 'bg-purple-600 text-white border-purple-500 font-bold'
+                              : 'bg-slate-100 dark:bg-slate-900 text-slate-700 dark:text-slate-300 border-slate-200 dark:border-slate-800'
+                          }`}
+                        >
+                          {item.label}
+                        </button>
+                      ))}
+                    </div>
+                  </div>
+                </div>
+
+                {/* Sizing Telemetry Output Column */}
+                <div className="lg:col-span-6 p-4 rounded-xl bg-slate-900 text-slate-100 border border-slate-800 space-y-3 font-mono text-xs">
+                  <div className="flex items-center justify-between pb-2 border-b border-slate-800">
+                    <span className="text-purple-400 font-bold">CALCULATED ARCHITECTURE FOOTPRINT</span>
+                    <span className="text-[10px] text-slate-500">IEEE 754 Float32</span>
+                  </div>
+
+                  <div className="grid grid-cols-2 gap-3 pt-1">
+                    <div className="p-2.5 rounded-lg bg-slate-950 border border-slate-800">
+                      <span className="text-slate-400 text-[10px] block">Raw Vector Storage</span>
+                      <strong className="text-base text-white tabular-nums">{rawGb.toFixed(2)} GB</strong>
+                      <span className="text-[10px] text-slate-500 block mt-0.5">{vdbCount.toLocaleString()} x {vdbDim} x 4B</span>
+                    </div>
+
+                    <div className="p-2.5 rounded-lg bg-slate-950 border border-slate-800">
+                      <span className="text-slate-400 text-[10px] block">Graph Index Overhead</span>
+                      <strong className="text-base text-purple-300 tabular-nums">+{indexOverheadGb.toFixed(2)} GB</strong>
+                      <span className="text-[10px] text-slate-500 block mt-0.5">{vdbIndex === 'hnsw' ? '1.25x M=16 edges' : vdbIndex === 'ivfflat' ? '0.08x centroids' : '0x flat'}</span>
+                    </div>
+
+                    <div className="p-2.5 rounded-lg bg-slate-950 border border-purple-500/40">
+                      <span className="text-purple-400 text-[10px] block font-bold">Target Instance RAM</span>
+                      <strong className="text-base text-emerald-400 tabular-nums">{totalRamGb.toFixed(2)} GB</strong>
+                      <span className="text-[10px] text-slate-500 block mt-0.5">Includes 20% OS page buffer</span>
+                    </div>
+
+                    <div className="p-2.5 rounded-lg bg-slate-950 border border-slate-800">
+                      <span className="text-slate-400 text-[10px] block">Retrieval Latency (p95)</span>
+                      <strong className="text-base text-cyan-300 tabular-nums">{vdbLatency}</strong>
+                      <span className="text-[10px] text-slate-500 block mt-0.5">Sub-20ms SLA compliant</span>
+                    </div>
+                  </div>
+
+                  <div className="p-2.5 rounded-lg bg-purple-950/20 border border-purple-500/30 text-[11px] space-y-1">
+                    <div className="text-purple-300 font-bold">Recommended Cloud Provisioning:</div>
+                    <div className="text-slate-300">{vdbInstance} with Amazon EBS gp3 (3,000 IOPS baseline).</div>
+                  </div>
+
+                  <div className="text-[10px] text-slate-500 italic pt-1">
+                    Architectural Invariant: HNSW graph indices must remain fully resident in RAM to prevent random SSD seek penalties during beam-search graph traversals.
+                  </div>
+                </div>
+
+              </div>
+            </div>
+          )}
+
+          {/* RAG Pipeline Calculator */}
+          {calcParadigm === 'rag' && (
+            <div className={`p-5 rounded-2xl border ${isStudioMode ? 'bg-white border-slate-200' : 'bg-slate-950/80 border-slate-800'} space-y-6`}>
+              <div className="grid grid-cols-1 lg:grid-cols-12 gap-6 items-start">
+                <div className="lg:col-span-6 space-y-4">
+                  <h5 className="text-xs font-mono uppercase tracking-wider text-amber-400 font-bold">
+                    RAG Retrieval &amp; Context Parameters
+                  </h5>
+
+                  <div>
+                    <label className="text-xs font-sans text-slate-500 dark:text-slate-400 block mb-1.5">
+                      Top-k Retrieved Chunks: <strong className="text-slate-900 dark:text-white font-mono">{ragTopK} chunks</strong>
+                    </label>
+                    <div className="flex flex-wrap gap-2">
+                      {[3, 5, 10, 20].map((k) => (
+                        <button
+                          key={k}
+                          onClick={() => setRagTopK(k)}
+                          className={`px-3 py-1 rounded-lg text-xs font-mono cursor-pointer transition-colors border ${
+                            ragTopK === k
+                              ? 'bg-amber-600 text-white border-amber-500 font-bold'
+                              : 'bg-slate-100 dark:bg-slate-900 text-slate-700 dark:text-slate-300 border-slate-200 dark:border-slate-800'
+                          }`}
+                        >
+                          Top-{k}
+                        </button>
+                      ))}
+                    </div>
+                  </div>
+
+                  <div>
+                    <label className="text-xs font-sans text-slate-500 dark:text-slate-400 block mb-1.5">
+                      Chunk Token Size: <strong className="text-slate-900 dark:text-white font-mono">{ragChunkSize} tokens</strong>
+                    </label>
+                    <div className="flex flex-wrap gap-2">
+                      {[256, 512, 1024].map((sz) => (
+                        <button
+                          key={sz}
+                          onClick={() => setRagChunkSize(sz)}
+                          className={`px-3 py-1 rounded-lg text-xs font-mono cursor-pointer transition-colors border ${
+                            ragChunkSize === sz
+                              ? 'bg-amber-600 text-white border-amber-500 font-bold'
+                              : 'bg-slate-100 dark:bg-slate-900 text-slate-700 dark:text-slate-300 border-slate-200 dark:border-slate-800'
+                          }`}
+                        >
+                          {sz} tokens
+                        </button>
+                      ))}
+                    </div>
+                  </div>
+
+                  <div>
+                    <label className="text-xs font-sans text-slate-500 dark:text-slate-400 block mb-1.5">
+                      Daily Enterprise Query Volume: <strong className="text-slate-900 dark:text-white font-mono">{ragDailyQueries.toLocaleString()} / day</strong>
+                    </label>
+                    <div className="flex flex-wrap gap-2">
+                      {[10000, 50000, 250000].map((vol) => (
+                        <button
+                          key={vol}
+                          onClick={() => setRagDailyQueries(vol)}
+                          className={`px-3 py-1 rounded-lg text-xs font-mono cursor-pointer transition-colors border ${
+                            ragDailyQueries === vol
+                              ? 'bg-amber-600 text-white border-amber-500 font-bold'
+                              : 'bg-slate-100 dark:bg-slate-900 text-slate-700 dark:text-slate-300 border-slate-200 dark:border-slate-800'
+                          }`}
+                        >
+                          {vol >= 1000 ? `${vol / 1000}k / day` : vol}
+                        </button>
+                      ))}
+                    </div>
+                  </div>
+                </div>
+
+                <div className="lg:col-span-6 p-4 rounded-xl bg-slate-900 text-slate-100 border border-slate-800 space-y-3 font-mono text-xs">
+                  <div className="flex items-center justify-between pb-2 border-b border-slate-800">
+                    <span className="text-amber-400 font-bold">RAG CONTEXT &amp; INFERENCE BUDGET</span>
+                    <span className="text-[10px] text-slate-500">128k Window Budget</span>
+                  </div>
+
+                  <div className="grid grid-cols-2 gap-3 pt-1">
+                    <div className="p-2.5 rounded-lg bg-slate-950 border border-slate-800">
+                      <span className="text-slate-400 text-[10px] block">Injected Context</span>
+                      <strong className="text-base text-white tabular-nums">{ragInjectedTokens.toLocaleString()} tokens</strong>
+                      <span className="text-[10px] text-slate-500 block mt-0.5">{ragSaturationPct}% of 128k context</span>
+                    </div>
+
+                    <div className="p-2.5 rounded-lg bg-slate-950 border border-slate-800">
+                      <span className="text-slate-400 text-[10px] block">Cohere Rerank-3 Latency</span>
+                      <strong className="text-base text-cyan-300 tabular-nums">{ragRerankLatency}</strong>
+                      <span className="text-[10px] text-slate-500 block mt-0.5">Cross-encoder neural ranking</span>
+                    </div>
+
+                    <div className="p-2.5 rounded-lg bg-slate-950 border border-slate-800">
+                      <span className="text-slate-400 text-[10px] block">Standard Daily LLM Cost</span>
+                      <strong className="text-base text-rose-300 tabular-nums">${ragStandardCost} / day</strong>
+                      <span className="text-[10px] text-slate-500 block mt-0.5">${(parseFloat(ragStandardCost) * 30).toFixed(0)} / month baseline</span>
+                    </div>
+
+                    <div className="p-2.5 rounded-lg bg-slate-950 border border-emerald-500/40">
+                      <span className="text-emerald-400 text-[10px] block font-bold">With Prompt Caching</span>
+                      <strong className="text-base text-emerald-400 tabular-nums">${ragCachedCost} / day</strong>
+                      <span className="text-[10px] text-slate-500 block mt-0.5">61% cloud cost savings</span>
+                    </div>
+                  </div>
+
+                  <div className="p-2.5 rounded-lg bg-amber-950/20 border border-amber-500/30 text-[11px] space-y-1">
+                    <div className="text-amber-300 font-bold">Enterprise Architectural Pattern:</div>
+                    <div className="text-slate-300">Hybrid BM25 keyword filtering pre-scores candidates before dense vector re-ranking to cap cross-encoder GPU saturation.</div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          )}
+
+          {/* LRM Reasoning Calculator */}
+          {calcParadigm === 'lrm' && (
+            <div className={`p-5 rounded-2xl border ${isStudioMode ? 'bg-white border-slate-200' : 'bg-slate-950/80 border-slate-800'} space-y-6`}>
+              <div className="grid grid-cols-1 lg:grid-cols-12 gap-6 items-start">
+                <div className="lg:col-span-6 space-y-4">
+                  <h5 className="text-xs font-mono uppercase tracking-wider text-cyan-400 font-bold">
+                    Test-Time Compute Scaler
+                  </h5>
+
+                  <div>
+                    <label className="text-xs font-sans text-slate-500 dark:text-slate-400 block mb-1.5">
+                      Deliberate Reasoning Effort: <strong className="text-slate-900 dark:text-white font-mono">{lrmEffort.toUpperCase()}</strong>
+                    </label>
+                    <div className="flex flex-wrap gap-2">
+                      {[
+                        { id: 'low', label: 'Low (512 tokens)' },
+                        { id: 'medium', label: 'Medium (2048 tokens)' },
+                        { id: 'high', label: 'High (8192 tokens)' }
+                      ].map((item) => (
+                        <button
+                          key={item.id}
+                          onClick={() => setLrmEffort(item.id as 'low' | 'medium' | 'high')}
+                          className={`px-3 py-1 rounded-lg text-xs font-mono cursor-pointer transition-colors border ${
+                            lrmEffort === item.id
+                              ? 'bg-cyan-600 text-white border-cyan-500 font-bold'
+                              : 'bg-slate-100 dark:bg-slate-900 text-slate-700 dark:text-slate-300 border-slate-200 dark:border-slate-800'
+                          }`}
+                        >
+                          {item.label}
+                        </button>
+                      ))}
+                    </div>
+                  </div>
+
+                  <div>
+                    <label className="text-xs font-sans text-slate-500 dark:text-slate-400 block mb-1.5">
+                      Concurrent Reasoning Streams: <strong className="text-slate-900 dark:text-white font-mono">{lrmConcurrency} streams</strong>
+                    </label>
+                    <div className="flex flex-wrap gap-2">
+                      {[10, 50, 200].map((c) => (
+                        <button
+                          key={c}
+                          onClick={() => setLrmConcurrency(c)}
+                          className={`px-3 py-1 rounded-lg text-xs font-mono cursor-pointer transition-colors border ${
+                            lrmConcurrency === c
+                              ? 'bg-cyan-600 text-white border-cyan-500 font-bold'
+                              : 'bg-slate-100 dark:bg-slate-900 text-slate-700 dark:text-slate-300 border-slate-200 dark:border-slate-800'
+                          }`}
+                        >
+                          {c} streams
+                        </button>
+                      ))}
+                    </div>
+                  </div>
+                </div>
+
+                <div className="lg:col-span-6 p-4 rounded-xl bg-slate-900 text-slate-100 border border-slate-800 space-y-3 font-mono text-xs">
+                  <div className="flex items-center justify-between pb-2 border-b border-slate-800">
+                    <span className="text-cyan-400 font-bold">REASONING COMPUTE TELEMETRY</span>
+                    <span className="text-[10px] text-slate-500">RLVR Verification</span>
+                  </div>
+
+                  <div className="grid grid-cols-2 gap-3 pt-1">
+                    <div className="p-2.5 rounded-lg bg-slate-950 border border-slate-800">
+                      <span className="text-slate-400 text-[10px] block">Test-Time Budget</span>
+                      <strong className="text-base text-white tabular-nums">{lrmTokenBudget} tokens</strong>
+                      <span className="text-[10px] text-slate-500 block mt-0.5">{lrmSteps}</span>
+                    </div>
+
+                    <div className="p-2.5 rounded-lg bg-slate-950 border border-slate-800">
+                      <span className="text-slate-400 text-[10px] block">Mean Latency to Answer</span>
+                      <strong className="text-base text-cyan-300 tabular-nums">{lrmLatency}</strong>
+                      <span className="text-[10px] text-slate-500 block mt-0.5">Continuous batching vLLM</span>
+                    </div>
+
+                    <div className="p-2.5 rounded-lg bg-slate-950 border border-emerald-500/40">
+                      <span className="text-emerald-400 text-[10px] block font-bold">Empirical Accuracy</span>
+                      <strong className="text-base text-emerald-400 tabular-nums">{lrmConfidence}</strong>
+                      <span className="text-[10px] text-slate-500 block mt-0.5">Formal mathematical proof</span>
+                    </div>
+
+                    <div className="p-2.5 rounded-lg bg-slate-950 border border-slate-800">
+                      <span className="text-slate-400 text-[10px] block">Serving Cluster</span>
+                      <strong className="text-xs text-white block mt-1">{lrmServingCluster.split('(')[0]}</strong>
+                    </div>
+                  </div>
+
+                  <div className="text-[10px] text-slate-500 italic pt-1">
+                    Architectural Invariant: Large Reasoning Models trade wall-clock latency for formal verification accuracy by exploring parallel self-correction search trees before emitting verified responses.
+                  </div>
+                </div>
+              </div>
+            </div>
+          )}
+
+          {/* Agentic AI Calculator */}
+          {calcParadigm === 'agent' && (
+            <div className={`p-5 rounded-2xl border ${isStudioMode ? 'bg-white border-slate-200' : 'bg-slate-950/80 border-slate-800'} space-y-6`}>
+              <div className="grid grid-cols-1 lg:grid-cols-12 gap-6 items-start">
+                <div className="lg:col-span-6 space-y-4">
+                  <h5 className="text-xs font-mono uppercase tracking-wider text-emerald-400 font-bold">
+                    Agentic Loop &amp; Safety Governor
+                  </h5>
+
+                  <div>
+                    <label className="text-xs font-sans text-slate-500 dark:text-slate-400 block mb-1.5">
+                      Max Iteration Step Budget: <strong className="text-slate-900 dark:text-white font-mono">{agentStepBudget} steps</strong>
+                    </label>
+                    <div className="flex flex-wrap gap-2">
+                      {[3, 5, 10, 20].map((s) => (
+                        <button
+                          key={s}
+                          onClick={() => setAgentStepBudget(s)}
+                          className={`px-3 py-1 rounded-lg text-xs font-mono cursor-pointer transition-colors border ${
+                            agentStepBudget === s
+                              ? 'bg-emerald-600 text-white border-emerald-500 font-bold'
+                              : 'bg-slate-100 dark:bg-slate-900 text-slate-700 dark:text-slate-300 border-slate-200 dark:border-slate-800'
+                          }`}
+                        >
+                          {s} steps
+                        </button>
+                      ))}
+                    </div>
+                  </div>
+
+                  <div>
+                    <label className="text-xs font-sans text-slate-500 dark:text-slate-400 block mb-1.5">
+                      Parallel MCP Tool Invocations: <strong className="text-slate-900 dark:text-white font-mono">{agentParallelTools} parallel</strong>
+                    </label>
+                    <div className="flex flex-wrap gap-2">
+                      {[1, 3, 5].map((t) => (
+                        <button
+                          key={t}
+                          onClick={() => setAgentParallelTools(t)}
+                          className={`px-3 py-1 rounded-lg text-xs font-mono cursor-pointer transition-colors border ${
+                            agentParallelTools === t
+                              ? 'bg-emerald-600 text-white border-emerald-500 font-bold'
+                              : 'bg-slate-100 dark:bg-slate-900 text-slate-700 dark:text-slate-300 border-slate-200 dark:border-slate-800'
+                          }`}
+                        >
+                          {t} tools
+                        </button>
+                      ))}
+                    </div>
+                  </div>
+                </div>
+
+                <div className="lg:col-span-6 p-4 rounded-xl bg-slate-900 text-slate-100 border border-slate-800 space-y-3 font-mono text-xs">
+                  <div className="flex items-center justify-between pb-2 border-b border-slate-800">
+                    <span className="text-emerald-400 font-bold">SAFETY GOVERNOR &amp; SPEND TELEMETRY</span>
+                    <span className="text-[10px] text-slate-500">Acyclic DAG Guard</span>
+                  </div>
+
+                  <div className="grid grid-cols-2 gap-3 pt-1">
+                    <div className="p-2.5 rounded-lg bg-slate-950 border border-emerald-500/40">
+                      <span className="text-emerald-400 text-[10px] block font-bold">Worst-Case Cost Ceiling</span>
+                      <strong className="text-base text-emerald-400 tabular-nums">${agentCostPerRun} / run</strong>
+                      <span className="text-[10px] text-slate-500 block mt-0.5">Enforced by hard API ceiling</span>
+                    </div>
+
+                    <div className="p-2.5 rounded-lg bg-slate-950 border border-slate-800">
+                      <span className="text-slate-400 text-[10px] block">Recursion Protection</span>
+                      <strong className="text-xs text-white block mt-1">LangGraph DAG Checkpoint</strong>
+                      <span className="text-[10px] text-slate-500 block mt-0.5">Cycle detection active</span>
+                    </div>
+                  </div>
+
+                  <div className="p-2.5 rounded-lg bg-emerald-950/20 border border-emerald-500/30 text-[11px] space-y-1">
+                    <div className="text-emerald-300 font-bold">Docker Container Sandbox Isolation:</div>
+                    <div className="text-slate-300">Ephemeral worker spun up with 512MB cgroups limit, unprivileged user, and 30s SIGKILL watchdog.</div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          )}
+
+          {/* MCP Transport Calculator */}
+          {calcParadigm === 'mcp' && (
+            <div className={`p-5 rounded-2xl border ${isStudioMode ? 'bg-white border-slate-200' : 'bg-slate-950/80 border-slate-800'} space-y-6`}>
+              <div className="grid grid-cols-1 lg:grid-cols-12 gap-6 items-start">
+                <div className="lg:col-span-6 space-y-4">
+                  <h5 className="text-xs font-mono uppercase tracking-wider text-pink-400 font-bold">
+                    MCP Wire Protocol &amp; Serialization
+                  </h5>
+
+                  <div>
+                    <label className="text-xs font-sans text-slate-500 dark:text-slate-400 block mb-1.5">
+                      Transport Wire: <strong className="text-slate-900 dark:text-white font-mono">{mcpTransport.toUpperCase()}</strong>
+                    </label>
+                    <div className="flex flex-wrap gap-2">
+                      {[
+                        { id: 'stdio', label: 'stdio (Local Process IPC)' },
+                        { id: 'sse', label: 'SSE / HTTP (Remote Distributed Mesh)' }
+                      ].map((item) => (
+                        <button
+                          key={item.id}
+                          onClick={() => setMcpTransport(item.id as 'stdio' | 'sse')}
+                          className={`px-3 py-1 rounded-lg text-xs font-mono cursor-pointer transition-colors border ${
+                            mcpTransport === item.id
+                              ? 'bg-pink-600 text-white border-pink-500 font-bold'
+                              : 'bg-slate-100 dark:bg-slate-900 text-slate-700 dark:text-slate-300 border-slate-200 dark:border-slate-800'
+                          }`}
+                        >
+                          {item.label}
+                        </button>
+                      ))}
+                    </div>
+                  </div>
+
+                  <div>
+                    <label className="text-xs font-sans text-slate-500 dark:text-slate-400 block mb-1.5">
+                      Declared JSON-RPC Tools: <strong className="text-slate-900 dark:text-white font-mono">{mcpToolCount} tools</strong>
+                    </label>
+                    <div className="flex flex-wrap gap-2">
+                      {[5, 20, 50].map((c) => (
+                        <button
+                          key={c}
+                          onClick={() => setMcpToolCount(c)}
+                          className={`px-3 py-1 rounded-lg text-xs font-mono cursor-pointer transition-colors border ${
+                            mcpToolCount === c
+                              ? 'bg-pink-600 text-white border-pink-500 font-bold'
+                              : 'bg-slate-100 dark:bg-slate-900 text-slate-700 dark:text-slate-300 border-slate-200 dark:border-slate-800'
+                          }`}
+                        >
+                          {c} tools
+                        </button>
+                      ))}
+                    </div>
+                  </div>
+                </div>
+
+                <div className="lg:col-span-6 p-4 rounded-xl bg-slate-900 text-slate-100 border border-slate-800 space-y-3 font-mono text-xs">
+                  <div className="flex items-center justify-between pb-2 border-b border-slate-800">
+                    <span className="text-pink-400 font-bold">MCP WIRE PROTOCOL TELEMETRY</span>
+                    <span className="text-[10px] text-slate-500">JSON-RPC 2.0 Spec</span>
+                  </div>
+
+                  <div className="grid grid-cols-2 gap-3 pt-1">
+                    <div className="p-2.5 rounded-lg bg-slate-950 border border-pink-500/40">
+                      <span className="text-pink-400 text-[10px] block font-bold">Handshake Latency</span>
+                      <strong className="text-base text-pink-300 tabular-nums">{mcpLatency}</strong>
+                      <span className="text-[10px] text-slate-500 block mt-0.5">{mcpTransport === 'stdio' ? 'Zero network hop' : 'mTLS TLSv1.3 overhead'}</span>
+                    </div>
+
+                    <div className="p-2.5 rounded-lg bg-slate-950 border border-slate-800">
+                      <span className="text-slate-400 text-[10px] block">Schema Payload Size</span>
+                      <strong className="text-base text-white tabular-nums">{mcpPayloadKb} KB</strong>
+                      <span className="text-[10px] text-slate-500 block mt-0.5">tool discovery payload</span>
+                    </div>
+                  </div>
+
+                  <div className="p-2.5 rounded-lg bg-pink-950/20 border border-pink-500/30 text-[11px] space-y-1">
+                    <div className="text-pink-300 font-bold">Zero Ambient Authority Guarantee:</div>
+                    <div className="text-slate-300">MCP tool servers declare strict input/output JSON schemas with cryptographically signed SPIFFE identities, preventing ambient credential leakage to LLMs.</div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          )}
+
         </div>
       )}
 

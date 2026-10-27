@@ -58,6 +58,14 @@ const FAQ_MAP: Record<string, { answer: string; url?: string }> = {
     answer: "Meena evaluates distributed architecture tradeoffs across four core domains in the System Design Decision Matrix: (1) Choreographed Saga vs Orchestrated Saga vs 2PC, (2) Hybrid RAG vs Domain Fine-Tuning vs Prompt Caching, (3) Java 21 Virtual Threads vs Reactive WebFlux vs OS Thread Pools, and (4) gRPC vs REST vs Model Context Protocol (MCP). Inspect full criteria scores and production verdicts in the Architecture Lab.",
     url: "#architecture-tradeoff-matrix"
   },
+  'capacity': {
+    answer: "Meena designs enterprise capacity planning models for Vector Databases (HNSW memory sizing, RAM buffers, AWS r6g instance tiers), RAG pipelines (context window saturation, reranker latency, prompt caching cost reduction), LRM test-time compute, and Agentic spend ceilings. Inspect the interactive Capacity Planner in the ByteByteGo AI Codex.",
+    url: "#architecture-ai-codex"
+  },
+  'sizing': {
+    answer: "Meena provides mathematical sizing models for enterprise AI systems: Vector DB RAM requirements (count * dim * 4 bytes + HNSW graph overhead), RAG token budgets, and deliberate test-time compute scaling. Explore the interactive Capacity Simulator in the AI Codex.",
+    url: "#architecture-ai-codex"
+  },
   'saga': {
     answer: "Meena implements Choreographed Saga transactions using Kafka event streaming and compensating transactions. When payment or inventory steps fail, automated rollback events restore ledger consistency without blocking distributed 2PC locks.",
     url: "#architecture-workbench"

@@ -83,6 +83,9 @@ describe('Portfolio Verification & Asset Integrity', () => {
     assert.ok(codexCode.includes('mermaidDiagram'), 'Must define Mermaid diagram representations for enterprise architectures');
     assert.ok(codexCode.includes('isChaosMode'), 'Must implement Chaos Resilience Mode for distributed failure injection');
     assert.ok(codexCode.includes('isLightboxOpen'), 'Must implement Fullscreen Lightbox Zoom Modal for infographic inspection');
+    assert.ok(codexCode.includes("viewMode === 'capacity'"), 'Must implement Capacity Planner view mode');
+    assert.ok(codexCode.includes('handleCopyCalcRfc'), 'Must support copying capacity sizing RFC specification');
+    assert.ok(codexCode.includes('calcParadigm'), 'Must manage active capacity paradigm state');
     assert.ok(!/[\u2013\u2014]/.test(codexCode), 'ByteByteGoAiCodex must contain zero em/en-dashes');
 
     const labCode = fs.readFileSync(path.join(rootDir, 'src', 'components', 'portfolio', 'ArchitectureLab.tsx'), 'utf8');
@@ -188,6 +191,16 @@ describe('Interactive CLI & Assistant Query Engine', () => {
     assert.ok(cliCode.includes("'poster'"), "InteractiveCli must include 'poster' in AVAILABLE_COMMANDS");
     assert.ok(cliCode.includes('[ $ bytebytego ]'), "InteractiveCli must define [ $ bytebytego ] quick chip");
     assert.ok(cliCode.includes("case 'bytebytego':"), "InteractiveCli switch must handle 'bytebytego'");
+    assert.ok(!/[\u2013\u2014]/.test(cliCode), 'InteractiveCli.tsx must contain zero em/en-dashes');
+  });
+
+  test('InteractiveCli.tsx supports capacity and sizing commands and quick chip', () => {
+    const cliCode = fs.readFileSync(path.join(rootDir, 'src', 'components', 'portfolio', 'InteractiveCli.tsx'), 'utf8');
+    assert.ok(cliCode.includes("'capacity'"), "InteractiveCli must include 'capacity' in AVAILABLE_COMMANDS");
+    assert.ok(cliCode.includes("'sizing'"), "InteractiveCli must include 'sizing' in AVAILABLE_COMMANDS");
+    assert.ok(cliCode.includes("'calculator'"), "InteractiveCli must include 'calculator' in AVAILABLE_COMMANDS");
+    assert.ok(cliCode.includes('[ $ capacity ]'), "InteractiveCli must define [ $ capacity ] quick chip");
+    assert.ok(cliCode.includes("case 'capacity':"), "InteractiveCli switch must handle 'capacity'");
     assert.ok(!/[\u2013\u2014]/.test(cliCode), 'InteractiveCli.tsx must contain zero em/en-dashes');
   });
 });
@@ -463,6 +476,7 @@ describe('Quality, Antislop, Accessibility & Performance Hygiene Verification', 
     assert.ok(chatCode.includes("'ai': {"), 'ChatWidget must define FAQ for AI architectures');
     assert.ok(chatCode.includes("'adr': {"), 'ChatWidget must define FAQ for ADRs');
     assert.ok(chatCode.includes("'tradeoffs': {"), 'ChatWidget must define FAQ for system design tradeoffs');
+    assert.ok(chatCode.includes("'capacity': {"), 'ChatWidget must define FAQ for capacity planning');
     assert.ok(chatCode.includes("'saga': {"), 'ChatWidget must define FAQ for Saga transactions');
     assert.ok(chatCode.includes('Explain Meena\'s AI architecture & MCP codex'), 'ChatWidget must include MCP codex quick question');
     assert.ok(chatCode.includes('How does Meena evaluate architecture trade-offs'), 'ChatWidget must include Tradeoffs quick question');

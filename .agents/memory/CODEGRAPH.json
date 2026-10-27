@@ -1,6 +1,6 @@
 {
   "version": "1.0.0",
-  "generatedAt": "2026-10-27T11:43:08.661Z",
+  "generatedAt": "2026-10-27T11:55:14.776Z",
   "nodes": {
     "src/components/architecture/AdrExplorer.tsx": {
       "file": "src/components/architecture/AdrExplorer.tsx",
@@ -73,7 +73,7 @@
         "AiTermSpec",
         "ByteByteGoAiCodex"
       ],
-      "loc": 2025
+      "loc": 2719
     },
     "src/components/architecture/ByteByteGoDiagram.tsx": {
       "file": "src/components/architecture/ByteByteGoDiagram.tsx",
@@ -185,7 +185,7 @@
       "exports": [
         "ChatWidget"
       ],
-      "loc": 404
+      "loc": 412
     },
     "src/components/MatrixBackground.tsx": {
       "file": "src/components/MatrixBackground.tsx",
@@ -269,7 +269,7 @@
       "exports": [
         "InteractiveCli"
       ],
-      "loc": 1127
+      "loc": 1189
     },
     "src/components/portfolio/ProjectsShowcase.tsx": {
       "file": "src/components/portfolio/ProjectsShowcase.tsx",
