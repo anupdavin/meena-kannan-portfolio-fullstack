@@ -14,7 +14,14 @@ import {
   RotateCcw, 
   Server, 
   Send,
-  Bot
+  Bot,
+  Activity,
+  FileText,
+  GitCompare,
+  Sliders,
+  Flame,
+  Globe,
+  GitCommit
 } from 'lucide-react'
 
 type FileTab = 'java' | 'k8s' | 'metrics' | 'mcp'
@@ -151,6 +158,17 @@ const VALUE_PROPS = [
   { icon: ShieldCheck, text: '99.99% SLA Uptime', desc: 'Fault-tolerant distributed systems', color: 'text-emerald-400', border: 'border-emerald-500/30' },
   { icon: TrendingUp, text: '40% Cost Reduction', desc: 'Optimized cloud & microservices', color: 'text-cyan-400', border: 'border-cyan-500/30' },
   { icon: Zap, text: '10K+ Requests/Sec', desc: 'Sub-80ms API response latency', color: 'text-purple-400', border: 'border-purple-500/30' },
+]
+
+const ARCHITECTURE_ENGINES = [
+  { id: 'architecture-ai-codex', label: 'AI Codex', badge: 'ByteByteGo', icon: Bot, border: 'border-teal-500/40 text-teal-300 hover:bg-teal-500/10' },
+  { id: 'architecture-workbench', label: 'Workbench', badge: '5 Systems', icon: Activity, border: 'border-cyan-500/40 text-cyan-300 hover:bg-cyan-500/10' },
+  { id: 'architecture-adr-ledger', label: 'ADR Ledger', badge: 'ADR-001-006', icon: FileText, border: 'border-indigo-500/40 text-indigo-300 hover:bg-indigo-500/10' },
+  { id: 'architecture-tradeoff-matrix', label: 'Trade-Offs', badge: 'Matrix', icon: GitCompare, border: 'border-amber-500/40 text-amber-300 hover:bg-amber-500/10' },
+  { id: 'architecture-evolution-diff', label: 'Evolution Diff', badge: 'Mesh Diff', icon: Sliders, border: 'border-rose-500/40 text-rose-300 hover:bg-rose-500/10' },
+  { id: 'architecture-chaos-matrix', label: 'Chaos Drills', badge: 'SRE Matrix', icon: Flame, border: 'border-orange-500/40 text-orange-300 hover:bg-orange-500/10' },
+  { id: 'architecture-api-gateway', label: 'API Gateway', badge: 'Envoy', icon: Globe, border: 'border-blue-500/40 text-blue-300 hover:bg-blue-500/10' },
+  { id: 'architecture-distributed-tracing', label: 'Tracing', badge: 'OTel Spans', icon: GitCommit, border: 'border-purple-500/40 text-purple-300 hover:bg-purple-500/10' },
 ]
 
 export default function TerminalHero() {
@@ -382,6 +400,31 @@ export default function TerminalHero() {
             <div className="p-2 sm:p-0 bg-slate-950/40 sm:bg-transparent rounded-lg border border-slate-800 sm:border-none">
               <span className="text-teal-400 font-extrabold text-base sm:text-xl block tabular-nums">40%</span>
               <span className="text-[10px] sm:text-[11px] text-slate-500">Cloud Saved</span>
+            </div>
+          </div>
+
+          {/* 8 Live Architecture Engines Fast-Jump Dock */}
+          <div className="pt-3 border-t border-slate-800/80 space-y-2">
+            <div className="flex items-center justify-between text-[11px] font-mono">
+              <span className="text-slate-300 font-bold uppercase tracking-wider flex items-center gap-1.5">
+                <span className="w-2 h-2 rounded-full bg-cyan-400 animate-pulse" />
+                8 Interactive Architecture Engines
+              </span>
+              <span className="text-slate-500 text-[10px]">Direct Fast Jump &darr;</span>
+            </div>
+            <div className="flex flex-wrap gap-1.5">
+              {ARCHITECTURE_ENGINES.map((eng) => (
+                <button
+                  key={eng.id}
+                  onClick={() => scrollToSection(eng.id)}
+                  className={`inline-flex items-center gap-1.5 px-2.5 py-1 rounded-lg bg-slate-900/90 border text-[11px] font-mono transition-all cursor-pointer ${eng.border}`}
+                  aria-label={`Jump directly to ${eng.label}`}
+                >
+                  <eng.icon className="w-3 h-3 shrink-0" />
+                  <span>{eng.label}</span>
+                  <span className="text-[9px] px-1 py-0.2 rounded bg-slate-800 text-slate-400">{eng.badge}</span>
+                </button>
+              ))}
             </div>
           </div>
         </motion.div>

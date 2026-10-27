@@ -136,5 +136,11 @@
     "title": "Distributed Tracing & OpenTelemetry Span Flamegraph",
     "text": "Meena instruments end-to-end W3C distributed trace context propagation with OpenTelemetry across all 5 architectures: (1) SaaS IAM Auth trace with RS256 JWT verify and PostgreSQL RLS filter (24.5ms, bottleneck: DB RLS 6.4ms), (2) Distributed Saga Checkout with outbox CDC and Kafka partition publisher (48.2ms, bottleneck: payment authorization 18.5ms), (3) WebSocket Real-Time collaboration with Java 21 Virtual Thread unparking across 50,000 sockets (9.8ms, bottleneck: parallel push 4.2ms), (4) FinTech PCI-DSS payment charge with AWS KMS PAN tokenization and serializable ledger transaction (32.4ms, bottleneck: double-entry transfer 21.4ms), and (5) Agentic AI MCP tool execution with gVisor sandbox container dispatch and pgvector 1536d cosine similarity search (64.2ms, bottleneck: HNSW vector search 31.2ms).",
     "url": "#architecture-distributed-tracing"
+  },
+  {
+    "id": "kafka-event-streams",
+    "title": "Enterprise Kafka Event Streams & Partition Lag Monitor",
+    "text": "Meena designs enterprise Apache Kafka event streaming topologies with zero head-of-line blocking across 5 systems: (1) orders.v1.events: Choreographed Saga checkout events via Debezium CDC from transactional PostgreSQL outbox (8 partitions, 15,000 TPS, zstd compression), (2) tenants.v1.audit: Tenant isolation and RLS authorization audit logs for SOC2 compliance (6 partitions, 5,000 TPS, lz4 compression), (3) collab.v1.workspace-deltas: High-frequency operational transformations and cursor vectors partitioned by workspace UUID (12 partitions, 50,000 frames/sec), (4) payments.v1.settlement: Immutable append-only double-entry ledger stream with SHA-256 hash chains (6 partitions, 3,000 TPS, zstd), and (5) agent.v1.mcp-telemetry: Streaming JSON-RPC 2.0 tool execution logs and token expenditure telemetry from gVisor sandbox containers (8 partitions, 10,000 TPS).",
+    "url": "#architecture-event-streams"
   }
 ]

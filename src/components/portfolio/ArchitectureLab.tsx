@@ -16,6 +16,7 @@ import {
   Flame,
   Globe,
   GitCommit,
+  Radio,
   X
 } from 'lucide-react'
 import ByteByteGoDiagram from '@/components/architecture/ByteByteGoDiagram'
@@ -26,6 +27,7 @@ import ArchitectureEvolutionDiff from '@/components/architecture/ArchitectureEvo
 import ChaosResilienceMatrix from '@/components/architecture/ChaosResilienceMatrix'
 import ApiGatewayPlayground from '@/components/architecture/ApiGatewayPlayground'
 import DistributedTraceInspector from '@/components/architecture/DistributedTraceInspector'
+import KafkaStreamMonitor from '@/components/architecture/KafkaStreamMonitor'
 import { ARCHITECTURE_SYSTEMS } from '@/data/architectureSystems'
 import { ARCHITECTURAL_DECISIONS } from '@/data/architecturalDecisions'
 import { ARCHITECTURAL_TRADEOFFS } from '@/data/architecturalTradeoffs'
@@ -33,6 +35,7 @@ import { ARCHITECTURE_EVOLUTIONS } from '@/data/architectureEvolutions'
 import { CHAOS_DRILLS } from '@/data/chaosDrills'
 import { GATEWAY_ROUTES } from '@/data/gatewayRoutes'
 import { DISTRIBUTED_TRACES } from '@/data/distributedTraces'
+import { KAFKA_TOPIC_STREAMS } from '@/data/kafkaStreams'
 
 const AI_TERMS_SUMMARY = [
   { id: 'agentic-ai', title: 'Agentic AI', text: 'Perception-action loop, DAG memory, tool execution, LangGraph' },
@@ -58,6 +61,7 @@ export default function ArchitectureLab() {
         drills: 5,
         gateway: 5,
         traces: 5,
+        kafka: 5,
         isActive: false
       }
     }
@@ -131,8 +135,17 @@ export default function ArchitectureLab() {
       t.governingAdr.toLowerCase().includes(q)
     ).length
 
+    const kafkaCount = KAFKA_TOPIC_STREAMS.filter(k => 
+      k.title.toLowerCase().includes(q) ||
+      k.topicId.toLowerCase().includes(q) ||
+      k.systemName.toLowerCase().includes(q) ||
+      k.category.toLowerCase().includes(q) ||
+      k.summary.toLowerCase().includes(q) ||
+      k.governingAdr.toLowerCase().includes(q)
+    ).length
+
     return {
-      total: workbenchCount + aiCount + adrCount + tradeoffCount + evolutionCount + chaosCount + gatewayCount + traceCount,
+      total: workbenchCount + aiCount + adrCount + tradeoffCount + evolutionCount + chaosCount + gatewayCount + traceCount + kafkaCount,
       workbench: workbenchCount,
       aiCodex: aiCount,
       adr: adrCount,
@@ -141,6 +154,7 @@ export default function ArchitectureLab() {
       drills: chaosCount,
       gateway: gatewayCount,
       traces: traceCount,
+      kafka: kafkaCount,
       isActive: true
     }
   }, [searchQuery])
@@ -341,6 +355,17 @@ export default function ArchitectureLab() {
             <GitCommit className="w-3.5 h-3.5 text-indigo-400" />
             <span>Distributed Traces ({matchStats.traces})</span>
           </a>
+          <a 
+            href="#architecture-event-streams"
+            className={`px-3 py-1.5 rounded-lg border transition-all flex items-center gap-1.5 cursor-pointer ${
+              matchStats.isActive && matchStats.kafka > 0
+                ? 'bg-cyan-500/10 border-cyan-500/50 text-cyan-400 shadow-[0_0_10px_rgba(6,182,212,0.15)] font-bold'
+                : 'bg-slate-900 border-slate-800 hover:border-cyan-500/50 hover:text-cyan-400 text-slate-300'
+            }`}
+          >
+            <Radio className="w-3.5 h-3.5 text-cyan-400" />
+            <span>Event Streams ({matchStats.kafka})</span>
+          </a>
         </div>
       </div>
 
@@ -442,6 +467,18 @@ export default function ArchitectureLab() {
         className="scroll-mt-24"
       >
         <DistributedTraceInspector />
+      </motion.div>
+
+      {/* 2.12. Kafka Event Stream & Partition Lag Monitor */}
+      <motion.div
+        id="architecture-event-streams"
+        initial={{ opacity: 0, y: 25 }}
+        whileInView={{ opacity: 1, y: 0 }}
+        viewport={{ once: true }}
+        transition={{ duration: 0.6, delay: 0.45 }}
+        className="scroll-mt-24"
+      >
+        <KafkaStreamMonitor />
       </motion.div>
 
       {/* 3. Architectural Design Pillars Strip */}

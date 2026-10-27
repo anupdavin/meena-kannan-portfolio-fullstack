@@ -25,17 +25,22 @@ export default function Portfolio() {
   const [showScrollTop, setShowScrollTop] = useState(false)
   const sectionRefs = useRef<Record<string, HTMLElement | null>>({})
 
-  // Ensure fresh landing on Hero section if no hash is present in URL
+  // Ensure fresh landing on Hero section if no hash is present, or scroll to hash target with retry
   useEffect(() => {
     if (!window.location.hash) {
       window.scrollTo({ top: 0, left: 0, behavior: 'instant' })
     } else {
-      const target = document.querySelector(window.location.hash)
-      if (target) {
-        setTimeout(() => {
+      const scrollWithRetry = (attempts = 0) => {
+        const hash = window.location.hash
+        if (!hash) return
+        const target = document.querySelector(hash)
+        if (target) {
           target.scrollIntoView({ behavior: 'smooth' })
-        }, 100)
+        } else if (attempts < 5) {
+          setTimeout(() => scrollWithRetry(attempts + 1), 150)
+        }
       }
+      scrollWithRetry(0)
     }
   }, [])
 

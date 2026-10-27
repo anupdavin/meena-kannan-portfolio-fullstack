@@ -8,6 +8,7 @@ import { ARCHITECTURE_EVOLUTIONS } from '@/data/architectureEvolutions'
 import { CHAOS_DRILLS } from '@/data/chaosDrills'
 import { GATEWAY_ROUTES } from '@/data/gatewayRoutes'
 import { DISTRIBUTED_TRACES } from '@/data/distributedTraces'
+import { KAFKA_TOPIC_STREAMS } from '@/data/kafkaStreams'
 import { EXECUTIVE_BRIEFING } from '@/data/executiveBriefing'
 
 interface HistoryEntry {
@@ -50,6 +51,10 @@ const AVAILABLE_COMMANDS = [
   'spans',
   'otel',
   'jaeger',
+  'kafka',
+  'streams',
+  'topics',
+  'lag',
   'adr',
   'decisions',
   'tradeoffs',
@@ -90,6 +95,7 @@ const QUICK_CHIPS = [
   { label: '[ $ chaos ]', cmd: 'chaos' },
   { label: '[ $ gateway ]', cmd: 'gateway' },
   { label: '[ $ trace ]', cmd: 'trace' },
+  { label: '[ $ kafka ]', cmd: 'kafka' },
   { label: '[ $ find kafka ]', cmd: 'find kafka' },
   { label: '[ $ tradeoffs ]', cmd: 'tradeoffs' },
   { label: '[ $ adr ]', cmd: 'adr' },
@@ -118,6 +124,7 @@ const COMMAND_HELP = [
   '  chaos           - Execute automated chaos disaster recovery drills & SLA logs (or "chaos <id>")',
   '  gateway         - Inspect Envoy API gateway routes, mTLS & filters (or "gateway <id>")',
   '  trace           - Inspect OpenTelemetry distributed traces & span flamegraphs (or "trace <id>")',
+  '  kafka           - Inspect Kafka event topics, partition lag & ISR quorums (or "kafka <id>")',
   '  find <query>    - Search cross-cutting architecture systems, ADRs, AI codex & trade-offs',
   '  tradeoffs       - Evaluate system design decision trade-offs (or "compare <topic>")',
   '  stats           - View production performance & impact metrics (99.99% SLA)',
@@ -870,6 +877,19 @@ export default function InteractiveCli() {
           ]
           break
         }
+        if (sub === 'kafka' || sub === 'streams' || sub === 'topics' || sub === 'lag' || args.some(a => a.toLowerCase().includes('kafka') || a.toLowerCase().includes('stream') || a.toLowerCase().includes('topic'))) {
+          output = [
+            'Routing to Kafka Event Streams & Partition Lag Monitor (#architecture-event-streams):',
+            '  1. orders.v1.events        : Saga Order Lifecycle (8 partitions, 15,000 TPS, zstd)',
+            '  2. tenants.v1.audit        : SaaS Security Audit (6 partitions, 5,000 TPS, lz4)',
+            '  3. collab.v1.workspace-deltas : Real-Time Deltas (12 partitions, 50k frames/sec)',
+            '  4. payments.v1.settlement  : FinTech Double-Entry (6 partitions, 3,000 TPS, zstd)',
+            '  5. agent.v1.mcp-telemetry  : MCP Tool Execution Bus (8 partitions, 10,000 TPS)',
+            '--------------------------------------------------------------------------------',
+            'Interactive Monitor: Live in #architecture-event-streams with partition lag & ISR quorums.'
+          ]
+          break
+        }
         output = [
           'ByteByteGo Interactive Architecture Lab Navigator:',
           '--------------------------------------------------------------------------------',
@@ -882,6 +902,7 @@ export default function InteractiveCli() {
           '  [ 6 ] "architecture chaos"     : Chaos Disaster Recovery Drills (#architecture-chaos-matrix)',
           '  [ 7 ] "architecture gateway"   : Ingress Routing & Envoy Filters (#architecture-api-gateway)',
           '  [ 8 ] "architecture trace"     : OpenTelemetry Distributed Tracing (#architecture-distributed-tracing)',
+          '  [ 9 ] "architecture kafka"     : Kafka Event Streams & Partition Lag (#architecture-event-streams)',
           '--------------------------------------------------------------------------------',
           'Clean Architecture Principles Enforced:',
           '  + Domain Isolation     : Core business domains decouple from libraries and vendor SDKs',
@@ -1255,6 +1276,69 @@ export default function InteractiveCli() {
         ]
         break
       }
+      case 'kafka':
+      case 'streams':
+      case 'topics':
+      case 'lag': {
+        const target = args[0]?.toLowerCase().trim()
+        if (target) {
+          const matched = KAFKA_TOPIC_STREAMS.find(k => 
+            k.topicId === target ||
+            k.topicId.includes(target) ||
+            k.systemId === target ||
+            k.systemName.toLowerCase().includes(target) ||
+            (target === '1' && k.topicId === 'orders.v1.events') ||
+            (target === '2' && k.topicId === 'tenants.v1.audit') ||
+            (target === '3' && k.topicId === 'collab.v1.workspace-deltas') ||
+            (target === '4' && k.topicId === 'payments.v1.settlement') ||
+            (target === '5' && k.topicId === 'agent.v1.mcp-telemetry')
+          )
+          if (matched) {
+            output = [
+              `Kafka Event Topic: ${matched.title}`,
+              `Topic ID    : ${matched.topicId}`,
+              `Target System: ${matched.systemName}`,
+              `Category    : ${matched.category}`,
+              `Governing ADR: ${matched.governingAdr}`,
+              '--------------------------------------------------------------------------------',
+              `Partitions  : ${matched.partitionsCount} (Replication: ${matched.replicationFactor}x, Cleanup: ${matched.cleanupPolicy})`,
+              `Retention   : ${matched.retentionHours} hours (Compression: ${matched.compressionType})`,
+              `Throughput  : ${matched.targetThroughputTps} (P99 Publish: ${matched.p99PublishLatency})`,
+              '--------------------------------------------------------------------------------',
+              'CONSUMER GROUPS & LAG:',
+              ...matched.consumerGroups.map(cg =>
+                `  * [${cg.state}] Group: ${cg.groupId} (${cg.protocol}, ${cg.membersCount} members, Lag: ${cg.totalLag})`
+              ),
+              '',
+              'PARTITION OFFSET TOPOLOGY:',
+              ...matched.partitions.map(p =>
+                `  P-${p.partitionId} [${p.leaderBroker.split('.')[0]}] :: LogEnd: ${p.logEndOffset} | Consumer: ${p.consumerOffset} | Lag: ${p.lag} | ISR: ${p.isr.length}/${p.replicas.length}`
+              ),
+              '--------------------------------------------------------------------------------',
+              'Full live partition lag monitor available in #architecture-event-streams.'
+            ]
+            break
+          }
+        }
+
+        output = [
+          'Kafka Event Streams & Partition Lag Monitor:',
+          '--------------------------------------------------------------------------------',
+          'Inspect enterprise Kafka event streams, partition topologies & consumer lag across 5 systems:',
+          '',
+          ...KAFKA_TOPIC_STREAMS.flatMap((k, idx) => [
+            `${idx + 1}. [ ${k.topicId} ] : ${k.title}`,
+            `   System        : ${k.systemName}`,
+            `   Partitions    : ${k.partitionsCount} parts (Throughput: ${k.targetThroughputTps}, Latency: ${k.p99PublishLatency})`,
+            `   Consumer Groups: ${k.consumerGroups.map(cg => `${cg.groupId} (lag: ${cg.totalLag})`).join(', ')}`,
+            `   Deep Dive     : "kafka ${idx + 1}" or "kafka ${k.topicId.split('.')[0]}" (e.g. "kafka orders", "kafka tenants", "kafka collab", "kafka payments", "kafka agent")`,
+            ''
+          ]),
+          '--------------------------------------------------------------------------------',
+          'Tip: Run "kafka <id>" (e.g. "kafka 1" or "kafka orders") to inspect partition offset ledger.'
+        ]
+        break
+      }
       case 'find':
       case 'search': {
         const query = args.join(' ').toLowerCase().trim()
@@ -1264,7 +1348,7 @@ export default function InteractiveCli() {
             '--------------------------------------------------------------------------------',
             'Search cross-cutting distributed systems, ADRs, AI paradigms, and trade-offs.',
             'Usage: find <query> (e.g. "find kafka", "find redis", "find mcp", "find saga")',
-            'Available Domains: Systems, ADR Governance, AI Codex, Trade-Off Matrix, Evolution Diffs, Chaos Drills, API Gateway, Distributed Traces'
+            'Available Domains: Systems, ADR Governance, AI Codex, Trade-Off Matrix, Evolution Diffs, Chaos Drills, API Gateway, Distributed Traces, Kafka Event Streams'
           ]
           break
         }
@@ -1421,6 +1505,26 @@ export default function InteractiveCli() {
               `[Distributed Trace] ${t.title}`,
               `  Endpoint   : ${t.rootEndpoint} (${t.totalDurationMs.toFixed(1)}ms)`,
               `  Anchor     : #architecture-distributed-tracing`,
+              ''
+            )
+          }
+        })
+
+        // 9. Search Kafka Event Streams
+        KAFKA_TOPIC_STREAMS.forEach(k => {
+          if (
+            k.title.toLowerCase().includes(query) ||
+            k.topicId.toLowerCase().includes(query) ||
+            k.systemName.toLowerCase().includes(query) ||
+            k.category.toLowerCase().includes(query) ||
+            k.summary.toLowerCase().includes(query) ||
+            k.governingAdr.toLowerCase().includes(query) ||
+            k.consumerGroups.some(cg => cg.groupId.toLowerCase().includes(query))
+          ) {
+            results.push(
+              `[Kafka Event Stream] ${k.title}`,
+              `  Topic      : ${k.topicId} (${k.partitionsCount} parts, ${k.targetThroughputTps})`,
+              `  Anchor     : #architecture-event-streams`,
               ''
             )
           }

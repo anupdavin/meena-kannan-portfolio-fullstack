@@ -808,6 +808,44 @@ describe('Production Architectural Decision Records (ADR) & CLI Integration', ()
     assert.ok(indexHtml.includes('id="architecture-distributed-tracing"'), 'index.html must include #architecture-distributed-tracing landmark');
     assert.ok(!/[\u2013\u2014]/.test(indexHtml), 'index.html must contain zero em/en-dashes');
   });
+
+  test('KafkaStreamMonitor and kafkaStreams.ts define enterprise Kafka streams with CLI integration', () => {
+    const kafkaDataPath = path.join(rootDir, 'src', 'data', 'kafkaStreams.ts');
+    assert.ok(fs.existsSync(kafkaDataPath), 'kafkaStreams.ts must exist');
+    const kafkaDataCode = fs.readFileSync(kafkaDataPath, 'utf8');
+    assert.ok(kafkaDataCode.includes('orders.v1.events'), 'Must define orders.v1.events topic');
+    assert.ok(kafkaDataCode.includes('tenants.v1.audit'), 'Must define tenants.v1.audit topic');
+    assert.ok(kafkaDataCode.includes('collab.v1.workspace-deltas'), 'Must define collab.v1.workspace-deltas topic');
+    assert.ok(kafkaDataCode.includes('payments.v1.settlement'), 'Must define payments.v1.settlement topic');
+    assert.ok(kafkaDataCode.includes('agent.v1.mcp-telemetry'), 'Must define agent.v1.mcp-telemetry topic');
+    assert.ok(!/[\u2013\u2014]/.test(kafkaDataCode), 'kafkaStreams.ts must contain zero em/en-dashes');
+
+    const componentPath = path.join(rootDir, 'src', 'components', 'architecture', 'KafkaStreamMonitor.tsx');
+    assert.ok(fs.existsSync(componentPath), 'KafkaStreamMonitor.tsx must exist');
+    const compCode = fs.readFileSync(componentPath, 'utf8');
+    assert.ok(compCode.includes('handleCopyRfc'), 'KafkaStreamMonitor must support 1-click RFC copy');
+    assert.ok(compCode.includes('handleCopyPayload'), 'KafkaStreamMonitor must support 1-click payload copy');
+    assert.ok(compCode.includes('KAFKA_TOPIC_STREAMS'), 'KafkaStreamMonitor must render KAFKA_TOPIC_STREAMS');
+    assert.ok(!/[\u2013\u2014]/.test(compCode), 'KafkaStreamMonitor.tsx must contain zero em/en-dashes');
+
+    const labCode = fs.readFileSync(path.join(rootDir, 'src', 'components', 'portfolio', 'ArchitectureLab.tsx'), 'utf8');
+    assert.ok(labCode.includes('KafkaStreamMonitor'), 'ArchitectureLab must mount KafkaStreamMonitor');
+    assert.ok(labCode.includes('id="architecture-event-streams"'), 'ArchitectureLab must define anchor #architecture-event-streams');
+
+    const cliCode = fs.readFileSync(path.join(rootDir, 'src', 'components', 'portfolio', 'InteractiveCli.tsx'), 'utf8');
+    assert.ok(cliCode.includes("'kafka'"), "InteractiveCli must support 'kafka' command");
+    assert.ok(cliCode.includes('[ $ kafka ]'), "InteractiveCli must include '[ $ kafka ]' quick chip");
+    assert.ok(cliCode.includes('KAFKA_TOPIC_STREAMS'), 'InteractiveCli must search across KAFKA_TOPIC_STREAMS');
+    assert.ok(!/[\u2013\u2014]/.test(cliCode), 'InteractiveCli.tsx must contain zero em/en-dashes');
+
+    const chatIndex = fs.readFileSync(path.join(rootDir, 'public', 'chat', 'index.json'), 'utf8');
+    assert.ok(chatIndex.includes('kafka-event-streams'), 'public/chat/index.json must index kafka-event-streams');
+    assert.ok(!/[\u2013\u2014]/.test(chatIndex), 'public/chat/index.json must contain zero em/en-dashes');
+
+    const indexHtml = fs.readFileSync(path.join(rootDir, 'index.html'), 'utf8');
+    assert.ok(indexHtml.includes('id="architecture-event-streams"'), 'index.html must include #architecture-event-streams landmark');
+    assert.ok(!/[\u2013\u2014]/.test(indexHtml), 'index.html must contain zero em/en-dashes');
+  });
 });
 
 
