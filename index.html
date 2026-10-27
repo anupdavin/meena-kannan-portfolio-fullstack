@@ -669,6 +669,16 @@
                 High-resilience fault isolation, non-blocking delay scheduling, and poison-pill triage across 5 enterprise architectures: Exponential Backoff with Decorrelated Jitter (non-harmonic delay scaling breaking thundering herd retry harmonics), Non-Blocking Staggered Retry Topics (orders.retry.10s, orders.retry.1m, orders.retry.5m delay queues eliminating head-of-line blocking on primary 15k TPS partitions), Poison Pill Quarantine and Dead-Letter Parking Lot (sub-2ms containment of unparseable JSON and schema mismatches with instant SRE alerting), Idempotent DLQ Message Replay with Circuit Guard (rate-limited 250 msg/s re-injection guarded by Redis idempotency locks and circuit breaker health checks), and Out-of-Order DLQ Event Reconciliation (causal watermarking and state rebasing preventing delayed historical events from corrupting newer aggregate states).
               </p>
             </div>
+
+            <!-- Sub-Section 23: Distributed Idempotency Key & Two-Phase Ingress Committer Sandbox -->
+            <div id="architecture-idempotency" style="background: rgba(9, 14, 24, 0.7); border: 1px solid #1e293b; border-radius: 16px; padding: 1.5rem; margin-top: 1rem;">
+              <h3 style="color: #818cf8; font-size: 1.25rem; font-weight: bold; margin-bottom: 0.5rem;">
+                Distributed Idempotency Key &amp; Two-Phase Ingress Committer Sandbox
+              </h3>
+              <p style="color: #94a3b8; font-size: 0.85rem; line-height: 1.6;">
+                Linearizable exactly-once execution, monotonic fencing tokens, and zero double-spend guarantees across 5 enterprise architectures: Redis Redlock Distributed Locking with Monotonic Fencing Tokens (distributed lock leases with monotonic counter tokens invalidating delayed zombie writes), IETF RFC 9110 Sliding Window Ingress Idempotency Gate (two-phase reserve-and-commit ingress filter with in-flight reservation locks and 24h cached response fast-paths), Database Unique Constraint with Atomic Compare-and-Swap (PostgreSQL ACID unique constraint eliminating duplicate mutations with zero distributed 2PC overhead), Webhook At-Least-Once Replay Protection (HMAC-SHA256 signature verification and hot Redis deduplication ledgers preventing double-credits on Stripe/Adyen retries), and Cryptographic Request Fingerprinting with SHA-256 (canonical payload digestion detecting and intercepting tampered request re-submissions with HTTP 422).
+              </p>
+            </div>
           </section>
 
           <!-- Projects & Interactive Architecture Section Landmark -->

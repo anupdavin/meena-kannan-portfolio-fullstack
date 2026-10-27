@@ -220,5 +220,11 @@
     "title": "Distributed Dead-Letter Queue (DLQ) & Non-Blocking Retry Matrix Sandbox",
     "text": "Meena architects enterprise dead-letter queue (DLQ) and non-blocking retry engines across 5 paradigms: (1) Exponential Backoff with Decorrelated Jitter: Non-harmonic delay scaling sleep = min(cap, random(base, sleep * 3)) breaking thundering herd retry harmonics, (2) Non-Blocking Staggered Retry Topics: Multi-tier Kafka delay queues (orders.retry.10s, 1m, 5m) ensuring zero head-of-line blocking on primary 15,000 TPS event streams, (3) Poison Pill Quarantine & Dead-Letter Parking Lot: Instant sub-2ms bypass to quarantine database for non-retryable deserialization and schema corruptions with SRE alerting, (4) Idempotent DLQ Replay with Circuit Guard: Rate-limited 250 msg/s re-injection guarded by Redis idempotency locks and automated circuit breaker trips if error rates exceed 5%, and (5) Out-of-Order DLQ Reconciliation: Causal watermarking and state rebasing preventing obsolete replayed events from overwriting newer aggregate states.",
     "url": "#architecture-dlq-retry"
+  },
+  {
+    "id": "distributed-idempotency-keys",
+    "title": "Distributed Idempotency Key & Two-Phase Ingress Committer Sandbox",
+    "text": "Meena architects enterprise idempotency and linearizable deduplication engines across 5 paradigms: (1) Redis Redlock with Monotonic Fencing Tokens: Quorum lease allocation with incrementing counter tokens strictly invalidating delayed zombie writes at storage layer, (2) IETF RFC 9110 Sliding Window Ingress Gate: Two-phase reserve-and-commit filter with in-flight mutex (HTTP 409 Conflict with Retry-After) and sub-0.8ms cached 201 Created fast-paths, (3) Database Unique CAS Locks: PostgreSQL ACID unique constraint with ON CONFLICT DO NOTHING eliminating duplicate writes with zero distributed 2PC overhead, (4) Webhook At-Least-Once Ledger: HMAC-SHA256 signature verification and hot Redis deduplication ledgers preventing double-credits on Stripe/PayPal retries, and (5) Cryptographic Request Fingerprinting: SHA-256 canonical payload digestion detecting and intercepting tampered request re-submissions with HTTP 422.",
+    "url": "#architecture-idempotency"
   }
 ]

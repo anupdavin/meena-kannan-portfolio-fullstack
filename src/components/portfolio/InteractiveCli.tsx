@@ -22,6 +22,7 @@ import { DISTRIBUTED_SAGA_MODELS } from '@/data/distributedSagas'
 import { DISTRIBUTED_CACHE_MODELS } from '@/data/distributedCache'
 import { EVENT_SOURCING_MODELS } from '@/data/eventSourcing'
 import { DLQ_RETRY_MODELS } from '@/data/dlqRetryModels'
+import { IDEMPOTENCY_MODELS } from '@/data/idempotencyModels'
 import { EXECUTIVE_BRIEFING } from '@/data/executiveBriefing'
 
 interface HistoryEntry {
@@ -128,6 +129,11 @@ const AVAILABLE_COMMANDS = [
   'poisonpill',
   'backoffjitter',
   'parkinglot',
+  'idempotency',
+  'dedup',
+  'fencingtoken',
+  'idempotentkey',
+  'replayhammer',
   'adr',
   'decisions',
   'tradeoffs',
@@ -182,6 +188,7 @@ const QUICK_CHIPS = [
   { label: '[ $ cache ]', cmd: 'cache' },
   { label: '[ $ eventsourcing ]', cmd: 'eventsourcing' },
   { label: '[ $ dlq ]', cmd: 'dlq' },
+  { label: '[ $ idempotency ]', cmd: 'idempotency' },
   { label: '[ $ find kafka ]', cmd: 'find kafka' },
   { label: '[ $ tradeoffs ]', cmd: 'tradeoffs' },
   { label: '[ $ adr ]', cmd: 'adr' },
@@ -222,6 +229,7 @@ const COMMAND_HELP = [
   '  cache           - Inspect distributed cache stampede protection & mutex leasing (or "cache <id>")',
   '  eventsourcing   - Inspect distributed event sourcing, CQRS & snapshotting (or "eventsourcing <id>")',
   '  dlq             - Inspect dead-letter queue, poison-pill quarantine & retries (or "dlq <id>")',
+  '  idempotency     - Inspect distributed idempotency keys, fencing tokens & CAS locks (or "idempotency <id>")',
   '  find <query>    - Search cross-cutting architecture systems, ADRs, AI codex & trade-offs',
   '  tradeoffs       - Evaluate system design decision trade-offs (or "compare <topic>")',
   '  stats           - View production performance & impact metrics (99.99% SLA)',
@@ -1156,6 +1164,19 @@ export default function InteractiveCli() {
           ]
           break
         }
+        if (sub === 'idempotency' || sub === 'dedup' || sub === 'fencingtoken' || sub === 'idempotentkey' || sub === 'replayhammer' || args.some(a => a.toLowerCase().includes('idem') || a.toLowerCase().includes('dedup') || a.toLowerCase().includes('fencing'))) {
+          output = [
+            'Routing to Distributed Idempotency Key & Two-Phase Ingress Committer (#architecture-idempotency):',
+            '  1. Redlock Fencing Tokens  : Quorum lease with monotonic counter token invalidating delayed zombie writes',
+            '  2. RFC 9110 Ingress Gate   : Two-phase reserve-and-commit filter with in-flight mutex & 24h cached status',
+            '  3. DB Unique CAS Locks     : PostgreSQL atomic INSERT ON CONFLICT DO NOTHING with zero side-effects',
+            '  4. Webhook Replay Ledger   : Stripe/Adyen at-least-once deduplication ledger with 0.00% double-credit risk',
+            '  5. SHA-256 Fingerprinting  : Canonical payload digestion intercepting key tampering with HTTP 422',
+            '--------------------------------------------------------------------------------',
+            'Interactive Sandbox: Live in #architecture-idempotency with duplicate hammer & tamper probes.'
+          ]
+          break
+        }
         output = [
           'ByteByteGo Interactive Architecture Lab Navigator:',
           '--------------------------------------------------------------------------------',
@@ -1182,6 +1203,7 @@ export default function InteractiveCli() {
           '  [ 20 ] "architecture cache"   : Distributed Cache Stampede & Coherence (#architecture-distributed-cache)',
           '  [ 21 ] "architecture eventsourcing": Distributed Event Sourcing & CQRS (#architecture-event-sourcing)',
           '  [ 22 ] "architecture dlq"     : Dead-Letter Queue & Retry Matrix (#architecture-dlq-retry)',
+          '  [ 23 ] "architecture idempotency": Distributed Idempotency & CAS Locks (#architecture-idempotency)',
           '--------------------------------------------------------------------------------',
           'Clean Architecture Principles Enforced:',
           '  + Domain Isolation     : Core business domains decouple from libraries and vendor SDKs',
@@ -2453,6 +2475,69 @@ export default function InteractiveCli() {
         ]
         break
       }
+      case 'idempotency':
+      case 'dedup':
+      case 'fencingtoken':
+      case 'idempotentkey':
+      case 'replayhammer': {
+        const target = args[0]?.toLowerCase().trim()
+        if (target) {
+          const matched = IDEMPOTENCY_MODELS.find(m =>
+            m.id === target ||
+            m.id.includes(target) ||
+            m.name.toLowerCase().includes(target) ||
+            m.badge.toLowerCase().includes(target) ||
+            (target === '1' && m.id === 'redis-redlock-fencing-tokens') ||
+            (target === '2' && m.id === 'sliding-window-ingress-dedup') ||
+            (target === '3' && m.id === 'database-unique-cas-locks') ||
+            (target === '4' && m.id === 'webhook-at-least-once-dedup') ||
+            (target === '5' && m.id === 'cryptographic-request-fingerprinting')
+          )
+          if (matched) {
+            output = [
+              '--------------------------------------------------------------------------------',
+              `Idempotency Model: ${matched.name} [${matched.badge}]`,
+              '--------------------------------------------------------------------------------',
+              `Core Paradigm       : ${matched.paradigm}`,
+              `Algorithm Formula   : ${matched.algorithmFormula}`,
+              `Deduplication SLA   : ${matched.dedupLatency}`,
+              `Double-Exec Defense : ${matched.doubleExecutionDefense}`,
+              `Storage Ledger      : ${matched.storageModel}`,
+              '--------------------------------------------------------------------------------',
+              'WORKFLOW PHASES & INVARIANTS:',
+              ...matched.workflowPhases.map(p =>
+                `  * [${p.name}] :: ${p.description} -> Invariant: ${p.invariants}`
+              ),
+              '--------------------------------------------------------------------------------',
+              'PRODUCTION OUTCOMES & INVARIANTS:',
+              ...Object.entries(matched.productionOutcomes).map(([k, v]) => `  + ${k}: ${v}`),
+              '',
+              `Architectural Invariant: "${matched.architecturalInvariant}"`,
+              '--------------------------------------------------------------------------------',
+              'Full live interactive duplicate hammer and replay simulator in #architecture-idempotency.'
+            ]
+            break
+          }
+        }
+
+        output = [
+          'Distributed Idempotency Key & Two-Phase Ingress Committer Sandbox:',
+          '--------------------------------------------------------------------------------',
+          'Explore 5 enterprise deduplication and linearizable execution architectures:',
+          '',
+          ...IDEMPOTENCY_MODELS.flatMap((m, idx) => [
+            `${idx + 1}. [ ${m.id} ] : ${m.name} (${m.badge})`,
+            `   Paradigm   : ${m.paradigm}`,
+            `   Latency    : ${m.dedupLatency.split(';')[0]}`,
+            `   Defense    : ${m.doubleExecutionDefense.split(';')[0]}`,
+            `   Deep Dive  : "idempotency ${idx + 1}" or "idempotency ${m.id.split('-')[0]}" (e.g. "idempotency redlock", "idempotency sliding", "idempotency cas", "idempotency webhook", "idempotency sha256")`,
+            ''
+          ]),
+          '--------------------------------------------------------------------------------',
+          'Tip: Run "idempotency <id>" (e.g. "idempotency 1" or "idempotency redlock") to inspect fencing tokens and CAS locks.'
+        ]
+        break
+      }
       case 'find':
       case 'search': {
         const query = args.join(' ').toLowerCase().trim()
@@ -2462,7 +2547,7 @@ export default function InteractiveCli() {
             '--------------------------------------------------------------------------------',
             'Search cross-cutting distributed systems, ADRs, AI paradigms, and trade-offs.',
             'Usage: find <query> (e.g. "find kafka", "find redis", "find mcp", "find saga")',
-            'Available Domains: Systems, ADR Governance, AI Codex, Trade-Off Matrix, Evolution Diffs, Chaos Drills, API Gateway, Distributed Traces, Kafka Event Streams, Distributed Rate Limiting, Multi-Region Replication, Database Sharding, Edge CDN Caching, Circuit Breakers, Concurrency & Deadlocks, Raft Consensus, Vector Search, Traffic Priority & QoS, Distributed Sagas & Compensations, Distributed Cache Stampede & Coherence, Distributed Event Sourcing & CQRS'
+            'Available Domains: Systems, ADR Governance, AI Codex, Trade-Off Matrix, Evolution Diffs, Chaos Drills, API Gateway, Distributed Traces, Kafka Event Streams, Distributed Rate Limiting, Multi-Region Replication, Database Sharding, Edge CDN Caching, Circuit Breakers, Concurrency & Deadlocks, Raft Consensus, Vector Search, Traffic Priority & QoS, Distributed Sagas & Compensations, Distributed Cache Stampede & Coherence, Distributed Event Sourcing & CQRS, Distributed DLQ & Retries, Distributed Idempotency & CAS Locks'
           ]
           break
         }
@@ -2930,6 +3015,29 @@ export default function InteractiveCli() {
               `  Paradigm   : ${d.paradigm} (${d.badge})`,
               `  Recovery   : ${d.recoveryLatency.split(';')[0]}`,
               `  Anchor     : #architecture-dlq-retry`,
+              ''
+            )
+          }
+        })
+
+        // 23. Search Distributed Idempotency & Ingress Committer
+        IDEMPOTENCY_MODELS.forEach(i => {
+          if (
+            i.name.toLowerCase().includes(query) ||
+            i.id.toLowerCase().includes(query) ||
+            i.paradigm.toLowerCase().includes(query) ||
+            i.badge.toLowerCase().includes(query) ||
+            i.algorithmFormula.toLowerCase().includes(query) ||
+            i.dedupLatency.toLowerCase().includes(query) ||
+            i.doubleExecutionDefense.toLowerCase().includes(query) ||
+            i.storageModel.toLowerCase().includes(query) ||
+            i.architecturalInvariant.toLowerCase().includes(query)
+          ) {
+            results.push(
+              `[Idempotency & CAS] ${i.name}`,
+              `  Paradigm   : ${i.paradigm} (${i.badge})`,
+              `  Defense    : ${i.doubleExecutionDefense.split(';')[0]}`,
+              `  Anchor     : #architecture-idempotency`,
               ''
             )
           }

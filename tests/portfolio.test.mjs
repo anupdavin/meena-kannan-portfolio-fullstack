@@ -1349,6 +1349,43 @@ describe('Production Architectural Decision Records (ADR) & CLI Integration', ()
     assert.ok(indexHtml.includes('id="architecture-dlq-retry"'), 'index.html must include #architecture-dlq-retry landmark');
     assert.ok(!/[\u2013\u2014]/.test(indexHtml), 'index.html must contain zero em/en-dashes');
   });
+
+  test('IdempotencySandbox and idempotencyModels.ts define distributed idempotency, fencing tokens and CAS locks with CLI integration', () => {
+    const idemDataPath = path.join(rootDir, 'src', 'data', 'idempotencyModels.ts');
+    assert.ok(fs.existsSync(idemDataPath), 'idempotencyModels.ts must exist');
+    const idemDataCode = fs.readFileSync(idemDataPath, 'utf8');
+    assert.ok(idemDataCode.includes('redis-redlock-fencing-tokens'), 'Must define redis-redlock-fencing-tokens model');
+    assert.ok(idemDataCode.includes('sliding-window-ingress-dedup'), 'Must define sliding-window-ingress-dedup model');
+    assert.ok(idemDataCode.includes('database-unique-cas-locks'), 'Must define database-unique-cas-locks model');
+    assert.ok(idemDataCode.includes('webhook-at-least-once-dedup'), 'Must define webhook-at-least-once-dedup model');
+    assert.ok(idemDataCode.includes('cryptographic-request-fingerprinting'), 'Must define cryptographic-request-fingerprinting model');
+    assert.ok(!/[\u2013\u2014]/.test(idemDataCode), 'idempotencyModels.ts must contain zero em/en-dashes');
+
+    const componentPath = path.join(rootDir, 'src', 'components', 'architecture', 'IdempotencySandbox.tsx');
+    assert.ok(fs.existsSync(componentPath), 'IdempotencySandbox.tsx must exist');
+    const compCode = fs.readFileSync(componentPath, 'utf8');
+    assert.ok(compCode.includes('copyRfcReport'), 'IdempotencySandbox must support 1-click RFC copy');
+    assert.ok(compCode.includes('IDEMPOTENCY_MODELS'), 'IdempotencySandbox must render IDEMPOTENCY_MODELS');
+    assert.ok(!/[\u2013\u2014]/.test(compCode), 'IdempotencySandbox.tsx must contain zero em/en-dashes');
+
+    const labCode = fs.readFileSync(path.join(rootDir, 'src', 'components', 'portfolio', 'ArchitectureLab.tsx'), 'utf8');
+    assert.ok(labCode.includes('IdempotencySandbox'), 'ArchitectureLab must mount IdempotencySandbox');
+    assert.ok(labCode.includes('id="architecture-idempotency"'), 'ArchitectureLab must define anchor #architecture-idempotency');
+
+    const cliCode = fs.readFileSync(path.join(rootDir, 'src', 'components', 'portfolio', 'InteractiveCli.tsx'), 'utf8');
+    assert.ok(cliCode.includes("'idempotency'"), "InteractiveCli must support 'idempotency' command");
+    assert.ok(cliCode.includes('[ $ idempotency ]'), "InteractiveCli must include '[ $ idempotency ]' quick chip");
+    assert.ok(cliCode.includes('IDEMPOTENCY_MODELS'), 'InteractiveCli must search across IDEMPOTENCY_MODELS');
+    assert.ok(!/[\u2013\u2014]/.test(cliCode), 'InteractiveCli.tsx must contain zero em/en-dashes');
+
+    const chatIndex = fs.readFileSync(path.join(rootDir, 'public', 'chat', 'index.json'), 'utf8');
+    assert.ok(chatIndex.includes('distributed-idempotency-keys'), 'public/chat/index.json must index distributed-idempotency-keys');
+    assert.ok(!/[\u2013\u2014]/.test(chatIndex), 'public/chat/index.json must contain zero em/en-dashes');
+
+    const indexHtml = fs.readFileSync(path.join(rootDir, 'index.html'), 'utf8');
+    assert.ok(indexHtml.includes('id="architecture-idempotency"'), 'index.html must include #architecture-idempotency landmark');
+    assert.ok(!/[\u2013\u2014]/.test(indexHtml), 'index.html must contain zero em/en-dashes');
+  });
 });
 
 

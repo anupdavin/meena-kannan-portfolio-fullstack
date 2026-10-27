@@ -76,4 +76,22 @@ This document serves as the persistent semantic memory layer for AI coding agent
 * **Decision:** Implemented an interactive 5-paradigm sandbox demonstrating Exponential Backoff with Decorrelated Jitter ($sleep = \min(cap, random(base, sleep \cdot 3))$), Non-Blocking Staggered Kafka Delay Topics (10s, 1m, 5m graduated escalation), Poison Pill Quarantine & Dead-Letter Parking Lot with sub-2ms bypass for deserialization errors, Idempotent Batch DLQ Replay with Circuit Guard and Redis leases, and Causal Watermarking Reconciliation preventing delayed events from corrupting current aggregate states.
 * **Blast Radius:** Mounted in `ArchitectureLab.tsx` under `#architecture-dlq-retry`; integrated into `InteractiveCli.tsx` with `dlq`, `retry`, `poisonpill` commands and `[ $ dlq ]` quick chip; indexed in `index.html` Sub-Section 22 and `public/chat/index.json`. Verified in test 26 of `tests/portfolio.test.mjs`.
 
+---
+
+## ADR-023: Distributed Idempotency Key & Two-Phase Ingress Committer Sandbox
+* **Status:** Accepted & Enforced
+* **Target Components:** [`IdempotencySandbox.tsx`](file:///src/components/architecture/IdempotencySandbox.tsx), [`idempotencyModels.ts`](file:///src/data/idempotencyModels.ts), [`ArchitectureLab.tsx`](file:///src/components/portfolio/ArchitectureLab.tsx)
+* **Context:** Financial transaction gateways, e-commerce checkout APIs, and high-frequency webhook listeners require strict exactly-once ingress guarantees to prevent duplicate order submissions, multiple balance deductions, and race conditions during network retries or client double-clicks.
+* **Decision:** Implemented an interactive 5-paradigm sandbox demonstrating Redis Redlock with Monotonic Fencing Tokens to guard against distributed lease expiration during GC pauses, IETF RFC 9110 Sliding Window Ingress Gates returning sub-0.8ms cached 201 Created responses for duplicates while rejecting concurrent requests with HTTP 409 Conflict, Database Unique CAS Locks with atomic row reservation (`INSERT ... ON CONFLICT (key) DO NOTHING`), Webhook At-Least-Once Delivery Ledgers with payload signature checks, and Cryptographic Request Fingerprinting with SHA-256 payload canonicalization returning HTTP 422 Unprocessable Entity when mutated payloads attempt key reuse.
+* **Blast Radius:** Mounted in `ArchitectureLab.tsx` under `#architecture-idempotency`; integrated into `InteractiveCli.tsx` with `idempotency`, `dedup`, `fencingtoken`, `idempotentkey`, `replayhammer` commands and `[ $ idempotency ]` quick chip; indexed in `index.html` Sub-Section 23 and `public/chat/index.json`. Verified in test 27 of `tests/portfolio.test.mjs`.
+
+
+## ADR-023: Distributed Idempotency Key & Two-Phase Ingress Committer
+* **Status:** Accepted & Enforced
+* **Target Components:** [`IdempotencySandbox.tsx`](file:///src/components/architecture/IdempotencySandbox.tsx), [`idempotencyModels.ts`](file:///src/data/idempotencyModels.ts), [`ArchitectureLab.tsx`](file:///src/components/portfolio/ArchitectureLab.tsx)
+* **Context:** Financial settlement, distributed saga orchestration, and third-party webhook integrations face duplicate delivery risks from network partitions, client timeouts, and automated retries. Without linearizable idempotency gates, duplicate transactions result in catastrophic double-credits and corrupted account balances.
+* **Decision:** Implemented an interactive 5-paradigm sandbox demonstrating Redis Redlock with Monotonic Fencing Tokens invalidating delayed zombie writes during GC pauses, IETF RFC 9110 Sliding Window Ingress Gate with two-phase reserve-and-commit in-flight mutex locks and 24h cached response fast-paths, Database Unique Constraint with Atomic CAS locks in PostgreSQL eliminating 2PC distributed locking overhead, Webhook At-Least-Once Replay Protection via HMAC-SHA256 signature verification and hot Redis deduplication ledgers, and Cryptographic Request Fingerprinting with SHA-256 canonical payload digestion detecting payload tampering with HTTP 422 Unprocessable Entity.
+* **Blast Radius:** Mounted in `ArchitectureLab.tsx` under `#architecture-idempotency`; integrated into `InteractiveCli.tsx` with `idempotency`, `dedup`, `fencingtoken` commands and `[ $ idempotency ]` quick chip; indexed in `index.html` Sub-Section 23 and `public/chat/index.json`. Verified in test 27 of `tests/portfolio.test.mjs`.
+
+
 

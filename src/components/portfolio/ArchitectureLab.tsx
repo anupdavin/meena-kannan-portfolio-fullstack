@@ -25,6 +25,7 @@ import {
   GitMerge,
   History,
   AlertOctagon,
+  Lock,
   X
 } from 'lucide-react'
 import ByteByteGoDiagram from '@/components/architecture/ByteByteGoDiagram'
@@ -49,6 +50,7 @@ import DistributedSagasSandbox from '@/components/architecture/DistributedSagasS
 import DistributedCacheSandbox from '@/components/architecture/DistributedCacheSandbox'
 import EventSourcingSandbox from '@/components/architecture/EventSourcingSandbox'
 import DlqRetrySandbox from '@/components/architecture/DlqRetrySandbox'
+import IdempotencySandbox from '@/components/architecture/IdempotencySandbox'
 import { ARCHITECTURE_SYSTEMS } from '@/data/architectureSystems'
 import { ARCHITECTURAL_DECISIONS } from '@/data/architecturalDecisions'
 import { ARCHITECTURAL_TRADEOFFS } from '@/data/architecturalTradeoffs'
@@ -70,6 +72,7 @@ import { DISTRIBUTED_SAGA_MODELS } from '@/data/distributedSagas'
 import { DISTRIBUTED_CACHE_MODELS } from '@/data/distributedCache'
 import { EVENT_SOURCING_MODELS } from '@/data/eventSourcing'
 import { DLQ_RETRY_MODELS } from '@/data/dlqRetryModels'
+import { IDEMPOTENCY_MODELS } from '@/data/idempotencyModels'
 
 const AI_TERMS_SUMMARY = [
   { id: 'agentic-ai', title: 'Agentic AI', text: 'Perception-action loop, DAG memory, tool execution, LangGraph' },
@@ -109,6 +112,7 @@ export default function ArchitectureLab() {
         cache: 5,
         eventsourcing: 5,
         dlq: 5,
+        idempotency: 5,
         isActive: false
       }
     }
@@ -335,8 +339,20 @@ export default function ArchitectureLab() {
       d.architecturalInvariant.toLowerCase().includes(q)
     ).length
 
+    const idempotencyCount = IDEMPOTENCY_MODELS.filter(i =>
+      i.name.toLowerCase().includes(q) ||
+      i.id.toLowerCase().includes(q) ||
+      i.paradigm.toLowerCase().includes(q) ||
+      i.badge.toLowerCase().includes(q) ||
+      i.algorithmFormula.toLowerCase().includes(q) ||
+      i.dedupLatency.toLowerCase().includes(q) ||
+      i.doubleExecutionDefense.toLowerCase().includes(q) ||
+      i.storageModel.toLowerCase().includes(q) ||
+      i.architecturalInvariant.toLowerCase().includes(q)
+    ).length
+
     return {
-      total: workbenchCount + aiCount + adrCount + tradeoffCount + evolutionCount + chaosCount + gatewayCount + traceCount + kafkaCount + ratelimitCount + multiregionCount + shardingCount + cdnCount + circuitBreakerCount + concurrencyCount + raftCount + vectorCount + priorityCount + sagasCount + cacheCount + eventSourcingCount + dlqCount,
+      total: workbenchCount + aiCount + adrCount + tradeoffCount + evolutionCount + chaosCount + gatewayCount + traceCount + kafkaCount + ratelimitCount + multiregionCount + shardingCount + cdnCount + circuitBreakerCount + concurrencyCount + raftCount + vectorCount + priorityCount + sagasCount + cacheCount + eventSourcingCount + dlqCount + idempotencyCount,
       workbench: workbenchCount,
       aiCodex: aiCount,
       adr: adrCount,
@@ -359,6 +375,7 @@ export default function ArchitectureLab() {
       cache: cacheCount,
       eventsourcing: eventSourcingCount,
       dlq: dlqCount,
+      idempotency: idempotencyCount,
       isActive: true
     }
   }, [searchQuery])
@@ -713,6 +730,17 @@ export default function ArchitectureLab() {
             <AlertOctagon className="w-3.5 h-3.5 text-rose-400" />
             <span>DLQ &amp; Retries ({matchStats.dlq})</span>
           </a>
+          <a 
+            href="#architecture-idempotency"
+            className={`px-3 py-1.5 rounded-lg border transition-all flex items-center gap-1.5 cursor-pointer ${
+              matchStats.isActive && matchStats.idempotency > 0
+                ? 'bg-indigo-500/10 border-indigo-500/50 text-indigo-400 shadow-[0_0_10px_rgba(99,102,241,0.15)] font-bold'
+                : 'bg-slate-900 border-slate-800 hover:border-indigo-500/50 hover:text-indigo-400 text-slate-300'
+            }`}
+          >
+            <Lock className="w-3.5 h-3.5 text-indigo-400" />
+            <span>Idempotency Keys ({matchStats.idempotency})</span>
+          </a>
         </div>
       </div>
 
@@ -982,6 +1010,18 @@ export default function ArchitectureLab() {
         className="scroll-mt-24"
       >
         <DlqRetrySandbox />
+      </motion.div>
+
+      {/* 2.26. Distributed Idempotency Key & Two-Phase Ingress Committer Sandbox */}
+      <motion.div
+        id="architecture-idempotency"
+        initial={{ opacity: 0, y: 25 }}
+        whileInView={{ opacity: 1, y: 0 }}
+        viewport={{ once: true }}
+        transition={{ duration: 0.6, delay: 1.15 }}
+        className="scroll-mt-24"
+      >
+        <IdempotencySandbox />
       </motion.div>
 
       {/* 3. Architectural Design Pillars Strip */}

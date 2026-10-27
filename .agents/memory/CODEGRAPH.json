@@ -1,6 +1,6 @@
 {
   "version": "1.0.0",
-  "generatedAt": "2026-10-27T19:17:23.698Z",
+  "generatedAt": "2026-10-27T19:39:12.747Z",
   "nodes": {
     "src/components/architecture/AdrExplorer.tsx": {
       "file": "src/components/architecture/AdrExplorer.tsx",
@@ -265,6 +265,18 @@
       ],
       "loc": 424
     },
+    "src/components/architecture/IdempotencySandbox.tsx": {
+      "file": "src/components/architecture/IdempotencySandbox.tsx",
+      "imports": [
+        "react",
+        "lucide-react",
+        "@/data/idempotencyModels"
+      ],
+      "exports": [
+        "IdempotencySandbox"
+      ],
+      "loc": 536
+    },
     "src/components/architecture/KafkaStreamMonitor.tsx": {
       "file": "src/components/architecture/KafkaStreamMonitor.tsx",
       "imports": [
@@ -467,6 +479,7 @@
         "@/components/architecture/DistributedCacheSandbox",
         "@/components/architecture/EventSourcingSandbox",
         "@/components/architecture/DlqRetrySandbox",
+        "@/components/architecture/IdempotencySandbox",
         "@/data/architectureSystems",
         "@/data/architecturalDecisions",
         "@/data/architecturalTradeoffs",
@@ -487,12 +500,13 @@
         "@/data/distributedSagas",
         "@/data/distributedCache",
         "@/data/eventSourcing",
-        "@/data/dlqRetryModels"
+        "@/data/dlqRetryModels",
+        "@/data/idempotencyModels"
       ],
       "exports": [
         "ArchitectureLab"
       ],
-      "loc": 1040
+      "loc": 1080
     },
     "src/components/portfolio/ContactTerminal.tsx": {
       "file": "src/components/portfolio/ContactTerminal.tsx",
@@ -559,12 +573,13 @@
         "@/data/distributedCache",
         "@/data/eventSourcing",
         "@/data/dlqRetryModels",
+        "@/data/idempotencyModels",
         "@/data/executiveBriefing"
       ],
       "exports": [
         "InteractiveCli"
       ],
-      "loc": 3210
+      "loc": 3318
     },
     "src/components/portfolio/ProjectsShowcase.tsx": {
       "file": "src/components/portfolio/ProjectsShowcase.tsx",
@@ -617,7 +632,7 @@
       "exports": [
         "TerminalHero"
       ],
-      "loc": 614
+      "loc": 616
     },
     "src/components/ui/badge.tsx": {
       "file": "src/components/ui/badge.tsx",
@@ -861,6 +876,17 @@
       ],
       "loc": 413
     },
+    "src/data/idempotencyModels.ts": {
+      "file": "src/data/idempotencyModels.ts",
+      "imports": [],
+      "exports": [
+        "IdempotencyRecord",
+        "IdempotencyModel",
+        "IDEMPOTENCY_MODELS",
+        "SEED_IDEMPOTENCY_RECORDS"
+      ],
+      "loc": 500
+    },
     "src/data/kafkaStreams.ts": {
       "file": "src/data/kafkaStreams.ts",
       "imports": [],
@@ -1069,6 +1095,7 @@
     "EdgeCdnSandbox": "src/components/architecture/EdgeCdnSandbox.tsx",
     "EventSourcingSandbox": "src/components/architecture/EventSourcingSandbox.tsx",
     "HeroArchitectureTopology": "src/components/architecture/HeroArchitectureTopology.tsx",
+    "IdempotencySandbox": "src/components/architecture/IdempotencySandbox.tsx",
     "KafkaStreamMonitor": "src/components/architecture/KafkaStreamMonitor.tsx",
     "MultiRegionReplicationSandbox": "src/components/architecture/MultiRegionReplicationSandbox.tsx",
     "RaftConsensusSandbox": "src/components/architecture/RaftConsensusSandbox.tsx",
@@ -1183,6 +1210,10 @@
     "GatewayFilter": "src/data/gatewayRoutes.ts",
     "GatewayRoute": "src/data/gatewayRoutes.ts",
     "GATEWAY_ROUTES": "src/data/gatewayRoutes.ts",
+    "IdempotencyRecord": "src/data/idempotencyModels.ts",
+    "IdempotencyModel": "src/data/idempotencyModels.ts",
+    "IDEMPOTENCY_MODELS": "src/data/idempotencyModels.ts",
+    "SEED_IDEMPOTENCY_RECORDS": "src/data/idempotencyModels.ts",
     "KafkaPartition": "src/data/kafkaStreams.ts",
     "KafkaConsumerGroup": "src/data/kafkaStreams.ts",
     "KafkaTopicStream": "src/data/kafkaStreams.ts",
