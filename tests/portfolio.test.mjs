@@ -1053,6 +1053,43 @@ describe('Production Architectural Decision Records (ADR) & CLI Integration', ()
     assert.ok(indexHtml.includes('id="architecture-circuit-breaker"'), 'index.html must include #architecture-circuit-breaker landmark');
     assert.ok(!/[\u2013\u2014]/.test(indexHtml), 'index.html must contain zero em/en-dashes');
   });
+
+  test('DistributedConcurrencySandbox and distributedConcurrency.ts define distributed concurrency and deadlock detection with CLI integration', () => {
+    const concDataPath = path.join(rootDir, 'src', 'data', 'distributedConcurrency.ts');
+    assert.ok(fs.existsSync(concDataPath), 'distributedConcurrency.ts must exist');
+    const concDataCode = fs.readFileSync(concDataPath, 'utf8');
+    assert.ok(concDataCode.includes('strict-2pl-wait-die'), 'Must define strict-2pl-wait-die model');
+    assert.ok(concDataCode.includes('optimistic-concurrency-control'), 'Must define optimistic-concurrency-control model');
+    assert.ok(concDataCode.includes('mvcc-snapshot-isolation'), 'Must define mvcc-snapshot-isolation model');
+    assert.ok(concDataCode.includes('wait-for-graph-tarjan'), 'Must define wait-for-graph-tarjan model');
+    assert.ok(concDataCode.includes('distributed-lock-manager-redlock'), 'Must define distributed-lock-manager-redlock model');
+    assert.ok(!/[\u2013\u2014]/.test(concDataCode), 'distributedConcurrency.ts must contain zero em/en-dashes');
+
+    const componentPath = path.join(rootDir, 'src', 'components', 'architecture', 'DistributedConcurrencySandbox.tsx');
+    assert.ok(fs.existsSync(componentPath), 'DistributedConcurrencySandbox.tsx must exist');
+    const compCode = fs.readFileSync(componentPath, 'utf8');
+    assert.ok(compCode.includes('copyRfcReport'), 'DistributedConcurrencySandbox must support 1-click RFC copy');
+    assert.ok(compCode.includes('CONCURRENCY_MODELS'), 'DistributedConcurrencySandbox must render CONCURRENCY_MODELS');
+    assert.ok(!/[\u2013\u2014]/.test(compCode), 'DistributedConcurrencySandbox.tsx must contain zero em/en-dashes');
+
+    const labCode = fs.readFileSync(path.join(rootDir, 'src', 'components', 'portfolio', 'ArchitectureLab.tsx'), 'utf8');
+    assert.ok(labCode.includes('DistributedConcurrencySandbox'), 'ArchitectureLab must mount DistributedConcurrencySandbox');
+    assert.ok(labCode.includes('id="architecture-distributed-concurrency"'), 'ArchitectureLab must define anchor #architecture-distributed-concurrency');
+
+    const cliCode = fs.readFileSync(path.join(rootDir, 'src', 'components', 'portfolio', 'InteractiveCli.tsx'), 'utf8');
+    assert.ok(cliCode.includes("'concurrency'"), "InteractiveCli must support 'concurrency' command");
+    assert.ok(cliCode.includes('[ $ concurrency ]'), "InteractiveCli must include '[ $ concurrency ]' quick chip");
+    assert.ok(cliCode.includes('CONCURRENCY_MODELS'), 'InteractiveCli must search across CONCURRENCY_MODELS');
+    assert.ok(!/[\u2013\u2014]/.test(cliCode), 'InteractiveCli.tsx must contain zero em/en-dashes');
+
+    const chatIndex = fs.readFileSync(path.join(rootDir, 'public', 'chat', 'index.json'), 'utf8');
+    assert.ok(chatIndex.includes('distributed-concurrency-deadlocks'), 'public/chat/index.json must index distributed-concurrency-deadlocks');
+    assert.ok(!/[\u2013\u2014]/.test(chatIndex), 'public/chat/index.json must contain zero em/en-dashes');
+
+    const indexHtml = fs.readFileSync(path.join(rootDir, 'index.html'), 'utf8');
+    assert.ok(indexHtml.includes('id="architecture-distributed-concurrency"'), 'index.html must include #architecture-distributed-concurrency landmark');
+    assert.ok(!/[\u2013\u2014]/.test(indexHtml), 'index.html must contain zero em/en-dashes');
+  });
 });
 
 

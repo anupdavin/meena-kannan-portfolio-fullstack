@@ -21,6 +21,7 @@ import {
   ShieldAlert,
   Database,
   CloudLightning,
+  GitFork,
   X
 } from 'lucide-react'
 import ByteByteGoDiagram from '@/components/architecture/ByteByteGoDiagram'
@@ -37,6 +38,7 @@ import MultiRegionReplicationSandbox from '@/components/architecture/MultiRegion
 import DatabaseShardingSandbox from '@/components/architecture/DatabaseShardingSandbox'
 import EdgeCdnSandbox from '@/components/architecture/EdgeCdnSandbox'
 import CircuitBreakerSandbox from '@/components/architecture/CircuitBreakerSandbox'
+import DistributedConcurrencySandbox from '@/components/architecture/DistributedConcurrencySandbox'
 import { ARCHITECTURE_SYSTEMS } from '@/data/architectureSystems'
 import { ARCHITECTURAL_DECISIONS } from '@/data/architecturalDecisions'
 import { ARCHITECTURAL_TRADEOFFS } from '@/data/architecturalTradeoffs'
@@ -50,6 +52,7 @@ import { MULTI_REGION_STRATEGIES } from '@/data/multiRegionReplication'
 import { DATABASE_SHARDING_STRATEGIES } from '@/data/databaseSharding'
 import { EDGE_CDN_STRATEGIES } from '@/data/edgeCdnCaching'
 import { CIRCUIT_BREAKER_PATTERNS } from '@/data/circuitBreakers'
+import { CONCURRENCY_MODELS } from '@/data/distributedConcurrency'
 
 const AI_TERMS_SUMMARY = [
   { id: 'agentic-ai', title: 'Agentic AI', text: 'Perception-action loop, DAG memory, tool execution, LangGraph' },
@@ -81,6 +84,7 @@ export default function ArchitectureLab() {
         sharding: 5,
         cdn: 5,
         circuitbreaker: 5,
+        concurrency: 5,
         isActive: false
       }
     }
@@ -215,8 +219,17 @@ export default function ArchitectureLab() {
       b.architecturalInvariant.toLowerCase().includes(q)
     ).length
 
+    const concurrencyCount = CONCURRENCY_MODELS.filter(c => 
+      c.name.toLowerCase().includes(q) ||
+      c.id.toLowerCase().includes(q) ||
+      c.paradigm.toLowerCase().includes(q) ||
+      c.badge.toLowerCase().includes(q) ||
+      c.deadlockStrategy.toLowerCase().includes(q) ||
+      c.architecturalInvariant.toLowerCase().includes(q)
+    ).length
+
     return {
-      total: workbenchCount + aiCount + adrCount + tradeoffCount + evolutionCount + chaosCount + gatewayCount + traceCount + kafkaCount + ratelimitCount + multiregionCount + shardingCount + cdnCount + circuitBreakerCount,
+      total: workbenchCount + aiCount + adrCount + tradeoffCount + evolutionCount + chaosCount + gatewayCount + traceCount + kafkaCount + ratelimitCount + multiregionCount + shardingCount + cdnCount + circuitBreakerCount + concurrencyCount,
       workbench: workbenchCount,
       aiCodex: aiCount,
       adr: adrCount,
@@ -231,6 +244,7 @@ export default function ArchitectureLab() {
       sharding: shardingCount,
       cdn: cdnCount,
       circuitbreaker: circuitBreakerCount,
+      concurrency: concurrencyCount,
       isActive: true
     }
   }, [searchQuery])
@@ -497,6 +511,17 @@ export default function ArchitectureLab() {
             <ShieldAlert className="w-3.5 h-3.5 text-rose-400" />
             <span>Circuit Breakers ({matchStats.circuitbreaker})</span>
           </a>
+          <a 
+            href="#architecture-distributed-concurrency"
+            className={`px-3 py-1.5 rounded-lg border transition-all flex items-center gap-1.5 cursor-pointer ${
+              matchStats.isActive && matchStats.concurrency > 0
+                ? 'bg-indigo-500/10 border-indigo-500/50 text-indigo-400 shadow-[0_0_10px_rgba(99,102,241,0.15)] font-bold'
+                : 'bg-slate-900 border-slate-800 hover:border-indigo-500/50 hover:text-indigo-400 text-slate-300'
+            }`}
+          >
+            <GitFork className="w-3.5 h-3.5 text-indigo-400" />
+            <span>Concurrency & Deadlocks ({matchStats.concurrency})</span>
+          </a>
         </div>
       </div>
 
@@ -670,6 +695,18 @@ export default function ArchitectureLab() {
         className="scroll-mt-24"
       >
         <CircuitBreakerSandbox />
+      </motion.div>
+
+      {/* 2.18. Distributed Deadlock Detection & 2PL vs OCC Concurrency Control Simulator */}
+      <motion.div
+        id="architecture-distributed-concurrency"
+        initial={{ opacity: 0, y: 25 }}
+        whileInView={{ opacity: 1, y: 0 }}
+        viewport={{ once: true }}
+        transition={{ duration: 0.6, delay: 0.75 }}
+        className="scroll-mt-24"
+      >
+        <DistributedConcurrencySandbox />
       </motion.div>
 
       {/* 3. Architectural Design Pillars Strip */}

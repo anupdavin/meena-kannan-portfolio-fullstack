@@ -581,12 +581,22 @@
             </div>
 
             <!-- Sub-Section 14: Distributed Circuit Breaker & Cascading Fault Mesh Sandbox -->
-            <div id="architecture-circuit-breaker" style="background: rgba(9, 14, 24, 0.7); border: 1px solid #1e293b; border-radius: 16px; padding: 1.5rem;">
+            <div id="architecture-circuit-breaker" style="background: rgba(9, 14, 24, 0.7); border: 1px solid #1e293b; border-radius: 16px; padding: 1.5rem; margin-bottom: 2rem;">
               <h3 style="color: #f43f5e; font-size: 1.25rem; font-weight: bold; margin-bottom: 0.5rem;">
                 Distributed Circuit Breaker &amp; Cascading Fault Mesh Sandbox
               </h3>
               <p style="color: #94a3b8; font-size: 0.85rem; line-height: 1.6;">
                 Fault-tolerance, sliding window error evaluation, and cascading failure protection across 5 resilient paradigms: Resilience4j Sliding Window Circuit Breakers (count &amp; time-based ring buffer state machine), Semaphore &amp; Thread-Pool Bulkhead Isolation (compartmentalizing peripheral dependencies to protect core threads), Exponential Backoff with Full Jitter (breaking thundering herd retry harmonics), Adaptive Concurrency Limits (TCP Vegas / BBR queue delay gradient auto-tuning), and Envoy Passive Health Checking with Outlier Ejection (sub-100ms degraded pod eviction).
+              </p>
+            </div>
+
+            <!-- Sub-Section 15: Distributed Deadlock Detection & Concurrency Control Sandbox -->
+            <div id="architecture-distributed-concurrency" style="background: rgba(9, 14, 24, 0.7); border: 1px solid #1e293b; border-radius: 16px; padding: 1.5rem;">
+              <h3 style="color: #06b6d4; font-size: 1.25rem; font-weight: bold; margin-bottom: 0.5rem;">
+                Distributed Deadlock Detection &amp; 2PL vs OCC Concurrency Control Simulator
+              </h3>
+              <p style="color: #94a3b8; font-size: 0.85rem; line-height: 1.6;">
+                Comparative evaluation of 5 distributed concurrency and isolation control paradigms: Strict Two-Phase Locking (S2PL) with Wait-Die timestamp deadlock prevention, Optimistic Concurrency Control (OCC) with 3-phase validate/commit for high-read low-write workloads, Multi-Version Concurrency Control (MVCC) with PostgreSQL Snapshot Isolation (non-blocking readers), Wait-For Graph (WFG) with Tarjan Strongly Connected Components (SCC) cycle detection and minimum-rollback victim selection, and Distributed Lock Management (DLM) with Redis Redlock quorums and Raft term leases.
               </p>
             </div>
           </section>

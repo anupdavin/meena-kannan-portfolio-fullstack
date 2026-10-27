@@ -14,6 +14,7 @@ import { MULTI_REGION_STRATEGIES } from '@/data/multiRegionReplication'
 import { DATABASE_SHARDING_STRATEGIES } from '@/data/databaseSharding'
 import { EDGE_CDN_STRATEGIES } from '@/data/edgeCdnCaching'
 import { CIRCUIT_BREAKER_PATTERNS } from '@/data/circuitBreakers'
+import { CONCURRENCY_MODELS } from '@/data/distributedConcurrency'
 import { EXECUTIVE_BRIEFING } from '@/data/executiveBriefing'
 
 interface HistoryEntry {
@@ -81,6 +82,11 @@ const AVAILABLE_COMMANDS = [
   'bulkhead',
   'resilience4j',
   'backoff',
+  'concurrency',
+  'deadlock',
+  'twophase',
+  'occ',
+  'mvcc',
   'adr',
   'decisions',
   'tradeoffs',
@@ -127,6 +133,7 @@ const QUICK_CHIPS = [
   { label: '[ $ sharding ]', cmd: 'sharding' },
   { label: '[ $ cdn ]', cmd: 'cdn' },
   { label: '[ $ circuitbreaker ]', cmd: 'circuitbreaker' },
+  { label: '[ $ concurrency ]', cmd: 'concurrency' },
   { label: '[ $ find kafka ]', cmd: 'find kafka' },
   { label: '[ $ tradeoffs ]', cmd: 'tradeoffs' },
   { label: '[ $ adr ]', cmd: 'adr' },
@@ -161,6 +168,7 @@ const COMMAND_HELP = [
   '  sharding        - Inspect database sharding topologies & consistent hash ring (or "sharding <id>")',
   '  cdn             - Inspect Edge CDN caching, surrogate-key purges & SWR flows (or "cdn <id>")',
   '  circuitbreaker  - Evaluate distributed circuit breakers, bulkheads & backoff jitter (or "circuitbreaker <id>")',
+  '  concurrency     - Inspect distributed deadlock detection & 2PL vs OCC concurrency (or "concurrency <id>")',
   '  find <query>    - Search cross-cutting architecture systems, ADRs, AI codex & trade-offs',
   '  tradeoffs       - Evaluate system design decision trade-offs (or "compare <topic>")',
   '  stats           - View production performance & impact metrics (99.99% SLA)',
@@ -978,6 +986,32 @@ export default function InteractiveCli() {
           ]
           break
         }
+        if (sub === 'circuitbreaker' || sub === 'bulkhead' || sub === 'resilience4j' || sub === 'backoff' || args.some(a => a.toLowerCase().includes('circuit') || a.toLowerCase().includes('breaker') || a.toLowerCase().includes('bulkhead'))) {
+          output = [
+            'Routing to Distributed Circuit Breakers & Cascading Fault Mesh Sandbox (#architecture-circuit-breaker):',
+            '  1. Resilience4j Sliding Window  : Ring-buffer error rate thresholding (CLOSED -> OPEN -> HALF-OPEN)',
+            '  2. Semaphore Thread Bulkhead    : Dependency isolation protecting core execution threads',
+            '  3. Exponential Backoff & Jitter : Decorrelated full jitter breaking thundering retry storms',
+            '  4. Adaptive Concurrency Vegas   : Gradient queue delay tracking avoiding bufferbloat',
+            '  5. Envoy Outlier Ejection       : Passive health checking evicting 5xx unhealthy hosts',
+            '--------------------------------------------------------------------------------',
+            'Interactive Sandbox: Live in #architecture-circuit-breaker with synthetic burst & state transitions.'
+          ]
+          break
+        }
+        if (sub === 'concurrency' || sub === 'deadlock' || sub === 'twophase' || sub === 'occ' || sub === 'mvcc' || args.some(a => a.toLowerCase().includes('concurren') || a.toLowerCase().includes('deadlock') || a.toLowerCase().includes('2pl') || a.toLowerCase().includes('occ'))) {
+          output = [
+            'Routing to Distributed Concurrency & Deadlock Detection Sandbox (#architecture-distributed-concurrency):',
+            '  1. Strict 2PL (Wait-Die) : Timestamp seniority deadlock prevention (0 cycles)',
+            '  2. Lock-Free OCC         : Backward validation phase (0 lock contention, +310% throughput)',
+            '  3. PostgreSQL MVCC       : Row version chains & visibility maps (readers never block writers)',
+            '  4. Tarjan WFG Detector   : O(V + E) SCC directed cycle search & lowest-cost victim abort',
+            '  5. Redlock DLM           : Multi-master Redis quorum leases with monotonic fencing tokens',
+            '--------------------------------------------------------------------------------',
+            'Interactive Sandbox: Live in #architecture-distributed-concurrency with WFG cycle break simulator.'
+          ]
+          break
+        }
         output = [
           'ByteByteGo Interactive Architecture Lab Navigator:',
           '--------------------------------------------------------------------------------',
@@ -995,6 +1029,8 @@ export default function InteractiveCli() {
           '  [ 11 ] "architecture multiregion": Multi-Region Database Replication (#architecture-multi-region)',
           '  [ 12 ] "architecture sharding": Database Sharding & Consistent Hashing (#architecture-database-sharding)',
           '  [ 13 ] "architecture cdn"     : Edge CDN Caching & Invalidation (#architecture-edge-cdn)',
+          '  [ 14 ] "architecture circuitbreaker": Distributed Circuit Breaker Mesh (#architecture-circuit-breaker)',
+          '  [ 15 ] "architecture concurrency": Concurrency & Deadlock Detection (#architecture-distributed-concurrency)',
           '--------------------------------------------------------------------------------',
           'Clean Architecture Principles Enforced:',
           '  + Domain Isolation     : Core business domains decouple from libraries and vendor SDKs',
@@ -1757,6 +1793,69 @@ export default function InteractiveCli() {
         ]
         break
       }
+      case 'concurrency':
+      case 'deadlock':
+      case 'twophase':
+      case 'occ':
+      case 'mvcc': {
+        const target = args[0]?.toLowerCase().trim()
+        if (target) {
+          const matched = CONCURRENCY_MODELS.find(m => 
+            m.id === target ||
+            m.id.includes(target) ||
+            m.name.toLowerCase().includes(target) ||
+            m.badge.toLowerCase().includes(target) ||
+            (target === '1' && m.id === 'strict-2pl-wait-die') ||
+            (target === '2' && m.id === 'optimistic-concurrency-control') ||
+            (target === '3' && m.id === 'mvcc-snapshot-isolation') ||
+            (target === '4' && m.id === 'wait-for-graph-tarjan') ||
+            (target === '5' && m.id === 'distributed-lock-manager-redlock')
+          )
+          if (matched) {
+            output = [
+              '--------------------------------------------------------------------------------',
+              `Concurrency Model: ${matched.name} [${matched.badge}]`,
+              '--------------------------------------------------------------------------------',
+              `Core Paradigm       : ${matched.paradigm}`,
+              `Lock Overhead       : ${matched.lockOverhead}`,
+              `Deadlock Strategy   : ${matched.deadlockStrategy}`,
+              `Isolation Level     : ${matched.isolationLevel}`,
+              `Scale Profile       : ${matched.scaleProfile}`,
+              '--------------------------------------------------------------------------------',
+              'WORKFLOW PHASES & INVARIANTS:',
+              ...matched.workflowPhases.map(p =>
+                `  * [${p.name}] :: ${p.description} -> Invariant: ${p.invariants}`
+              ),
+              '--------------------------------------------------------------------------------',
+              'PRODUCTION OUTCOMES & INVARIANTS:',
+              ...Object.entries(matched.productionOutcomes).map(([k, v]) => `  + ${k}: ${v}`),
+              '',
+              `Architectural Invariant: "${matched.architecturalInvariant}"`,
+              '--------------------------------------------------------------------------------',
+              'Full live Wait-For Graph cycle detection & Tarjan abort simulator in #architecture-distributed-concurrency.'
+            ]
+            break
+          }
+        }
+
+        output = [
+          'Distributed Concurrency & Deadlock Control Sandbox:',
+          '--------------------------------------------------------------------------------',
+          'Explore 5 distributed concurrency, locking, and deadlock detection models:',
+          '',
+          ...CONCURRENCY_MODELS.flatMap((m, idx) => [
+            `${idx + 1}. [ ${m.id} ] : ${m.name} (${m.badge})`,
+            `   Paradigm      : ${m.paradigm}`,
+            `   Deadlock Rule : ${m.deadlockStrategy}`,
+            `   Isolation     : ${m.isolationLevel}`,
+            `   Deep Dive     : "concurrency ${idx + 1}" or "concurrency ${m.id.split('-')[0]}" (e.g. "concurrency 2pl", "concurrency occ", "concurrency mvcc", "concurrency tarjan", "concurrency redlock")`,
+            ''
+          ]),
+          '--------------------------------------------------------------------------------',
+          'Tip: Run "concurrency <id>" (e.g. "concurrency 1" or "concurrency tarjan") to inspect transaction locks.'
+        ]
+        break
+      }
       case 'find':
       case 'search': {
         const query = args.join(' ').toLowerCase().trim()
@@ -1766,7 +1865,7 @@ export default function InteractiveCli() {
             '--------------------------------------------------------------------------------',
             'Search cross-cutting distributed systems, ADRs, AI paradigms, and trade-offs.',
             'Usage: find <query> (e.g. "find kafka", "find redis", "find mcp", "find saga")',
-            'Available Domains: Systems, ADR Governance, AI Codex, Trade-Off Matrix, Evolution Diffs, Chaos Drills, API Gateway, Distributed Traces, Kafka Event Streams, Distributed Rate Limiting, Multi-Region Replication, Database Sharding, Edge CDN Caching'
+            'Available Domains: Systems, ADR Governance, AI Codex, Trade-Off Matrix, Evolution Diffs, Chaos Drills, API Gateway, Distributed Traces, Kafka Event Streams, Distributed Rate Limiting, Multi-Region Replication, Database Sharding, Edge CDN Caching, Circuit Breakers, Concurrency & Deadlocks'
           ]
           break
         }
@@ -2052,6 +2151,27 @@ export default function InteractiveCli() {
               `[Circuit Breaker] ${b.name}`,
               `  Paradigm   : ${b.paradigm} (${b.badge})`,
               `  Anchor     : #architecture-circuit-breaker`,
+              ''
+            )
+          }
+        })
+
+        // 15. Search Distributed Concurrency & Deadlocks
+        CONCURRENCY_MODELS.forEach(c => {
+          if (
+            c.name.toLowerCase().includes(query) ||
+            c.id.toLowerCase().includes(query) ||
+            c.paradigm.toLowerCase().includes(query) ||
+            c.badge.toLowerCase().includes(query) ||
+            c.deadlockStrategy.toLowerCase().includes(query) ||
+            c.isolationLevel.toLowerCase().includes(query) ||
+            c.architecturalInvariant.toLowerCase().includes(query)
+          ) {
+            results.push(
+              `[Distributed Concurrency] ${c.name}`,
+              `  Paradigm   : ${c.paradigm} (${c.badge})`,
+              `  Deadlock   : ${c.deadlockStrategy}`,
+              `  Anchor     : #architecture-distributed-concurrency`,
               ''
             )
           }
