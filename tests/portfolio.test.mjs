@@ -1423,6 +1423,43 @@ describe('Production Architectural Decision Records (ADR) & CLI Integration', ()
     assert.ok(indexHtml.includes('id="architecture-atomic-commit"'), 'index.html must include #architecture-atomic-commit landmark');
     assert.ok(!/[\u2013\u2014]/.test(indexHtml), 'index.html must contain zero em/en-dashes');
   });
+
+  test('FeatureFlagSandbox and featureFlagModels.ts define dynamic feature flags, MurmurHash3 and canary splitter with CLI integration', () => {
+    const flagDataPath = path.join(rootDir, 'src', 'data', 'featureFlagModels.ts');
+    assert.ok(fs.existsSync(flagDataPath), 'featureFlagModels.ts must exist');
+    const flagDataCode = fs.readFileSync(flagDataPath, 'utf8');
+    assert.ok(flagDataCode.includes('murmurhash3-consistent-bucketing'), 'Must define murmurhash3-consistent-bucketing model');
+    assert.ok(flagDataCode.includes('openfeature-contextual-rules'), 'Must define openfeature-contextual-rules model');
+    assert.ok(flagDataCode.includes('canary-traffic-splitter-circuit'), 'Must define canary-traffic-splitter-circuit model');
+    assert.ok(flagDataCode.includes('sse-edge-flag-streaming'), 'Must define sse-edge-flag-streaming model');
+    assert.ok(flagDataCode.includes('flag-debt-deprecation-sentinel'), 'Must define flag-debt-deprecation-sentinel model');
+    assert.ok(!/[\u2013\u2014]/.test(flagDataCode), 'featureFlagModels.ts must contain zero em/en-dashes');
+
+    const componentPath = path.join(rootDir, 'src', 'components', 'architecture', 'FeatureFlagSandbox.tsx');
+    assert.ok(fs.existsSync(componentPath), 'FeatureFlagSandbox.tsx must exist');
+    const compCode = fs.readFileSync(componentPath, 'utf8');
+    assert.ok(compCode.includes('handleCopyRfc'), 'FeatureFlagSandbox must support 1-click RFC copy');
+    assert.ok(compCode.includes('FEATURE_FLAG_MODELS'), 'FeatureFlagSandbox must render FEATURE_FLAG_MODELS');
+    assert.ok(!/[\u2013\u2014]/.test(compCode), 'FeatureFlagSandbox.tsx must contain zero em/en-dashes');
+
+    const labCode = fs.readFileSync(path.join(rootDir, 'src', 'components', 'portfolio', 'ArchitectureLab.tsx'), 'utf8');
+    assert.ok(labCode.includes('FeatureFlagSandbox'), 'ArchitectureLab must mount FeatureFlagSandbox');
+    assert.ok(labCode.includes('id="architecture-feature-flags"'), 'ArchitectureLab must define anchor #architecture-feature-flags');
+
+    const cliCode = fs.readFileSync(path.join(rootDir, 'src', 'components', 'portfolio', 'InteractiveCli.tsx'), 'utf8');
+    assert.ok(cliCode.includes("'featureflag'"), "InteractiveCli must support 'featureflag' command");
+    assert.ok(cliCode.includes('[ $ flags ]'), "InteractiveCli must include '[ $ flags ]' quick chip");
+    assert.ok(cliCode.includes('FEATURE_FLAG_MODELS'), 'InteractiveCli must search across FEATURE_FLAG_MODELS');
+    assert.ok(!/[\u2013\u2014]/.test(cliCode), 'InteractiveCli.tsx must contain zero em/en-dashes');
+
+    const chatIndex = fs.readFileSync(path.join(rootDir, 'public', 'chat', 'index.json'), 'utf8');
+    assert.ok(chatIndex.includes('distributed-feature-flags'), 'public/chat/index.json must index distributed-feature-flags');
+    assert.ok(!/[\u2013\u2014]/.test(chatIndex), 'public/chat/index.json must contain zero em/en-dashes');
+
+    const indexHtml = fs.readFileSync(path.join(rootDir, 'index.html'), 'utf8');
+    assert.ok(indexHtml.includes('id="architecture-feature-flags"'), 'index.html must include #architecture-feature-flags landmark');
+    assert.ok(!/[\u2013\u2014]/.test(indexHtml), 'index.html must contain zero em/en-dashes');
+  });
 });
 
 

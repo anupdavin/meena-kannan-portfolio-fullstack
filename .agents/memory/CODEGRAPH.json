@@ -1,6 +1,6 @@
 {
   "version": "1.0.0",
-  "generatedAt": "2026-10-27T19:48:50.629Z",
+  "generatedAt": "2026-10-27T19:58:12.412Z",
   "nodes": {
     "src/components/architecture/AdrExplorer.tsx": {
       "file": "src/components/architecture/AdrExplorer.tsx",
@@ -263,6 +263,16 @@
       ],
       "loc": 583
     },
+    "src/components/architecture/FeatureFlagSandbox.tsx": {
+      "file": "src/components/architecture/FeatureFlagSandbox.tsx",
+      "imports": [
+        "../../data/featureFlagModels"
+      ],
+      "exports": [
+        "FeatureFlagSandbox"
+      ],
+      "loc": 511
+    },
     "src/components/architecture/HeroArchitectureTopology.tsx": {
       "file": "src/components/architecture/HeroArchitectureTopology.tsx",
       "imports": [
@@ -491,6 +501,7 @@
         "@/components/architecture/DlqRetrySandbox",
         "@/components/architecture/IdempotencySandbox",
         "@/components/architecture/AtomicCommitSandbox",
+        "@/components/architecture/FeatureFlagSandbox",
         "@/data/architectureSystems",
         "@/data/architecturalDecisions",
         "@/data/architecturalTradeoffs",
@@ -513,12 +524,13 @@
         "@/data/eventSourcing",
         "@/data/dlqRetryModels",
         "@/data/idempotencyModels",
-        "@/data/atomicCommitModels"
+        "@/data/atomicCommitModels",
+        "@/data/featureFlagModels"
       ],
       "exports": [
         "ArchitectureLab"
       ],
-      "loc": 1119
+      "loc": 1159
     },
     "src/components/portfolio/ContactTerminal.tsx": {
       "file": "src/components/portfolio/ContactTerminal.tsx",
@@ -587,12 +599,13 @@
         "@/data/dlqRetryModels",
         "@/data/idempotencyModels",
         "@/data/atomicCommitModels",
+        "@/data/featureFlagModels",
         "@/data/executiveBriefing"
       ],
       "exports": [
         "InteractiveCli"
       ],
-      "loc": 3411
+      "loc": 3509
     },
     "src/components/portfolio/ProjectsShowcase.tsx": {
       "file": "src/components/portfolio/ProjectsShowcase.tsx",
@@ -645,7 +658,7 @@
       "exports": [
         "TerminalHero"
       ],
-      "loc": 618
+      "loc": 620
     },
     "src/components/ui/badge.tsx": {
       "file": "src/components/ui/badge.tsx",
@@ -892,6 +905,20 @@
       ],
       "loc": 121
     },
+    "src/data/featureFlagModels.ts": {
+      "file": "src/data/featureFlagModels.ts",
+      "imports": [],
+      "exports": [
+        "FlagVariant",
+        "FeatureFlagParadigm",
+        "CanaryTargetCohort",
+        "FEATURE_FLAG_MODELS",
+        "EvaluationContext",
+        "OpenFeatureRuleEvaluator",
+        "INITIAL_COHORTS"
+      ],
+      "loc": 461
+    },
     "src/data/gatewayRoutes.ts": {
       "file": "src/data/gatewayRoutes.ts",
       "imports": [],
@@ -1070,6 +1097,11 @@
       "type": "import"
     },
     {
+      "source": "src/components/architecture/FeatureFlagSandbox.tsx",
+      "target": "src/data/featureFlagModels.ts",
+      "type": "import"
+    },
+    {
       "source": "src/components/architecture/SystemDesignCanvas.tsx",
       "target": "src/components/architecture/ArchNode.tsx",
       "type": "import"
@@ -1126,6 +1158,7 @@
     "DlqRetrySandbox": "src/components/architecture/DlqRetrySandbox.tsx",
     "EdgeCdnSandbox": "src/components/architecture/EdgeCdnSandbox.tsx",
     "EventSourcingSandbox": "src/components/architecture/EventSourcingSandbox.tsx",
+    "FeatureFlagSandbox": "src/components/architecture/FeatureFlagSandbox.tsx",
     "HeroArchitectureTopology": "src/components/architecture/HeroArchitectureTopology.tsx",
     "IdempotencySandbox": "src/components/architecture/IdempotencySandbox.tsx",
     "KafkaStreamMonitor": "src/components/architecture/KafkaStreamMonitor.tsx",
@@ -1245,6 +1278,13 @@
     "SEED_EVENT_STREAM": "src/data/eventSourcing.ts",
     "ExecutiveBriefingData": "src/data/executiveBriefing.ts",
     "EXECUTIVE_BRIEFING": "src/data/executiveBriefing.ts",
+    "FlagVariant": "src/data/featureFlagModels.ts",
+    "FeatureFlagParadigm": "src/data/featureFlagModels.ts",
+    "CanaryTargetCohort": "src/data/featureFlagModels.ts",
+    "FEATURE_FLAG_MODELS": "src/data/featureFlagModels.ts",
+    "EvaluationContext": "src/data/featureFlagModels.ts",
+    "OpenFeatureRuleEvaluator": "src/data/featureFlagModels.ts",
+    "INITIAL_COHORTS": "src/data/featureFlagModels.ts",
     "GatewayFilter": "src/data/gatewayRoutes.ts",
     "GatewayRoute": "src/data/gatewayRoutes.ts",
     "GATEWAY_ROUTES": "src/data/gatewayRoutes.ts",

@@ -24,6 +24,7 @@ import { EVENT_SOURCING_MODELS } from '@/data/eventSourcing'
 import { DLQ_RETRY_MODELS } from '@/data/dlqRetryModels'
 import { IDEMPOTENCY_MODELS } from '@/data/idempotencyModels'
 import { ATOMIC_COMMIT_PARADIGMS } from '@/data/atomicCommitModels'
+import { FEATURE_FLAG_MODELS } from '@/data/featureFlagModels'
 import { EXECUTIVE_BRIEFING } from '@/data/executiveBriefing'
 
 interface HistoryEntry {
@@ -141,6 +142,13 @@ const AVAILABLE_COMMANDS = [
   '3pc',
   'indoubt',
   'coordinator',
+  'featureflag',
+  'featureflags',
+  'flags',
+  'canary',
+  'murmurhash',
+  'openfeature',
+  'killswitch',
   'adr',
   'decisions',
   'tradeoffs',
@@ -197,6 +205,7 @@ const QUICK_CHIPS = [
   { label: '[ $ dlq ]', cmd: 'dlq' },
   { label: '[ $ idempotency ]', cmd: 'idempotency' },
   { label: '[ $ 2pc ]', cmd: '2pc' },
+  { label: '[ $ flags ]', cmd: 'featureflag' },
   { label: '[ $ find kafka ]', cmd: 'find kafka' },
   { label: '[ $ tradeoffs ]', cmd: 'tradeoffs' },
   { label: '[ $ adr ]', cmd: 'adr' },
@@ -239,6 +248,7 @@ const COMMAND_HELP = [
   '  dlq             - Inspect dead-letter queue, poison-pill quarantine & retries (or "dlq <id>")',
   '  idempotency     - Inspect distributed idempotency keys, fencing tokens & CAS locks (or "idempotency <id>")',
   '  2pc             - Inspect 2PC vs Saga execution, non-blocking 3PC & TrueTime (or "2pc <id>")',
+  '  flags           - Inspect dynamic feature flags, MurmurHash3 bucketing & canary rollback (or "flags <id>")',
   '  find <query>    - Search cross-cutting architecture systems, ADRs, AI codex & trade-offs',
   '  tradeoffs       - Evaluate system design decision trade-offs (or "compare <topic>")',
   '  stats           - View production performance & impact metrics (99.99% SLA)',
@@ -2609,6 +2619,71 @@ export default function InteractiveCli() {
         ]
         break
       }
+      case 'featureflag':
+      case 'featureflags':
+      case 'flags':
+      case 'canary':
+      case 'murmurhash':
+      case 'openfeature':
+      case 'killswitch': {
+        const target = args[0]?.toLowerCase().trim()
+        if (target) {
+          const matched = FEATURE_FLAG_MODELS.find(m =>
+            m.id === target ||
+            m.id.includes(target) ||
+            m.name.toLowerCase().includes(target) ||
+            m.badge.toLowerCase().includes(target) ||
+            (target === '1' && m.id === 'murmurhash3-consistent-bucketing') ||
+            (target === '2' && m.id === 'openfeature-contextual-rules') ||
+            (target === '3' && m.id === 'canary-traffic-splitter-circuit') ||
+            (target === '4' && m.id === 'sse-edge-flag-streaming') ||
+            (target === '5' && m.id === 'flag-debt-deprecation-sentinel')
+          )
+          if (matched) {
+            output = [
+              '--------------------------------------------------------------------------------',
+              `Feature Flag Model: ${matched.name} [${matched.badge}]`,
+              '--------------------------------------------------------------------------------',
+              `Category            : ${matched.category}`,
+              `Algorithm Formula   : ${matched.algorithmFormula}`,
+              `Evaluation Latency  : ${matched.evaluationLatency}`,
+              `Rollback Guarantee  : ${matched.rollbackGuarantee}`,
+              `Uniformity Metric   : ${matched.distributionUniformity}`,
+              '--------------------------------------------------------------------------------',
+              'WORKFLOW PHASES & INVARIANTS:',
+              ...matched.workflowPhases.map(p =>
+                `  * [${p.name}] :: ${p.description} -> Invariant: ${p.invariants}`
+              ),
+              '--------------------------------------------------------------------------------',
+              'PRODUCTION OUTCOMES & INVARIANTS:',
+              ...Object.entries(matched.productionOutcomes).map(([k, v]) => `  + ${k}: ${v}`),
+              '',
+              `Architectural Invariant: "${matched.architecturalInvariant}"`,
+              '--------------------------------------------------------------------------------',
+              'Full live interactive rollout slider and canary circuit breaker in #architecture-feature-flags.'
+            ]
+            break
+          }
+        }
+
+        output = [
+          'Distributed Dynamic Feature Flagging & Canary Traffic Splitter Sandbox:',
+          '--------------------------------------------------------------------------------',
+          'Explore 5 enterprise dynamic flag evaluation and canary routing architectures:',
+          '',
+          ...FEATURE_FLAG_MODELS.flatMap((m, idx) => [
+            `${idx + 1}. [ ${m.id} ] : ${m.name} (${m.badge})`,
+            `   Category   : ${m.category}`,
+            `   Latency    : ${m.evaluationLatency.split(';')[0]}`,
+            `   Rollback   : ${m.rollbackGuarantee.split(';')[0]}`,
+            `   Deep Dive  : "flags ${idx + 1}" or "flags ${m.id.split('-')[0]}" (e.g. "flags murmur", "flags openfeature", "flags canary", "flags sse", "flags debt")`,
+            ''
+          ]),
+          '--------------------------------------------------------------------------------',
+          'Tip: Run "flags <id>" (e.g. "flags 1" or "flags canary") to inspect rollout invariants.'
+        ]
+        break
+      }
       case 'find':
       case 'search': {
         const query = args.join(' ').toLowerCase().trim()
@@ -2618,7 +2693,7 @@ export default function InteractiveCli() {
             '--------------------------------------------------------------------------------',
             'Search cross-cutting distributed systems, ADRs, AI paradigms, and trade-offs.',
             'Usage: find <query> (e.g. "find kafka", "find redis", "find mcp", "find saga")',
-            'Available Domains: Systems, ADR Governance, AI Codex, Trade-Off Matrix, Evolution Diffs, Chaos Drills, API Gateway, Distributed Traces, Kafka Event Streams, Distributed Rate Limiting, Multi-Region Replication, Database Sharding, Edge CDN Caching, Circuit Breakers, Concurrency & Deadlocks, Raft Consensus, Vector Search, Traffic Priority & QoS, Distributed Sagas & Compensations, Distributed Cache Stampede & Coherence, Distributed Event Sourcing & CQRS, Distributed DLQ & Retries, Distributed Idempotency & CAS Locks, Distributed 2PC vs Saga Commit & Drift Reconciler'
+            'Available Domains: Systems, ADR Governance, AI Codex, Trade-Off Matrix, Evolution Diffs, Chaos Drills, API Gateway, Distributed Traces, Kafka Event Streams, Distributed Rate Limiting, Multi-Region Replication, Database Sharding, Edge CDN Caching, Circuit Breakers, Concurrency & Deadlocks, Raft Consensus, Vector Search, Traffic Priority & QoS, Distributed Sagas & Compensations, Distributed Cache Stampede & Coherence, Distributed Event Sourcing & CQRS, Distributed DLQ & Retries, Distributed Idempotency & CAS Locks, Distributed 2PC vs Saga Commit & Drift Reconciler, Dynamic Feature Flagging & Canary Splitter'
           ]
           break
         }
@@ -3131,6 +3206,29 @@ export default function InteractiveCli() {
               `  Category   : ${a.category} (${a.blockingNature})`,
               `  Throughput : ${a.throughputTps}`,
               `  Anchor     : #architecture-atomic-commit`,
+              ''
+            )
+          }
+        })
+
+        // 25. Search Distributed Dynamic Feature Flags & Canary Splitter
+        FEATURE_FLAG_MODELS.forEach(f => {
+          if (
+            f.name.toLowerCase().includes(query) ||
+            f.id.toLowerCase().includes(query) ||
+            f.category.toLowerCase().includes(query) ||
+            f.badge.toLowerCase().includes(query) ||
+            f.algorithmFormula.toLowerCase().includes(query) ||
+            f.evaluationLatency.toLowerCase().includes(query) ||
+            f.rollbackGuarantee.toLowerCase().includes(query) ||
+            f.architecturalInvariant.toLowerCase().includes(query) ||
+            f.description.toLowerCase().includes(query)
+          ) {
+            results.push(
+              `[Feature Flags & Canary] ${f.name}`,
+              `  Category   : ${f.category} (${f.badge})`,
+              `  Rollback   : ${f.rollbackGuarantee.split(';')[0]}`,
+              `  Anchor     : #architecture-feature-flags`,
               ''
             )
           }

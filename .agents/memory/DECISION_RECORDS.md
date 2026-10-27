@@ -93,6 +93,16 @@ This document serves as the persistent semantic memory layer for AI coding agent
 * **Decision:** Implemented an interactive 5-paradigm sandbox demonstrating Classical Two-Phase Commit (2PC) with coordinator crash simulation and in-doubt lock analysis, Skeen's non-blocking Three-Phase Commit (3PC) with PreCommit quorum progression, Choreographed Sagas with Transactional Outbox (PostgreSQL Debezium CDC) delivering 18,000+ TPS line rates without distributed locks, Dual-Write Invariant Reconciliation & Self-Healing Engine with sliding window CRC-32 hash comparison and automated compensation repair, and Google Spanner TrueTime Paxos-Assisted Atomic Commit with commit wait ($2 \cdot \epsilon$) enforcing global external consistency without single-coordinator failure bottlenecks.
 * **Blast Radius:** Mounted in `ArchitectureLab.tsx` under `#architecture-atomic-commit`; integrated into `InteractiveCli.tsx` with `atomiccommit`, `twophasecommit`, `2pc`, `3pc`, `indoubt`, `coordinator` commands and `[ $ 2pc ]` quick chip; indexed in `index.html` Sub-Section 24 and `public/chat/index.json`. Verified in test 28 of `tests/portfolio.test.mjs`.
 
+---
+
+## ADR-025: Distributed Dynamic Feature Flagging & Canary Traffic Splitter Sandbox
+* **Status:** Accepted & Enforced
+* **Target Components:** [`FeatureFlagSandbox.tsx`](file:///src/components/architecture/FeatureFlagSandbox.tsx), [`featureFlagModels.ts`](file:///src/data/featureFlagModels.ts), [`ArchitectureLab.tsx`](file:///src/components/portfolio/ArchitectureLab.tsx)
+* **Context:** High-velocity SaaS platforms and microservices meshes require safe, continuous delivery without full-cluster deployments, downtime, or database restart churn. Naive configuration rollouts risk catastrophic blast radius if regressions trigger cascading failures.
+* **Decision:** Implemented an interactive 5-paradigm sandbox demonstrating MurmurHash3 Consistent Percentage Bucketing ($h = \text{MurmurHash3}(\text{userId} + \text{flagKey}) \pmod{100}$) delivering sub-0.25 microsecond sticky evaluation without central coordinator bottlenecks, OpenFeature Standard Contextual Rule Evaluation matching client attributes (tenant tier, geo country, roles) in sub-0.45 microseconds, Canary Traffic Splitter with Automated Circuit Rollback instantly resetting Envoy cluster weights to 0% in sub-15ms when HTTP 5xx error rates exceed 1.5%, Real-Time Edge Flag Streaming Bus via SSE & Redis Pub/Sub broadcasting binary delta trees to 100,000 edge instances with zero database polling, and Flag Debt Deprecation Sentinel synthesizing automated PRs to retire dead conditional branches.
+* **Blast Radius:** Mounted in `ArchitectureLab.tsx` under `#architecture-feature-flags`; integrated into `InteractiveCli.tsx` with `featureflag`, `canary`, `murmurhash`, `openfeature`, `killswitch` commands and `[ $ flags ]` quick chip; indexed in `index.html` Sub-Section 25 and `public/chat/index.json`. Verified in test 29 of `tests/portfolio.test.mjs`.
+
+
 
 
 

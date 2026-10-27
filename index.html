@@ -689,6 +689,16 @@
                 Synchronous ACID transactions, non-blocking consensus, and eventual consistency drift recovery across 5 enterprise architectures: Classical Two-Phase Commit (2PC) with In-Doubt Lock Recovery (XA protocol with atomic prepare and commit phases, exploring coordinator failure lock freeze), Three-Phase Commit (3PC) with Non-Blocking PreCommit Quorum (Skeen protocol decoupling readiness verification from commit execution), Choreographed Saga with Transactional CDC Outbox (zero distributed locks with local ACID transaction log tailing and asynchronous Kafka compensation), Dual-Write Invariant Reconciliation &amp; Self-Healing Engine (cryptographic CRC-32 sliding window detecting and auto-healing silent replication drift between PostgreSQL and Elasticsearch/Redis), and Paxos/Raft-Assisted Atomic Commit (Google Spanner TrueTime commit wait guaranteeing linearizable external consistency across multi-region datacenters).
               </p>
             </div>
+
+            <!-- Sub-Section 25: Distributed Dynamic Feature Flagging & Canary Splitter Sandbox -->
+            <div id="architecture-feature-flags" style="background: rgba(9, 14, 24, 0.7); border: 1px solid #1e293b; border-radius: 16px; padding: 1.5rem; margin-top: 1rem;">
+              <h3 style="color: #06b6d4; font-size: 1.25rem; font-weight: bold; margin-bottom: 0.5rem;">
+                Distributed Dynamic Feature Flagging &amp; Canary Splitter Sandbox
+              </h3>
+              <p style="color: #94a3b8; font-size: 0.85rem; line-height: 1.6;">
+                Deterministic sticky percentage bucketing, OpenFeature contextual rule evaluation, and automated canary rollback gates across 5 enterprise architectures: MurmurHash3 Consistent Percentage Bucketing (uniform pseudo-random hashing guaranteeing stable sticky bucket assignment without session state), OpenFeature Contextual Rule Evaluation Engine (sub-0.45 microsecond AST rule matching against tenant tier, country, and roles), Canary Traffic Splitter with Automated Circuit Rollback (Envoy weighted upstream cluster routing with instantaneous sub-15ms kill-switch rollback when canary 5xx error rate exceeds 1.5%), Real-Time Edge Flag Streaming Bus via SSE &amp; Redis Pub/Sub (sub-120ms global edge propagation to 100,000 edge pods with zero database polling), and Flag Technical Debt Sentinel &amp; Stale Deprecation Sentinel (automated telemetry auditing and PR synthesis for retired flags).
+              </p>
+            </div>
           </section>
 
           <!-- Projects & Interactive Architecture Section Landmark -->
